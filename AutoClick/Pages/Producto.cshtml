@@ -1,0 +1,557 @@
+@page "/producto/{id:int}"
+@model ProductoModel
+@{
+    ViewData["Title"] = $"{Model.Vehicle?.NombreCompleto} - AutoClick.cr";
+}
+
+<!-- Dark Theme Product Page -->
+<div class="producto-page">
+    <!-- Header -->
+    <header class="producto-header">
+        <div class="producto-logo-container">
+            <a asp-page="/Index">
+                <img src="~/images/logo.png" alt="AutoClick.cr" class="producto-logo" />
+            </a>
+        </div>
+        
+        <nav class="producto-nav-menu">
+            <div class="producto-flag-container">
+                <img src="~/images/costa-rica-flag.png" alt="Costa Rica" class="producto-flag" />
+            </div>
+            <div class="producto-nav-item">
+                <span>Anúnciese</span>
+                <div class="producto-dropdown-arrow"></div>
+            </div>
+            <div class="producto-nav-item">
+                <span>Productos & Servicios</span>
+                <div class="producto-dropdown-arrow"></div>
+            </div>
+            <div class="producto-nav-item">
+                <span>Financiamiento</span>
+                <div class="producto-dropdown-arrow"></div>
+            </div>
+        </nav>
+        
+        <div class="producto-header-actions">
+            <div class="producto-cart-icon">
+                <div class="cart-outline"></div>
+            </div>
+            <div class="producto-user-menu">
+                <div class="user-avatar-dots">
+                    <div class="dot small"></div>
+                    <div class="dot large"></div>
+                </div>
+                <span>Nombre A.</span>
+            </div>
+        </div>
+    </header>
+
+    <div class="producto-container">
+        <!-- Breadcrumb Navigation -->
+        <nav class="producto-breadcrumb">
+            <a asp-page="/Index" class="breadcrumb-link">Inicio</a>
+            <span class="breadcrumb-separator">/</span>
+            <a asp-page="/Explorar" class="breadcrumb-link">Explorar todos los autos</a>
+            <span class="breadcrumb-separator">/</span>
+            <span class="breadcrumb-current">@Model.Vehicle?.NombreCompleto</span>
+        </nav>
+
+        <div class="producto-content">
+            <!-- Main Image Gallery -->
+            <div class="producto-gallery">
+                <div class="producto-main-image">
+                    <img src="@(!string.IsNullOrEmpty(Model.Vehicle?.ImagenPrincipal) ? Model.Vehicle.ImagenPrincipal : "https://placehold.co/803x462?text=" + Uri.EscapeDataString(Model.Vehicle?.NombreCompleto ?? "Auto"))" alt="@Model.Vehicle?.NombreCompleto" class="main-car-image" style="object-fit: contain;" />
+                    
+                    <!-- Navigation Arrows -->
+                    <button class="gallery-nav-btn prev-btn">
+                        <div class="nav-arrow left"></div>
+                    </button>
+                    <button class="gallery-nav-btn next-btn">
+                        <div class="nav-arrow right"></div>
+                    </button>
+                </div>
+                
+                <!-- Thumbnail Gallery -->
+                <div class="producto-thumbnails">
+                    @{
+                        var imageUrls = Model.Vehicle?.ImagenesUrlsList ?? new List<string>();
+                        if (imageUrls.Count == 0 && !string.IsNullOrEmpty(Model.Vehicle?.ImagenPrincipal))
+                        {
+                            imageUrls.Add(Model.Vehicle.ImagenPrincipal);
+                        }
+                        var maxThumbnails = Math.Min(8, Math.Max(1, imageUrls.Count));
+                    }
+                    @for (int i = 0; i < maxThumbnails; i++)
+                    {
+                        <div class="thumbnail-item @(i == 0 ? "active" : "")">
+                            @if (i == 7 && imageUrls.Count > 8)
+                            {
+                                <img src="@(imageUrls.ElementAtOrDefault(i) ?? "https://placehold.co/93x78")" alt="Más imágenes" style="object-fit: contain;" />
+                                <div class="thumbnail-overlay">
+                                    <div class="plus-icon">+</div>
+                                </div>
+                            }
+                            else
+                            {
+                                <img src="@(imageUrls.ElementAtOrDefault(i) ?? "https://placehold.co/93x78")" alt="@Model.Vehicle?.NombreCompleto vista @(i + 1)" style="object-fit: contain;" />
+                            }
+                        </div>
+                    }
+                </div>
+            </div>
+
+            <!-- Right Sidebar -->
+            <div class="producto-sidebar">
+                <!-- Car Information Card -->
+                <div class="producto-info-card">
+                    <h1 class="producto-car-title">@Model.Vehicle?.NombreCompleto</h1>
+                    <p class="producto-car-mileage">@Model.FormatKilometrage(Model.Vehicle?.Kilometraje ?? 0)</p>
+                    <p class="producto-car-price">@Model.FormatPrice(Model.Vehicle?.ValorFiscal ?? 0)</p>
+                    
+                    <div class="producto-payment-estimate">
+                        <h3>Cuota estimada</h3>
+                        <p>Financiamiento disponible</p>
+                    </div>
+                    
+                    <div class="producto-actions">
+                        <div class="producto-icons">
+                            <button class="favorite-btn">
+                                <div class="heart-icon"></div>
+                            </button>
+                            <button class="share-btn">
+                                <div class="share-icon"></div>
+                            </button>
+                        </div>
+                        
+                        <button class="producto-preapproval-btn">
+                            Solicitar pre-aprobación
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Contact Seller Card -->
+                <div class="producto-contact-card">
+                    <h3>Contactar al vendedor</h3>
+                    <p class="seller-name">@Model.SellerName</p>
+                    
+                    <button class="contact-phone-btn">
+                        Llamar @Model.SellerPhone
+                    </button>
+                    
+                    <button class="contact-whatsapp-btn">
+                        <div class="whatsapp-icon"></div>
+                        @Model.SellerPhone
+                    </button>
+                </div>
+
+                <!-- Seller Information Card -->
+                <div class="producto-seller-card">
+                    <h3>Información del vendedor</h3>
+                    <p class="seller-business-name">@Model.SellerName</p>
+                    
+                    <div class="seller-logo">
+                        <div class="logo-placeholder">
+                            LOGO<br />(SI TIENE)
+                        </div>
+                    </div>
+                    
+                    <div class="seller-contact-info">
+                        <div class="seller-phones">
+                            <div class="phone-icon"></div>
+                            <span>@Model.SellerPhone</span>
+                            <span>@Model.SellerPhone</span>
+                        </div>
+                        
+                        <div class="seller-location">
+                            <div class="location-icon"></div>
+                            <span>@Model.SellerLocation</span>
+                        </div>
+                        
+                        <div class="seller-car-count">
+                            <div class="car-icon"></div>
+                            <span>(@Model.SellerCarCount de autos publicados)</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Description Section -->
+        <section class="producto-description">
+            <h2>Descripción</h2>
+            <p>
+                @{
+                    var descripcion = $"{Model.Vehicle?.NombreCompleto} en {Model.Vehicle?.Condicion?.ToLower()} condición. ";
+                    if (Model.Vehicle?.Kilometraje > 0)
+                    {
+                        descripcion += $"Con {Model.FormatKilometrage(Model.Vehicle.Kilometraje)}. ";
+                    }
+                    if (!string.IsNullOrEmpty(Model.Vehicle?.Combustible))
+                    {
+                        descripcion += $"Propulsión: {Model.Vehicle.Combustible}. ";
+                    }
+                    if (!string.IsNullOrEmpty(Model.Vehicle?.Transmision))
+                    {
+                        descripcion += $"Transmisión {Model.Vehicle.Transmision}. ";
+                    }
+                    descripcion += $"Ubicado en {Model.Vehicle?.UbicacionCompleta}.";
+                }
+                @descripcion
+            </p>
+        </section>
+
+        <!-- Specifications Section -->
+        <section class="producto-specifications">
+            <h2>Especificaciones</h2>
+            <div class="specs-grid">
+                <div class="spec-column">
+                    <div class="spec-item">
+                        <h3>Marca</h3>
+                        <p>@Model.ToTitleCase(Model.Vehicle?.Marca)</p>
+                    </div>
+                    <div class="spec-item">
+                        <h3>Modelo</h3>
+                        <p>@Model.ToTitleCase(Model.Vehicle?.Modelo)</p>
+                    </div>
+                    <div class="spec-item">
+                        <h3>Año</h3>
+                        <p>@Model.Vehicle?.Ano</p>
+                    </div>
+                </div>
+                
+                <div class="spec-column">
+                    <div class="spec-item">
+                        <h3>Kilometraje</h3>
+                        <p>@Model.FormatKilometrage(Model.Vehicle?.Kilometraje ?? 0)</p>
+                    </div>
+                    <div class="spec-item">
+                        <h3>Carrocería</h3>
+                        <p>@Model.Vehicle?.Carroceria</p>
+                    </div>
+                    <div class="spec-item">
+                        <h3>Número de puertas</h3>
+                        <p>@Model.Vehicle?.NumeroPuertas</p>
+                    </div>
+                </div>
+                
+                <div class="spec-column">
+                    <div class="spec-item">
+                        <h3>Motor</h3>
+                        <p>@Model.Vehicle?.Cilindrada</p>
+                    </div>
+                    <div class="spec-item">
+                        <h3>Propulsión</h3>
+                        <p>@Model.Vehicle?.Combustible</p>
+                    </div>
+                    <div class="spec-item">
+                        <h3>Transmisión</h3>
+                        <p>@Model.Vehicle?.Transmision</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Equipment Section -->
+        <section class="producto-equipment" style="width: 804px; padding-left: 32px; padding-right: 32px; padding-top: 24px; padding-bottom: 24px; background: #030D2B; overflow: hidden; border-radius: 4px; outline: 0.50px rgba(255, 255, 255, 0.50) solid; outline-offset: -0.50px; flex-direction: column; justify-content: flex-start; align-items: flex-start; gap: 8px; display: inline-flex">
+            <div style="align-self: stretch; flex-direction: column; justify-content: flex-start; align-items: flex-start; gap: 21px; display: flex">
+                <h2 style="align-self: stretch; text-box-trim: trim-both; text-box-edge: cap alphabetic; color: white; font-size: 20px; font-family: Montserrat; font-weight: 700; word-wrap: break-word">equipamiento</h2>
+                <div class="equipment-grid" style="align-self: stretch; justify-content: space-between; align-items: center; display: inline-flex">
+                    @{
+                        var allExtras = new List<string>();
+                        if (Model.Vehicle != null)
+                        {
+                            allExtras.AddRange(Model.Vehicle.ExtrasInteriorList);
+                            allExtras.AddRange(Model.Vehicle.ExtrasExteriorList);
+                            allExtras.AddRange(Model.Vehicle.ExtrasMultimediaList);
+                            allExtras.AddRange(Model.Vehicle.ExtrasSeguridadList);
+                            allExtras.AddRange(Model.Vehicle.ExtrasRendimientoList);
+                            allExtras.AddRange(Model.Vehicle.ExtrasAntiRoboList);
+                        }
+                        
+                        // Si no hay extras, mostrar algunos básicos por defecto
+                        if (allExtras.Count == 0)
+                        {
+                            allExtras.AddRange(new[] { 
+                                "Faros LED / xenón / halógenos", "Pantalla táctil multimedia", "Luces diurnas (DRL)", "Android Auto / Apple CarPlay", 
+                                "Luces automáticas", "Cargador inalámbrico", "Aros de lujo", "Iluminación ambiental"
+                            });
+                        }
+                        
+                        // Capitalizar primera letra de cada item
+                        allExtras = allExtras.Select(e => string.IsNullOrEmpty(e) ? e : 
+                            char.ToUpper(e[0]) + e.Substring(1).ToLower()).ToList();
+                        
+                        var halfCount = (int)Math.Ceiling(allExtras.Count / 2.0);
+                    }
+                    <div class="equipment-column" style="width: 361px; flex-direction: column; justify-content: flex-start; align-items: flex-start; gap: 24px; display: inline-flex">
+                        @for (int i = 0; i < halfCount && i < allExtras.Count; i++)
+                        {
+                            <div class="equipment-item" style="align-self: stretch; text-box-trim: trim-both; text-box-edge: cap alphabetic; color: rgba(255, 255, 255, 0.75); font-size: 16px; font-family: Montserrat; font-weight: 500; word-wrap: break-word">• @allExtras[i]</div>
+                        }
+                    </div>
+                    <div class="equipment-column" style="width: 360px; flex-direction: column; justify-content: flex-start; align-items: flex-start; gap: 24px; display: inline-flex">
+                        @for (int i = halfCount; i < allExtras.Count; i++)
+                        {
+                            <div class="equipment-item" style="align-self: stretch; text-box-trim: trim-both; text-box-edge: cap alphabetic; color: rgba(255, 255, 255, 0.75); font-size: 16px; font-family: Montserrat; font-weight: 500; word-wrap: break-word">• @allExtras[i]</div>
+                        }
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Marchamo Calculator Section -->
+        <section class="producto-marchamo">
+            <div class="marchamo-content">
+                <div class="marchamo-header">
+                    <img src="https://placehold.co/255x48" alt="AutoClick.cr" />
+                    <p class="marchamo-subtitle">Calculadora de marchamo y traspaso</p>
+                </div>
+                
+                <h2 class="marchamo-car-title">@Model.Vehicle?.NombreCompleto</h2>
+                
+                <div class="marchamo-sections">
+                    <div class="marchamo-section">
+                        <h3>Marchamo 2025</h3>
+                        <p class="coming-soon">DISPONIBLE PRÓXIMAMENTE</p>
+                    </div>
+                    
+                    <div class="marchamo-section">
+                        <h3>Costos de traspaso</h3>
+                        <p class="coming-soon">DISPONIBLE PRÓXIMAMENTE</p>
+                    </div>
+                </div>
+                
+                <p class="marchamo-powered">Impulsado por AutoClick.cr</p>
+            </div>
+            
+            <div class="marchamo-disclaimer">
+                Autoclick.cr informa que los valores presentados en esta plataforma son únicamente estimaciones de referencia. El cálculo oficial del marchamo corresponde al Instituto Nacional de Seguros (INS) y el monto exacto de los gastos de traspaso debe ser determinado por un abogado autorizado. Autoclick.cr no se hace responsable por diferencias entre los valores estimados y los montos oficiales.
+            </div>
+        </section>
+
+        <!-- Market Value Section -->
+        <section class="producto-market-value">
+            <h2>Valor de mercado</h2>
+            <p class="market-description">
+                Este vehículo se comparó con otros @Model.ToTitleCase(Model.Vehicle?.Marca) @Model.ToTitleCase(Model.Vehicle?.Modelo) @Model.Vehicle?.Ano en AutoClick.cr, considerando precio, kilometraje, equipamiento y estado.
+            </p>
+            
+            <div class="market-chart">
+                <img src="https://placehold.co/771x539" alt="Gráfico de valor de mercado" />
+                
+                <div class="market-indicator">
+                    <div class="market-price-indicator">
+                        <div class="indicator-arrow"></div>
+                        <div class="price-info">
+                            <h3>@Model.FormatPrice(Model.Vehicle?.ValorFiscal ?? 0)</h3>
+                            <div class="market-status">@Model.GetMarketStatus()</div>
+                            <div class="market-difference">Precio competitivo</div>
+                        </div>
+                    </div>
+                    
+                    <div class="average-value">
+                        <div class="average-arrow"></div>
+                        <div class="average-text">Valor promedio<br />@Model.FormatPrice(Model.GetMarketValue())</div>
+                    </div>
+                </div>
+            </div>
+            
+            <p class="market-powered">Impulsado por AutoClick.cr</p>
+        </section>
+
+        <!-- Financing Calculator Section -->
+        <section class="producto-financing">
+            <h2>CALCULAR FINANCIAMIENTO</h2>
+            
+            <form method="get" class="financing-form">
+                <input type="hidden" name="id" value="@Model.Id" />
+                
+                <div class="financing-row">
+                    <div class="financing-field">
+                        <label for="currency">Moneda *</label>
+                        <select name="currency" id="currency" class="financing-select">
+                            <option value="USD" selected="@(Model.Currency == "USD")">Dólar (USD)</option>
+                            <option value="CRC" selected="@(Model.Currency == "CRC")">Colones (CRC)</option>
+                        </select>
+                    </div>
+                    
+                    <div class="financing-field">
+                        <label for="vehiclePrice">Precio total del vehículo *</label>
+                        <input type="text" name="vehiclePrice" id="vehiclePrice" value="@Model.FormatPrice(Model.VehiclePrice)" class="financing-input" readonly />
+                    </div>
+                </div>
+                
+                <div class="financing-row">
+                    <div class="financing-field">
+                        <label for="loanTerm">Plazo del préstamo *</label>
+                        <select name="loanTerm" id="loanTerm" class="financing-select">
+                            <option value="84" selected="@(Model.LoanTerm == 84)">84 meses</option>
+                            <option value="72" selected="@(Model.LoanTerm == 72)">72 meses</option>
+                            <option value="60" selected="@(Model.LoanTerm == 60)">60 meses</option>
+                            <option value="48" selected="@(Model.LoanTerm == 48)">48 meses</option>
+                        </select>
+                    </div>
+                    
+                    <div class="financing-field">
+                        <label for="downPayment">Prima deseada</label>
+                        <input type="number" name="downPayment" id="downPayment" value="@Model.DownPayment" placeholder="Mínimo $10,000" class="financing-input" />
+                    </div>
+                </div>
+                
+                <div class="financing-row">
+                    <div class="financing-field">
+                        <label for="annualRate">Tasa anual</label>
+                        <input type="text" name="annualRate" id="annualRate" value="8.5%" class="financing-input" readonly />
+                    </div>
+                    
+                    <div class="financing-field">
+                        <label for="monthlyPayment"><strong>Cuota mensual estimada</strong></label>
+                        <input type="text" id="monthlyPayment" value="@Model.FormatPrice(Model.MonthlyPayment)" readonly class="financing-result" />
+                    </div>
+                </div>
+                
+                <button type="button" class="financing-submit-btn" onclick="solicitarPreAprobacion()">Solicitar pre-aprobación</button>
+            </form>
+        </section>
+
+        <!-- Advertisement -->
+        <div class="producto-large-ad">
+            <img src="https://placehold.co/157x25" alt="Publicidad" />
+            <h2>SU ANUNCIO AQUÍ</h2>
+            <p>¡Haga click en este recuadro para empezar!</p>
+        </div>
+
+        <!-- Similar Cars Section -->
+        <section class="producto-similar-cars">
+            <div class="similar-cars-header">
+                <h2>Vehículos similares</h2>
+                <a href="#" class="see-all-link">Ver todo</a>
+            </div>
+            
+            <div class="similar-cars-grid">
+                @foreach (var auto in Model.SimilarAutos)
+                {
+                    <div class="similar-car-card" onclick="window.location.href='@Url.Page("/Producto", new { id = auto.Id })'" style="cursor: pointer;">
+                        <img src="@(!string.IsNullOrEmpty(auto.ImagenPrincipal) ? auto.ImagenPrincipal : "https://placehold.co/300x200?text=" + Uri.EscapeDataString(auto.NombreCompleto))" alt="@auto.NombreCompleto" class="similar-car-image" style="object-fit: contain;" />
+                        <div class="similar-car-info">
+                            <h3 class="similar-car-title">@auto.NombreCompleto</h3>
+                            <p class="similar-car-price">@auto.ValorFiscalFormateado</p>
+                        </div>
+                        <div class="similar-car-actions">
+                            <button class="similar-favorite-btn" onclick="event.stopPropagation();">
+                                <div class="heart-outline"></div>
+                            </button>
+                            <button class="similar-share-btn" onclick="event.stopPropagation();">
+                                <div class="share-outline"></div>
+                            </button>
+                        </div>
+                        <img src="https://placehold.co/104x103?text=Badge" alt="Badge" class="similar-car-badge" />
+                    </div>
+                }
+            </div>
+        </section>
+
+        <!-- Advertisement Banner -->
+        <div class="producto-bottom-ad">
+            <img src="https://placehold.co/135x21" alt="Publicidad" />
+            <h2>SU ANUNCIO AQUÍ</h2>
+            <p>¡Haga click en este recuadro para empezar!</p>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="producto-footer">
+        <div class="producto-footer-content">
+            <div class="footer-brand-section">
+                <img src="https://placehold.co/289x46" alt="AutoClick.cr Logo" class="footer-logo" />
+                <div class="footer-social-links">
+                    <div class="social-icon facebook"></div>
+                    <div class="social-icon instagram"></div>
+                    <div class="social-icon whatsapp"></div>
+                </div>
+            </div>
+            
+            <div class="footer-links-section">
+                <h3>AutoClick.cr</h3>
+                <nav class="footer-nav">
+                    <a href="/contactanos">Contáctenos</a>
+                    <a asp-page="/SobreNosotros">Sobre Nosotros</a>
+                    <a href="/reportar-problema">Reportar un problema</a>
+                </nav>
+            </div>
+            
+            <div class="footer-legal-section">
+                <nav class="footer-nav">
+                    <a href="/TerminosCondiciones">Términos y condiciones</a>
+                    <a href="/PoliticaPrivacidad">Política de privacidad</a>
+                </nav>
+            </div>
+            
+            <div class="footer-newsletter-section">
+                <h3>Suscribete</h3>
+                <form class="newsletter-form">
+                    <input type="email" placeholder="Introducir correo" class="newsletter-input" />
+                    <p>Suscríbase para recibir las últimas noticias y promociones</p>
+                    <button type="submit" class="newsletter-btn">Suscribirse</button>
+                </form>
+            </div>
+        </div>
+        
+        <div class="footer-copyright">
+            <img src="https://placehold.co/20x20" alt="Copyright" />
+            <span>2025. Todos los derechos reservados - AutoClick.cr</span>
+        </div>
+    </footer>
+</div>
+
+<script>
+// Gallery navigation
+document.addEventListener('DOMContentLoaded', function() {
+    // Thumbnail click functionality
+    const thumbnails = document.querySelectorAll('.thumbnail-item');
+    const mainImage = document.querySelector('.main-car-image');
+    
+    thumbnails.forEach((thumb, index) => {
+        thumb.addEventListener('click', function() {
+            // Remove active class from all thumbnails
+            thumbnails.forEach(t => t.classList.remove('active'));
+            // Add active class to clicked thumbnail
+            this.classList.add('active');
+            
+            // Update main image (in a real app, you'd have different images)
+            if (index < 7) { // Not the "more images" thumbnail
+                // Update main image src here
+            }
+        });
+    });
+    
+    // Financing calculator auto-update (excluding readonly fields)
+    const financingInputs = document.querySelectorAll('.financing-input:not([readonly]), .financing-select');
+    financingInputs.forEach(input => {
+        input.addEventListener('change', function() {
+            // Auto-submit form to recalculate
+            this.closest('form').submit();
+        });
+    });
+});
+
+// Function for pre-approval button
+function solicitarPreAprobacion() {
+    // Get form data
+    const vehiculo = '@Html.Raw((Model.Vehicle?.NombreCompleto ?? "Vehículo").Replace("'", "\\'"))';
+    const precio = document.getElementById('vehiclePrice').value;
+    const plazo = document.getElementById('loanTerm').value;
+    const prima = document.getElementById('downPayment').value || '0';
+    
+    // Build URL with parameters
+    const params = new URLSearchParams({
+        vehiculo: vehiculo,
+        precio: precio,
+        plazo: plazo,
+        prima: prima
+    });
+    
+    // Redirect to bank landing page
+    window.location.href = '/LandingBanco?' + params.toString();
+}
+</script>

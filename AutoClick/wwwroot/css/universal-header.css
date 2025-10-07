@@ -1,0 +1,530 @@
+/* Universal Header Styles - AutoClick */
+
+.universal-header {
+    width: 100%;
+    height: 80px;
+    padding-right: 40px;
+    background: #02081C;
+    border-bottom: 0.5px solid rgba(255, 255, 255, 0.5);
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 1000;
+}
+
+.header-container {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    max-width: none;
+    margin: 0;
+    padding: 0;
+    position: relative;
+    overflow: visible;
+}
+
+/* Logo Section */
+.logo-section {
+    width: auto;
+    height: 80px;
+    position: relative;
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    padding-left: 0;
+    flex-shrink: 0;
+}
+
+.logo-link {
+    text-decoration: none;
+    padding: 0 20px;
+    display: flex;
+    align-items: center;
+    height: 100%;
+}
+
+.logo-image {
+    width: 148px;
+    height: 23.49px;
+}
+
+/* Navigation Section */
+.navigation-section {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 64px;
+    flex: 1;
+    padding: 0 20px;
+}
+
+/* Explorar Autos Button */
+.explorar-btn {
+    color: white;
+    font-size: 16px;
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 400;
+    text-decoration: none;
+    padding: 8px 16px;
+    border-radius: 6px;
+    transition: background-color 0.3s ease;
+}
+
+.explorar-btn:hover {
+    background: rgba(255, 255, 255, 0.1);
+    color: white;
+    text-decoration: none;
+}
+
+/* Flag styles removed as requested */
+
+/* Navigation Dropdowns */
+.nav-dropdown {
+    position: relative;
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+}
+
+.nav-item {
+    height: 40px;
+    background: none;
+    border: none;
+    color: white;
+    font-size: 16px;
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 400;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 8px;
+    cursor: pointer;
+    padding: 8px 16px;
+    border-radius: 6px;
+    transition: background-color 0.3s ease;
+}
+
+.nav-item:hover {
+    background: rgba(255, 255, 255, 0.1);
+}
+
+/* Override Bootstrap dropdown arrows */
+.nav-item::after,
+.nav-item::before {
+    display: none !important;
+}
+
+.dropdown-toggle::after,
+.dropdown-toggle::before {
+    display: none !important;
+}
+
+/* Dropdown Content */
+.dropdown-content {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    background: white;
+    min-width: 200px;
+    border-radius: 8px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+    opacity: 0;
+    visibility: hidden;
+    transform: translateY(-10px);
+    transition: all 0.3s ease;
+    z-index: 1001;
+    overflow: hidden;
+    margin-top: 8px;
+}
+
+.nav-dropdown:hover .dropdown-content,
+.nav-dropdown.active .dropdown-content {
+    opacity: 1;
+    visibility: visible;
+    transform: translateY(0);
+}
+
+.dropdown-link {
+    display: block;
+    padding: 12px 20px;
+    color: #02081C;
+    text-decoration: none;
+    font-size: 14px;
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 400;
+    border-bottom: 1px solid #f0f0f0;
+    transition: background-color 0.2s ease;
+}
+
+.dropdown-link:hover {
+    background: #f8f9fa;
+    color: #02081C;
+    text-decoration: none;
+}
+
+.dropdown-link:last-child {
+    border-bottom: none;
+}
+
+/* Actions Section */
+.actions-section {
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    gap: 32px;
+    position: relative;
+    height: 80px;
+    overflow: visible;
+    flex-shrink: 0;
+    margin-left: auto;
+    padding-right: 20px;
+}
+
+.search-icon {
+    border-radius: 4px;
+    display: flex;
+    align-items: center;
+}
+
+.icon-border {
+    padding: 12px;
+    border: 2px solid white;
+    border-radius: 4px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.search-placeholder {
+    width: 20px;
+    height: 17px;
+    border: 2px solid white;
+}
+
+/* User Section */
+.user-section {
+    position: relative;
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    gap: 8px;
+}
+
+/* Auth Section (for non-logged in users) */
+.auth-section {
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    position: relative;
+    z-index: 10;
+    flex-shrink: 0;
+}
+
+.login-register-btn {
+    color: white;
+    font-size: 16px;
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 400;
+    text-decoration: none;
+    padding: 8px 12px;
+    border-radius: 6px;
+    transition: background-color 0.3s ease;
+    display: inline-flex;
+    align-items: center;
+    white-space: nowrap;
+    margin-left: 20px;
+    position: relative;
+    z-index: 10;
+    /* Prevent any dropdown behavior */
+    user-select: none;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+}
+
+.login-register-btn:hover {
+    background: rgba(255, 255, 255, 0.1);
+    color: white;
+    text-decoration: none;
+}
+
+/* Prevent any pseudo-elements that might create dropdown appearance */
+.login-register-btn::after,
+.login-register-btn::before {
+    display: none !important;
+    content: none !important;
+}
+
+/* Override any Bootstrap dropdown styles */
+.login-register-btn.dropdown-toggle::after {
+    display: none !important;
+}
+
+/* Force reset all dropdown-related styles */
+.auth-section .dropdown,
+.auth-section .dropdown-toggle,
+.auth-section .dropdown-menu,
+.login-register-btn.dropdown,
+.login-register-btn.dropdown-toggle {
+    position: static !important;
+    display: inline-flex !important;
+    transform: none !important;
+    height: 40px !important;
+    max-height: 40px !important;
+}
+
+/* Nuclear option - completely isolate auth section */
+.universal-header .actions-section .auth-section {
+    isolation: isolate !important;
+    contain: layout style size !important;
+}
+
+/* Ensure auth section is always visible */
+.actions-section .auth-section {
+    display: flex !important;
+    visibility: visible !important;
+    opacity: 1 !important;
+}
+
+.login-register-btn {
+    display: inline-flex !important;
+    visibility: visible !important;
+    opacity: 1 !important;
+    color: white !important;
+}
+
+/* User avatar (only for logged-in users) */
+.user-section .user-avatar {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    flex-shrink: 0;
+    width: auto;
+    height: auto;
+}
+
+.user-section .avatar-dot {
+    width: 5.33px;
+    height: 5.33px;
+    background: white;
+    border-radius: 50%;
+    flex-shrink: 0;
+}
+
+.user-section .avatar-bars {
+    width: 10.67px;
+    height: 6px;
+    background: white;
+    flex-shrink: 0;
+}
+
+.user-name {
+    height: 40px;
+    background: none;
+    border: none;
+    color: white;
+    font-size: 16px;
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 400;
+    cursor: pointer;
+    padding: 8px 12px;
+    border-radius: 6px;
+    transition: background-color 0.3s ease;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.user-name:hover,
+.user-section:hover .user-name,
+.user-section.active .user-name {
+    background: rgba(255, 255, 255, 0.1);
+}
+
+/* User Dropdown */
+.user-dropdown {
+    position: absolute;
+    top: 100%;
+    right: 0;
+    background: white;
+    min-width: 200px;
+    border-radius: 8px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+    opacity: 0;
+    visibility: hidden;
+    transform: translateY(-10px);
+    transition: all 0.3s ease;
+    z-index: 1001;
+    overflow: hidden;
+    margin-top: 8px;
+}
+
+/* User dropdown shows on hover using the same system as nav dropdowns */
+.user-section:hover .user-dropdown,
+.user-section.active .user-dropdown,
+.user-dropdown.show {
+    opacity: 1;
+    visibility: visible;
+    transform: translateY(0);
+}
+
+.user-menu-item {
+    display: block;
+    padding: 12px 20px;
+    color: #02081C;
+    text-decoration: none;
+    font-size: 14px;
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 400;
+    border: none;
+    background: none;
+    width: 100%;
+    text-align: left;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+    border-bottom: 1px solid #f0f0f0;
+}
+
+.user-menu-item:hover {
+    background: #f8f9fa;
+    color: #02081C;
+    text-decoration: none;
+}
+
+.user-menu-item:last-child {
+    border-bottom: none;
+}
+
+.user-menu-item.logout {
+    color: #dc3545;
+    border-top: 1px solid #f0f0f0;
+}
+
+.user-menu-item.logout:hover {
+    background: #fff5f5;
+    color: #dc3545;
+}
+
+.menu-divider {
+    margin: 0;
+    border: none;
+    border-top: 1px solid #f0f0f0;
+}
+
+/* Responsive Design */
+@media (max-width: 1024px) {
+    .navigation-section {
+        gap: 32px;
+    }
+    
+    .header-container {
+        padding: 0 15px;
+    }
+}
+
+@media (max-width: 768px) {
+    .universal-header {
+        padding-right: 20px;
+    }
+    
+    .navigation-section {
+        display: none; /* Hide navigation on mobile, replace with hamburger menu */
+    }
+    
+    .logo-section {
+        width: auto;
+        padding-left: 15px;
+    }
+    
+    .logo-image {
+        width: 120px;
+        height: auto;
+    }
+    
+    .actions-section {
+        gap: 16px;
+    }
+    
+    .user-name {
+        font-size: 14px;
+    }
+}
+
+/* Ensure content doesn't overlap with fixed header */
+body {
+    padding-top: 80px;
+}
+
+/* Auth pages don't need header padding */
+.main-container.auth-page {
+    padding-top: 0 !important;
+    margin-top: 0 !important;
+}
+
+/* Override body padding for auth pages */
+.auth-page {
+    padding-top: 0 !important;
+}
+
+/* Alternative method for auth pages */
+body.auth-body {
+    padding-top: 0 !important;
+}
+
+/* Page content adjustments */
+.page-content {
+    margin-top: 80px;
+}
+
+/* Animation for dropdown arrows */
+@keyframes arrowRotate {
+    from {
+        transform: rotate(0deg);
+    }
+    to {
+        transform: rotate(180deg);
+    }
+}
+
+/* Hover effects */
+.nav-dropdown:hover .nav-item,
+.nav-dropdown.active .nav-item {
+    background: rgba(255, 255, 255, 0.1);
+}
+
+/* Focus states for accessibility */
+.nav-item:focus,
+.user-name:focus {
+    outline: 2px solid rgba(255, 255, 255, 0.5);
+    outline-offset: 2px;
+}
+
+.dropdown-link:focus,
+.user-menu-item:focus {
+    outline: 2px solid #02081C;
+    outline-offset: -2px;
+}
+
+/* Clean auth section styles */
+.universal-header .auth-section {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.universal-header .login-register-btn {
+    color: white;
+    text-decoration: none;
+    padding: 8px 12px;
+    border-radius: 6px;
+    transition: background-color 0.3s ease;
+}
+
+/* Prevent dropdown arrows */
+.auth-section .dropdown-toggle::after,
+.login-register-btn.dropdown-toggle::after {
+    display: none !important;
+}

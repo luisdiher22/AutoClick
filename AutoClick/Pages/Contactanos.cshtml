@@ -1,0 +1,108 @@
+@page
+@model AutoClick.Pages.ContactanosModel
+@{
+    ViewData["Title"] = "Contáctanos - AutoClick.cr";
+}
+
+@section Styles {
+    <link rel="stylesheet" href="~/css/contactanos.css" />
+}
+
+<div class="contactanos-container">
+    <div class="contactanos-panel">
+        <h1 class="contactanos-title">Contáctenos</h1>
+        
+        <form method="post" class="contactanos-form">
+            <h2 class="section-title">Datos de contacto</h2>
+            
+            @if (ViewData.ModelState.ErrorCount > 0)
+            {
+                <div class="alert alert-danger">
+                    <ul class="error-list">
+                        @foreach (var error in ViewData.ModelState.Values.SelectMany(v => v.Errors))
+                        {
+                            <li>@error.ErrorMessage</li>
+                        }
+                    </ul>
+                </div>
+            }
+
+            @if (TempData["SuccessMessage"] != null)
+            {
+                <div class="alert alert-success">
+                    @TempData["SuccessMessage"]
+                </div>
+            }
+
+            @if (TempData["ErrorMessage"] != null)
+            {
+                <div class="alert alert-error">
+                    @TempData["ErrorMessage"]
+                </div>
+            }
+
+            <div class="form-row">
+                <div class="form-group">
+                    <label asp-for="Nombre">Nombre *</label>
+                    <input asp-for="Nombre" type="text" placeholder="Introduzca su nombre" />
+                    <span asp-validation-for="Nombre" class="field-error"></span>
+                </div>
+                
+                <div class="form-group">
+                    <label asp-for="Apellido">Apellido *</label>
+                    <input asp-for="Apellido" type="text" placeholder="Introduzca su apellido" />
+                    <span asp-validation-for="Apellido" class="field-error"></span>
+                </div>
+            </div>
+
+            <div class="form-group full-width">
+                <label asp-for="Email">Correo electrónico *</label>
+                <input asp-for="Email" type="email" placeholder="Introduzca su correo electrónico" />
+                <span asp-validation-for="Email" class="field-error"></span>
+            </div>
+
+            <div class="form-group full-width">
+                <label asp-for="ConfirmEmail">Confirmar correo electrónico *</label>
+                <input asp-for="ConfirmEmail" type="email" placeholder="Introduzca su correo electrónico" />
+                <span asp-validation-for="ConfirmEmail" class="field-error"></span>
+            </div>
+
+            <div class="form-row">
+                <div class="form-group">
+                    <label asp-for="TipoConsulta">Tipo de consulta *</label>
+                    <select asp-for="TipoConsulta">
+                        <option value="">Seleccione tipo de consulta</option>
+                        <option value="Consulta General">Consulta General</option>
+                        <option value="Soporte Técnico">Soporte Técnico</option>
+                        <option value="Publicar Anuncio">Publicar Anuncio</option>
+                        <option value="Problema con Anuncio">Problema con Anuncio</option>
+                        <option value="Facturación">Facturación</option>
+                        <option value="Sugerencias">Sugerencias</option>
+                        <option value="Otro">Otro</option>
+                    </select>
+                    <span asp-validation-for="TipoConsulta" class="field-error"></span>
+                </div>
+                
+                <div class="form-group">
+                    <label asp-for="Telefono">Teléfono *</label>
+                    <input asp-for="Telefono" type="tel" placeholder="Introduzca su número" />
+                    <span asp-validation-for="Telefono" class="field-error"></span>
+                </div>
+            </div>
+
+            <div class="form-group full-width">
+                <label asp-for="Mensaje">Cuéntenos acerca de su problema *</label>
+                <textarea asp-for="Mensaje" placeholder="Escriba su mensaje" rows="6"></textarea>
+                <span asp-validation-for="Mensaje" class="field-error"></span>
+            </div>
+
+            <button type="submit" class="submit-button">
+                Enviar
+            </button>
+        </form>
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

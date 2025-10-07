@@ -1,0 +1,607 @@
+/* Historial de Pagos Styles */
+
+/* Page wrapper to ensure footer stays at bottom */
+.page-wrapper {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    background: #02081C;
+}
+
+.historial-pagos-container {
+    flex: 1;
+    color: #ffffff;
+    display: flex;
+    min-height: 100%;
+}
+
+/* Sidebar */
+.payments-sidebar {
+    width: 376px;
+    min-height: 100%;
+    background: #030D2B;
+    border-right: 0.5px solid rgba(255, 255, 255, 0.25);
+    padding: 12px 16px;
+    position: relative;
+    overflow: hidden;
+}
+
+.sidebar-nav {
+    display: flex;
+    flex-direction: column;
+}
+
+.nav-item {
+    height: 56px;
+    position: relative;
+    display: flex;
+    align-items: center;
+    padding: 14px 16px;
+    border-radius: 2px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 500;
+    font-size: 16px;
+    color: #ffffff;
+    text-decoration: none;
+    gap: 8px;
+}
+
+.nav-item:hover {
+    background: rgba(255, 255, 255, 0.05);
+    color: #ffffff;
+}
+
+.nav-item:visited {
+    color: #ffffff;
+}
+
+.nav-item.active {
+    background: rgba(255, 255, 255, 0.1);
+}
+
+/* Sidebar Icons */
+.personal-icon {
+    width: 7.73px;
+    height: 7.73px;
+    background: white;
+    border-radius: 50%;
+    position: relative;
+}
+
+.personal-icon::after {
+    content: '';
+    position: absolute;
+    width: 15.46px;
+    height: 8.70px;
+    background: white;
+    border-radius: 50% 50% 0 0;
+    left: -3.87px;
+    top: 10px;
+}
+
+.payments-icon {
+    width: 23px;
+    height: 4.04px;
+    background: white;
+    position: relative;
+}
+
+.payments-icon::after {
+    content: '';
+    position: absolute;
+    width: 23px;
+    height: 9.64px;
+    background: white;
+    left: 0;
+    top: 6px;
+    border-radius: 2px;
+}
+
+.settings-icon {
+    width: 20px;
+    height: 20px;
+    background: white;
+    border-radius: 4px;
+}
+
+.sidebar-indicator {
+    width: 4px;
+    height: 36px;
+    background: white;
+    border-radius: 100px;
+    position: absolute;
+    left: 14px;
+    top: 78px;
+    transition: top 0.3s ease;
+}
+
+/* Main Content */
+.payments-content {
+    flex: 1;
+    padding: 40px 18px;
+    max-width: 800px;
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+    overflow-x: hidden;
+}
+
+.page-header {
+    margin-bottom: 20px;
+}
+
+.page-title {
+    color: white;
+    font-size: 20px;
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 700;
+    margin: 0;
+}
+
+/* Payments Table */
+.payments-table-container {
+    width: 853px;
+    background: #030D2B;
+    border-radius: 16px;
+    border: 0.5px solid rgba(255, 255, 255, 0.25);
+    overflow: hidden;
+    padding: 15px 24px;
+}
+
+.payments-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-family: 'Montserrat', sans-serif;
+}
+
+.payments-table thead th {
+    color: #F7F7F7;
+    font-size: 14px;
+    font-weight: 700;
+    text-align: left;
+    padding: 0 0 40px 0;
+    border: none;
+}
+
+.payments-table tbody tr {
+    border-bottom: 0.5px solid rgba(255, 255, 255, 0.25);
+}
+
+.payments-table tbody tr:nth-child(even) {
+    background: #02081C;
+}
+
+.payments-table tbody td {
+    color: #F7F7F7;
+    font-size: 14px;
+    font-weight: 500;
+    padding: 23px 0;
+    border: none;
+    vertical-align: middle;
+}
+
+.payment-date {
+    width: 120px;
+}
+
+.payment-detail {
+    width: 200px;
+}
+
+.payment-method {
+    width: 180px;
+}
+
+.payment-amount {
+    width: 80px;
+}
+
+.payment-status {
+    width: 150px;
+}
+
+.status-container {
+    display: flex;
+    align-items: center;
+    gap: 28px;
+}
+
+.status-badge {
+    padding: 8px;
+    border-radius: 100px;
+    font-size: 12px;
+    font-weight: 700;
+    color: white;
+    text-align: center;
+    min-width: 79px;
+}
+
+.status-badge.approved {
+    background: #00CC00;
+}
+
+.status-badge.pending {
+    background: #FFA500;
+}
+
+.status-badge.rejected {
+    background: #FF4444;
+}
+
+.receipt-icon {
+    width: 24px;
+    height: 24px;
+    border-radius: 2px;
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.receipt-icon svg {
+    width: 16px;
+    height: 16px;
+}
+
+/* Help Section */
+.help-section {
+    position: absolute;
+    right: 326px;
+    bottom: 248px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+}
+
+.help-text {
+    color: white;
+    font-size: 16px;
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 400;
+}
+
+/* Footer */
+.main-footer {
+    width: 100%;
+    height: 304px;
+    background: #030D2B;
+    border-top: 0.5px solid rgba(255, 255, 255, 0.45);
+    overflow: hidden;
+    margin-top: auto;
+    flex-shrink: 0;
+}
+
+.footer-content {
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    gap: 62px;
+    padding: 45px 0;
+    position: relative;
+    left: 445.5px;
+    top: 0;
+}
+
+.footer-brand {
+    width: 289px;
+    height: 143px;
+    position: absolute;
+    left: -405.5px;
+    top: -5px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: flex-start;
+    gap: 32px;
+}
+
+.footer-logo {
+    width: 289px;
+    height: 45.86px;
+}
+
+.social-links {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 48px;
+}
+
+.social-icon {
+    width: 32px;
+    height: 32px;
+    background: white;
+    cursor: pointer;
+    transition: transform 0.2s ease;
+}
+
+.social-icon:hover {
+    transform: scale(1.1);
+}
+
+.footer-links {
+    width: 193px;
+    height: 173px;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: flex-start;
+    gap: 40px;
+}
+
+.footer-legal {
+    padding-top: 56px;
+    gap: 20px;
+    height: auto;
+}
+
+.footer-section-title {
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    font-weight: 700;
+    font-size: 24px;
+    color: rgba(255, 255, 255, 0.5);
+    margin: 0;
+}
+
+.footer-nav {
+    display: flex;
+    flex-direction: column;
+    gap: 32px;
+}
+
+.footer-legal .footer-nav {
+    gap: 20px;
+}
+
+.footer-nav a {
+    color: #ffffff;
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 400;
+    font-size: 16px;
+    text-decoration: none;
+    transition: opacity 0.3s ease;
+}
+
+.footer-nav a:hover {
+    opacity: 0.8;
+    color: #ffffff;
+    text-decoration: none;
+}
+
+.newsletter {
+    width: 285px;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+.newsletter-form {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+.newsletter-input-container {
+    position: relative;
+    width: 175px;
+    height: 61px;
+}
+
+.newsletter-input {
+    width: 175px;
+    height: 44px;
+    padding: 8px 64px 8px 16px;
+    background: #02081C;
+    border-radius: 4px;
+    border: 0.5px solid rgba(255, 255, 255, 0.5);
+    color: #ffffff;
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 500;
+    font-size: 14px;
+    position: absolute;
+    top: 17px;
+}
+
+.newsletter-input::placeholder {
+    color: rgba(255, 255, 255, 0.5);
+}
+
+.newsletter-input:focus {
+    outline: none;
+    border-color: rgba(255, 255, 255, 0.8);
+}
+
+.newsletter-description {
+    color: #ffffff;
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 500;
+    font-size: 14px;
+    margin: 0;
+    line-height: 1.4;
+}
+
+.newsletter-btn {
+    height: 44px;
+    padding: 16px;
+    background: #0A2680;
+    border-radius: 4px;
+    border: 0.5px solid white;
+    color: white;
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 700;
+    font-size: 16px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    align-self: flex-start;
+}
+
+.newsletter-btn:hover {
+    background: #0d2e99;
+    transform: translateY(-1px);
+}
+
+.footer-copyright {
+    position: absolute;
+    left: 428px;
+    top: 268px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+}
+
+.copyright-icon {
+    width: 20px;
+    height: 20px;
+    transform: rotate(180deg);
+}
+
+.footer-copyright span {
+    color: white;
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 300;
+    font-size: 16px;
+    text-align: center;
+}
+
+/* Status Messages */
+.status-message {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    padding: 12px 20px;
+    border-radius: 8px;
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 500;
+    font-size: 14px;
+    z-index: 9999;
+    animation: slideInRight 0.3s ease;
+}
+
+.status-message.success {
+    background: #22C55E;
+    color: white;
+}
+
+.status-message.error {
+    background: #EF4444;
+    color: white;
+}
+
+/* Responsive Design */
+@media (max-width: 1200px) {
+    .historial-pagos-container {
+        flex-direction: column;
+    }
+    
+    .payments-sidebar {
+        width: 100%;
+        height: auto;
+        display: flex;
+        justify-content: center;
+        padding: 20px;
+    }
+    
+    .sidebar-nav {
+        flex-direction: row;
+        gap: 20px;
+    }
+    
+    .sidebar-indicator {
+        display: none;
+    }
+    
+    .payments-content {
+        max-width: 100%;
+        padding: 20px;
+    }
+    
+    .payments-table-container {
+        width: 100%;
+        overflow-x: auto;
+    }
+    
+    .help-section {
+        position: static;
+        margin-top: 20px;
+        text-align: center;
+    }
+}
+
+@media (max-width: 768px) {
+    .payments-table-container {
+        padding: 10px 15px;
+    }
+    
+    .payments-table thead th,
+    .payments-table tbody td {
+        padding: 15px 5px;
+        font-size: 12px;
+    }
+    
+    .status-container {
+        flex-direction: column;
+        gap: 10px;
+        align-items: flex-start;
+    }
+    
+    .status-badge {
+        min-width: 60px;
+        padding: 6px;
+        font-size: 10px;
+    }
+    
+    .sidebar-nav {
+        flex-direction: column;
+        gap: 10px;
+    }
+    
+    .nav-item {
+        font-size: 14px;
+        padding: 10px;
+    }
+    
+    .page-title {
+        font-size: 18px;
+    }
+}
+
+@media (max-width: 480px) {
+    .payments-content {
+        padding: 15px;
+    }
+    
+    .payments-table-container {
+        padding: 8px 10px;
+    }
+    
+    .payments-table thead th,
+    .payments-table tbody td {
+        padding: 10px 3px;
+        font-size: 11px;
+    }
+    
+    .page-title {
+        font-size: 16px;
+    }
+}
+
+/* Animations */
+@keyframes slideInRight {
+    from {
+        transform: translateX(100%);
+        opacity: 0;
+    }
+    to {
+        transform: translateX(0);
+        opacity: 1;
+    }
+}
+
+/* Smooth scrolling */
+html {
+    scroll-behavior: smooth;
+}

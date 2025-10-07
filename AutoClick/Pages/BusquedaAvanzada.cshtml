@@ -1,0 +1,428 @@
+@page "/busqueda-avanzada"
+@model BusquedaAvanzadaModel
+@{
+    ViewData["Title"] = "Búsqueda Avanzada - AutoClick.cr";
+}
+
+<!-- Dark Theme Page Container -->
+<div class="busqueda-avanzada-page">
+    <!-- Header -->
+    <header class="busqueda-header">
+        <div class="busqueda-logo-container">
+            <a asp-page="/Index">
+                <img src="~/images/logo.png" alt="AutoClick.cr" class="busqueda-logo" />
+            </a>
+        </div>
+        
+        <nav class="busqueda-nav-menu">
+            <div class="busqueda-flag-container">
+                <img src="~/images/costa-rica-flag.png" alt="Costa Rica" class="busqueda-flag" />
+            </div>
+            <div class="busqueda-nav-item">
+                <span>Anúnciese</span>
+                <div class="busqueda-dropdown-arrow"></div>
+            </div>
+            <div class="busqueda-nav-item">
+                <span>Productos & Servicios</span>
+                <div class="busqueda-dropdown-arrow"></div>
+            </div>
+            <div class="busqueda-nav-item">
+                <span>Financiamiento</span>
+                <div class="busqueda-dropdown-arrow"></div>
+            </div>
+        </nav>
+        
+        <div class="busqueda-header-actions">
+            <div class="busqueda-cart-icon">
+                <div class="cart-outline"></div>
+            </div>
+            <div class="busqueda-user-menu">
+                <div class="user-avatar-dots">
+                    <div class="dot small"></div>
+                    <div class="dot large"></div>
+                </div>
+                <span>Nombre A.</span>
+            </div>
+        </div>
+    </header>
+
+    <div class="busqueda-container">
+        <!-- Breadcrumb Navigation -->
+        <nav class="busqueda-breadcrumb">
+            <a asp-page="/Index" class="breadcrumb-link">Inicio</a>
+            <span class="breadcrumb-separator">/</span>
+            <span class="breadcrumb-current">Búsqueda avanzada</span>
+        </nav>
+
+        <div class="busqueda-content">
+            <!-- Sidebar Filters -->
+            <aside class="busqueda-sidebar">
+                <!-- Filter Container -->
+                <div class="busqueda-filters-container">
+                    <div class="busqueda-filters-section">
+                        <!-- Filters Header -->
+                        <h3 class="busqueda-filters-title">Filtros de búsqueda</h3>
+                        
+                        <!-- Applied Filters Tags -->
+                        <div class="applied-filters-tags">
+                            <div class="filter-tags-row">
+                                <div class="filter-tag">
+                                    <span>Alajuela</span>
+                                    <button class="remove-filter-btn"></button>
+                                </div>
+                                <div class="filter-tag">
+                                    <span>San Antonio</span>
+                                    <button class="remove-filter-btn"></button>
+                                </div>
+                            </div>
+                            <div class="filter-tags-row">
+                                <div class="filter-tag">
+                                    <span>Toyota</span>
+                                    <button class="remove-filter-btn"></button>
+                                </div>
+                                <div class="filter-tag">
+                                    <span>Corolla</span>
+                                    <button class="remove-filter-btn"></button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Filter Form -->
+                        <form method="get" class="busqueda-filters-form">
+                            <input type="hidden" name="page" value="1" />
+                            <input type="hidden" name="sortBy" value="@Model.SortBy" />
+
+                            <!-- Provincia -->
+                            <div class="busqueda-filter-group">
+                                <label class="busqueda-filter-label">Provincia</label>
+                                <div class="busqueda-select-wrapper">
+                                    <select name="province" class="busqueda-filter-select">
+                                        <option value="">Todas las provincias</option>
+                                        <option value="san-jose">San José</option>
+                                        <option value="alajuela">Alajuela</option>
+                                        <option value="cartago">Cartago</option>
+                                    </select>
+                                    <div class="select-arrow"></div>
+                                </div>
+                            </div>
+
+                            <!-- Cantón -->
+                            <div class="busqueda-filter-group">
+                                <label class="busqueda-filter-label">Cantón</label>
+                                <div class="busqueda-select-wrapper">
+                                    <select name="canton" class="busqueda-filter-select">
+                                        <option value="">Todos los cantones</option>
+                                        <option value="san-antonio">San Antonio</option>
+                                        <option value="escazu">Escazú</option>
+                                    </select>
+                                    <div class="select-arrow"></div>
+                                </div>
+                            </div>
+
+                            <!-- Marca -->
+                            <div class="busqueda-filter-group">
+                                <label class="busqueda-filter-label">Marca</label>
+                                <div class="busqueda-select-wrapper">
+                                    <select name="brand" class="busqueda-filter-select">
+                                        <option value="">Todas las marcas</option>
+                                        <option value="BMW">BMW</option>
+                                        <option value="Audi">Audi</option>
+                                        <option value="Mercedes-Benz">Mercedes-Benz</option>
+                                        <option value="Toyota">Toyota</option>
+                                    </select>
+                                    <div class="select-arrow"></div>
+                                </div>
+                            </div>
+
+                            <!-- Modelo -->
+                            <div class="busqueda-filter-group">
+                                <label class="busqueda-filter-label">Modelo</label>
+                                <div class="busqueda-select-wrapper">
+                                    <select name="model" class="busqueda-filter-select">
+                                        <option value="">Todos los modelos</option>
+                                        <option value="X5M">X5M</option>
+                                        <option value="Q5">Q5</option>
+                                        <option value="Corolla">Corolla</option>
+                                    </select>
+                                    <div class="select-arrow"></div>
+                                </div>
+                            </div>
+
+                            <!-- Rango de precio -->
+                            <div class="busqueda-filter-group">
+                                <label class="busqueda-filter-label">Rango de precio</label>
+                                <div class="busqueda-price-range">
+                                    <div class="price-input-group">
+                                        <label class="price-input-label">Min</label>
+                                        <input type="number" name="minPrice" placeholder="$" class="busqueda-price-field" value="@Model.MinPrice" />
+                                    </div>
+                                    <span class="price-separator">hasta</span>
+                                    <div class="price-input-group">
+                                        <label class="price-input-label">Max</label>
+                                        <input type="number" name="maxPrice" placeholder="$" class="busqueda-price-field" value="@Model.MaxPrice" />
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Kilometraje -->
+                            <div class="busqueda-filter-group">
+                                <label class="busqueda-filter-label">Kilometraje</label>
+                                <div class="busqueda-price-range">
+                                    <div class="price-input-group">
+                                        <label class="price-input-label">Min</label>
+                                        <input type="number" name="minKm" class="busqueda-price-field" value="@Model.MinKm" />
+                                    </div>
+                                    <span class="price-separator">hasta</span>
+                                    <div class="price-input-group">
+                                        <label class="price-input-label">Max</label>
+                                        <input type="number" name="maxKm" class="busqueda-price-field" value="@Model.MaxKm" />
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Año -->
+                            <div class="busqueda-filter-group">
+                                <label class="busqueda-filter-label">Año</label>
+                                <div class="busqueda-price-range">
+                                    <div class="price-input-group">
+                                        <label class="price-input-label">Min</label>
+                                        <div class="busqueda-select-wrapper">
+                                            <select name="minYear" class="busqueda-filter-select small">
+                                                <option value="">Cualquiera</option>
+                                                <option value="2020">2020</option>
+                                                <option value="2021">2021</option>
+                                                <option value="2022">2022</option>
+                                            </select>
+                                            <div class="select-arrow"></div>
+                                        </div>
+                                    </div>
+                                    <span class="price-separator">hasta</span>
+                                    <div class="price-input-group">
+                                        <label class="price-input-label">Max</label>
+                                        <div class="busqueda-select-wrapper">
+                                            <select name="maxYear" class="busqueda-filter-select small">
+                                                <option value="">Cualquiera</option>
+                                                <option value="2023">2023</option>
+                                                <option value="2024">2024</option>
+                                                <option value="2025">2025</option>
+                                            </select>
+                                            <div class="select-arrow"></div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </form>
+
+                        <!-- Additional Filters -->
+                        <div class="busqueda-additional-filters">
+                            <div class="additional-filter-item">
+                                <span>Carrocería</span>
+                                <div class="select-arrow"></div>
+                            </div>
+                            <div class="additional-filter-item">
+                                <span>Combustible/Propulsión</span>
+                                <div class="select-arrow"></div>
+                            </div>
+                            <div class="additional-filter-item">
+                                <span>Tracción</span>
+                                <div class="select-arrow"></div>
+                            </div>
+                            <div class="additional-filter-item">
+                                <span>Tipo de vendedor</span>
+                                <div class="select-arrow"></div>
+                            </div>
+                            <div class="additional-filter-item">
+                                <span>Condición</span>
+                                <div class="select-arrow"></div>
+                            </div>
+                            <div class="additional-filter-item">
+                                <span>Transmisión</span>
+                                <div class="select-arrow"></div>
+                            </div>
+                            <div class="additional-filter-item">
+                                <span>Pasajeros</span>
+                                <div class="select-arrow"></div>
+                            </div>
+                            <div class="additional-filter-item">
+                                <span>Extras</span>
+                                <div class="select-arrow"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Sidebar Advertisement -->
+                <div class="busqueda-sidebar-ad">
+                    <img src="https://placehold.co/138x22" alt="Logo publicitario" />
+                    <h3>SU ANUNCIO AQUÍ</h3>
+                    <p>¡Haga click en este recuadro para empezar!</p>
+                </div>
+            </aside>
+
+            <!-- Main Content -->
+            <main class="busqueda-main">
+                <!-- Sort Dropdown -->
+                <div class="busqueda-sort-header">
+                    <div class="busqueda-sort-wrapper">
+                        <select class="busqueda-sort-select" onchange="changeBusquedaSorting(this.value)">
+                            <option value="recent" selected="@(Model.SortBy == "recent")">Ordenar por: Más recientes</option>
+                            <option value="price-asc" selected="@(Model.SortBy == "price-asc")">Ordenar por: Precio menor a mayor</option>
+                            <option value="price-desc" selected="@(Model.SortBy == "price-desc")">Ordenar por: Precio mayor a menor</option>
+                            <option value="year" selected="@(Model.SortBy == "year")">Ordenar por: Año más nuevo</option>
+                        </select>
+                        <div class="sort-arrow"></div>
+                    </div>
+                </div>
+
+                <!-- Cars Grid - 2 Columns -->
+                <div class="busqueda-cars-grid">
+                    @foreach (var auto in Model.Autos)
+                    {
+                        <div class="busqueda-car-card">
+                            <!-- Car Image with Overlays -->
+                            <div class="busqueda-car-image-container">
+                                <img src="@auto.ImagenPrincipal" alt="@auto.NombreCompleto" class="busqueda-car-image" />
+                                
+                                <!-- Destacado Badge -->
+                                <div class="busqueda-destacado-badge">Destacado</div>
+                                
+                                <!-- Favorite Button -->
+                                <div class="busqueda-heart-icon">
+                                    <div class="heart-outline"></div>
+                                </div>
+                                
+                                <!-- Premium Logo Overlay -->
+                                <div class="premium-logo-overlay">
+                                    <img src="https://placehold.co/138x136" alt="Premium" />
+                                </div>
+                            </div>
+                            
+                            <!-- Car Info -->
+                            <div class="busqueda-car-info">
+                                <h3 class="busqueda-car-title">@auto.NombreCompleto</h3>
+                                <p class="busqueda-car-price">@auto.ValorFiscalFormateado</p>
+                                
+                                <!-- Good Deal Badge -->
+                                <div class="busqueda-good-deal">
+                                    <img src="https://placehold.co/22x11" alt="Buena oferta" />
+                                    <span>Buena oferta</span>
+                                </div>
+                                
+                                <!-- Contact Button -->
+                                <button class="busqueda-contact-btn">Contactar vendedor</button>
+                                
+                                <!-- Additional Info -->
+                                <div class="busqueda-car-details">
+                                    <div class="car-km">@((new Random().Next(2000, 50000)).ToString("N0")) km</div>
+                                    <div class="car-estimate">Est. $@((auto.ValorFiscal / 100).ToString("N0"))/mes</div>
+                                </div>
+                            </div>
+                        </div>
+                    }
+                </div>
+
+                <!-- Advertisement Banners -->
+                <div class="busqueda-ad-banner">
+                    <img src="https://placehold.co/143x23" alt="Logo publicitario" />
+                    <h2>SU ANUNCIO AQUÍ</h2>
+                    <p>¡Haga click en este recuadro para empezar!</p>
+                </div>
+
+                <div class="busqueda-ad-banner">
+                    <img src="https://placehold.co/143x23" alt="Logo publicitario" />
+                    <h2>SU ANUNCIO AQUÍ</h2>
+                    <p>¡Haga click en este recuadro para empezar!</p>
+                </div>
+
+                <!-- Pagination -->
+                <nav class="busqueda-pagination" aria-label="Paginación de búsqueda">
+                    <div class="pagination-container">
+                        <!-- Previous Button -->
+                        <a href="@Url.Page("/BusquedaAvanzada", new { page = Model.CurrentPage - 1, sortBy = Model.SortBy })" 
+                           class="busqueda-pagination-arrow @(Model.CurrentPage <= 1 ? "disabled" : "")">
+                            <div class="pagination-arrow-icon left"></div>
+                        </a>
+
+                        <!-- Page Numbers -->
+                        @for (int i = 1; i <= Math.Min(5, Model.TotalPages); i++)
+                        {
+                            <a href="@Url.Page("/BusquedaAvanzada", new { page = i, sortBy = Model.SortBy })" 
+                               class="busqueda-pagination-number @(Model.CurrentPage == i ? "active" : "")">
+                                @i
+                            </a>
+                        }
+
+                        @if (Model.TotalPages > 5)
+                        {
+                            <span class="busqueda-pagination-ellipsis">…</span>
+                            
+                            <a href="@Url.Page("/BusquedaAvanzada", new { page = Model.TotalPages, sortBy = Model.SortBy })" 
+                               class="busqueda-pagination-number @(Model.CurrentPage == Model.TotalPages ? "active" : "")">
+                                584
+                            </a>
+                        }
+
+                        <!-- Next Button -->
+                        <a href="@Url.Page("/BusquedaAvanzada", new { page = Model.CurrentPage + 1, sortBy = Model.SortBy })" 
+                           class="busqueda-pagination-arrow @(Model.CurrentPage >= Model.TotalPages ? "disabled" : "")">
+                            <div class="pagination-arrow-icon right"></div>
+                        </a>
+                    </div>
+                </nav>
+            </main>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="busqueda-footer">
+        <div class="busqueda-footer-content">
+            <div class="footer-brand-section">
+                <img src="https://placehold.co/289x46" alt="AutoClick.cr Logo" class="footer-logo" />
+                <div class="footer-social-links">
+                    <div class="social-icon facebook"></div>
+                    <div class="social-icon instagram"></div>
+                    <div class="social-icon whatsapp"></div>
+                </div>
+            </div>
+            
+            <div class="footer-links-section">
+                <h3>AutoClick.cr</h3>
+                <nav class="footer-nav">
+                    <a href="/contactanos">Contáctenos</a>
+                    <a asp-page="/SobreNosotros">Sobre Nosotros</a>
+                    <a href="/reportar-problema">Reportar un problema</a>
+                </nav>
+            </div>
+            
+            <div class="footer-legal-section">
+                <nav class="footer-nav">
+                    <a href="/TerminosCondiciones">Términos y condiciones</a>
+                    <a href="/PoliticaPrivacidad">Política de privacidad</a>
+                </nav>
+            </div>
+            
+            <div class="footer-newsletter-section">
+                <h3>Suscribete</h3>
+                <form class="newsletter-form">
+                    <input type="email" placeholder="Introducir correo" class="newsletter-input" />
+                    <p>Suscríbase para recibir las últimas noticias y promociones</p>
+                    <button type="submit" class="newsletter-btn">Suscribirse</button>
+                </form>
+            </div>
+        </div>
+        
+        <div class="footer-copyright">
+            <img src="https://placehold.co/20x20" alt="Copyright" />
+            <span>2025. Todos los derechos reservados - AutoClick.cr</span>
+        </div>
+    </footer>
+</div>
+
+<script>
+function changeBusquedaSorting(sortBy) {
+    const url = new URL(window.location);
+    url.searchParams.set('sortBy', sortBy);
+    url.searchParams.set('page', '1');
+    window.location.href = url.toString();
+}
+</script>

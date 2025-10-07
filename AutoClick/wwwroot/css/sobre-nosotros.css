@@ -1,0 +1,618 @@
+/* Sobre Nosotros Styles */
+
+.sobre-nosotros-container {
+    background: #02081C;
+    min-height: 100vh;
+    color: #ffffff;
+    overflow: hidden;
+    position: relative;
+}
+
+/* Breadcrumb */
+.breadcrumb {
+    position: absolute;
+    left: 32px;
+    top: 96px;
+    display: flex;
+    align-items: center;
+    font-size: 16px;
+    z-index: 10;
+}
+
+.breadcrumb-item {
+    color: #ffffff;
+    text-decoration: none;
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 700;
+    transition: opacity 0.3s ease;
+}
+
+.breadcrumb-item:hover {
+    opacity: 0.8;
+    color: #ffffff;
+    text-decoration: none;
+}
+
+.breadcrumb-separator {
+    color: #ffffff;
+    margin: 0 8px;
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 500;
+}
+
+.breadcrumb-current {
+    color: #ffffff;
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 500;
+}
+
+/* Content Sections */
+.content-section {
+    width: 1248px;
+    position: relative;
+    left: 32px;
+    margin-bottom: 100px;
+    display: flex;
+    flex-direction: column;
+}
+
+/* Historia Section */
+.historia-section {
+    top: 232px;
+    position: absolute;
+}
+
+/* Misión Section */
+.mision-section {
+    top: 624px;
+    position: absolute;
+    left: 401px;
+    width: 847px;
+}
+
+/* Visión Section */
+.vision-section {
+    top: 926px;
+    position: absolute;
+}
+
+/* Valores Section */
+.valores-section {
+    top: 1222px;
+    position: absolute;
+    left: 471px;
+    width: 777px;
+}
+
+/* Background Text */
+.section-background-text {
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 800;
+    font-size: 121.95px;
+    color: rgba(255, 255, 255, 0.2);
+    margin: 0;
+    line-height: 1;
+    text-transform: uppercase;
+}
+
+.section-background-text.right-aligned {
+    text-align: right;
+}
+
+/* Section Content */
+.section-content {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    margin-top: -40px;
+}
+
+.section-content.left-aligned {
+    padding-left: 119px;
+}
+
+.section-content.right-aligned {
+    justify-content: flex-end;
+}
+
+.section-content.right-aligned .section-text {
+    text-align: right;
+    padding-right: 134px;
+}
+
+.mision-section .section-content.right-aligned .section-text {
+    padding-right: 212px;
+}
+
+/* Section Text */
+.section-text {
+    width: 589px;
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 500;
+    font-size: 20px;
+    color: #ffffff;
+    line-height: 1.6;
+}
+
+.mision-section .section-text {
+    width: 635px;
+}
+
+.section-text p {
+    margin: 0 0 20px 0;
+}
+
+.section-text p:last-child {
+    margin-bottom: 0;
+}
+
+/* Valores Specific Styles */
+.valores-text {
+    text-align: left;
+    padding-right: 0;
+}
+
+.valor-item {
+    margin-bottom: 32px;
+}
+
+.valor-item:last-child {
+    margin-bottom: 0;
+}
+
+.valor-item h3 {
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 700;
+    font-size: 20px;
+    color: #ffffff;
+    margin: 0 0 8px 0;
+    display: inline;
+}
+
+.valor-item p {
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 500;
+    font-size: 20px;
+    color: #ffffff;
+    margin: 0;
+    display: inline;
+}
+
+/* Footer */
+.main-footer {
+    width: 100%;
+    height: 304px;
+    position: absolute;
+    top: 2041px;
+    left: 0;
+    background: #030D2B;
+    border-top: 0.5px solid rgba(255, 255, 255, 0.45);
+    overflow: hidden;
+}
+
+.footer-content {
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    gap: 62px;
+    position: absolute;
+    left: 445.5px;
+    top: 45px;
+}
+
+.footer-brand {
+    width: 289px;
+    height: 143px;
+    position: absolute;
+    left: -405.5px;
+    top: -5px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: flex-start;
+    gap: 32px;
+}
+
+.footer-logo {
+    width: 289px;
+    height: 45.86px;
+}
+
+.social-links {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 48px;
+}
+
+.social-icon {
+    width: 32px;
+    height: 32px;
+    background: white;
+    position: relative;
+    overflow: hidden;
+}
+
+.facebook-icon {
+    cursor: pointer;
+    transition: transform 0.2s ease;
+}
+
+.instagram-icon::before {
+    content: '';
+    position: absolute;
+    width: 16.44px;
+    height: 16.44px;
+    left: 7.78px;
+    top: 7.78px;
+    background: #030D2B;
+    border-radius: 50%;
+}
+
+.instagram-icon::after {
+    content: '';
+    position: absolute;
+    width: 3.84px;
+    height: 3.84px;
+    left: 22.62px;
+    top: 5.54px;
+    background: #030D2B;
+    border-radius: 50%;
+}
+
+.whatsapp-icon {
+    cursor: pointer;
+    transition: transform 0.2s ease;
+}
+
+.footer-links {
+    width: 193px;
+    height: 173px;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: flex-start;
+    gap: 40px;
+}
+
+.footer-legal {
+    padding-top: 56px;
+    gap: 20px;
+    height: auto;
+}
+
+.footer-section-title {
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    font-weight: 700;
+    font-size: 24px;
+    color: rgba(255, 255, 255, 0.5);
+    margin: 0;
+}
+
+.footer-nav {
+    display: flex;
+    flex-direction: column;
+    gap: 32px;
+}
+
+.footer-legal .footer-nav {
+    gap: 20px;
+}
+
+.footer-nav a {
+    color: #ffffff;
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 400;
+    font-size: 16px;
+    text-decoration: none;
+    transition: opacity 0.3s ease;
+}
+
+.footer-nav a:hover {
+    opacity: 0.8;
+    color: #ffffff;
+    text-decoration: none;
+}
+
+/* Newsletter */
+.newsletter {
+    width: 285px;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+.newsletter-form {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+.newsletter-input-container {
+    position: relative;
+    width: 175px;
+    height: 61px;
+}
+
+.newsletter-input {
+    width: 175px;
+    height: 44px;
+    padding: 8px 64px 8px 16px;
+    background: #02081C;
+    border-radius: 4px;
+    border: 0.5px solid rgba(255, 255, 255, 0.5);
+    color: #ffffff;
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 500;
+    font-size: 14px;
+    position: absolute;
+    top: 17px;
+}
+
+.newsletter-input::placeholder {
+    color: rgba(255, 255, 255, 0.5);
+}
+
+.newsletter-input:focus {
+    outline: none;
+    border-color: rgba(255, 255, 255, 0.8);
+}
+
+.newsletter-description {
+    color: #ffffff;
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 500;
+    font-size: 14px;
+    margin: 0;
+    line-height: 1.4;
+}
+
+.newsletter-btn {
+    height: 44px;
+    padding: 16px;
+    background: #0A2680;
+    border-radius: 4px;
+    border: 0.5px solid white;
+    color: white;
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 700;
+    font-size: 16px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    align-self: flex-start;
+}
+
+.newsletter-btn:hover {
+    background: #0d2e99;
+    transform: translateY(-1px);
+}
+
+/* Footer Copyright */
+.footer-copyright {
+    position: absolute;
+    left: 428px;
+    top: 268px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+}
+
+.copyright-icon {
+    width: 20px;
+    height: 20px;
+    transform: rotate(180deg);
+}
+
+.footer-copyright span {
+    color: white;
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 300;
+    font-size: 16px;
+    text-align: center;
+}
+
+/* Status Messages */
+.status-message {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    padding: 12px 20px;
+    border-radius: 8px;
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 500;
+    font-size: 14px;
+    z-index: 9999;
+    animation: slideInRight 0.3s ease;
+}
+
+.status-message.success {
+    background: #22C55E;
+    color: white;
+}
+
+.status-message.error {
+    background: #EF4444;
+    color: white;
+}
+
+/* Responsive Design */
+@media (max-width: 1320px) {
+    .content-section {
+        width: 90%;
+        max-width: 1248px;
+        left: 5%;
+    }
+    
+    .mision-section {
+        left: 20%;
+        width: 75%;
+    }
+    
+    .valores-section {
+        left: 25%;
+        width: 70%;
+    }
+}
+
+@media (max-width: 1024px) {
+    .section-background-text {
+        font-size: 80px;
+    }
+    
+    .section-text {
+        width: 100%;
+        font-size: 18px;
+    }
+    
+    .mision-section .section-text {
+        width: 100%;
+    }
+    
+    .section-content.left-aligned {
+        padding-left: 60px;
+    }
+    
+    .section-content.right-aligned .section-text {
+        padding-right: 60px;
+    }
+    
+    .mision-section .section-content.right-aligned .section-text {
+        padding-right: 60px;
+    }
+}
+
+@media (max-width: 768px) {
+    .sobre-nosotros-container {
+        padding: 20px;
+    }
+    
+    .breadcrumb {
+        position: static;
+        margin-bottom: 40px;
+    }
+    
+    .content-section {
+        position: static;
+        width: 100%;
+        left: 0;
+        margin-bottom: 80px;
+    }
+    
+    .historia-section,
+    .mision-section,
+    .vision-section,
+    .valores-section {
+        position: static;
+        left: 0;
+        width: 100%;
+    }
+    
+    .section-background-text {
+        font-size: 60px;
+        text-align: center;
+    }
+    
+    .section-content {
+        margin-top: -20px;
+    }
+    
+    .section-content.left-aligned,
+    .section-content.right-aligned .section-text {
+        padding: 0;
+        text-align: left;
+    }
+    
+    .section-text {
+        font-size: 16px;
+        width: 100%;
+    }
+    
+    .main-footer {
+        position: static;
+        height: auto;
+        padding: 40px 20px;
+    }
+    
+    .footer-content {
+        position: static;
+        flex-direction: column;
+        align-items: center;
+        gap: 40px;
+        left: 0;
+        top: 0;
+    }
+    
+    .footer-brand {
+        position: static;
+        width: 100%;
+        align-items: center;
+        left: 0;
+        top: 0;
+    }
+    
+    .footer-links {
+        width: 100%;
+        align-items: center;
+        text-align: center;
+    }
+    
+    .newsletter {
+        width: 100%;
+        align-items: center;
+    }
+    
+    .newsletter-input-container {
+        width: 100%;
+    }
+    
+    .newsletter-input {
+        width: 100%;
+    }
+    
+    .footer-copyright {
+        position: static;
+        left: 0;
+        top: 0;
+        margin-top: 30px;
+        flex-direction: column;
+        gap: 10px;
+    }
+}
+
+@media (max-width: 480px) {
+    .section-background-text {
+        font-size: 40px;
+    }
+    
+    .section-text {
+        font-size: 14px;
+    }
+    
+    .valor-item h3,
+    .valor-item p {
+        font-size: 16px;
+    }
+    
+    .breadcrumb {
+        font-size: 14px;
+    }
+}
+
+/* Animations */
+@keyframes slideInRight {
+    from {
+        transform: translateX(100%);
+        opacity: 0;
+    }
+    to {
+        transform: translateX(0);
+        opacity: 1;
+    }
+}
+
+/* Smooth scrolling */
+html {
+    scroll-behavior: smooth;
+}

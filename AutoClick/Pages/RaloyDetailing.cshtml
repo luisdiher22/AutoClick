@@ -1,0 +1,499 @@
+@page "/raloy-detailing"
+@model AutoClick.Pages.RaloyDetailingModel
+@{
+    ViewData["Title"] = "Raloy - Detailing Automotriz - AutoClick.cr";
+}
+
+@section Styles {
+    <link rel="stylesheet" href="~/css/raloy-detailing.css" asp-append-version="true" />
+}
+
+<!-- Header removed - Using universal header -->
+    <div class="logo-container">
+        <img src="~/images/logo.png" alt="AutoClick.cr" style="height: 23px;" />
+    </div>
+    
+    <nav class="nav-menu">
+        <div>
+            <img src="~/images/costa-rica-flag.png" alt="Costa Rica" style="width: 67px; height: 31px;" />
+        </div>
+        <div class="nav-dropdown-container">
+            <a href="#" class="nav-item nav-dropdown">Anúnciese</a>
+            <div class="dropdown-menu">
+                <a asp-page="/RegistroAgencia" class="dropdown-item">Registrarse como agencia</a>
+                <a asp-page="/AnunciarEmpresa" class="dropdown-item">Anuncie su empresa</a>
+            </div>
+        </div>
+        <div class="nav-dropdown-container">
+            <a href="#" class="nav-item nav-dropdown">Productos & Servicios</a>
+            <div class="dropdown-menu">
+                <a asp-page="/PpfCeramico" class="dropdown-item">PPF y Cerámico</a>
+                <a asp-page="/RaloyDetailing" class="dropdown-item active">Raloy - Detailing</a>
+            </div>
+        </div>
+        <div class="nav-dropdown-container">
+
+
+<!-- Hero Section -->
+<section class="hero-section">
+    <div class="hero-background">
+        <img src="https://placehold.co/1280x832" alt="Raloy Detailing Background" class="hero-bg-image" />
+        <div class="hero-overlay"></div>
+        <div class="hero-content">
+            <h1 class="hero-title">Más que limpieza, es perfección. Detailing de alto nivel para autos de alto estándar.</h1>
+            <p class="hero-subtitle">Lorem ipsum dolor sit amet consectetur. Leo justo aenean leo faucibus accumsan mattis purus. Morbi id sapien proin donec eget vestibulum. Tristique viverra nunc adipiscing ut. Sapien eget ante netus gravida purus in ut neque sit. Neque cursus volutpat rutrum neque. Ut sagittis nisl facilisi mollis. A posuere ultricies nullam nisl commodo.</p>
+            <button class="hero-cta-btn" onclick="scrollToContact()">Cotizar</button>
+        </div>
+    </div>
+</section>
+
+<!-- Video Section -->
+<section class="video-section">
+    <div class="video-container">
+        <div class="video-placeholder">
+            <div class="youtube-icon">
+                <div class="youtube-bg"></div>
+                <div class="play-icon"></div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Why Choose Us Section -->
+<section class="why-choose-us">
+    <div class="why-container">
+        <h2 class="why-title">¿Por qué escogernos?</h2>
+        <div class="features-list">
+            <div class="feature-item">
+                <div class="feature-icons">
+                    <div class="feature-icon-small"></div>
+                    <div class="feature-icon-large"></div>
+                </div>
+                <span class="feature-text">Productos premium que no dañan pinturas ni interiores.</span>
+            </div>
+            
+            <div class="feature-item">
+                <div class="feature-icons">
+                    <div class="feature-icon-small"></div>
+                    <div class="feature-icon-large"></div>
+                </div>
+                <span class="feature-text">Técnicos con formación profesional en estética automotriz.</span>
+            </div>
+            
+            <div class="feature-item">
+                <div class="feature-icons">
+                    <div class="feature-icon-small"></div>
+                    <div class="feature-icon-large"></div>
+                </div>
+                <span class="feature-text">Enfoque en cada detalle, no solo en lo que "se ve".</span>
+            </div>
+            
+            <div class="feature-item">
+                <div class="feature-icons">
+                    <div class="feature-icon-small"></div>
+                    <div class="feature-icon-large"></div>
+                </div>
+                <span class="feature-text">Resultados de showroom.</span>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Testimonials Section -->
+<section class="testimonials-section">
+    <div class="testimonials-container">
+        <h2 class="testimonials-title">Testimonios</h2>
+        <div class="testimonials-slider">
+            <div class="testimonials-track">
+                <!-- Testimonial 1 -->
+                <div class="testimonial-card">
+                    <div class="testimonial-header">
+                        <div class="testimonial-profile">
+                            <img src="https://placehold.co/52x52" alt="Jane Smith" class="profile-avatar" />
+                            <div class="profile-info">
+                                <div class="profile-name-section">
+                                    <span class="profile-name">Jane Smith</span>
+                                    <img src="https://placehold.co/20x20" alt="Verified" class="verified-badge" />
+                                    <span class="recommendation-text">recommends <strong>Company Name</strong></span>
+                                </div>
+                                <div class="post-time">
+                                    <span>30m •</span>
+                                    <div class="visibility-icon"></div>
+                                    <div class="privacy-icon"></div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="more-options"></div>
+                    </div>
+                    
+                    <div class="testimonial-content">
+                        <p>I have been doing business with them for years, and YourCompany makes it so easy! If you don't understand how valuable their products can be for you, you need to look at what it does and how you can save and make money.</p>
+                    </div>
+                    
+                    <div class="testimonial-stats">
+                        <div class="reaction-avatars">
+                            <div class="avatar-small"></div>
+                            <div class="avatar-small"></div>
+                        </div>
+                        <span class="likes-count">You & 1 other</span>
+                        <span class="comments-count">0 Comments</span>
+                    </div>
+                    
+                    <div class="testimonial-actions">
+                        <button class="action-btn like-btn active">
+                            <div class="action-icon like-icon"></div>
+                            Like
+                        </button>
+                        <button class="action-btn comment-btn">
+                            <div class="action-icon comment-icon"></div>
+                            Comment
+                        </button>
+                        <button class="action-btn share-btn">
+                            <div class="action-icon share-icon"></div>
+                            Share
+                        </button>
+                    </div>
+                    
+                    <div class="testimonial-comments">
+                        <div class="comment-item">
+                            <img src="https://placehold.co/40x40" alt="Mike Johnson" class="comment-avatar" />
+                            <div class="comment-content">
+                                <div class="comment-bubble">
+                                    <div class="comment-author">Mike Johnson</div>
+                                    <div class="comment-text">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Diam nisi, cras neque, lorem vel vulputate vitae aliquam. Pretium tristique nisi, ut commodo fames. Porttitor et sagittis egestas vitae metus, odio tristique amet, duis. Nunc tortor elit aliquet quis in mauris.</div>
+                                </div>
+                                <div class="comment-actions">
+                                    <span>Like</span>
+                                    <span>Reply</span>
+                                    <span>5m</span>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="add-comment">
+                            <img src="https://placehold.co/40x40" alt="Your avatar" class="comment-avatar" />
+                            <div class="comment-input-container">
+                                <input type="text" placeholder="Write a comment..." class="comment-input" />
+                                <div class="comment-tip">Press Enter to post.</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Testimonial 2 (duplicate for slider effect) -->
+                <div class="testimonial-card">
+                    <div class="testimonial-header">
+                        <div class="testimonial-profile">
+                            <img src="https://placehold.co/52x52" alt="Jane Smith" class="profile-avatar" />
+                            <div class="profile-info">
+                                <div class="profile-name-section">
+                                    <span class="profile-name">Jane Smith</span>
+                                    <img src="https://placehold.co/20x20" alt="Verified" class="verified-badge" />
+                                    <span class="recommendation-text">recommends <strong>Company Name</strong></span>
+                                </div>
+                                <div class="post-time">
+                                    <span>30m •</span>
+                                    <div class="visibility-icon"></div>
+                                    <div class="privacy-icon"></div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="more-options"></div>
+                    </div>
+                    
+                    <div class="testimonial-content">
+                        <p>I have been doing business with them for years, and YourCompany makes it so easy! If you don't understand how valuable their products can be for you, you need to look at what it does and how you can save and make money.</p>
+                    </div>
+                    
+                    <div class="testimonial-stats">
+                        <div class="reaction-avatars">
+                            <div class="avatar-small"></div>
+                            <div class="avatar-small"></div>
+                        </div>
+                        <span class="likes-count">You & 1 other</span>
+                        <span class="comments-count">0 Comments</span>
+                    </div>
+                    
+                    <div class="testimonial-actions">
+                        <button class="action-btn like-btn active">
+                            <div class="action-icon like-icon"></div>
+                            Like
+                        </button>
+                        <button class="action-btn comment-btn">
+                            <div class="action-icon comment-icon"></div>
+                            Comment
+                        </button>
+                        <button class="action-btn share-btn">
+                            <div class="action-icon share-icon"></div>
+                            Share
+                        </button>
+                    </div>
+                    
+                    <div class="testimonial-comments">
+                        <div class="comment-item">
+                            <img src="https://placehold.co/40x40" alt="Mike Johnson" class="comment-avatar" />
+                            <div class="comment-content">
+                                <div class="comment-bubble">
+                                    <div class="comment-author">Mike Johnson</div>
+                                    <div class="comment-text">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Diam nisi, cras neque, lorem vel vulputate vitae aliquam. Pretium tristique nisi, ut commodo fames. Porttitor et sagittis egestas vitae metus, odio tristique amet, duis. Nunc tortor elit aliquet quis in mauris.</div>
+                                </div>
+                                <div class="comment-actions">
+                                    <span>Like</span>
+                                    <span>Reply</span>
+                                    <span>5m</span>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="add-comment">
+                            <img src="https://placehold.co/40x40" alt="Your avatar" class="comment-avatar" />
+                            <div class="comment-input-container">
+                                <input type="text" placeholder="Write a comment..." class="comment-input" />
+                                <div class="comment-tip">Press Enter to post.</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Navigation Arrow -->
+            <button class="slider-nav-btn">
+                <div class="nav-arrow"></div>
+            </button>
+        </div>
+    </div>
+</section>
+
+<!-- Gallery Section -->
+<section class="gallery-section">
+    <div class="gallery-container">
+        <h2 class="gallery-title">Fotografías</h2>
+        <div class="gallery-grid">
+            <div class="gallery-main">
+                <img src="https://placehold.co/610x480" alt="Detailing trabajo principal" class="main-image" />
+            </div>
+            <div class="gallery-thumbnails">
+                <img src="https://placehold.co/295x230" alt="Detailing trabajo 1" class="thumbnail-image" />
+                <img src="https://placehold.co/295x230" alt="Detailing trabajo 2" class="thumbnail-image" />
+                <img src="https://placehold.co/295x230" alt="Detailing trabajo 3" class="thumbnail-image" />
+                <img src="https://placehold.co/295x230" alt="Detailing trabajo 4" class="thumbnail-image" />
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Call to Action Section -->
+<section class="final-cta-section">
+    <div class="final-cta-background">
+        <div class="final-cta-content">
+            <h2 class="final-cta-text">Dale a tu auto el cuidado que merece.</h2>
+            <button class="final-cta-btn" onclick="scrollToContact()">Cotizar</button>
+        </div>
+    </div>
+</section>
+
+<!-- Contact Section -->
+<section class="contact-section" id="contact-form">
+    <div class="contact-container">
+        <div class="contact-content">
+            <h2 class="contact-title">¿Interesado en nuestros servicios de detailing?</h2>
+            <p class="contact-subtitle">Solicite una cotización personalizada para su vehículo</p>
+            
+            @if (!string.IsNullOrEmpty(Model.ErrorMessage))
+            {
+                <div class="error-message">
+                    @Model.ErrorMessage
+                </div>
+            }
+            
+            @if (!string.IsNullOrEmpty(Model.SuccessMessage))
+            {
+                <div class="success-message">
+                    @Model.SuccessMessage
+                </div>
+            }
+            
+            <form method="post" class="contact-form">
+                <div class="form-row">
+                    <div class="form-group">
+                        <label asp-for="Nombre" class="form-label">Nombre completo</label>
+                        <input asp-for="Nombre" class="form-control" placeholder="Su nombre completo" />
+                        <span asp-validation-for="Nombre" class="validation-error"></span>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label asp-for="Telefono" class="form-label">Teléfono</label>
+                        <input asp-for="Telefono" class="form-control" placeholder="Su número de teléfono" />
+                        <span asp-validation-for="Telefono" class="validation-error"></span>
+                    </div>
+                </div>
+                
+                <div class="form-row">
+                    <div class="form-group">
+                        <label asp-for="Email" class="form-label">Correo electrónico</label>
+                        <input asp-for="Email" type="email" class="form-control" placeholder="su@email.com" />
+                        <span asp-validation-for="Email" class="validation-error"></span>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label asp-for="TipoVehiculo" class="form-label">Tipo de vehículo</label>
+                        <select asp-for="TipoVehiculo" class="form-control">
+                            <option value="">Seleccione el tipo</option>
+                            <option value="Sedan">Sedán</option>
+                            <option value="SUV">SUV</option>
+                            <option value="Coupe">Coupé</option>
+                            <option value="Hatchback">Hatchback</option>
+                            <option value="Pickup">Pick-up</option>
+                            <option value="Deportivo">Deportivo</option>
+                            <option value="Lujo">Vehículo de lujo</option>
+                            <option value="Otro">Otro</option>
+                        </select>
+                        <span asp-validation-for="TipoVehiculo" class="validation-error"></span>
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <label asp-for="ServicioInteres" class="form-label">Servicios de interés</label>
+                    <div class="checkbox-group">
+                        <label class="checkbox-item">
+                            <input type="checkbox" name="ServicioInteres" value="Detailing-Basico" />
+                            <span class="checkmark"></span>
+                            Detailing Básico
+                        </label>
+                        <label class="checkbox-item">
+                            <input type="checkbox" name="ServicioInteres" value="Detailing-Premium" />
+                            <span class="checkmark"></span>
+                            Detailing Premium
+                        </label>
+                        <label class="checkbox-item">
+                            <input type="checkbox" name="ServicioInteres" value="Lavado-Completo" />
+                            <span class="checkmark"></span>
+                            Lavado Completo
+                        </label>
+                        <label class="checkbox-item">
+                            <input type="checkbox" name="ServicioInteres" value="Encerado-Profesional" />
+                            <span class="checkmark"></span>
+                            Encerado Profesional
+                        </label>
+                        <label class="checkbox-item">
+                            <input type="checkbox" name="ServicioInteres" value="Limpieza-Interior" />
+                            <span class="checkmark"></span>
+                            Limpieza Interior Profunda
+                        </label>
+                        <label class="checkbox-item">
+                            <input type="checkbox" name="ServicioInteres" value="Mantenimiento-Periodico" />
+                            <span class="checkmark"></span>
+                            Mantenimiento Periódico
+                        </label>
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <label asp-for="Mensaje" class="form-label">Mensaje adicional (opcional)</label>
+                    <textarea asp-for="Mensaje" class="form-control" rows="4" placeholder="Cuéntenos sobre su vehículo, estado actual, o necesidades específicas..."></textarea>
+                    <span asp-validation-for="Mensaje" class="validation-error"></span>
+                </div>
+                
+                <button type="submit" class="submit-button">Solicitar Cotización</button>
+            </form>
+        </div>
+    </div>
+</section>
+
+<!-- FAQ Section -->
+<section class="faq-section">
+    <div class="faq-container">
+        <h2 class="faq-title">Preguntas frecuentes</h2>
+        
+        <div class="faq-list">
+            <div class="faq-item" data-faq="1">
+                <div class="faq-question">
+                    <span>¿Qué diferencia su detailing del que ofrecen los lavacar?</span>
+                    <div class="faq-toggle"></div>
+                </div>
+                <div class="faq-answer">
+                    <p>Nuestro detailing va más allá de la simple limpieza. Utilizamos técnicas profesionales, productos especializados y un enfoque meticuloso en cada detalle. Mientras los lavacar se enfocan en la limpieza básica, nosotros restauramos y protegemos cada superficie de su vehículo para obtener resultados de showroom.</p>
+                </div>
+            </div>
+            
+            <div class="faq-item" data-faq="2">
+                <div class="faq-question">
+                    <span>¿Usan productos abrasivos o que pueden dañar mi vehículo?</span>
+                    <div class="faq-toggle"></div>
+                </div>
+                <div class="faq-answer">
+                    <p>Absolutamente no. Utilizamos únicamente productos premium de marcas reconocidas mundialmente, diseñados específicamente para no dañar pinturas, plásticos, cueros o cualquier material automotriz. Nuestros técnicos están capacitados en las mejores prácticas para garantizar la seguridad de su vehículo.</p>
+                </div>
+            </div>
+            
+            <div class="faq-item" data-faq="3">
+                <div class="faq-question">
+                    <span>¿Cuánto tiempo toma un servicio completo de detailing?</span>
+                    <div class="faq-toggle"></div>
+                </div>
+                <div class="faq-answer">
+                    <p>Dependiendo del paquete seleccionado y el estado del vehículo, un detailing completo puede tomar entre 4 a 8 horas. El detailing premium puede requerir hasta una jornada completa para garantizar que cada detalle sea perfecto. Ofrecemos servicios de recogida y entrega para su comodidad.</p>
+                </div>
+            </div>
+            
+            <div class="faq-item" data-faq="4">
+                <div class="faq-question">
+                    <span>¿Qué beneficios obtengo con el mantenimiento periódico?</span>
+                    <div class="faq-toggle"></div>
+                </div>
+                <div class="faq-answer">
+                    <p>El mantenimiento periódico preserva el valor de su vehículo, mantiene la protección de la pintura, previene el deterioro prematuro de materiales, y garantiza que su auto siempre luzca impecable. Además, ofrecemos descuentos especiales para clientes con planes de mantenimiento regular.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Footer -->
+<footer class="main-footer">
+    <div class="footer-content">
+        <div class="footer-brand">
+            <img src="https://placehold.co/289x46" alt="AutoClick.cr Logo" class="footer-logo" />
+            <div class="social-links">
+                <div class="social-icon facebook"></div>
+                <div class="social-icon instagram"></div>
+                <div class="social-icon whatsapp"></div>
+            </div>
+        </div>
+        
+        <div class="footer-links">
+            <h3 class="footer-section-title font-jakarta">AutoClick.cr</h3>
+            <nav class="footer-nav">
+                <a href="/contactanos">Contáctenos</a>
+                <a asp-page="/SobreNosotros">Sobre Nosotros</a>
+                <a href="/reportar-problema">Reportar un problema</a>
+            </nav>
+        </div>
+        
+        <div class="footer-links" style="padding-top: 56px;">
+            <nav class="footer-nav">
+                <a href="/TerminosCondiciones">Términos y condiciones</a>
+                <a href="/PoliticaPrivacidad">Política de privacidad</a>
+            </nav>
+        </div>
+        
+        <div class="newsletter">
+            <h3 class="footer-section-title font-jakarta">Suscribete</h3>
+            <form>
+                <input type="email" class="newsletter-input" placeholder="Introducir correo" />
+                <p style="color: white; font-size: 14px; font-weight: 500; margin: 16px 0;">Suscríbase para recibir las últimas noticias y promociones</p>
+                <button type="submit" class="newsletter-btn">Suscribirse</button>
+            </form>
+        </div>
+    </div>
+    
+    <div class="footer-copyright">
+        <img src="https://placehold.co/20x20" alt="Copyright" style="width: 20px; height: 20px; margin-right: 10px;" />
+        2025. Todos los derechos reservados - AutoClick.cr
+    </div>
+</footer>
+
+@section Scripts {
+    <script src="~/js/raloy-detailing.js" asp-append-version="true"></script>
+    <partial name="_ValidationScriptsPartial" />
+}

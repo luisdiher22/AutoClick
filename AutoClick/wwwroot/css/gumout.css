@@ -1,0 +1,593 @@
+/* Gumout Financing Page Styles */
+.gumout-container {
+    width: 100%;
+    background: #02081C;
+    color: white;
+    min-height: 100vh;
+    overflow-x: hidden;
+}
+
+/* Hero Section */
+.hero-section {
+    width: 100%;
+    height: 832px;
+    position: relative;
+    background: linear-gradient(90deg, rgba(0, 0, 0, 0) 38%, rgba(0, 0, 0, 0.80) 87%),
+                url('https://placehold.co/1280x832/0066cc/ffffff?text=Hero+Background') center/cover;
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    padding-right: 80px;
+    margin-top: 80px;
+}
+
+.hero-overlay {
+    max-width: 479px;
+    text-align: right;
+}
+
+.hero-title {
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 700;
+    font-size: 68px;
+    line-height: 1.1;
+    color: white;
+    margin: 0 0 40px 0;
+    text-box-trim: trim-both;
+    text-box-edge: cap alphabetic;
+}
+
+.hero-cta-button {
+    background: white;
+    color: #06174D;
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 700;
+    font-size: 16px;
+    padding: 16px 32px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.hero-cta-button:hover {
+    background: #f0f0f0;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(255, 255, 255, 0.2);
+}
+
+/* Benefits Section */
+.benefits-section {
+    padding: 80px 32px 60px;
+    max-width: 1216px;
+    margin: 0 auto;
+}
+
+.benefits-title {
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    font-weight: 800;
+    font-size: 40px;
+    text-align: center;
+    color: white;
+    margin-bottom: 24px;
+    text-box-trim: trim-both;
+    text-box-edge: cap alphabetic;
+}
+
+.benefits-description {
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 500;
+    font-size: 20px;
+    line-height: 1.5;
+    text-align: center;
+    color: white;
+    margin: 0 auto 80px;
+    max-width: 1017px;
+    text-box-trim: trim-both;
+    text-box-edge: cap alphabetic;
+}
+
+.benefits-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 105px;
+    align-items: flex-start;
+}
+
+.benefit-card {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    gap: 32px;
+}
+
+.benefit-icon {
+    width: 102px;
+    height: 102px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.icon-placeholder {
+    width: 82.57px;
+    height: 102px;
+    background: white;
+}
+
+.coins-stack {
+    position: relative;
+    width: 60px;
+    height: 102px;
+}
+
+.coin, .coin-vertical, .coin-large, .coin-small {
+    position: absolute;
+    background: white;
+}
+
+.coin {
+    width: 59.74px;
+    height: 26.23px;
+}
+
+.coin-vertical {
+    width: 27.69px;
+    height: 61.20px;
+}
+
+.coin-large {
+    width: 55.37px;
+    height: 53.91px;
+}
+
+.coin-small {
+    width: 17.49px;
+    height: 33.51px;
+}
+
+.coin:nth-child(1) { top: 0; left: 0; }
+.coin-vertical:nth-child(2) { top: 20px; left: 15px; }
+.coin:nth-child(3) { top: 35px; left: 0; }
+.coin-vertical:nth-child(4) { top: 40px; left: 15px; }
+.coin-large:nth-child(5) { bottom: 15px; left: 2px; }
+.coin-small:nth-child(6) { bottom: 0; right: 0; }
+
+.benefit-title {
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 700;
+    font-size: 32px;
+    color: white;
+    margin: 0;
+    text-box-trim: trim-both;
+    text-box-edge: cap alphabetic;
+}
+
+.benefit-text {
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 500;
+    font-size: 16px;
+    line-height: 1.5;
+    color: white;
+    margin: 0;
+    max-width: 340px;
+    text-box-trim: trim-both;
+    text-box-edge: cap alphabetic;
+}
+
+/* Banks Section */
+.banks-section {
+    padding: 60px 32px 80px;
+    text-align: center;
+}
+
+.banks-title {
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 700;
+    font-size: 36px;
+    color: white;
+    margin: 0 0 24px 0;
+    text-box-trim: trim-both;
+    text-box-edge: cap alphabetic;
+}
+
+.banks-description {
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 500;
+    font-size: 20px;
+    color: white;
+    margin: 0 auto 60px;
+    max-width: 800px;
+    text-box-trim: trim-both;
+    text-box-edge: cap alphabetic;
+}
+
+.banks-grid {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 20px;
+    flex-wrap: wrap;
+    max-width: 1216px;
+    margin: 0 auto;
+}
+
+.bank-logo {
+    width: 289px;
+    height: 289px;
+    background: white;
+    border-radius: 4px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: transform 0.3s ease;
+}
+
+.bank-logo:hover {
+    transform: translateY(-5px);
+}
+
+.bank-placeholder {
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 700;
+    font-size: 30.79px;
+    color: black;
+    text-align: center;
+    line-height: 1.2;
+}
+
+/* Calculator Section */
+.calculator-section {
+    padding: 80px 32px;
+    display: flex;
+    gap: 40px;
+    max-width: 1280px;
+    margin: 0 auto;
+    align-items: flex-start;
+}
+
+.calculator-container {
+    flex: 1;
+    background: #030D2B;
+    border-radius: 4px;
+    border: 1px solid rgba(255, 255, 255, 0.25);
+    padding: 24px;
+    max-width: 804px;
+}
+
+.calculator-title {
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 700;
+    font-size: 20px;
+    color: white;
+    margin: 0 0 27px 0;
+    text-box-trim: trim-both;
+    text-box-edge: cap alphabetic;
+}
+
+.finance-form {
+    display: flex;
+    flex-direction: column;
+    gap: 23px;
+}
+
+.form-row {
+    display: flex;
+    gap: 20px;
+}
+
+.form-group {
+    flex: 1;
+    position: relative;
+}
+
+.form-group label {
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 500;
+    font-size: 14px;
+    color: white;
+    margin-bottom: 8px;
+    display: block;
+}
+
+.form-group label.required::after {
+    content: " *";
+    color: #FF0000;
+}
+
+.form-group label.output-label {
+    font-weight: 800;
+}
+
+.form-select,
+.form-group input {
+    width: 100%;
+    height: 44px;
+    background: #02081C;
+    border: 0.5px solid rgba(255, 255, 255, 0.5);
+    border-radius: 4px;
+    padding: 8px 16px;
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 500;
+    font-size: 14px;
+    color: white;
+    box-sizing: border-box;
+}
+
+.form-select {
+    appearance: none;
+    background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='white' viewBox='0 0 16 16'%3e%3cpath d='m7.247 4.86-4.796 5.481c-.566.647-.106 1.659.753 1.659h9.592a1 1 0 0 0 .753-1.659l-4.796-5.48a1 1 0 0 0-1.506 0z'/%3e%3c/svg%3e");
+    background-position: right 16px center;
+    background-repeat: no-repeat;
+    background-size: 12px;
+    padding-right: 40px;
+}
+
+.input-with-prefix {
+    position: relative;
+    display: flex;
+    align-items: center;
+}
+
+.input-with-prefix .prefix {
+    position: absolute;
+    left: 16px;
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 500;
+    font-size: 14px;
+    color: white;
+    z-index: 2;
+}
+
+.input-with-prefix input {
+    padding-left: 32px;
+}
+
+.form-select::placeholder,
+.form-group input::placeholder {
+    color: rgba(255, 255, 255, 0.5);
+}
+
+.form-select:focus,
+.form-group input:focus {
+    outline: none;
+    border-color: rgba(255, 255, 255, 0.8);
+    box-shadow: 0 0 0 2px rgba(255, 255, 255, 0.1);
+}
+
+.submit-button {
+    width: 100%;
+    height: 44px;
+    background: white;
+    color: #06174D;
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 700;
+    font-size: 16px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    margin-top: 20px;
+}
+
+.submit-button:hover {
+    background: #f0f0f0;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(255, 255, 255, 0.2);
+}
+
+.ad-space {
+    width: 392px;
+    height: 390px;
+    background: #04091F;
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+}
+
+.ad-content {
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    font-weight: 800;
+    font-size: 31.36px;
+    color: white;
+    text-align: center;
+    line-height: 1.2;
+}
+
+/* FAQ Section */
+.faq-section {
+    padding: 60px 32px;
+    max-width: 1280px;
+    margin: 0 auto;
+}
+
+.faq-title {
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 700;
+    font-size: 32px;
+    color: white;
+    margin: 0 0 32px 0;
+    text-box-trim: trim-both;
+    text-box-edge: cap alphabetic;
+}
+
+.faq-container {
+    max-width: 852px;
+}
+
+.faq-item {
+    border-top: 1px solid rgba(255, 255, 255, 0.25);
+}
+
+.faq-item:last-child {
+    border-bottom: 1px solid rgba(255, 255, 255, 0.25);
+}
+
+.faq-question {
+    width: 100%;
+    background: none;
+    border: none;
+    color: white;
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 700;
+    font-size: 16px;
+    text-align: left;
+    padding: 24px 0;
+    cursor: pointer;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    transition: color 0.3s ease;
+}
+
+.faq-question:hover {
+    color: rgba(255, 255, 255, 0.8);
+}
+
+.faq-arrow {
+    transition: transform 0.3s ease;
+    flex-shrink: 0;
+    margin-left: 20px;
+}
+
+.faq-item.active .faq-arrow {
+    transform: rotate(180deg);
+}
+
+.faq-answer {
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.3s ease, padding 0.3s ease;
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: 4px;
+    margin-bottom: 8px;
+}
+
+.faq-item.active .faq-answer {
+    max-height: 200px;
+    padding: 20px;
+}
+
+.faq-answer p {
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 400;
+    font-size: 14px;
+    line-height: 1.5;
+    color: rgba(255, 255, 255, 0.9);
+    margin: 0;
+}
+
+/* Alert Styles */
+.alert {
+    padding: 16px;
+    border-radius: 4px;
+    margin-bottom: 20px;
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 500;
+    font-size: 14px;
+}
+
+.alert-success {
+    background: rgba(34, 197, 94, 0.1);
+    border: 1px solid rgba(34, 197, 94, 0.3);
+    color: #22c55e;
+}
+
+.alert-error {
+    background: rgba(239, 68, 68, 0.1);
+    border: 1px solid rgba(239, 68, 68, 0.3);
+    color: #ef4444;
+}
+
+/* Responsive Design */
+@media (max-width: 1024px) {
+    .hero-title {
+        font-size: 48px;
+    }
+    
+    .benefits-grid {
+        gap: 60px;
+    }
+    
+    .calculator-section {
+        flex-direction: column;
+    }
+    
+    .ad-space {
+        width: 100%;
+        max-width: 392px;
+        margin: 0 auto;
+    }
+    
+    .banks-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+@media (max-width: 768px) {
+    .hero-section {
+        height: 600px;
+        padding: 40px 20px;
+        text-align: center;
+        justify-content: center;
+    }
+    
+    .hero-title {
+        font-size: 36px;
+        max-width: 100%;
+    }
+    
+    .benefits-grid {
+        grid-template-columns: 1fr;
+        gap: 40px;
+    }
+    
+    .form-row {
+        flex-direction: column;
+        gap: 16px;
+    }
+    
+    .banks-grid {
+        grid-template-columns: 1fr;
+        gap: 16px;
+    }
+    
+    .bank-logo {
+        width: 100%;
+        max-width: 289px;
+        margin: 0 auto;
+    }
+    
+    .calculator-section {
+        padding: 40px 16px;
+    }
+    
+    .calculator-container {
+        padding: 20px;
+    }
+}
+
+@media (max-width: 480px) {
+    .hero-title {
+        font-size: 28px;
+    }
+    
+    .benefits-title {
+        font-size: 32px;
+    }
+    
+    .benefits-description {
+        font-size: 18px;
+    }
+    
+    .benefit-title {
+        font-size: 24px;
+    }
+    
+    .banks-title {
+        font-size: 28px;
+    }
+}

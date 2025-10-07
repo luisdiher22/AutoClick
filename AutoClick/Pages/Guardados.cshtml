@@ -1,0 +1,217 @@
+@page "/guardados"
+@model GuardadosModel
+@{
+    ViewData["Title"] = "Autos Guardados - AutoClick.cr";
+}
+
+<!-- Header -->
+<!-- Header removed - Using universal header -->
+    <div class="logo-container">
+        <a asp-page="/Index">
+            <img src="~/images/logo.png" alt="AutoClick.cr" style="height: 23px;" />
+        </a>
+    </div>
+    
+    <nav class="nav-menu">
+        <div>
+            <img src="~/images/costa-rica-flag.png" alt="Costa Rica" style="width: 67px; height: 31px;" />
+        </div>
+        <div class="nav-dropdown-container">
+            <a href="#" class="nav-item nav-dropdown">Anúnciese</a>
+            <div class="dropdown-menu">
+                <a asp-page="/RegistroAgencia" class="dropdown-item">Registrarse como agencia</a>
+                <a asp-page="/AnunciarEmpresa" class="dropdown-item">Anuncie su empresa</a>
+            </div>
+        </div>
+        <div class="nav-dropdown-container">
+            <a href="#" class="nav-item nav-dropdown">Productos & Servicios</a>
+            <div class="dropdown-menu">
+                <a asp-page="/PpfCeramico" class="dropdown-item">PPF y Cerámico</a>
+                <a asp-page="/RaloyDetailing" class="dropdown-item">Raloy - Detailing</a>
+            </div>
+        </div>
+        <div class="nav-dropdown-container">
+            <a href="#" class="nav-item nav-dropdown">Financiamiento</a>
+            <div class="dropdown-menu">
+                <a asp-page="/Gumout" class="dropdown-item">Gumout</a>
+            </div>
+        </div>
+    </nav>
+    
+    <div class="header-actions">
+        <div style="border-radius: 4px; padding: 12px; border: 2px solid white;">
+            <div style="width: 20px; height: 17px; border: 2px solid white;"></div>
+        </div>
+        <a href="#" class="login-btn">
+            <div style="width: 5px; height: 5px; background: white; margin-right: 5px;"></div>
+            <div style="width: 10px; height: 6px; background: white; margin-right: 8px;"></div>
+            Nombre A.
+        </a>
+    </div>
+</header>
+
+<!-- Page Content -->
+<div class="content-width">
+    <!-- Breadcrumb Navigation -->
+    <nav class="breadcrumb-nav-guardados">
+        <a asp-page="/Index" class="breadcrumb-link">Inicio</a>
+        <span class="breadcrumb-separator">/</span>
+        <span class="breadcrumb-current">Autos guardados</span>
+    </nav>
+
+    <!-- Page Header -->
+    <div class="guardados-header">
+        <h1 class="guardados-title">Autos guardados</h1>
+        <div class="sort-dropdown">
+            <select id="sortSelect" class="guardados-sort-select" onchange="changeSorting(this.value)">
+                <option value="recent" selected="@(Model.SortBy == "recent")">Ordenar por: Más recientes</option>
+                <option value="price-asc" selected="@(Model.SortBy == "price-asc")">Ordenar por: Precio menor a mayor</option>
+                <option value="price-desc" selected="@(Model.SortBy == "price-desc")">Ordenar por: Precio mayor a menor</option>
+                <option value="year" selected="@(Model.SortBy == "year")">Ordenar por: Año más nuevo</option>
+            </select>
+        </div>
+    </div>
+
+    <!-- Cars Grid - 3 Columns as shown in Figma -->
+    <div class="guardados-grid">
+        @foreach (var auto in Model.SavedAutos)
+        {
+            <a asp-page="/Producto" asp-route-id="@auto.Id" style="text-decoration: none; color: inherit;">
+                <div class="guardados-car-card">
+                    <div class="guardados-car-image-container">
+                        <img src="@auto.ImagenPrincipal" alt="@auto.NombreCompleto" class="guardados-car-image" />
+                        <div class="guardados-car-actions">
+                            <button class="guardados-favorite-btn active" title="Quitar de favoritos" onclick="event.stopPropagation(); event.preventDefault();">
+                                <svg width="20" height="17" viewBox="0 0 24 24" fill="none">
+                                    <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z" fill="currentColor"/>
+                                </svg>
+                            </button>
+                            <button class="guardados-share-btn" title="Compartir" onclick="event.stopPropagation(); event.preventDefault();">
+                                <svg width="16" height="20" viewBox="0 0 24 24" fill="none">
+                                    <path d="M18 16.08c-.76 0-1.44.3-1.96.77L8.91 12.7c.05-.23.09-.46.09-.7s-.04-.47-.09-.7l7.05-4.11c.54.5 1.25.81 2.04.81 1.66 0 3-1.34 3-3s-1.34-3-3-3-3 1.34-3 3c0 .24.04.47.09.7L8.04 9.81C7.5 9.31 6.79 9 6 9c-1.66 0-3 1.34-3 3s1.34 3 3 3c.79 0 1.5-.31 2.04-.81l7.12 4.16c-.05.21-.08.43-.08.65 0 1.61 1.31 2.92 2.92 2.92s2.92-1.31 2.92-2.92-1.31-2.92-2.92-2.92z" fill="currentColor"/>
+                                </svg>
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <div class="guardados-car-info">
+                        <h3 class="guardados-car-title">@auto.NombreCompleto</h3>
+                        <p class="guardados-car-price">@auto.ValorFiscalFormateado</p>
+                    </div>
+                </div>
+            </a>
+        }
+
+        <!-- Advertisement Slot (as shown in Figma) -->
+        @if (Model.SavedAutos.Count >= 7)
+        {
+            <div class="guardados-ad-slot">
+                <img src="https://placehold.co/135x21" alt="Logo publicitario" class="ad-logo" />
+                <h3 class="ad-title">SU ANUNCIO AQUÍ</h3>
+                <p class="ad-subtitle">¡Haga click en este recuadro para empezar!</p>
+            </div>
+        }
+    </div>
+
+    <!-- Pagination -->
+    <nav class="guardados-pagination" aria-label="Paginación de autos guardados">
+        <div class="pagination-container">
+            <!-- Previous Button -->
+            <a href="@Url.Page("/Guardados", new { page = Model.CurrentPage - 1, sortBy = Model.SortBy })" 
+               class="pagination-arrow @(Model.CurrentPage <= 1 ? "disabled" : "")">
+                <svg width="17" height="14" viewBox="0 0 24 24" fill="none">
+                    <path d="M15.41 7.41L14 6l-6 6 6 6 1.41-1.41L10.83 12z" fill="currentColor"/>
+                </svg>
+            </a>
+
+            <!-- Page Numbers -->
+            @for (int i = 1; i <= Math.Min(5, Model.TotalPages); i++)
+            {
+                <a href="@Url.Page("/Guardados", new { page = i, sortBy = Model.SortBy })" 
+                   class="pagination-number @(Model.CurrentPage == i ? "active" : "")">
+                    @i
+                </a>
+            }
+
+            @if (Model.TotalPages > 5)
+            {
+                @if (Model.TotalPages > 6)
+                {
+                    <span class="pagination-ellipsis">…</span>
+                }
+                
+                <a href="@Url.Page("/Guardados", new { page = Model.TotalPages, sortBy = Model.SortBy })" 
+                   class="pagination-number @(Model.CurrentPage == Model.TotalPages ? "active" : "")">
+                    @Model.TotalPages
+                </a>
+            }
+
+            <!-- Next Button -->
+            <a href="@Url.Page("/Guardados", new { page = Model.CurrentPage + 1, sortBy = Model.SortBy })" 
+               class="pagination-arrow @(Model.CurrentPage >= Model.TotalPages ? "disabled" : "")">
+                <svg width="17" height="14" viewBox="0 0 24 24" fill="none">
+                    <path d="M8.59 16.59L10 18l6-6-6-6-1.41 1.41L13.17 12z" fill="currentColor"/>
+                </svg>
+            </a>
+        </div>
+    </nav>
+
+    <!-- Large Advertisement Banner -->
+    <div class="guardados-large-ad">
+        <img src="https://placehold.co/168x27" alt="Logo publicitario" class="large-ad-logo" />
+        <h2 class="large-ad-title">SU ANUNCIO AQUÍ</h2>
+        <p class="large-ad-subtitle">¡Haga click en este recuadro para empezar!</p>
+    </div>
+</div>
+
+<!-- Footer -->
+<footer class="main-footer">
+    <div class="footer-content">
+        <div class="footer-brand">
+            <img src="https://placehold.co/289x46" alt="AutoClick.cr Logo" class="footer-logo" />
+            <div class="social-links">
+                <div class="social-icon"></div>
+                <div class="social-icon"></div>
+                <div class="social-icon"></div>
+            </div>
+        </div>
+        
+        <div class="footer-links">
+            <h3 class="footer-section-title font-jakarta">AutoClick.cr</h3>
+            <nav class="footer-nav">
+                <a href="/contactanos">Contáctenos</a>
+                <a asp-page="/SobreNosotros">Sobre Nosotros</a>
+                <a href="/reportar-problema">Reportar un problema</a>
+            </nav>
+        </div>
+        
+        <div class="footer-links" style="padding-top: 56px;">
+            <nav class="footer-nav">
+                <a href="/TerminosCondiciones">Términos y condiciones</a>
+                <a href="/PoliticaPrivacidad">Política de privacidad</a>
+            </nav>
+        </div>
+        
+        <div class="newsletter">
+            <h3 class="footer-section-title font-jakarta">Suscribete</h3>
+            <form>
+                <input type="email" class="newsletter-input" placeholder="Introducir correo" />
+                <p style="color: white; font-size: 14px; font-weight: 500; margin: 16px 0;">Suscríbase para recibir las últimas noticias y promociones</p>
+                <button type="submit" class="newsletter-btn">Suscribirse</button>
+            </form>
+        </div>
+    </div>
+    
+    <div class="footer-copyright">
+        <img src="https://placehold.co/20x20" alt="Copyright" style="width: 20px; height: 20px; margin-right: 10px;" />
+        2025. Todos los derechos reservados - AutoClick.cr
+    </div>
+</footer>
+
+<script>
+function changeSorting(sortBy) {
+    const currentPage = @Model.CurrentPage;
+    const url = `@Url.Page("/Guardados")?page=1&sortBy=${sortBy}`;
+    window.location.href = url;
+}
+</script>

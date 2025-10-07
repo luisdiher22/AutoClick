@@ -1,0 +1,19 @@
+@page
+@model AutoClick.Pages.LogoutModel
+@{
+    ViewData["Title"] = "Cerrando Sesión";
+}
+
+<div style="display: flex; justify-content: center; align-items: center; height: 100vh; background: #02081C; color: white;">
+    <div style="text-align: center;">
+        <h2>Cerrando sesión...</h2>
+        <p>Por favor espera mientras cerramos tu sesión.</p>
+    </div>
+</div>
+
+<script>
+    // Redirect to home page after a short delay
+    setTimeout(() => {
+        window.location.href = '/';
+    }, 1000);
+</script>

@@ -1,0 +1,53 @@
+﻿<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - AutoClick.cr</title>
+    
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;700&family=Plus+Jakarta+Sans:wght@700&display=swap" rel="stylesheet">
+    
+    <!-- Stylesheets -->
+    <script type="importmap"></script>
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/css/autoclick.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/css/universal-header.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/AutoClick.styles.css" asp-append-version="true" />
+    
+    @await RenderSectionAsync("Styles", required: false)
+    
+    <!-- Meta Tags -->
+    <meta name="description" content="AutoClick.cr - Plataforma líder en Costa Rica para comprar y vender autos usados y nuevos. Encuentra tu auto ideal o anuncia el tuyo sin costo.">
+    <meta name="keywords" content="autos, carros, Costa Rica, comprar auto, vender auto, autos usados">
+</head>
+<body>
+    <!-- Universal Header (exclude from auth pages) -->
+    @{
+        string currentPage = ViewContext.RouteData.Values["page"]?.ToString() ?? "";
+        bool isAuthPage = currentPage.Contains("/Auth") || 
+                         currentPage.Contains("/RegistroIndividuo") || 
+                         currentPage.Contains("/RegistroAgencia");
+    }
+    
+    @if (!isAuthPage)
+    {
+        @await Html.PartialAsync("_Header")
+    }
+    
+    <div class="main-container @(isAuthPage ? "auth-page" : "")">
+        @RenderBody()
+    </div>
+
+    <!-- Footer will be included in the page content -->
+
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="~/js/site.js" asp-append-version="true"></script>
+
+    @await RenderSectionAsync("Scripts", required: false)
+</body>
+</html>

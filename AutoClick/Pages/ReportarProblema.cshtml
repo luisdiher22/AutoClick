@@ -1,0 +1,121 @@
+@page "/reportar-problema"
+@model AutoClick.Pages.ReportarProblemaModel
+@{
+    ViewData["Title"] = "Reportar un problema";
+}
+
+<link rel="stylesheet" href="~/css/reportar-problema.css" asp-append-version="true" />
+
+<div class="reportar-problema-container">
+    <div class="reportar-problema-content">
+        <div class="form-panel">
+            <div class="panel-header">
+                <h1 class="panel-title">Reportar un problema</h1>
+            </div>
+
+            <form method="post" class="reportar-form">
+                <div class="section-header">
+                    <h2>Datos de contacto</h2>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label asp-for="Nombre" class="form-label">
+                            Nombre
+                            <span class="required">*</span>
+                        </label>
+                        <input asp-for="Nombre" class="form-input" placeholder="Introduzca su nombre" />
+                        <span asp-validation-for="Nombre" class="text-danger"></span>
+                    </div>
+
+                    <div class="form-group">
+                        <label asp-for="Apellido" class="form-label">
+                            Apellido
+                            <span class="required">*</span>
+                        </label>
+                        <input asp-for="Apellido" class="form-input" placeholder="Introduzca su apellido" />
+                        <span asp-validation-for="Apellido" class="text-danger"></span>
+                    </div>
+                </div>
+
+                <div class="form-group full-width">
+                    <label asp-for="Email" class="form-label">
+                        Correo electrónico
+                        <span class="required">*</span>
+                    </label>
+                    <input asp-for="Email" type="email" class="form-input" placeholder="Introduzca su correo electrónico" />
+                    <span asp-validation-for="Email" class="text-danger"></span>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label asp-for="TipoProblema" class="form-label">
+                            Tipo de problema
+                            <span class="required">*</span>
+                        </label>
+                        <select asp-for="TipoProblema" class="form-select">
+                            <option value="">Seleccione tipo de problema</option>
+                            <option value="Técnico">Problema técnico</option>
+                            <option value="Cuenta">Problema con mi cuenta</option>
+                            <option value="Anuncio">Problema con anuncio</option>
+                            <option value="Pago">Problema de pago</option>
+                            <option value="Otro">Otro problema</option>
+                        </select>
+                        <span asp-validation-for="TipoProblema" class="text-danger"></span>
+                    </div>
+
+                    <div class="form-group">
+                        <label asp-for="Telefono" class="form-label">
+                            Teléfono
+                            <span class="required">*</span>
+                        </label>
+                        <input asp-for="Telefono" type="tel" class="form-input" placeholder="Introduzca su número" />
+                        <span asp-validation-for="Telefono" class="text-danger"></span>
+                    </div>
+                </div>
+
+                <div class="form-group full-width">
+                    <label asp-for="ConfirmarEmail" class="form-label">
+                        Confirmar correo electrónico
+                        <span class="required">*</span>
+                    </label>
+                    <input asp-for="ConfirmarEmail" type="email" class="form-input" placeholder="Confirme su correo electrónico" />
+                    <span asp-validation-for="ConfirmarEmail" class="text-danger"></span>
+                </div>
+
+                <div class="form-group full-width">
+                    <label asp-for="DescripcionProblema" class="form-label">
+                        Cuéntenos acerca de su problema
+                        <span class="required">*</span>
+                    </label>
+                    <textarea asp-for="DescripcionProblema" class="form-textarea" rows="6" placeholder="Escriba su mensaje"></textarea>
+                    <span asp-validation-for="DescripcionProblema" class="text-danger"></span>
+                </div>
+
+                <div class="submit-section">
+                    <button type="submit" class="submit-btn">
+                        Enviar
+                    </button>
+                </div>
+            </form>
+
+            @if (!string.IsNullOrEmpty(Model.SuccessMessage))
+            {
+                <div class="success-message">
+                    @Model.SuccessMessage
+                </div>
+            }
+
+            @if (!string.IsNullOrEmpty(Model.ErrorMessage))
+            {
+                <div class="error-message">
+                    @Model.ErrorMessage
+                </div>
+            }
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

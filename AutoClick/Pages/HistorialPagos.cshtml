@@ -1,0 +1,91 @@
+@page
+@model AutoClick.Pages.HistorialPagosModel
+@{
+    ViewData["Title"] = "Historial de pagos - AutoClick.cr";
+    Layout = "~/Pages/Shared/_Layout.cshtml";
+}
+
+<partial name="~/Pages/Shared/_Header.cshtml" />
+
+<div class="page-wrapper">
+    <div class="historial-pagos-container">
+    <!-- Sidebar -->
+    <div class="payments-sidebar">
+        <div class="sidebar-nav">
+            <a href="/MiPerfil" class="nav-item">
+                <div class="personal-icon"></div>
+                <span>Información de contacto</span>
+            </a>
+            <a href="/HistorialPagos" class="nav-item active">
+                <div class="payments-icon"></div>
+                <span>Historial de pagos</span>
+            </a>
+            <a href="/ConfiguracionCuenta" class="nav-item">
+                <div class="settings-icon"></div>
+                <span>Configuración de cuenta</span>
+            </a>
+        </div>
+        <div class="sidebar-indicator"></div>
+    </div>
+
+    <!-- Main Content -->
+    <div class="payments-content">
+        <div class="page-header">
+            <h1 class="page-title">Historial de pagos</h1>
+        </div>
+
+        <!-- Payments Table -->
+        <div class="payments-table-container">
+            <table class="payments-table">
+                <thead>
+                    <tr>
+                        <th>Fecha</th>
+                        <th>Detalle</th>
+                        <th>Método de pago</th>
+                        <th>Monto</th>
+                        <th>Estado</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var payment in Model.PaymentHistory)
+                    {
+                        <tr class="payment-row">
+                            <td class="payment-date">@payment.Date.ToString("dd/MM/yyyy")</td>
+                            <td class="payment-detail">@payment.Detail</td>
+                            <td class="payment-method">@payment.PaymentMethod</td>
+                            <td class="payment-amount">@payment.FormattedAmount</td>
+                            <td class="payment-status">
+                                <div class="status-container">
+                                    <span class="status-badge @payment.StatusClass">@payment.Status</span>
+                                    @if (payment.Status == "Aprobado")
+                                    {
+                                        <div class="receipt-icon">
+                                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+                                                <rect x="4" y="4" width="16" height="16" rx="2" fill="white"/>
+                                                <path d="M9 12L11 14L15 10" stroke="#02081C" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                            </svg>
+                                        </div>
+                                    }
+                                </div>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+
+        <!-- Help Section -->
+        <div class="help-section">
+            <span class="help-text">¿Problemas con uno o varios pagos?</span>
+        </div>
+    </div>
+    </div>
+</div>
+
+@section Styles {
+    <link rel="stylesheet" href="~/css/historial-pagos.css" />
+}
+
+@section Scripts {
+    <script src="~/js/historial-pagos.js"></script>
+}

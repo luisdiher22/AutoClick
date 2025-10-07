@@ -1,0 +1,143 @@
+@page
+@model AutoClick.Pages.LandingBancoModel
+@{
+    ViewData["Title"] = "Landing del Banco - AutoClick.cr";
+}
+
+@section Styles {
+    <style>
+        .landing-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            background: linear-gradient(135deg, var(--primary-bg), var(--secondary-bg));
+            text-align: center;
+            padding: 40px;
+        }
+
+        .landing-content {
+            max-width: 600px;
+            background: var(--secondary-bg);
+            padding: 60px 40px;
+            border-radius: 12px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+        }
+
+        .landing-icon {
+            font-size: 80px;
+            margin-bottom: 30px;
+            opacity: 0.7;
+        }
+
+        .landing-title {
+            font-size: 28px;
+            font-weight: 700;
+            color: white;
+            margin-bottom: 20px;
+        }
+
+        .landing-subtitle {
+            font-size: 18px;
+            color: rgba(255, 255, 255, 0.8);
+            margin-bottom: 30px;
+            line-height: 1.6;
+        }
+
+        .landing-description {
+            font-size: 16px;
+            color: rgba(255, 255, 255, 0.6);
+            margin-bottom: 40px;
+            line-height: 1.6;
+        }
+
+        .back-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background: var(--primary-blue);
+            color: white;
+            padding: 12px 24px;
+            border-radius: 6px;
+            text-decoration: none;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            border: none;
+            cursor: pointer;
+        }
+
+        .back-btn:hover {
+            background: #0A2680;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(10, 38, 128, 0.3);
+            color: white;
+            text-decoration: none;
+        }
+
+        .info-box {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 8px;
+            padding: 20px;
+            margin-top: 30px;
+        }
+
+        .info-title {
+            font-size: 16px;
+            font-weight: 600;
+            color: var(--text-white);
+            margin-bottom: 10px;
+        }
+
+        .info-text {
+            font-size: 14px;
+            color: rgba(255, 255, 255, 0.7);
+            line-height: 1.5;
+        }
+    </style>
+}
+
+<div class="landing-container">
+    <div class="landing-content">
+        <div class="landing-icon">🏦</div>
+        
+        <h1 class="landing-title">Landing Page del Banco</h1>
+        
+        <p class="landing-subtitle">
+            Aquí se encontraría la landing page del banco
+        </p>
+        
+        <p class="landing-description">
+            Esta página será reemplazada en el futuro con la landing page oficial del banco 
+            para procesar las solicitudes de pre-aprobación de financiamiento vehicular.
+        </p>
+
+        <div class="info-box">
+            <h3 class="info-title">Información del vehículo solicitado:</h3>
+            <div class="info-text">
+                @if (!string.IsNullOrEmpty(Request.Query["vehiculo"]))
+                {
+                    <p><strong>Vehículo:</strong> @Request.Query["vehiculo"]</p>
+                }
+                @if (!string.IsNullOrEmpty(Request.Query["precio"]))
+                {
+                    <p><strong>Precio:</strong> @Request.Query["precio"]</p>
+                }
+                @if (!string.IsNullOrEmpty(Request.Query["plazo"]))
+                {
+                    <p><strong>Plazo:</strong> @Request.Query["plazo"] meses</p>
+                }
+                @if (!string.IsNullOrEmpty(Request.Query["prima"]))
+                {
+                    <p><strong>Prima:</strong> @Request.Query["prima"]</p>
+                }
+            </div>
+        </div>
+
+        <a href="javascript:history.back()" class="back-btn">
+            ← Regresar al vehículo
+        </a>
+    </div>
+</div>

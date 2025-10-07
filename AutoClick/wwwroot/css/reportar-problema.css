@@ -1,0 +1,379 @@
+/* Reportar Problema Styles */
+
+.reportar-problema-container {
+    width: 100%;
+    min-height: 100vh;
+    background: #02081C;
+    overflow: hidden;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 40px 20px;
+    box-sizing: border-box;
+}
+
+.reportar-problema-content {
+    width: 100%;
+    max-width: 1280px;
+    position: relative;
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+}
+
+.form-panel {
+    width: 100%;
+    max-width: 609px;
+    background: #030D2B;
+    border-radius: 4px;
+    border: 1px solid rgba(255, 255, 255, 0.25);
+    padding: 0;
+    overflow: hidden;
+    position: relative;
+}
+
+.panel-header {
+    padding: 24px 20px 20px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.panel-title {
+    color: white;
+    font-size: 24px;
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 700;
+    text-align: center;
+    margin: 0;
+}
+
+.reportar-form {
+    padding: 20px;
+}
+
+.section-header {
+    margin-bottom: 24px;
+}
+
+.section-header h2 {
+    color: white;
+    font-size: 20px;
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 700;
+    margin: 0;
+}
+
+.form-row {
+    display: flex;
+    gap: 16px;
+    margin-bottom: 16px;
+}
+
+.form-group {
+    flex: 1;
+    margin-bottom: 16px;
+}
+
+.form-group.full-width {
+    width: 100%;
+}
+
+.form-label {
+    display: block;
+    color: white;
+    font-size: 14px;
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 500;
+    margin-bottom: 8px;
+    display: flex;
+    align-items: center;
+    gap: 4px;
+}
+
+.required {
+    color: #FF0000;
+    font-size: 14px;
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 500;
+}
+
+.form-input {
+    width: 100%;
+    height: 44px;
+    padding: 8px 16px;
+    background: #02081C;
+    border: 0.5px solid rgba(255, 255, 255, 0.5);
+    border-radius: 4px;
+    color: white;
+    font-size: 14px;
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 500;
+    box-sizing: border-box;
+    outline: none;
+    transition: border-color 0.3s ease;
+}
+
+.form-input::placeholder {
+    color: rgba(255, 255, 255, 0.5);
+    font-size: 14px;
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 500;
+}
+
+.form-input:focus {
+    border-color: #0A2680;
+    box-shadow: 0 0 0 2px rgba(10, 38, 128, 0.2);
+}
+
+.form-select {
+    width: 100%;
+    height: 44px;
+    padding: 8px 16px;
+    background: #02081C;
+    border: 0.5px solid rgba(255, 255, 255, 0.5);
+    border-radius: 4px;
+    color: white;
+    font-size: 14px;
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 500;
+    box-sizing: border-box;
+    outline: none;
+    cursor: pointer;
+    appearance: none;
+    background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='white' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6,9 12,15 18,9'%3e%3c/polyline%3e%3c/svg%3e");
+    background-repeat: no-repeat;
+    background-position: right 12px center;
+    background-size: 12px 6px;
+    padding-right: 40px;
+}
+
+.form-select option {
+    background: #02081C;
+    color: white;
+    font-family: 'Montserrat', sans-serif;
+}
+
+.form-select:focus {
+    border-color: #0A2680;
+    box-shadow: 0 0 0 2px rgba(10, 38, 128, 0.2);
+}
+
+.form-textarea {
+    width: 100%;
+    min-height: 140px;
+    padding: 16px;
+    background: #02081C;
+    border: 0.5px solid rgba(255, 255, 255, 0.5);
+    border-radius: 4px;
+    color: white;
+    font-size: 14px;
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 500;
+    box-sizing: border-box;
+    outline: none;
+    resize: vertical;
+    transition: border-color 0.3s ease;
+}
+
+.form-textarea::placeholder {
+    color: rgba(255, 255, 255, 0.5);
+    font-size: 14px;
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 500;
+}
+
+.form-textarea:focus {
+    border-color: #0A2680;
+    box-shadow: 0 0 0 2px rgba(10, 38, 128, 0.2);
+}
+
+.submit-section {
+    display: flex;
+    justify-content: center;
+    padding-top: 20px;
+    margin-top: 20px;
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.submit-btn {
+    width: 100%;
+    max-width: 200px;
+    height: 48px;
+    background: white;
+    border: none;
+    border-radius: 8px;
+    color: black;
+    font-size: 14px;
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+}
+
+.submit-btn:hover {
+    background: #f0f0f0;
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(255, 255, 255, 0.1);
+}
+
+.submit-btn:active {
+    transform: translateY(0);
+}
+
+.submit-btn:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+    transform: none;
+}
+
+.text-danger {
+    color: #FF4444;
+    font-size: 12px;
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 400;
+    margin-top: 4px;
+    display: block;
+}
+
+.success-message {
+    background: rgba(0, 204, 0, 0.1);
+    border: 1px solid #00CC00;
+    border-radius: 4px;
+    padding: 16px;
+    margin-top: 20px;
+    color: #00CC00;
+    font-size: 14px;
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 500;
+    text-align: center;
+}
+
+.error-message {
+    background: rgba(255, 68, 68, 0.1);
+    border: 1px solid #FF4444;
+    border-radius: 4px;
+    padding: 16px;
+    margin-top: 20px;
+    color: #FF4444;
+    font-size: 14px;
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 500;
+    text-align: center;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .reportar-problema-container {
+        padding: 20px 10px;
+    }
+
+    .form-panel {
+        max-width: 100%;
+        margin: 0 10px;
+    }
+
+    .panel-title {
+        font-size: 20px;
+    }
+
+    .section-header h2 {
+        font-size: 18px;
+    }
+
+    .form-row {
+        flex-direction: column;
+        gap: 0;
+    }
+
+    .form-group {
+        margin-bottom: 16px;
+    }
+
+    .reportar-form {
+        padding: 16px;
+    }
+
+    .submit-btn {
+        max-width: 100%;
+    }
+}
+
+@media (max-width: 480px) {
+    .reportar-problema-container {
+        padding: 15px 5px;
+    }
+
+    .panel-header {
+        padding: 20px 16px 16px;
+    }
+
+    .panel-title {
+        font-size: 18px;
+    }
+
+    .section-header h2 {
+        font-size: 16px;
+    }
+
+    .reportar-form {
+        padding: 12px;
+    }
+
+    .form-input,
+    .form-select {
+        height: 40px;
+        font-size: 13px;
+    }
+
+    .form-textarea {
+        min-height: 120px;
+        font-size: 13px;
+    }
+
+    .submit-btn {
+        height: 44px;
+        font-size: 13px;
+    }
+}
+
+/* Input validation states */
+.form-input.input-validation-error,
+.form-select.input-validation-error,
+.form-textarea.input-validation-error {
+    border-color: #FF4444;
+    box-shadow: 0 0 0 2px rgba(255, 68, 68, 0.2);
+}
+
+/* Focus states for better accessibility */
+.form-input:focus-visible,
+.form-select:focus-visible,
+.form-textarea:focus-visible,
+.submit-btn:focus-visible {
+    outline: 2px solid #0A2680;
+    outline-offset: 2px;
+}
+
+/* Animation for form submission */
+.submit-btn.submitting {
+    pointer-events: none;
+    opacity: 0.7;
+}
+
+.submit-btn.submitting::after {
+    content: '';
+    width: 16px;
+    height: 16px;
+    border: 2px solid transparent;
+    border-top: 2px solid currentColor;
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+    margin-left: 8px;
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}

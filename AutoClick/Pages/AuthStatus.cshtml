@@ -1,0 +1,47 @@
+@page "/AuthStatus"
+@{
+    ViewData["Title"] = "Estado de Autenticación";
+}
+
+<h2>Estado de Autenticación</h2>
+
+<div style="font-family: monospace; background: #f5f5f5; padding: 20px; margin: 20px 0;">
+    <h3>Información del Usuario:</h3>
+    <p><strong>IsAuthenticated:</strong> @(User.Identity?.IsAuthenticated)</p>
+    <p><strong>Identity Name:</strong> @(User.Identity?.Name ?? "NULL")</p>
+    <p><strong>Authentication Type:</strong> @(User.Identity?.AuthenticationType ?? "NULL")</p>
+    
+    <h3>Claims:</h3>
+    @if (User.Claims.Any())
+    {
+        <ul>
+            @foreach (var claim in User.Claims)
+            {
+                <li><strong>@claim.Type:</strong> @claim.Value</li>
+            }
+        </ul>
+    }
+    else
+    {
+        <p>No claims encontrados</p>
+    }
+    
+    <h3>Cookies:</h3>
+    @if (HttpContext.Request.Cookies.Any())
+    {
+        <ul>
+            @foreach (var cookie in HttpContext.Request.Cookies)
+            {
+                <li><strong>@cookie.Key:</strong> @cookie.Value.Substring(0, Math.Min(50, cookie.Value.Length))...</li>
+            }
+        </ul>
+    }
+    else
+    {
+        <p>No cookies encontrados</p>
+    }
+</div>
+
+<p><a href="/MiPerfil">Ir a Mi Perfil</a></p>
+<p><a href="/ConfiguracionCuenta">Ir a Configuración Cuenta</a></p>
+<p><a href="/">Volver al Home</a></p>

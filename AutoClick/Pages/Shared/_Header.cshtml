@@ -1,0 +1,445 @@
+<!-- Universal Header -->
+<header class="universal-header">
+    <div class="header-container">
+        <!-- Logo Section -->
+        <div class="logo-section">
+            <a asp-page="/Index" class="logo-link">
+                <img src="~/images/logo.png" alt="AutoClick.cr" class="logo-image" />
+            </a>
+        </div>
+        
+        <!-- Navigation Section -->
+        <nav class="navigation-section">
+            <!-- Explorar Autos Button -->
+            <a asp-page="/Explorar" class="explorar-btn">
+                <span>Explorar autos</span>
+            </a>
+            
+            <!-- Navigation Items -->
+            <div class="nav-dropdown" data-dropdown="anunciese">
+                <button class="nav-item">
+                    <span>Anúnciese </span>
+                </button>
+                <div class="dropdown-content">
+                    <a asp-page="/AnunciarMiAuto" class="dropdown-link">Anunciar Mi Auto</a>
+                    <a asp-page="/AnunciarEmpresa" class="dropdown-link">Anunciar Empresa</a>
+                    <a asp-page="/RegistroAgencia" class="dropdown-link">Registro de Agencia</a>
+                </div>
+            </div>
+            
+            <div class="nav-dropdown" data-dropdown="productos">
+                <button class="nav-item">
+                    <span>Productos & Servicios </span>
+                </button>
+                <div class="dropdown-content">
+                    <a asp-page="/PpfCeramico" class="dropdown-link">PPF y Cerámico</a>
+                    <a asp-page="/RaloyDetailing" class="dropdown-link">Raloy - Detailing</a>
+                    <a asp-page="/BusquedaAvanzada" class="dropdown-link">Búsqueda Avanzada</a>
+                </div>
+            </div>
+            
+            <div class="nav-dropdown" data-dropdown="financiamiento">
+                <button class="nav-item">
+                    <span>Financiamiento </span>
+                </button>
+                <div class="dropdown-content">
+                    <a asp-page="/Gumout" class="dropdown-link">Gumout</a>
+                    <a href="#" class="dropdown-link">Opciones de Crédito</a>
+                    <a href="#" class="dropdown-link">Calculadora de Cuotas</a>
+                </div>
+            </div>
+        </nav>
+        
+        <!-- Actions Section -->
+        <div class="actions-section">
+            <!-- Search Icon removed - was causing visual issues -->
+            
+            <!-- User Section -->
+            @{
+                bool isUserLoggedIn = User.Identity?.IsAuthenticated == true;
+                string userName = User.Identity?.Name ?? User.FindFirst(System.Security.Claims.ClaimTypes.Name)?.Value ?? User.FindFirst("FullName")?.Value ?? "Usuario";
+            }
+            
+            @if (isUserLoggedIn)
+            {
+                <!-- Logged in user -->
+                <div class="user-section nav-dropdown" data-dropdown="user">
+                    <button class="user-name nav-item">@userName</button>
+                    <div class="user-dropdown dropdown-content" id="userDropdown">
+                        <a asp-page="/MiPerfil" class="user-menu-item dropdown-link">Mi Perfil</a>
+                        <a asp-page="/MisAnuncios" class="user-menu-item dropdown-link">Mis Anuncios</a>
+                        <a asp-page="/HistorialPagos" class="user-menu-item dropdown-link">Historial de Pagos</a>
+                        <a asp-page="/ConfiguracionCuenta" class="user-menu-item dropdown-link">Configuración</a>
+                        <hr class="menu-divider">
+                        <a asp-page="/Logout" class="user-menu-item logout dropdown-link">Cerrar Sesión</a>
+                    </div>
+                </div>
+            }
+            else
+            {
+                <!-- Not logged in - show login/register -->
+                <div class="auth-section">
+                    <a asp-page="/Auth" class="login-register-btn">Inicie sesión/Registro</a>
+                </div>
+            }
+        </div>
+    </div>
+</header>
+
+<script>
+    // Universal Header JavaScript Functionality
+    document.addEventListener('DOMContentLoaded', function() {
+        initializeDropdowns();
+        initializeUserMenu();
+        initializeSearch();
+    });
+
+    function initializeDropdowns() {
+        const dropdowns = document.querySelectorAll('.nav-dropdown');
+        
+        dropdowns.forEach(dropdown => {
+            const button = dropdown.querySelector('.nav-item');
+            const content = dropdown.querySelector('.dropdown-content');
+            
+            if (button && content) {
+                // Mouse events for desktop
+                dropdown.addEventListener('mouseenter', () => {
+                    dropdown.classList.add('active');
+                });
+                
+                dropdown.addEventListener('mouseleave', () => {
+                    dropdown.classList.remove('active');
+                });
+                
+                // Click events for mobile/touch
+                button.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    
+                    // Close other dropdowns
+                    dropdowns.forEach(otherDropdown => {
+                        if (otherDropdown !== dropdown) {
+                            otherDropdown.classList.remove('active');
+                        }
+                    });
+                    
+                    // Toggle current dropdown
+                    dropdown.classList.toggle('active');
+                });
+            }
+        });
+        
+        // Close dropdowns when clicking outside
+        document.addEventListener('click', (e) => {
+            if (!e.target.closest('.nav-dropdown') && !e.target.closest('.auth-section')) {
+                dropdowns.forEach(dropdown => {
+                    dropdown.classList.remove('active');
+                });
+            }
+        });
+        
+        // Prevent auth section from being treated as dropdown
+        const authSection = document.querySelector('.auth-section');
+        const loginBtn = document.querySelector('.login-register-btn');
+        if (authSection && loginBtn) {
+            // Simple cleanup without mutation observer (prevents freezing)
+            const removeBootstrapClasses = () => {
+                try {
+                    loginBtn.classList.remove(
+                        'active', 'dropdown-toggle', 'dropdown', 'btn', 'btn-group',
+                        'show', 'dropdown-menu-end', 'dropdown-menu-start'
+                    );
+                    authSection.classList.remove(
+                        'active', 'dropdown-toggle', 'dropdown', 'btn-group', 'show'
+                    );
+                    
+                    // Remove Bootstrap attributes
+                    loginBtn.removeAttribute('data-bs-toggle');
+                    loginBtn.removeAttribute('data-bs-target');
+                    loginBtn.removeAttribute('aria-expanded');
+                    loginBtn.removeAttribute('aria-haspopup');
+                } catch (e) {
+                    console.log('Error cleaning auth button:', e);
+                }
+            };
+            
+            // Remove classes immediately
+            removeBootstrapClasses();
+            
+            // Simple click handler without complex logic
+            loginBtn.addEventListener('click', (e) => {
+                // Don't prevent default - allow normal navigation
+                removeBootstrapClasses();
+            }, { once: false, passive: true });
+        }
+    }
+
+    function initializeUserMenu() {
+        // User menu is now handled by the same dropdown system as navigation
+        // No additional initialization needed since it uses nav-dropdown class
+    }
+
+    function initializeSearch() {
+        const searchIcon = document.querySelector('.search-icon');
+        if (searchIcon) {
+            searchIcon.addEventListener('click', handleSearch);
+            searchIcon.style.cursor = 'pointer';
+        }
+    }
+
+    function toggleUserMenu() {
+        // User menu now uses the same dropdown system as navigation
+        // Toggle is handled by the dropdown system
+        const userDropdown = document.querySelector('.user-section');
+        if (userDropdown) {
+            userDropdown.classList.toggle('active');
+        }
+    }
+
+    function handleLogout() {
+        if (confirm('¿Estás seguro que deseas cerrar sesión?')) {
+            // Redirect to logout page
+            window.location.href = '/Logout';
+        }
+    }
+
+    function handleSearch() {
+        console.log('Search functionality to be implemented');
+        // Implement search modal or redirect to search page
+        window.location.href = '/BusquedaAvanzada';
+    }
+</script>
+
+@section Scripts {
+    <script>
+        // User dropdown functionality
+        document.addEventListener('DOMContentLoaded', function() {
+            const dropdownBtn = document.getElementById('userDropdownBtn');
+            const dropdownMenu = document.getElementById('userDropdownMenu');
+            
+            if (dropdownBtn && dropdownMenu) {
+                dropdownBtn.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    dropdownMenu.classList.toggle('show');
+                });
+                
+                // Close dropdown when clicking outside
+                document.addEventListener('click', function(e) {
+                    if (!dropdownBtn.contains(e.target) && !dropdownMenu.contains(e.target)) {
+                        dropdownMenu.classList.remove('show');
+                    }
+                });
+                
+                // Prevent dropdown from closing when clicking inside
+                dropdownMenu.addEventListener('click', function(e) {
+                    e.stopPropagation();
+                });
+            }
+        });
+        
+        function handleLogout() {
+            if (confirm('¿Estás seguro que deseas cerrar sesión?')) {
+                // Redirect to logout page
+                window.location.href = '/Logout';
+            }
+        }
+    </script>
+}
+
+@section Styles {
+    <style>
+        /* User Dropdown Styles */
+        .user-dropdown-container {
+            position: relative;
+        }
+        
+        .user-dropdown-btn {
+            background: none;
+            border: none;
+            color: white;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 8px 12px;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            font-size: 14px;
+            font-weight: 500;
+        }
+        
+        .user-dropdown-btn:hover {
+            background: rgba(255, 255, 255, 0.1);
+        }
+        
+        .user-avatar {
+            display: flex;
+            align-items: center;
+        }
+        
+        .dropdown-arrow {
+            transition: transform 0.2s ease;
+        }
+        
+        .user-dropdown-btn.active .dropdown-arrow {
+            transform: rotate(180deg);
+        }
+        
+        .user-dropdown-menu {
+            position: absolute;
+            top: 100%;
+            right: 0;
+            background: #ffffff;
+            border-radius: 12px;
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+            min-width: 320px;
+            opacity: 0;
+            visibility: hidden;
+            transform: translateY(-10px);
+            transition: all 0.2s ease;
+            z-index: 1000;
+            overflow: hidden;
+            margin-top: 8px;
+        }
+        
+        .user-dropdown-menu.show {
+            opacity: 1;
+            visibility: visible;
+            transform: translateY(0);
+        }
+        
+        .dropdown-header {
+            padding: 20px;
+            background: linear-gradient(135deg, #02081C, #030D2B);
+        }
+        
+        .user-info {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        
+        .user-avatar-large {
+            width: 48px;
+            height: 48px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .user-details {
+            flex: 1;
+        }
+        
+        .user-display-name {
+            color: #ffffff;
+            font-weight: 600;
+            font-size: 16px;
+            margin-bottom: 2px;
+        }
+        
+        .user-email {
+            color: #8A92B2;
+            font-size: 14px;
+        }
+        
+        .dropdown-divider {
+            height: 1px;
+            background: #E5E7EB;
+            margin: 0;
+        }
+        
+        .dropdown-section {
+            padding: 12px 0;
+        }
+        
+        .dropdown-item-large {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 12px 20px;
+            color: #374151;
+            text-decoration: none;
+            transition: background-color 0.2s ease;
+        }
+        
+        .dropdown-item-large:hover {
+            background: #F3F4F6;
+            color: #374151;
+            text-decoration: none;
+        }
+        
+        .item-icon {
+            font-size: 20px;
+            width: 24px;
+            text-align: center;
+        }
+        
+        .item-content {
+            flex: 1;
+        }
+        
+        .item-title {
+            font-weight: 500;
+            font-size: 14px;
+            margin-bottom: 2px;
+        }
+        
+        .item-description {
+            font-size: 12px;
+            color: #6B7280;
+        }
+        
+        .dropdown-item-simple {
+            display: block;
+            padding: 8px 20px;
+            color: #374151;
+            text-decoration: none;
+            font-size: 14px;
+            transition: background-color 0.2s ease;
+        }
+        
+        .dropdown-item-simple:hover {
+            background: #F3F4F6;
+            color: #374151;
+            text-decoration: none;
+        }
+        
+        .logout-btn {
+            width: 100%;
+            background: none;
+            border: none;
+            padding: 12px 20px;
+            color: #DC2626;
+            font-size: 14px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: background-color 0.2s ease;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .logout-btn:hover {
+            background: #FEF2F2;
+        }
+        
+        .logout-icon {
+            font-size: 16px;
+        }
+        
+        /* Responsive adjustments */
+        @@media (max-width: 768px) {
+            .user-dropdown-menu {
+                right: -20px;
+                min-width: 280px;
+            }
+            
+            .user-name {
+                display: none;
+            }
+        }
+    </style>
+}

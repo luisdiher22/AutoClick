@@ -1,0 +1,226 @@
+@page "/gumout"
+@model AutoClick.Pages.GumoutModel
+@{
+    ViewData["Title"] = "Gumout - Financiamiento";
+}
+
+<link rel="stylesheet" href="~/css/gumout.css" />
+
+<div class="gumout-container">
+    <!-- Navigation (Existing from layout) -->
+    
+    <!-- Hero Section -->
+    <section class="hero-section">
+        <div class="hero-overlay">
+            <h1 class="hero-title">Estrena carro fácil, rápido y con cuotas a tu medida.</h1>
+            <button class="hero-cta-button" onclick="scrollToCalculator()">Solicitar preaprobación</button>
+        </div>
+    </section>
+
+    <!-- Why Finance Section -->
+    <section class="benefits-section">
+        <h2 class="benefits-title">¿Por qué financiar?</h2>
+        <p class="benefits-description">Financiar tu vehículo es una forma inteligente de estrenar sin comprometer tus ahorros. Con cuotas cómodas y planes adaptados a tus necesidades, podés hacer realidad tu próxima compra sin sacrificar tu estabilidad financiera.</p>
+        
+        <div class="benefits-grid">
+            <div class="benefit-card">
+                <div class="benefit-icon">
+                    <svg width="102" height="102" viewBox="0 0 102 102" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <rect width="102" height="102" fill="black"/>
+                        <rect y="17" width="102" height="85" fill="white"/>
+                        <rect x="68" y="46.75" width="34" height="25.50" fill="white"/>
+                        <rect x="21.25" y="0" width="63.75" height="25.50" fill="white"/>
+                        <rect y="68" width="46.75" height="34" fill="white"/>
+                    </svg>
+                </div>
+                <h3 class="benefit-title">Flexibilidad de pago</h3>
+                <p class="benefit-text">Accede a planes personalizados con plazos y cuotas que se ajustan a tu presupuesto mensual.</p>
+            </div>
+
+            <div class="benefit-card">
+                <div class="benefit-icon">
+                    <div class="icon-placeholder"></div>
+                </div>
+                <h3 class="benefit-title">Estrena sin esperar</h3>
+                <p class="benefit-text">Olvidate de ahorrar por años. Con el financiamiento adecuado, puedes manejar tu nuevo vehículo mucho antes de lo pensado.</p>
+            </div>
+
+            <div class="benefit-card">
+                <div class="benefit-icon">
+                    <div class="coins-stack">
+                        <div class="coin"></div>
+                        <div class="coin-vertical"></div>
+                        <div class="coin"></div>
+                        <div class="coin-vertical"></div>
+                        <div class="coin-large"></div>
+                        <div class="coin-small"></div>
+                    </div>
+                </div>
+                <h3 class="benefit-title">Conserva tu liquidez</h3>
+                <p class="benefit-text">No necesitas hacer un desembolso total. Manten tus ahorros disponibles para otros proyectos o imprevistos.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Banks Section -->
+    <section class="banks-section">
+        <h2 class="banks-title">Entidades bancarias disponibles</h2>
+        <p class="banks-description">Conéctate with los principales bancos del país y elige el financiamiento que más te convenga.</p>
+        
+        <div class="banks-grid">
+            <div class="bank-logo">
+                <div class="bank-placeholder">LOGO<br/>DEL BANCO</div>
+            </div>
+            <div class="bank-logo">
+                <div class="bank-placeholder">LOGO<br/>DEL BANCO</div>
+            </div>
+            <div class="bank-logo">
+                <div class="bank-placeholder">LOGO<br/>DEL BANCO</div>
+            </div>
+            <div class="bank-logo">
+                <div class="bank-placeholder">LOGO<br/>DEL BANCO</div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Calculator Section -->
+    <section class="calculator-section" id="calculator">
+        <div class="calculator-container">
+            <div class="calculator-form">
+                <h3 class="calculator-title">CALCULAR FINANCIAMIENTO</h3>
+                
+                @if(Model.SuccessMessage != null)
+                {
+                    <div class="alert alert-success">@Model.SuccessMessage</div>
+                }
+                
+                @if(Model.ErrorMessage != null)
+                {
+                    <div class="alert alert-error">@Model.ErrorMessage</div>
+                }
+
+                <form method="post" class="finance-form">
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label class="required">Moneda *</label>
+                            <select name="Moneda" class="form-select" required>
+                                <option value="">Seleccionar moneda</option>
+                                <option value="USD">Dólar (USD)</option>
+                                <option value="CRC">Colones (CRC)</option>
+                            </select>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="required">Precio total del vehículo *</label>
+                            <div class="input-with-prefix">
+                                <span class="prefix">$</span>
+                                <input type="number" name="PrecioVehiculo" placeholder="0.00" required />
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label class="required">Plazo del préstamo *</label>
+                            <select name="Plazo" class="form-select" required>
+                                <option value="">Seleccionar plazo</option>
+                                <option value="12">12 meses</option>
+                                <option value="24">24 meses</option>
+                                <option value="36">36 meses</option>
+                                <option value="48">48 meses</option>
+                                <option value="60">60 meses</option>
+                                <option value="72">72 meses</option>
+                                <option value="84">84 meses</option>
+                            </select>
+                        </div>
+
+                        <div class="form-group">
+                            <label>Prima deseada</label>
+                            <input type="number" name="Prima" placeholder="Mínimo $10,000" />
+                        </div>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>Tasa anual</label>
+                            <input type="number" name="TasaAnual" placeholder="8.95%" step="0.01" />
+                        </div>
+
+                        <div class="form-group">
+                            <label class="output-label">Cuota mensual estimada</label>
+                            <div class="input-with-prefix">
+                                <span class="prefix">$</span>
+                                <input type="text" name="CuotaMensual" readonly placeholder="0.00" />
+                            </div>
+                        </div>
+                    </div>
+
+                    <button type="submit" class="submit-button">Solicitar pre-aprobación</button>
+                </form>
+            </div>
+        </div>
+
+        <div class="ad-space">
+            <div class="ad-content">ESPACIO<br/>PUBLICITARIO</div>
+        </div>
+    </section>
+
+    <!-- FAQ Section -->
+    <section class="faq-section">
+        <h2 class="faq-title">Preguntas frecuentes</h2>
+        
+        <div class="faq-container">
+            <div class="faq-item">
+                <button class="faq-question" onclick="toggleFaq(this)">
+                    <span>¿Qué requisitos necesito para financiar un vehículo?</span>
+                    <svg class="faq-arrow" width="12" height="6" viewBox="0 0 12 6" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M1 1L6 5L11 1" stroke="white" stroke-width="1"/>
+                    </svg>
+                </button>
+                <div class="faq-answer">
+                    <p>Los requisitos básicos incluyen: cédula de identidad, comprobantes de ingresos de los últimos 3 meses, referencias comerciales y personales, y cumplir con el score crediticio mínimo del banco.</p>
+                </div>
+            </div>
+
+            <div class="faq-item">
+                <button class="faq-question" onclick="toggleFaq(this)">
+                    <span>¿Puedo financiar un vehículo usado?</span>
+                    <svg class="faq-arrow" width="12" height="6" viewBox="0 0 12 6" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M1 1L6 5L11 1" stroke="white" stroke-width="1"/>
+                    </svg>
+                </button>
+                <div class="faq-answer">
+                    <p>Sí, la mayoría de bancos financian vehículos usados con antigüedad máxima de 10-15 años, dependiendo de la entidad financiera y el valor del vehículo.</p>
+                </div>
+            </div>
+
+            <div class="faq-item">
+                <button class="faq-question" onclick="toggleFaq(this)">
+                    <span>¿Cuánto tarda la aprobación del crédito?</span>
+                    <svg class="faq-arrow" width="12" height="6" viewBox="0 0 12 6" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M1 1L6 5L11 1" stroke="white" stroke-width="1"/>
+                    </svg>
+                </button>
+                <div class="faq-answer">
+                    <p>El proceso de aprobación generalmente toma entre 2 a 5 días hábiles, dependiendo de la completitud de la documentación y la evaluación crediticia.</p>
+                </div>
+            </div>
+
+            <div class="faq-item">
+                <button class="faq-question" onclick="toggleFaq(this)">
+                    <span>¿Puedo adelantar pagos o cancelar el crédito antes de tiempo?</span>
+                    <svg class="faq-arrow" width="12" height="6" viewBox="0 0 12 6" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M1 1L6 5L11 1" stroke="white" stroke-width="1"/>
+                    </svg>
+                </button>
+                <div class="faq-answer">
+                    <p>Sí, la mayoría de bancos permiten pagos anticipados sin penalización. Esto te ayuda a reducir los intereses totales del préstamo y finalizar antes el compromiso.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer included from layout -->
+</div>
+
+<script src="~/js/gumout.js"></script>

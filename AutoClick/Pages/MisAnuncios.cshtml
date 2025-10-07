@@ -1,0 +1,341 @@
+@page
+@model AutoClick.Pages.MisAnunciosModel
+@{
+    ViewData["Title"] = "Mis anuncios - AutoClick.cr";
+}
+
+@section Styles {
+    <link rel="stylesheet" href="~/css/mis-anuncios.css" />
+}
+
+@await Html.PartialAsync("_Header")
+
+<div class="page-wrapper">
+    <div class="mis-anuncios-container">
+    <!-- Breadcrumb -->
+    <nav class="breadcrumb">
+        <a href="/" class="breadcrumb-item">Inicio</a>
+        <span class="breadcrumb-separator">/</span>
+        <span class="breadcrumb-current">Mis anuncios</span>
+    </nav>
+
+    <!-- Page Title -->
+    <h1 class="page-title">Mis anuncios</h1>
+
+    <div class="content-wrapper">
+        <!-- Sidebar Filters -->
+        <aside class="sidebar">
+            <div class="filter-panel">
+                <h2 class="filter-title">Filtrar mis anuncios</h2>
+                
+                <form method="get" class="filters-form">
+                    <!-- Provincia -->
+                    <div class="filter-group">
+                        <label for="provincia">Provincia</label>
+                        <select id="provincia" name="provincia" asp-for="Provincia">
+                            <option value="">Todas las provincias</option>
+                            <option value="San José">San José</option>
+                            <option value="Alajuela">Alajuela</option>
+                            <option value="Cartago">Cartago</option>
+                            <option value="Heredia">Heredia</option>
+                            <option value="Guanacaste">Guanacaste</option>
+                            <option value="Puntarenas">Puntarenas</option>
+                            <option value="Limón">Limón</option>
+                        </select>
+                    </div>
+
+                    <!-- Cantón -->
+                    <div class="filter-group">
+                        <label for="canton">Cantón</label>
+                        <select id="canton" name="canton" asp-for="Canton">
+                            <option value="">Todos los cantones</option>
+                        </select>
+                    </div>
+
+                    <!-- Marca -->
+                    <div class="filter-group">
+                        <label for="marca">Marca</label>
+                        <select id="marca" name="marca" asp-for="Marca">
+                            <option value="">Todas las marcas</option>
+                            <option value="Toyota">Toyota</option>
+                            <option value="Honda">Honda</option>
+                            <option value="Nissan">Nissan</option>
+                            <option value="Hyundai">Hyundai</option>
+                            <option value="Mazda">Mazda</option>
+                            <option value="BMW">BMW</option>
+                            <option value="Mercedes-Benz">Mercedes-Benz</option>
+                            <option value="Audi">Audi</option>
+                        </select>
+                    </div>
+
+                    <!-- Modelo -->
+                    <div class="filter-group">
+                        <label for="modelo">Modelo</label>
+                        <select id="modelo" name="modelo" asp-for="Modelo">
+                            <option value="">Todos los modelos</option>
+                        </select>
+                    </div>
+
+                    <!-- Rango de Precio -->
+                    <div class="filter-group">
+                        <label>Rango de precio</label>
+                        <div class="price-range">
+                            <div class="price-input">
+                                <label for="precioMin">Min</label>
+                                <input type="number" id="precioMin" name="precioMin" asp-for="PrecioMin" placeholder="$" />
+                            </div>
+                            <span class="range-separator">hasta</span>
+                            <div class="price-input">
+                                <label for="precioMax">Max</label>
+                                <input type="number" id="precioMax" name="precioMax" asp-for="PrecioMax" placeholder="$" />
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Kilometraje -->
+                    <div class="filter-group">
+                        <label>Kilometraje</label>
+                        <div class="range-inputs">
+                            <div class="range-input">
+                                <label for="kmMin">Min</label>
+                                <input type="number" id="kmMin" name="kmMin" asp-for="KilometrajeMin" />
+                            </div>
+                            <span class="range-separator">hasta</span>
+                            <div class="range-input">
+                                <label for="kmMax">Max</label>
+                                <input type="number" id="kmMax" name="kmMax" asp-for="KilometrajeMax" />
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Año -->
+                    <div class="filter-group">
+                        <label>Año</label>
+                        <div class="range-inputs">
+                            <div class="range-input">
+                                <label for="añoMin">Min</label>
+                                <input type="number" id="añoMin" name="añoMin" asp-for="AñoMin" />
+                            </div>
+                            <span class="range-separator">hasta</span>
+                            <div class="range-input">
+                                <label for="añoMax">Max</label>
+                                <input type="number" id="añoMax" name="añoMax" asp-for="AñoMax" />
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Filtros adicionales -->
+                    <div class="additional-filters">
+                        <div class="filter-dropdown">
+                            <select name="carroceria" asp-for="Carroceria">
+                                <option value="">Carrocería</option>
+                                <option value="Sedán">Sedán</option>
+                                <option value="SUV">SUV</option>
+                                <option value="Hatchback">Hatchback</option>
+                                <option value="Pickup">Pickup</option>
+                                <option value="Convertible">Convertible</option>
+                                <option value="Coupé">Coupé</option>
+                            </select>
+                        </div>
+
+                        <div class="filter-dropdown">
+                            <select name="combustible" asp-for="Combustible">
+                                <option value="">Combustible/Propulsión</option>
+                                <option value="Gasolina">Gasolina</option>
+                                <option value="Diésel">Diésel</option>
+                                <option value="Híbrido">Híbrido</option>
+                                <option value="Eléctrico">Eléctrico</option>
+                            </select>
+                        </div>
+
+                        <div class="filter-dropdown">
+                            <select name="traccion" asp-for="Traccion">
+                                <option value="">Tracción</option>
+                                <option value="Delantera">Delantera</option>
+                                <option value="Trasera">Trasera</option>
+                                <option value="4x4">4x4</option>
+                                <option value="AWD">AWD</option>
+                            </select>
+                        </div>
+
+                        <div class="filter-dropdown">
+                            <select name="tipoVendedor" asp-for="TipoVendedor">
+                                <option value="">Tipo de vendedor</option>
+                                <option value="Particular">Particular</option>
+                                <option value="Concesionario">Concesionario</option>
+                            </select>
+                        </div>
+
+                        <div class="filter-dropdown">
+                            <select name="condicion" asp-for="Condicion">
+                                <option value="">Condición</option>
+                                <option value="Nuevo">Nuevo</option>
+                                <option value="Usado">Usado</option>
+                            </select>
+                        </div>
+
+                        <div class="filter-dropdown">
+                            <select name="transmision" asp-for="Transmision">
+                                <option value="">Transmisión</option>
+                                <option value="Manual">Manual</option>
+                                <option value="Automática">Automática</option>
+                                <option value="CVT">CVT</option>
+                            </select>
+                        </div>
+
+                        <div class="filter-dropdown">
+                            <select name="pasajeros" asp-for="Pasajeros">
+                                <option value="">Pasajeros</option>
+                                <option value="2">2</option>
+                                <option value="4">4</option>
+                                <option value="5">5</option>
+                                <option value="7">7</option>
+                                <option value="8+">8+</option>
+                            </select>
+                        </div>
+
+                        <div class="filter-dropdown">
+                            <select name="extras" asp-for="Extras">
+                                <option value="">Extras</option>
+                                <option value="Aire acondicionado">Aire acondicionado</option>
+                                <option value="GPS">GPS</option>
+                                <option value="Cámara trasera">Cámara trasera</option>
+                                <option value="Asientos de cuero">Asientos de cuero</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <button type="submit" class="apply-filters-btn">Aplicar Filtros</button>
+                </form>
+            </div>
+
+            <!-- Advertisement Placeholder -->
+            <div class="sidebar-ad">
+                <img src="https://via.placeholder.com/344x423/333333/FFFFFF?text=SU+ANUNCIO+AQUÍ" alt="Publicidad" />
+                <div class="ad-content">
+                    <div class="ad-logo">
+                        <img src="https://via.placeholder.com/138x22/FFFFFF/333333?text=AutoClick.cr" alt="AutoClick.cr" />
+                    </div>
+                    <h3>SU ANUNCIO AQUÍ</h3>
+                    <p>¡Haga click en este recuadro para empezar!</p>
+                </div>
+            </div>
+        </aside>
+
+        <!-- Main Content Area -->
+        <main class="main-content">
+            <!-- Sort Options -->
+            <div class="sort-section">
+                <div class="sort-dropdown">
+                    <select name="ordenarPor" asp-for="OrdenarPor" onchange="this.form.submit()">
+                        <option value="recientes">Ordenar por: Más recientes</option>
+                        <option value="antiguos">Más antiguos</option>
+                        <option value="precio-asc">Precio: Menor a mayor</option>
+                        <option value="precio-desc">Precio: Mayor a menor</option>
+                        <option value="kilometraje">Menor kilometraje</option>
+                    </select>
+                </div>
+            </div>
+
+            <!-- Listings Grid -->
+            <div class="listings-grid">
+                @if (Model.Anuncios != null && Model.Anuncios.Any())
+                {
+                    @foreach (var anuncio in Model.Anuncios)
+                    {
+                        <div class="listing-card" data-listing-id="@anuncio.Id">
+                            <div class="listing-image">
+                                <img src="@(anuncio.ImagenPrincipal ?? "https://via.placeholder.com/416x262")" alt="@anuncio.Titulo" />
+                                @if (anuncio.EsDestacado)
+                                {
+                                    <span class="destacado-badge">Destacado</span>
+                                }
+                                <div class="listing-overlay">
+                                    <span class="dias-restantes">@anuncio.DiasRestantes días restantes</span>
+                                </div>
+                                <div class="listing-logo">
+                                    <img src="https://via.placeholder.com/120x120" alt="Logo" />
+                                </div>
+                            </div>
+                            
+                            <div class="listing-info">
+                                <h3 class="listing-title">@anuncio.Titulo</h3>
+                                <div class="listing-price">@anuncio.Precio.ToString("C")</div>
+                                <div class="listing-meta">
+                                    <div class="listing-stats">
+                                        <span class="views">👁 @anuncio.Vistas</span>
+                                        <span class="likes">❤ @anuncio.MeGusta</span>
+                                    </div>
+                                </div>
+                                <div class="listing-date">Publicado el @anuncio.FechaPublicacion.ToString("dd/MM/yy")</div>
+                                <div class="listing-status @anuncio.Estado.ToString().ToLower()">
+                                    @anuncio.Estado
+                                </div>
+                                
+                                <div class="listing-actions">
+                                    <button class="action-btn edit-btn" title="Editar anuncio" onclick="editListing(@anuncio.Id)">✏️</button>
+                                    <button class="action-btn delete-btn" title="Eliminar anuncio" onclick="confirmDeleteListing(this, '@anuncio.Id', '@anuncio.Titulo')">🗑️</button>
+                                </div>
+                            </div>
+                        </div>
+                    }
+                }
+                else
+                {
+                    <div class="no-listings">
+                        <h3>No tienes anuncios publicados</h3>
+                        <p>¡Comienza a vender tu vehículo ahora!</p>
+                        <a href="/anunciar-mi-auto" class="btn-primary">Publicar Anuncio</a>
+                    </div>
+                }
+            </div>
+
+            <!-- Pagination -->
+            @if (Model.TotalPaginas > 1)
+            {
+                <div class="pagination">
+                    @if (Model.PaginaActual > 1)
+                    {
+                        <a href="?pagina=@(Model.PaginaActual - 1)" class="pagination-btn prev">‹</a>
+                    }
+
+                    @for (int i = 1; i <= Math.Min(5, Model.TotalPaginas); i++)
+                    {
+                        <a href="?pagina=@i" class="pagination-number @(i == Model.PaginaActual ? "active" : "")">@i</a>
+                    }
+
+                    @if (Model.TotalPaginas > 5)
+                    {
+                        <span class="pagination-ellipsis">…</span>
+                        <a href="?pagina=@Model.TotalPaginas" class="pagination-number">@Model.TotalPaginas</a>
+                    }
+
+                    @if (Model.PaginaActual < Model.TotalPaginas)
+                    {
+                        <a href="?pagina=@(Model.PaginaActual + 1)" class="pagination-btn next">›</a>
+                    }
+                </div>
+            }
+
+            <!-- Bottom Advertisement -->
+            <div class="bottom-ad">
+                <img src="https://via.placeholder.com/851x159/333333/FFFFFF?text=SU+ANUNCIO+AQUÍ" alt="Publicidad" />
+                <div class="ad-content">
+                    <div class="ad-logo">
+                        <img src="https://via.placeholder.com/143x23/FFFFFF/333333?text=AutoClick.cr" alt="AutoClick.cr" />
+                    </div>
+                    <h3>SU ANUNCIO AQUÍ</h3>
+                    <p>¡Haga click en este recuadro para empezar!</p>
+                </div>
+            </div>
+        </main>
+    </div>
+    </div>
+</div>
+
+@section Scripts {
+    <form style="display: none;">
+        @Html.AntiForgeryToken()
+    </form>
+    <script src="~/js/mis-anuncios.js"></script>
+}

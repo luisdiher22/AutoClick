@@ -1,0 +1,5 @@
+{
+    "appService.preDeployTask": "publish-release",
+    "appService.deploySubpath": "AutoClick\\bin\\Release\\net9.0\\publish",
+    "appService.defaultWebAppToDeploy": "/subscriptions/a0e204a5-9a94-415f-8166-1912ccb9f29d/resourceGroups/AutoClick/providers/Microsoft.Web/sites/AutoClick"
+}

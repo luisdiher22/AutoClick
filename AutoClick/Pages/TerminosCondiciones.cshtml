@@ -1,0 +1,377 @@
+@page
+@model TerminosCondicionesModel
+@{
+    ViewData["Title"] = "Términos y Condiciones - AutoClick.cr";
+    Layout = "_Layout";
+}
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"]</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,200..800;1,200..800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="~/css/terminos-condiciones.css" asp-append-version="true" />
+</head>
+
+<body>
+    <!-- Header -->
+    @Html.Partial("~/Pages/Shared/_Header.cshtml")
+
+    <!-- Términos y Condiciones Content -->
+    <div class="terminos-container">
+        <div class="terminos-header">
+            <h1 class="terminos-title">Términos y Condiciones</h1>
+            <p class="terminos-subtitle">Última actualización: 27 de septiembre de 2025</p>
+        </div>
+
+        <div class="terminos-content">
+            <div class="terminos-sidebar">
+                <div class="sidebar-content">
+                    <h3 class="sidebar-title">Contenido</h3>
+                    <nav class="terms-nav">
+                        <a href="#aceptacion" class="nav-item active">1. Aceptación de términos</a>
+                        <a href="#definiciones" class="nav-item">2. Definiciones</a>
+                        <a href="#servicios" class="nav-item">3. Descripción de servicios</a>
+                        <a href="#registro" class="nav-item">4. Registro y cuenta</a>
+                        <a href="#uso-aceptable" class="nav-item">5. Uso aceptable</a>
+                        <a href="#anuncios" class="nav-item">6. Publicación de anuncios</a>
+                        <a href="#pagos" class="nav-item">7. Pagos y transacciones</a>
+                        <a href="#propiedad" class="nav-item">8. Propiedad intelectual</a>
+                        <a href="#privacidad" class="nav-item">9. Protección de datos</a>
+                        <a href="#limitacion" class="nav-item">10. Limitación de responsabilidad</a>
+                        <a href="#terminacion" class="nav-item">11. Terminación</a>
+                        <a href="#modificaciones" class="nav-item">12. Modificaciones</a>
+                        <a href="#ley-aplicable" class="nav-item">13. Ley aplicable</a>
+                        <a href="#contacto" class="nav-item">14. Contacto</a>
+                    </nav>
+                </div>
+            </div>
+
+            <div class="terminos-main">
+                <section id="aceptacion" class="terms-section">
+                    <h2>1. Aceptación de Términos</h2>
+                    <p>Al acceder y utilizar AutoClick.cr ("la Plataforma"), usted acepta estar legalmente obligado por estos Términos y Condiciones ("Términos"). Si no está de acuerdo con alguno de estos términos, no debe utilizar nuestros servicios.</p>
+                    <p>Estos términos constituyen un acuerdo legal entre usted ("Usuario") y AutoClick.cr ("Nosotros", "Nuestra Empresa"). Al utilizar nuestros servicios, confirma que tiene al menos 18 años de edad o cuenta con el consentimiento de sus padres o tutores legales.</p>
+                </section>
+
+                <section id="definiciones" class="terms-section">
+                    <h2>2. Definiciones</h2>
+                    <div class="definition-list">
+                        <div class="definition-item">
+                            <strong>"Plataforma":</strong> Se refiere a AutoClick.cr, incluyendo el sitio web, aplicaciones móviles y todos los servicios relacionados.
+                        </div>
+                        <div class="definition-item">
+                            <strong>"Usuario":</strong> Cualquier persona que accede o utiliza la Plataforma.
+                        </div>
+                        <div class="definition-item">
+                            <strong>"Anuncio":</strong> Cualquier listado de vehículo, producto o servicio publicado en la Plataforma.
+                        </div>
+                        <div class="definition-item">
+                            <strong>"Vendedor":</strong> Usuario que publica anuncios para vender vehículos o servicios.
+                        </div>
+                        <div class="definition-item">
+                            <strong>"Comprador":</strong> Usuario que busca adquirir vehículos o servicios a través de la Plataforma.
+                        </div>
+                        <div class="definition-item">
+                            <strong>"Contenido":</strong> Toda información, texto, imágenes, videos, y otros materiales compartidos en la Plataforma.
+                        </div>
+                    </div>
+                </section>
+
+                <section id="servicios" class="terms-section">
+                    <h2>3. Descripción de Servicios</h2>
+                    <p>AutoClick.cr es una plataforma digital que conecta compradores y vendedores de vehículos en Costa Rica. Nuestros servicios incluyen:</p>
+                    <ul class="terms-list">
+                        <li>Publicación de anuncios de vehículos y servicios automotrices</li>
+                        <li>Búsqueda y navegación de listados</li>
+                        <li>Herramientas de comunicación entre usuarios</li>
+                        <li>Servicios de verificación y validación</li>
+                        <li>Promoción de anuncios destacados</li>
+                        <li>Servicios de financiamiento y seguros (a través de socios)</li>
+                    </ul>
+                    <p>Actuamos únicamente como intermediario y no somos parte de las transacciones entre usuarios.</p>
+                </section>
+
+                <section id="registro" class="terms-section">
+                    <h2>4. Registro y Cuenta de Usuario</h2>
+                    <p>Para utilizar ciertos servicios, debe crear una cuenta proporcionando información precisa y completa. Usted es responsable de:</p>
+                    <ul class="terms-list">
+                        <li>Mantener la confidencialidad de sus credenciales de acceso</li>
+                        <li>Todas las actividades realizadas bajo su cuenta</li>
+                        <li>Notificar inmediatamente cualquier uso no autorizado</li>
+                        <li>Actualizar su información personal cuando sea necesario</li>
+                    </ul>
+                    <div class="warning-box">
+                        <strong>Importante:</strong> Está prohibido crear múltiples cuentas o compartir credenciales con terceros.
+                    </div>
+                </section>
+
+                <section id="uso-aceptable" class="terms-section">
+                    <h2>5. Uso Aceptable</h2>
+                    <p>Al utilizar nuestra Plataforma, se compromete a NO:</p>
+                    <ul class="prohibited-list">
+                        <li>Publicar contenido falso, engañoso o fraudulento</li>
+                        <li>Violar derechos de propiedad intelectual de terceros</li>
+                        <li>Utilizar la Plataforma para actividades ilegales</li>
+                        <li>Enviar spam o contenido no solicitado</li>
+                        <li>Interferir con el funcionamiento de la Plataforma</li>
+                        <li>Recopilar datos de otros usuarios sin consentimiento</li>
+                        <li>Crear cuentas falsas o suplantar identidades</li>
+                        <li>Publicar contenido ofensivo, discriminatorio o inapropiado</li>
+                    </ul>
+                </section>
+
+                <section id="anuncios" class="terms-section">
+                    <h2>6. Publicación de Anuncios</h2>
+                    <h3>6.1 Responsabilidades del Vendedor</h3>
+                    <p>Al publicar un anuncio, garantiza que:</p>
+                    <ul class="terms-list">
+                        <li>Es el propietario legítimo del vehículo o tiene autorización para venderlo</li>
+                        <li>Toda la información proporcionada es veraz y actualizada</li>
+                        <li>Las fotografías corresponden al vehículo anunciado</li>
+                        <li>El vehículo cumple con todas las regulaciones legales</li>
+                    </ul>
+                    
+                    <h3>6.2 Moderación de Contenido</h3>
+                    <p>Nos reservamos el derecho de revisar, editar o eliminar cualquier anuncio que:</p>
+                    <ul class="terms-list">
+                        <li>Viole estos términos y condiciones</li>
+                        <li>Contenga información incorrecta o engañosa</li>
+                        <li>No cumpla con nuestras políticas de calidad</li>
+                        <li>Genere quejas justificadas de otros usuarios</li>
+                    </ul>
+                </section>
+
+                <section id="pagos" class="terms-section">
+                    <h2>7. Pagos y Transacciones</h2>
+                    <h3>7.1 Servicios Premium</h3>
+                    <p>Ofrecemos servicios premium sujetos a pago, incluyendo:</p>
+                    <ul class="terms-list">
+                        <li>Anuncios destacados</li>
+                        <li>Mayor visibilidad en búsquedas</li>
+                        <li>Herramientas avanzadas de promoción</li>
+                        <li>Soporte prioritario</li>
+                    </ul>
+
+                    <h3>7.2 Política de Reembolsos</h3>
+                    <p>Los pagos por servicios premium son generalmente no reembolsables, excepto en casos específicos definidos en nuestra Política de Reembolsos.</p>
+
+                    <h3>7.3 Transacciones entre Usuarios</h3>
+                    <p>AutoClick.cr no es responsable de las transacciones comerciales entre usuarios. Recomendamos:</p>
+                    <ul class="terms-list">
+                        <li>Verificar la identidad del comprador/vendedor</li>
+                        <li>Inspeccionar físicamente los vehículos</li>
+                        <li>Utilizar métodos de pago seguros</li>
+                        <li>Completar toda la documentación legal requerida</li>
+                    </ul>
+                </section>
+
+                <section id="propiedad" class="terms-section">
+                    <h2>8. Propiedad Intelectual</h2>
+                    <p>Todos los derechos de propiedad intelectual relacionados con la Plataforma, incluyendo pero no limitado a:</p>
+                    <ul class="terms-list">
+                        <li>Diseño y funcionalidad del sitio web</li>
+                        <li>Logotipos y marcas comerciales</li>
+                        <li>Software y código fuente</li>
+                        <li>Contenido editorial y textos</li>
+                    </ul>
+                    <p>Pertenecen exclusivamente a AutoClick.cr o a nuestros licenciantes.</p>
+
+                    <h3>8.1 Licencia de Uso</h3>
+                    <p>Se le otorga una licencia limitada, no exclusiva y no transferible para utilizar la Plataforma únicamente para sus fines personales y comerciales legítimos.</p>
+                </section>
+
+                <section id="privacidad" class="terms-section">
+                    <h2>9. Protección de Datos y Privacidad</h2>
+                    <p>La recopilación y uso de sus datos personales se rige por nuestra <a href="/PoliticaPrivacidad" class="inline-link">Política de Privacidad</a>, la cual forma parte integral de estos términos.</p>
+                    
+                    <h3>9.1 Datos Recopilados</h3>
+                    <p>Recopilamos información para mejorar nuestros servicios, incluyendo:</p>
+                    <ul class="terms-list">
+                        <li>Información de registro y perfil</li>
+                        <li>Datos de navegación y uso</li>
+                        <li>Comunicaciones con otros usuarios</li>
+                        <li>Información de transacciones</li>
+                    </ul>
+
+                    <h3>9.2 Sus Derechos</h3>
+                    <p>Conforme a la legislación costarricense de protección de datos, usted tiene derecho a:</p>
+                    <ul class="terms-list">
+                        <li>Acceder a sus datos personales</li>
+                        <li>Rectificar información inexacta</li>
+                        <li>Solicitar la eliminación de datos</li>
+                        <li>Limitar el procesamiento de información</li>
+                        <li>Portabilidad de datos</li>
+                    </ul>
+                </section>
+
+                <section id="limitacion" class="terms-section">
+                    <h2>10. Limitación de Responsabilidad</h2>
+                    <div class="disclaimer-box">
+                        <h3>Exención de Garantías</h3>
+                        <p>La Plataforma se proporciona "tal como está" sin garantías de ningún tipo. No garantizamos:</p>
+                        <ul class="terms-list">
+                            <li>Disponibilidad ininterrumpida del servicio</li>
+                            <li>Ausencia de errores o virus</li>
+                            <li>Exactitud de la información de terceros</li>
+                            <li>Resultados específicos del uso de la Plataforma</li>
+                        </ul>
+                    </div>
+
+                    <h3>10.1 Limitación de Daños</h3>
+                    <p>En ningún caso seremos responsables por daños indirectos, incidentales, especiales o consecuentes, incluyendo pero no limitado a pérdida de beneficios, datos o uso.</p>
+
+                    <h3>10.2 Responsabilidad de Terceros</h3>
+                    <p>No somos responsables por las acciones, errores, omisiones o conducta de los usuarios o terceros en la Plataforma.</p>
+                </section>
+
+                <section id="terminacion" class="terms-section">
+                    <h2>11. Terminación</h2>
+                    <h3>11.1 Terminación por el Usuario</h3>
+                    <p>Puede terminar su cuenta en cualquier momento contactándonos o utilizando las herramientas de eliminación de cuenta en su perfil.</p>
+
+                    <h3>11.2 Terminación por AutoClick.cr</h3>
+                    <p>Podemos suspender o terminar su acceso inmediatamente, sin previo aviso, si:</p>
+                    <ul class="terms-list">
+                        <li>Viola estos términos y condiciones</li>
+                        <li>Participa en actividades fraudulentas</li>
+                        <li>Causa daño a otros usuarios o a la Plataforma</li>
+                        <li>No cumple con las obligaciones de pago</li>
+                    </ul>
+
+                    <h3>11.3 Efectos de la Terminación</h3>
+                    <p>Al terminar la cuenta:</p>
+                    <ul class="terms-list">
+                        <li>Perderá acceso a todos los servicios</li>
+                        <li>Sus anuncios serán eliminados</li>
+                        <li>Los datos pueden conservarse según nuestra política de retención</li>
+                    </ul>
+                </section>
+
+                <section id="modificaciones" class="terms-section">
+                    <h2>12. Modificaciones a los Términos</h2>
+                    <p>Nos reservamos el derecho de modificar estos términos en cualquier momento. Las modificaciones entrarán en vigencia:</p>
+                    <ul class="terms-list">
+                        <li>Inmediatamente al ser publicadas en la Plataforma</li>
+                        <li>30 días después de la notificación por correo electrónico para cambios materiales</li>
+                    </ul>
+
+                    <div class="notification-box">
+                        <p><strong>Su Responsabilidad:</strong> Es su responsabilidad revisar periódicamente estos términos. El uso continuado de la Plataforma después de las modificaciones constituye aceptación de los nuevos términos.</p>
+                    </div>
+                </section>
+
+                <section id="ley-aplicable" class="terms-section">
+                    <h2>13. Ley Aplicable y Jurisdicción</h2>
+                    <p>Estos términos se rigen por las leyes de Costa Rica. Cualquier disputa será resuelta en los tribunales competentes de San José, Costa Rica.</p>
+
+                    <h3>13.1 Resolución de Disputas</h3>
+                    <p>Antes de iniciar acciones legales, las partes se comprometen a intentar resolver las disputas mediante:</p>
+                    <ol class="terms-list">
+                        <li>Comunicación directa con nuestro equipo de soporte</li>
+                        <li>Mediación a través de un mediador neutral</li>
+                        <li>Arbitraje vinculante si la mediación no prospera</li>
+                    </ol>
+                </section>
+
+                <section id="contacto" class="terms-section">
+                    <h2>14. Información de Contacto</h2>
+                    <div class="contact-info">
+                        <p>Para preguntas sobre estos términos y condiciones, puede contactarnos:</p>
+                        
+                        <div class="contact-methods">
+                            <div class="contact-method">
+                                <strong>Correo Electrónico:</strong>
+                                <a href="mailto:legal@autoclick.cr">legal@autoclick.cr</a>
+                            </div>
+                            
+                            <div class="contact-method">
+                                <strong>Teléfono:</strong>
+                                <a href="tel:+50622345678">+506 2234-5678</a>
+                            </div>
+                            
+                            <div class="contact-method">
+                                <strong>Dirección Física:</strong>
+                                <address>
+                                    AutoClick.cr<br>
+                                    Edificio Centro Colón, Piso 15<br>
+                                    Paseo Colón, San José<br>
+                                    Costa Rica, 10101
+                                </address>
+                            </div>
+                            
+                            <div class="contact-method">
+                                <strong>Horarios de Atención:</strong>
+                                <p>Lunes a Viernes: 8:00 AM - 6:00 PM<br>
+                                Sábados: 9:00 AM - 1:00 PM</p>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <div class="acceptance-section">
+                    <div class="acceptance-box">
+                        <h3>Confirmación de Lectura</h3>
+                        <p>Al utilizar AutoClick.cr, confirma que ha leído, entendido y acepta cumplir con estos Términos y Condiciones en su totalidad.</p>
+                        <p class="last-updated"><strong>Fecha de última actualización:</strong> 27 de septiembre de 2025</p>
+                        <p class="version"><strong>Versión:</strong> 2.1</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="main-footer">
+        <div class="footer-content">
+            
+            <div class="footer-brand">
+                <img src="~/images/autoclick-logo-footer.png" alt="AutoClick.cr" class="footer-logo" />
+                <div class="footer-social-links">
+                    <a href="#" class="social-link"><i class="fab fa-facebook-f"></i></a>
+                    <a href="#" class="social-link"><i class="fab fa-instagram"></i></a>
+                    <a href="#" class="social-link"><i class="fab fa-twitter"></i></a>
+                    <a href="#" class="social-link"><i class="fab fa-linkedin-in"></i></a>
+                </div>
+            </div>
+
+            <div class="footer-links">
+                <h3 class="footer-section-title">AutoClick.cr</h3>
+                <nav class="footer-nav">
+                    <a href="/SobreNosotros">Sobre nosotros</a>
+                    <a href="/Contactanos">Contáctanos</a>
+                    <a href="/Explorar">Explorar autos</a>
+                    <a href="/BusquedaAvanzada">Búsqueda avanzada</a>
+                </nav>
+            </div>
+
+            <div class="footer-links footer-legal">
+                <nav class="footer-nav">
+                    <a href="/TerminosCondiciones" class="active">Términos y condiciones</a>
+                    <a href="/PoliticaPrivacidad">Política de privacidad</a>
+                    <a href="/ReportarProblema">Reportar un problema</a>
+                </nav>
+            </div>
+
+            <div class="footer-newsletter">
+                <h3 class="footer-section-title">Suscribete</h3>
+                <p class="newsletter-text">Recibe las últimas noticias y ofertas especiales</p>
+                <form class="newsletter-form">
+                    <input type="email" placeholder="Tu correo electrónico" class="newsletter-input" required>
+                    <button type="submit" class="newsletter-btn">Suscribirse</button>
+                </form>
+            </div>
+        </div>
+        
+        <div class="footer-copyright">
+            <p>&copy; 2025 AutoClick.cr. Todos los derechos reservados.</p>
+        </div>
+    </footer>
+
+    <script src="~/js/terminos-condiciones.js" asp-append-version="true"></script>
+</body>
+</html>

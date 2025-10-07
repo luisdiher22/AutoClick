@@ -1,0 +1,947 @@
+@page
+@model AnunciarMiAutoModel
+@{
+    ViewData["Title"] = Model.IsEditMode ? "Editar Anuncio - AutoClick.cr" : "Anunciar Mi Auto - AutoClick.cr";
+}
+
+@section Styles {
+    <link rel="stylesheet" href="~/css/anunciar-auto.css" />
+}
+
+@section Scripts {
+    <script src="~/js/anunciar-auto.js"></script>
+}
+
+<div class="anunciar-container">
+
+    <!-- Main Content -->
+    <div class="anunciar-main">
+        <!-- Background Image -->
+        <div class="background-image"></div>
+                                    <input type="checkbox" id="monitor-presion" name="Formulario.ExtrasSeguridad" value="monitor-presion" @(Model.Formulario?.ExtrasSeguridad?.Contains("monitor-presion") == true ? "checked" : "")>
+                            <label for="monitor-presion">Monitor de presión de llantas</label>       <!-- Form C                            <input type="checkbox" id="supercargado" name="Formulario.ExtrasRendimiento" value="supercargado" @(Model.Formulario?.ExtrasRendimiento?.Contains("supercargado") == true ? "checked" : "")>
+                            <label for="supercargado">Motor supercargado</label>tainer -->
+        <div class="form-container">
+            <!-- Form Header -->
+            <div class="form-header">
+                <h1>Anuncie su auto</h1>
+                <span class="section-indicator">Sección: <span id="current-section">1</span>/8</span>
+            </div>
+            
+            <!-- Form Container -->
+            <form method="post" enctype="multipart/form-data" id="anuncioForm">
+                @Html.AntiForgeryToken()
+                
+                <!-- Navigation Buttons -->
+                <div class="form-nav-buttons">
+                    <button type="button" class="btn-back" id="btn-back">
+                        <div class="back-arrow"></div>
+                        <span>Atrás</span>
+                    </button>
+                    <button type="button" class="btn-next" id="btn-next">
+                        <span>Siguiente sección</span>
+                    </button>
+                </div>
+                
+                <!-- Form Sections Container -->
+                <div class="form-sections" id="form-sections">
+                
+                <!-- Section 1: Datos del Vehículo -->
+                <div class="form-section active" data-section="1" id="seccion1">
+                    <div style="width: 100%; height: 800px; position: relative; overflow: hidden;">
+                        @if (Model.IsEditMode)
+                        {
+                            <div style="left: 20px; top: -20px; position: absolute; background: rgba(34, 197, 94, 0.2); color: #22C55E; padding: 8px 16px; border-radius: 6px; font-size: 12px; font-family: Montserrat; font-weight: 600;">
+                                🔧 EDITANDO ANUNCIO ID: @Model.Edit
+                            </div>
+                        }
+                        <div style="left: 20px; top: 10px; position: absolute; text-box-trim: trim-both; text-box-edge: cap alphabetic; color: rgba(255, 255, 255, 0.75); font-size: 18px; font-family: Montserrat; font-weight: 700; word-wrap: break-word">Datos del vehículo</div>
+                        
+                        <!-- Marca -->
+                        <div data-asterizco="true" data-property-1="Default" style="width: 260px; height: 60px; left: 30px; top: 50px; position: absolute">
+                            <select asp-for="Formulario.Marca" id="marca" required style="width: 260px; height: 42px; padding-left: 16px; padding-right: 16px; padding-top: 8px; padding-bottom: 8px; left: 0px; top: 18px; position: absolute; background: #02081C; border-radius: 4px; outline: 0.50px rgba(255, 255, 255, 0.50) solid; outline-offset: -0.50px; justify-content: space-between; align-items: center; display: inline-flex; color: rgba(255, 255, 255, 0.50); font-size: 14px; font-family: Montserrat; font-weight: 500; border: none;">
+                                <option value="">Elija una marca</option>
+                                <option value="toyota">Toyota</option>
+                                <option value="honda">Honda</option>
+                                <option value="nissan">Nissan</option>
+                                <option value="hyundai">Hyundai</option>
+                                <option value="kia">Kia</option>
+                                <option value="mazda">Mazda</option>
+                                <option value="chevrolet">Chevrolet</option>
+                                <option value="ford">Ford</option>
+                                <option value="volkswagen">Volkswagen</option>
+                            </select>
+                            <div style="left: 0px; top: 0px; position: absolute; justify-content: flex-start; align-items: center; gap: 4px; display: inline-flex">
+                                <div style="text-box-trim: trim-both; text-box-edge: cap alphabetic; color: white; font-size: 14px; font-family: Montserrat; font-weight: 500; word-wrap: break-word">Marca</div>
+                                <div style="text-box-trim: trim-both; text-box-edge: cap alphabetic; color: #FF0000; font-size: 14px; font-family: Montserrat; font-weight: 500; word-wrap: break-word">*</div>
+                            </div>
+                        </div>
+                        
+                        <!-- Modelo -->
+                        <div data-asterizco="true" data-property-1="Default" style="width: 260px; height: 60px; left: 320px; top: 50px; position: absolute">
+                            <select id="modelo" name="Formulario.Modelo" required style="width: 260px; height: 42px; padding-left: 16px; padding-right: 16px; padding-top: 8px; padding-bottom: 8px; left: 0px; top: 18px; position: absolute; background: #02081C; border-radius: 4px; outline: 0.50px rgba(255, 255, 255, 0.50) solid; outline-offset: -0.50px; justify-content: space-between; align-items: center; display: inline-flex; color: rgba(255, 255, 255, 0.50); font-size: 14px; font-family: Montserrat; font-weight: 500; border: none;">
+                                <option value="">Elija un modelo</option>
+                                @if (!string.IsNullOrEmpty(Model.Formulario?.Modelo))
+                                {
+                                    <option value="@Model.Formulario.Modelo" selected>@Model.Formulario.Modelo</option>
+                                }
+                            </select>
+                            <div style="left: 0px; top: 0px; position: absolute; justify-content: flex-start; align-items: center; gap: 4px; display: inline-flex">
+                                <div style="text-box-trim: trim-both; text-box-edge: cap alphabetic; color: white; font-size: 14px; font-family: Montserrat; font-weight: 500; word-wrap: break-word">Modelo</div>
+                                <div style="text-box-trim: trim-both; text-box-edge: cap alphabetic; color: #FF0000; font-size: 14px; font-family: Montserrat; font-weight: 500; word-wrap: break-word">*</div>
+                            </div>
+                        </div>
+                        
+                        <!-- Año -->
+                        <div data-asterizco="true" data-property-1="Default" style="width: 260px; height: 60px; left: 610px; top: 50px; position: absolute">
+                            <select asp-for="Formulario.Año" id="ano" required style="width: 260px; height: 42px; padding-left: 16px; padding-right: 16px; padding-top: 8px; padding-bottom: 8px; left: 0px; top: 18px; position: absolute; background: #02081C; border-radius: 4px; outline: 0.50px rgba(255, 255, 255, 0.50) solid; outline-offset: -0.50px; justify-content: space-between; align-items: center; display: inline-flex; color: rgba(255, 255, 255, 0.50); font-size: 14px; font-family: Montserrat; font-weight: 500; border: none;">
+                                <option value="">Elija el año</option>
+                                @for(int year = DateTime.Now.Year; year >= 1990; year--)
+                                {
+                                    <option value="@year">@year</option>
+                                }
+                            </select>
+                            <div style="left: 0px; top: 0px; position: absolute; justify-content: flex-start; align-items: center; gap: 4px; display: inline-flex">
+                                <div style="text-box-trim: trim-both; text-box-edge: cap alphabetic; color: white; font-size: 14px; font-family: Montserrat; font-weight: 500; word-wrap: break-word">Año</div>
+                                <div style="text-box-trim: trim-both; text-box-edge: cap alphabetic; color: #FF0000; font-size: 14px; font-family: Montserrat; font-weight: 500; word-wrap: break-word">*</div>
+                            </div>
+                        </div>
+                        
+                        <!-- Placa -->
+                        <div data-estado="Default" data-label2="true" style="width: 260px; height: 60px; left: 900px; top: 50px; position: absolute">
+                            <input asp-for="Formulario.Placa" type="text" id="placa" placeholder="Introducir placa (opcional para autos nuevos)" style="width: 260px; height: 42px; padding-top: 8px; padding-bottom: 8px; padding-left: 16px; padding-right: 16px; left: 0px; top: 18px; position: absolute; background: #02081C; border-radius: 4px; outline: 0.50px rgba(255, 255, 255, 0.50) solid; outline-offset: -0.50px; justify-content: flex-start; align-items: center; gap: 8px; display: inline-flex; color: rgba(255, 255, 255, 0.50); font-size: 14px; font-family: Montserrat; font-weight: 500; border: none;">
+                            <div style="width: 68.64px; height: 9px; left: 0px; top: 0px; position: absolute; justify-content: flex-start; align-items: center; gap: 4px; display: inline-flex">
+                                <div style="text-box-trim: trim-both; text-box-edge: cap alphabetic; color: white; font-size: 14px; font-family: Montserrat; font-weight: 500; word-wrap: break-word">Placa del vehículo <span style="color: rgba(255, 255, 255, 0.6); font-weight: 400;">(opcional)</span></div>
+                            </div>
+                        </div>
+                        
+                        <!-- Valor Fiscal -->
+                        <div data-estado="Default" data-label2="true" style="width: 260px; height: 60px; left: 30px; top: 140px; position: absolute">
+                            <input asp-for="Formulario.Precio" type="number" id="valor-fiscal" placeholder="Introducir valor fiscal" style="width: 260px; height: 42px; padding-top: 8px; padding-bottom: 8px; padding-left: 16px; padding-right: 16px; left: 0px; top: 18px; position: absolute; background: #02081C; border-radius: 4px; outline: 0.50px rgba(255, 255, 255, 0.50) solid; outline-offset: -0.50px; justify-content: flex-start; align-items: center; gap: 8px; display: inline-flex; color: rgba(255, 255, 255, 0.50); font-size: 14px; font-family: Montserrat; font-weight: 500; border: none;">
+                            <div style="width: 69.39px; height: 9px; left: 0px; top: 0px; position: absolute; justify-content: flex-start; align-items: center; gap: 4px; display: inline-flex">
+                                <div style="text-box-trim: trim-both; text-box-edge: cap alphabetic; color: white; font-size: 16px; font-family: Montserrat; font-weight: 700; word-wrap: break-word">Valor fiscal del vehículo</div>
+                            </div>
+                        </div>
+                        
+                        <!-- Averiguar Valor Fiscal Button -->
+                        <div data-property-1="Frame 10668518" style="width: 80px; height: 42px; padding: 8px; left: 320px; top: 158px; position: absolute; background: #2A6793; border-radius: 4px; justify-content: center; align-items: center; gap: 8px; display: inline-flex; cursor: pointer;">
+                            <div style="text-box-trim: trim-both; text-box-edge: cap alphabetic; text-align: right; color: white; font-size: 12px; font-family: Montserrat; font-weight: 700; word-wrap: break-word">Averiguar <br/>valor fiscal</div>
+                        </div>
+                        
+                        <!-- Info Texts -->
+                        <div style="left: 430px; top: 154px; position: absolute; text-box-trim: trim-both; text-box-edge: cap alphabetic"><span style="color: white; font-size: 14px; font-family: Montserrat; font-weight: 500; word-wrap: break-word">*El valor fiscal </span><span style="color: #FF0000; font-size: 14px; font-family: Montserrat; font-weight: 700; word-wrap: break-word">NO</span><span style="color: white; font-size: 14px; font-family: Montserrat; font-weight: 500; word-wrap: break-word"> se mostrará publicamente.*</span></div>
+                        <div style="left: 430px; top: 174px; position: absolute; text-box-trim: trim-both; text-box-edge: cap alphabetic; color: #00CC00; font-size: 14px; font-family: Montserrat; font-weight: 600; word-wrap: break-word">Al ingresar el valor fiscal, su anuncio tendrá mayor exposición en la plataforma durante 24 horas.</div>
+                        
+                        <!-- Carrocería -->
+                        <div data-asterizco="true" data-property-1="Default" style="width: 260px; height: 60px; left: 30px; top: 230px; position: absolute">
+                            <select asp-for="Formulario.Carroceria" id="carroceria" required style="width: 260px; height: 42px; padding-left: 16px; padding-right: 16px; padding-top: 8px; padding-bottom: 8px; left: 0px; top: 18px; position: absolute; background: #02081C; border-radius: 4px; outline: 0.50px rgba(255, 255, 255, 0.50) solid; outline-offset: -0.50px; justify-content: space-between; align-items: center; display: inline-flex; color: rgba(255, 255, 255, 0.50); font-size: 14px; font-family: Montserrat; font-weight: 500; border: none;">
+                                <option value="">Elija un tipo de carrocería</option>
+                                <option value="sedan">Sedán</option>
+                                <option value="suv">SUV</option>
+                                <option value="hatchback">Hatchback</option>
+                                <option value="pickup">Pick-up</option>
+                                <option value="coupe">Coupé</option>
+                                <option value="convertible">Convertible</option>
+                            </select>
+                            <div style="left: 0px; top: 0px; position: absolute; justify-content: flex-start; align-items: center; gap: 4px; display: inline-flex">
+                                <div style="text-box-trim: trim-both; text-box-edge: cap alphabetic; color: white; font-size: 14px; font-family: Montserrat; font-weight: 500; word-wrap: break-word">Carrocería</div>
+                                <div style="text-box-trim: trim-both; text-box-edge: cap alphabetic; color: #FF0000; font-size: 14px; font-family: Montserrat; font-weight: 500; word-wrap: break-word">*</div>
+                            </div>
+                        </div>
+                        
+                        <!-- Combustible -->
+                        <div data-asterizco="true" data-property-1="Default" style="width: 260px; height: 60px; left: 320px; top: 230px; position: absolute">
+                            <select asp-for="Formulario.Combustible" id="combustible" required style="width: 260px; height: 42px; padding-left: 16px; padding-right: 16px; padding-top: 8px; padding-bottom: 8px; left: 0px; top: 18px; position: absolute; background: #02081C; border-radius: 4px; outline: 0.50px rgba(255, 255, 255, 0.50) solid; outline-offset: -0.50px; justify-content: space-between; align-items: center; display: inline-flex; color: rgba(255, 255, 255, 0.50); font-size: 14px; font-family: Montserrat; font-weight: 500; border: none;">
+                                <option value="">Elija combustible</option>
+                                <option value="gasolina">Gasolina</option>
+                                <option value="diesel">Diésel</option>
+                                <option value="hibrido">Híbrido</option>
+                                <option value="electrico">Eléctrico</option>
+                            </select>
+                            <div style="left: 0px; top: 0px; position: absolute; justify-content: flex-start; align-items: center; gap: 4px; display: inline-flex">
+                                <div style="text-box-trim: trim-both; text-box-edge: cap alphabetic; color: white; font-size: 14px; font-family: Montserrat; font-weight: 500; word-wrap: break-word">Combustible</div>
+                                <div style="text-box-trim: trim-both; text-box-edge: cap alphabetic; color: #FF0000; font-size: 14px; font-family: Montserrat; font-weight: 500; word-wrap: break-word">*</div>
+                            </div>
+                        </div>
+                        
+                        <!-- Cilindrada -->
+                        <div data-estado="Default" data-label2="true" style="width: 260px; height: 60px; left: 610px; top: 230px; position: absolute">
+                            <input asp-for="Formulario.Cilindrada" type="number" id="cilindrada" placeholder="Introducir cilindrada (cc)" required style="width: 260px; height: 42px; padding-top: 8px; padding-bottom: 8px; padding-left: 16px; padding-right: 16px; left: 0px; top: 18px; position: absolute; background: #02081C; border-radius: 4px; outline: 0.50px rgba(255, 255, 255, 0.50) solid; outline-offset: -0.50px; justify-content: flex-start; align-items: center; gap: 8px; display: inline-flex; color: rgba(255, 255, 255, 0.50); font-size: 14px; font-family: Montserrat; font-weight: 500; border: none;">
+                            <div style="width: 68.39px; height: 9px; left: 0px; top: 0px; position: absolute; justify-content: flex-start; align-items: center; gap: 4px; display: inline-flex">
+                                <div style="text-box-trim: trim-both; text-box-edge: cap alphabetic; color: white; font-size: 14px; font-family: Montserrat; font-weight: 500; word-wrap: break-word">Cilindrada</div>
+                                <div style="text-box-trim: trim-both; text-box-edge: cap alphabetic; color: #FF0000; font-size: 14px; font-family: Montserrat; font-weight: 500; word-wrap: break-word">*</div>
+                            </div>
+                        </div>
+                        
+                        <!-- Color Exterior -->
+                        <div data-estado="Default" data-label2="true" style="width: 260px; height: 60px; left: 30px; top: 320px; position: absolute">
+                            <input asp-for="Formulario.ColorExterior" type="text" id="color-exterior" placeholder="Introducir color exterior" required style="width: 260px; height: 42px; padding-top: 8px; padding-bottom: 8px; padding-left: 16px; padding-right: 16px; left: 0px; top: 18px; position: absolute; background: #02081C; border-radius: 4px; outline: 0.50px rgba(255, 255, 255, 0.50) solid; outline-offset: -0.50px; justify-content: flex-start; align-items: center; gap: 8px; display: inline-flex; color: rgba(255, 255, 255, 0.50); font-size: 14px; font-family: Montserrat; font-weight: 500; border: none;">
+                            <div style="width: 68.64px; height: 9px; left: 0px; top: 0px; position: absolute; justify-content: flex-start; align-items: center; gap: 4px; display: inline-flex">
+                                <div style="text-box-trim: trim-both; text-box-edge: cap alphabetic; color: white; font-size: 14px; font-family: Montserrat; font-weight: 500; word-wrap: break-word">Color exterior</div>
+                                <div style="text-box-trim: trim-both; text-box-edge: cap alphabetic; color: #FF0000; font-size: 14px; font-family: Montserrat; font-weight: 500; word-wrap: break-word">*</div>
+                            </div>
+                        </div>
+                        
+                        <!-- Color Interior -->
+                        <div data-estado="Default" data-label2="true" style="width: 260px; height: 60px; left: 320px; top: 320px; position: absolute">
+                            <input asp-for="Formulario.ColorInterior" type="text" id="color-interior" placeholder="Introducir color interior" required style="width: 260px; height: 42px; padding-top: 8px; padding-bottom: 8px; padding-left: 16px; padding-right: 16px; left: 0px; top: 18px; position: absolute; background: #02081C; border-radius: 4px; outline: 0.50px rgba(255, 255, 255, 0.50) solid; outline-offset: -0.50px; justify-content: flex-start; align-items: center; gap: 8px; display: inline-flex; color: rgba(255, 255, 255, 0.50); font-size: 14px; font-family: Montserrat; font-weight: 500; border: none;">
+                            <div style="width: 68.64px; height: 9px; left: 0px; top: 0px; position: absolute; justify-content: flex-start; align-items: center; gap: 4px; display: inline-flex">
+                                <div style="text-box-trim: trim-both; text-box-edge: cap alphabetic; color: white; font-size: 14px; font-family: Montserrat; font-weight: 500; word-wrap: break-word">Color interior</div>
+                                <div style="text-box-trim: trim-both; text-box-edge: cap alphabetic; color: #FF0000; font-size: 14px; font-family: Montserrat; font-weight: 500; word-wrap: break-word">*</div>
+                            </div>
+                        </div>
+                        
+                        <!-- Puertas -->
+                        <div data-asterizco="true" data-property-1="Default" style="width: 260px; height: 60px; left: 610px; top: 320px; position: absolute">
+                            <select asp-for="Formulario.Puertas" id="puertas" required style="width: 260px; height: 42px; padding-left: 16px; padding-right: 16px; padding-top: 8px; padding-bottom: 8px; left: 0px; top: 18px; position: absolute; background: #02081C; border-radius: 4px; outline: 0.50px rgba(255, 255, 255, 0.50) solid; outline-offset: -0.50px; justify-content: space-between; align-items: center; display: inline-flex; color: rgba(255, 255, 255, 0.50); font-size: 14px; font-family: Montserrat; font-weight: 500; border: none;">
+                                <option value="">Elija # de puertas</option>
+                                <option value="2">2 puertas</option>
+                                <option value="3">3 puertas</option>
+                                <option value="4">4 puertas</option>
+                                <option value="5">5 puertas</option>
+                            </select>
+                            <div style="left: 0px; top: 0px; position: absolute; justify-content: flex-start; align-items: center; gap: 4px; display: inline-flex">
+                                <div style="text-box-trim: trim-both; text-box-edge: cap alphabetic; color: white; font-size: 14px; font-family: Montserrat; font-weight: 500; word-wrap: break-word">Puertas</div>
+                                <div style="text-box-trim: trim-both; text-box-edge: cap alphabetic; color: #FF0000; font-size: 14px; font-family: Montserrat; font-weight: 500; word-wrap: break-word">*</div>
+                            </div>
+                        </div>
+                        
+                        <!-- Pasajeros -->
+                        <div data-asterizco="true" data-property-1="Default" style="width: 260px; height: 60px; left: 900px; top: 320px; position: absolute">
+                            <select asp-for="Formulario.Pasajeros" id="pasajeros" required style="width: 260px; height: 42px; padding-left: 16px; padding-right: 16px; padding-top: 8px; padding-bottom: 8px; left: 0px; top: 18px; position: absolute; background: #02081C; border-radius: 4px; outline: 0.50px rgba(255, 255, 255, 0.50) solid; outline-offset: -0.50px; justify-content: space-between; align-items: center; display: inline-flex; color: rgba(255, 255, 255, 0.50); font-size: 14px; font-family: Montserrat; font-weight: 500; border: none;">
+                                <option value="">Elija # de pasajeros</option>
+                                <option value="2">2 pasajeros</option>
+                                <option value="4">4 pasajeros</option>
+                                <option value="5">5 pasajeros</option>
+                                <option value="7">7 pasajeros</option>
+                                <option value="8">8+ pasajeros</option>
+                            </select>
+                            <div style="left: 0px; top: 0px; position: absolute; justify-content: flex-start; align-items: center; gap: 4px; display: inline-flex">
+                                <div style="text-box-trim: trim-both; text-box-edge: cap alphabetic; color: white; font-size: 14px; font-family: Montserrat; font-weight: 500; word-wrap: break-word">Pasajeros</div>
+                                <div style="text-box-trim: trim-both; text-box-edge: cap alphabetic; color: #FF0000; font-size: 14px; font-family: Montserrat; font-weight: 500; word-wrap: break-word">*</div>
+                            </div>
+                        </div>
+                        
+                        <!-- Transmisión -->
+                        <div data-asterizco="true" data-property-1="Default" style="width: 260px; height: 60px; left: 30px; top: 410px; position: absolute">
+                            <select asp-for="Formulario.Transmision" id="transmision" required style="width: 260px; height: 42px; padding-left: 16px; padding-right: 16px; padding-top: 8px; padding-bottom: 8px; left: 0px; top: 18px; position: absolute; background: #02081C; border-radius: 4px; outline: 0.50px rgba(255, 255, 255, 0.50) solid; outline-offset: -0.50px; justify-content: space-between; align-items: center; display: inline-flex; color: rgba(255, 255, 255, 0.50); font-size: 14px; font-family: Montserrat; font-weight: 500; border: none;">
+                                <option value="">Elija transmisión</option>
+                                <option value="manual">Manual</option>
+                                <option value="automatica">Automática</option>
+                                <option value="cvt">CVT</option>
+                            </select>
+                            <div style="left: 0px; top: 0px; position: absolute; justify-content: flex-start; align-items: center; gap: 4px; display: inline-flex">
+                                <div style="text-box-trim: trim-both; text-box-edge: cap alphabetic; color: white; font-size: 14px; font-family: Montserrat; font-weight: 500; word-wrap: break-word">Transmisión</div>
+                                <div style="text-box-trim: trim-both; text-box-edge: cap alphabetic; color: #FF0000; font-size: 14px; font-family: Montserrat; font-weight: 500; word-wrap: break-word">*</div>
+                            </div>
+                        </div>
+                        
+                        <!-- Tracción -->
+                        <div data-asterizco="true" data-property-1="Default" style="width: 260px; height: 60px; left: 320px; top: 410px; position: absolute">
+                            <select asp-for="Formulario.Traccion" id="traccion" required style="width: 260px; height: 42px; padding-left: 16px; padding-right: 16px; padding-top: 8px; padding-bottom: 8px; left: 0px; top: 18px; position: absolute; background: #02081C; border-radius: 4px; outline: 0.50px rgba(255, 255, 255, 0.50) solid; outline-offset: -0.50px; justify-content: space-between; align-items: center; display: inline-flex; color: rgba(255, 255, 255, 0.50); font-size: 14px; font-family: Montserrat; font-weight: 500; border: none;">
+                                <option value="">Elija tracción</option>
+                                <option value="delantera">Delantera (FWD)</option>
+                                <option value="trasera">Trasera (RWD)</option>
+                                <option value="integral">Integral (AWD)</option>
+                                <option value="4x4">4x4</option>
+                            </select>
+                            <div style="left: 0px; top: 0px; position: absolute; justify-content: flex-start; align-items: center; gap: 4px; display: inline-flex">
+                                <div style="text-box-trim: trim-both; text-box-edge: cap alphabetic; color: white; font-size: 14px; font-family: Montserrat; font-weight: 500; word-wrap: break-word">Tracción</div>
+                                <div style="text-box-trim: trim-both; text-box-edge: cap alphabetic; color: #FF0000; font-size: 14px; font-family: Montserrat; font-weight: 500; word-wrap: break-word">*</div>
+                            </div>
+                        </div>
+                        
+                        <!-- Kilometraje -->
+                        <div data-estado="Default" data-label2="true" style="width: 200px; height: 60px; left: 610px; top: 410px; position: absolute">
+                            <input asp-for="Formulario.Kilometraje" type="number" id="kilometraje" placeholder="Introducir kilometraje" required style="width: 200px; height: 42px; padding-top: 8px; padding-bottom: 8px; padding-left: 16px; padding-right: 16px; left: 0px; top: 18px; position: absolute; background: #02081C; border-radius: 4px; outline: 0.50px rgba(255, 255, 255, 0.50) solid; outline-offset: -0.50px; justify-content: flex-start; align-items: center; gap: 8px; display: inline-flex; color: rgba(255, 255, 255, 0.50); font-size: 14px; font-family: Montserrat; font-weight: 500; border: none;">
+                            <div style="width: 51.04px; height: 9px; left: 0px; top: 0px; position: absolute; justify-content: flex-start; align-items: center; gap: 4px; display: inline-flex">
+                                <div style="text-box-trim: trim-both; text-box-edge: cap alphabetic; color: white; font-size: 14px; font-family: Montserrat; font-weight: 500; word-wrap: break-word">Kilometraje</div>
+                                <div style="text-box-trim: trim-both; text-box-edge: cap alphabetic; color: #FF0000; font-size: 14px; font-family: Montserrat; font-weight: 500; word-wrap: break-word">*</div>
+                            </div>
+                        </div>
+                        
+                        <!-- Km Unit -->
+                        <div style="height: 42px; padding-left: 8px; padding-right: 8px; padding-top: 8px; padding-bottom: 8px; left: 825px; top: 428px; position: absolute; background: #02081C; overflow: hidden; border-radius: 4px; outline: 0.50px rgba(255, 255, 255, 0.50) solid; outline-offset: -0.50px; justify-content: flex-start; align-items: center; gap: 8px; display: inline-flex">
+                            <div style="text-box-trim: trim-both; text-box-edge: cap alphabetic; text-align: center; color: white; font-size: 12px; font-family: Montserrat; font-weight: 500; word-wrap: break-word">Km</div>
+                        </div>
+                        
+                        <!-- Condición -->
+                        <div data-asterizco="true" data-property-1="Default" style="width: 260px; height: 60px; left: 900px; top: 410px; position: absolute">
+                            <select asp-for="Formulario.Condicion" id="condicion" required style="width: 260px; height: 42px; padding-left: 16px; padding-right: 16px; padding-top: 8px; padding-bottom: 8px; left: 0px; top: 18px; position: absolute; background: #02081C; border-radius: 4px; outline: 0.50px rgba(255, 255, 255, 0.50) solid; outline-offset: -0.50px; justify-content: space-between; align-items: center; display: inline-flex; color: rgba(255, 255, 255, 0.50); font-size: 14px; font-family: Montserrat; font-weight: 500; border: none;">
+                                <option value="">Elija una condición</option>
+                                <option value="nuevo">Nuevo</option>
+                                <option value="usado">Usado</option>
+                            </select>
+                            <div style="left: 0px; top: 0px; position: absolute; justify-content: flex-start; align-items: center; gap: 4px; display: inline-flex">
+                                <div style="text-box-trim: trim-both; text-box-edge: cap alphabetic; color: white; font-size: 14px; font-family: Montserrat; font-weight: 500; word-wrap: break-word">Condición</div>
+                                <div style="text-box-trim: trim-both; text-box-edge: cap alphabetic; color: #FF0000; font-size: 14px; font-family: Montserrat; font-weight: 500; word-wrap: break-word">*</div>
+                            </div>
+                        </div>
+                        
+                        <!-- Precio -->
+                        <div data-estado="Default" data-label2="true" style="width: 260px; height: 60px; left: 30px; top: 500px; position: absolute">
+                            <input asp-for="Formulario.Precio" type="number" id="precio" placeholder="Introducir precio" required style="width: 260px; height: 42px; padding-top: 8px; padding-bottom: 8px; padding-left: 16px; padding-right: 16px; left: 0px; top: 18px; position: absolute; background: #02081C; border-radius: 4px; outline: 0.50px rgba(255, 255, 255, 0.50) solid; outline-offset: -0.50px; justify-content: flex-start; align-items: center; gap: 8px; display: inline-flex; color: rgba(255, 255, 255, 0.50); font-size: 14px; font-family: Montserrat; font-weight: 500; border: none;">
+                            <div style="width: 68.64px; height: 9px; left: 0px; top: 0px; position: absolute; justify-content: flex-start; align-items: center; gap: 4px; display: inline-flex">
+                                <div style="text-box-trim: trim-both; text-box-edge: cap alphabetic; color: white; font-size: 14px; font-family: Montserrat; font-weight: 500; word-wrap: break-word">Precio del vehículo</div>
+                                <div style="text-box-trim: trim-both; text-box-edge: cap alphabetic; color: #FF0000; font-size: 14px; font-family: Montserrat; font-weight: 500; word-wrap: break-word">*</div>
+                            </div>
+                        </div>
+                        
+                        <!-- Descripción -->
+                        <div data-estado="Default" style="width: 1200px; height: 140px; left: 30px; top: 590px; position: absolute">
+                            <textarea asp-for="Formulario.Descripcion" id="descripcion" placeholder="Escribe descripción" required style="width: 1200px; height: 100px; padding-top: 16px; padding-bottom: 12px; padding-left: 16px; padding-right: 16px; left: 0px; top: 18px; position: absolute; background: #02081C; border-radius: 4px; outline: 0.50px rgba(255, 255, 255, 0.50) solid; outline-offset: -0.50px; justify-content: flex-start; align-items: flex-start; gap: 8px; display: inline-flex; color: rgba(255, 255, 255, 0.50); font-size: 14px; font-family: Montserrat; font-weight: 500; border: none; resize: none;"></textarea>
+                            <div style="width: 289.39px; height: 9px; left: 0px; top: 1px; position: absolute; justify-content: flex-start; align-items: center; gap: 4px; display: inline-flex">
+                                <div style="text-box-trim: trim-both; text-box-edge: cap alphabetic; color: white; font-size: 14px; font-family: Montserrat; font-weight: 500; word-wrap: break-word">Descripción detallada del vehículo</div>
+                                <div style="text-box-trim: trim-both; text-box-edge: cap alphabetic; color: #FF0000; font-size: 14px; font-family: Montserrat; font-weight: 500; word-wrap: break-word">*</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Section 2: Equipamiento -->
+                <div class="form-section" data-section="2" id="seccion2">
+                    <div style="width: 100%; min-height: 800px; position: relative; padding: 20px;">
+                    <h2>Equipamiento del vehículo</h2>
+                    <div class="equipment-grid">
+                        <div class="equipment-item">
+                            <input type="checkbox" id="faros-led" name="Formulario.ExtrasExterior" value="faros-led" @(Model.Formulario?.ExtrasExterior?.Contains("faros-led") == true ? "checked" : "")>
+                            <label for="faros-led">Faros LED / Xenón / Halógenos</label>
+                        </div>
+                        <div class="equipment-item">
+                            <input type="checkbox" id="luces-diurnas" name="Formulario.ExtrasExterior" value="luces-diurnas" @(Model.Formulario?.ExtrasExterior?.Contains("luces-diurnas") == true ? "checked" : "")>
+                            <label for="luces-diurnas">Luces diurnas (DRL)</label>
+                        </div>
+                        <div class="equipment-item">
+                            <input type="checkbox" id="luces-automaticas" name="Formulario.ExtrasExterior" value="luces-automaticas" @(Model.Formulario?.ExtrasExterior?.Contains("luces-automaticas") == true ? "checked" : "")>
+                            <label for="luces-automaticas">Luces automáticas</label>
+                        </div>
+                        <div class="equipment-item">
+                            <input type="checkbox" id="retrovisores-retractiles" name="Formulario.ExtrasExterior" value="retrovisores-retractiles" @(Model.Formulario?.ExtrasExterior?.Contains("retrovisores-retractiles") == true ? "checked" : "")>
+                            <label for="retrovisores-retractiles">Retrovisores Auto-Retractibles</label>
+                        </div>
+                        <div class="equipment-item">
+                            <input type="checkbox" id="aros-lujo" name="Formulario.ExtrasExterior" value="aros-lujo" @(Model.Formulario?.ExtrasExterior?.Contains("aros-lujo") == true ? "checked" : "")>
+                            <label for="aros-lujo">Aros de lujo</label>
+                        </div>
+                        <div class="equipment-item">
+                            <input type="checkbox" id="camaras-parking" name="Formulario.ExtrasSeguridad" value="camaras-parking" @(Model.Formulario?.ExtrasSeguridad?.Contains("camaras-parking") == true ? "checked" : "")>
+                            <label for="camaras-parking">Cámaras de parking</label>
+                        </div>
+                        <div class="equipment-item">
+                            <input type="checkbox" id="aleron-trasero" name="Formulario.ExtrasExterior" value="aleron-trasero" @(Model.Formulario?.ExtrasExterior?.Contains("aleron-trasero") == true ? "checked" : "")>
+                            <label for="aleron-trasero">Alerón trasero</label>
+                        </div>
+                        <div class="equipment-item">
+                            <input type="checkbox" id="sensor-lluvia" name="Formulario.ExtrasExterior" value="sensor-lluvia" @(Model.Formulario?.ExtrasExterior?.Contains("sensor-lluvia") == true ? "checked" : "")>
+                            <label for="sensor-lluvia">Sensor de lluvia</label>
+                        </div>
+                        <div class="equipment-item">
+                            <input type="checkbox" id="vidrios-polarizados" name="Formulario.ExtrasExterior" value="vidrios-polarizados" @(Model.Formulario?.ExtrasExterior?.Contains("vidrios-polarizados") == true ? "checked" : "")>
+                            <label for="vidrios-polarizados">Vidrios polarizados</label>
+                        </div>
+                        <div class="equipment-item">
+                            <input type="checkbox" id="techo-solar" name="Formulario.ExtrasExterior" value="techo-solar" @(Model.Formulario?.ExtrasExterior?.Contains("techo-solar") == true ? "checked" : "")>
+                            <label for="techo-solar">Techo solar / panorámico</label>
+                        </div>
+                        <div class="equipment-item">
+                            <input type="checkbox" id="racks" name="Formulario.ExtrasExterior" value="racks" @(Model.Formulario?.ExtrasExterior?.Contains("racks") == true ? "checked" : "")>
+                            <label for="racks">Racks</label>
+                        </div>
+                        <div class="equipment-item">
+                            <input type="checkbox" id="estribos-laterales" name="Formulario.ExtrasExterior" value="estribos-laterales" @(Model.Formulario?.ExtrasExterior?.Contains("estribos-laterales") == true ? "checked" : "")>
+                            <label for="estribos-laterales">Estribos laterales</label>
+                        </div>
+                    </div>
+
+                    <h2>Equipamiento Interior</h2>
+                    <div class="equipment-grid">
+                        <div class="equipment-item">
+                            <input type="checkbox" id="asientos-cuero" name="Formulario.ExtrasInterior" value="asientos-cuero" @(Model.Formulario?.ExtrasInterior?.Contains("asientos-cuero") == true ? "checked" : "")>
+                            <label for="asientos-cuero">Asientos en cuero</label>
+                        </div>
+                        <div class="equipment-item">
+                            <input type="checkbox" id="asientos-memoria" name="Formulario.ExtrasInterior" value="asientos-memoria" @(Model.Formulario?.ExtrasInterior?.Contains("asientos-memoria") == true ? "checked" : "")>
+                            <label for="asientos-memoria">Asientos con memoria</label>
+                        </div>
+                        <div class="equipment-item">
+                            <input type="checkbox" id="asientos-electricos" name="Formulario.ExtrasInterior" value="asientos-electricos" @(Model.Formulario?.ExtrasInterior?.Contains("asientos-electricos") == true ? "checked" : "")>
+                            <label for="asientos-electricos">Asientos eléctricos</label>
+                        </div>
+                        <div class="equipment-item">
+                            <input type="checkbox" id="encendido-remoto" name="Formulario.ExtrasInterior" value="encendido-remoto" @(Model.Formulario?.ExtrasInterior?.Contains("encendido-remoto") == true ? "checked" : "")>
+                            <label for="encendido-remoto">Encendido remoto</label>
+                        </div>
+                        <div class="equipment-item">
+                            <input type="checkbox" id="aire-acondicionado" name="Formulario.ExtrasInterior" value="aire-acondicionado" @(Model.Formulario?.ExtrasInterior?.Contains("aire-acondicionado") == true ? "checked" : "")>
+                            <label for="aire-acondicionado">Aire acondicionado</label>
+                        </div>
+                        <div class="equipment-item">
+                            <input type="checkbox" id="boton-arranque" name="Formulario.ExtrasInterior" value="boton-arranque" @(Model.Formulario?.ExtrasInterior?.Contains("boton-arranque") == true ? "checked" : "")>
+                            <label for="boton-arranque">Botón de arranque</label>
+                        </div>
+                        <div class="equipment-item">
+                            <input type="checkbox" id="llave-inteligente" name="Formulario.ExtrasInterior" value="llave-inteligente" @(Model.Formulario?.ExtrasInterior?.Contains("llave-inteligente") == true ? "checked" : "")>
+                            <label for="llave-inteligente">Llave inteligente</label>
+                        </div>
+                        <div class="equipment-item">
+                            <input type="checkbox" id="volante-multifuncion" name="Formulario.ExtrasInterior" value="volante-multifuncion" @(Model.Formulario?.ExtrasInterior?.Contains("volante-multifuncion") == true ? "checked" : "")>
+                            <label for="volante-multifuncion">Volante multifunción</label>
+                        </div>
+                        <div class="equipment-item">
+                            <input type="checkbox" id="volante-ajustable" name="Formulario.ExtrasInterior" value="volante-ajustable" @(Model.Formulario?.ExtrasInterior?.Contains("volante-ajustable") == true ? "checked" : "")>
+                            <label for="volante-ajustable">Volante ajustable eléctricamente</label>
+                        </div>
+                        <div class="equipment-item">
+                            <input type="checkbox" id="iluminacion-ambiental" name="Formulario.ExtrasInterior" value="iluminacion-ambiental" @(Model.Formulario?.ExtrasInterior?.Contains("iluminacion-ambiental") == true ? "checked" : "")>
+                            <label for="iluminacion-ambiental">Iluminación ambiental</label>
+                        </div>
+                        <div class="equipment-item">
+                            <input type="checkbox" id="cargador-inalambrico" name="Formulario.ExtrasMultimedia" value="cargador-inalambrico" @(Model.Formulario?.ExtrasMultimedia?.Contains("cargador-inalambrico") == true ? "checked" : "")>
+                            <label for="cargador-inalambrico">Cargador inalámbrico</label>
+                        </div>
+                        <div class="equipment-item">
+                            <input type="checkbox" id="persianas-traseras" name="Formulario.ExtrasInterior" value="persianas-traseras" @(Model.Formulario?.ExtrasInterior?.Contains("persianas-traseras") == true ? "checked" : "")>
+                            <label for="persianas-traseras">Persianas traseras</label>
+                        </div>
+                        <div class="equipment-item">
+                            <input type="checkbox" id="vidrios-electricos" name="Formulario.ExtrasInterior" value="vidrios-electricos" @(Model.Formulario?.ExtrasInterior?.Contains("vidrios-electricos") == true ? "checked" : "")>
+                            <label for="vidrios-electricos">Vidrios eléctricos</label>
+                        </div>
+                        <div class="equipment-item">
+                            <input type="checkbox" id="maletero-electrico" name="Formulario.ExtrasInterior" value="maletero-electrico" @(Model.Formulario?.ExtrasInterior?.Contains("maletero-electrico") == true ? "checked" : "")>
+                            <label for="maletero-electrico">Maletero eléctrico</label>
+                        </div>
+                    </div>
+
+                    <h2>Multimedia</h2>
+                    <div class="equipment-grid">
+                        <div class="equipment-item">
+                            <input type="checkbox" id="pantalla-tactil" name="Formulario.ExtrasMultimedia" value="pantalla-tactil" @(Model.Formulario?.ExtrasMultimedia?.Contains("pantalla-tactil") == true ? "checked" : "")>
+                            <label for="pantalla-tactil">Pantalla táctil multimedia</label>
+                        </div>
+                        <div class="equipment-item">
+                            <input type="checkbox" id="android-carplay" name="Formulario.ExtrasMultimedia" value="android-carplay" @(Model.Formulario?.ExtrasMultimedia?.Contains("android-carplay") == true ? "checked" : "")>
+                            <label for="android-carplay">Android Auto / Apple CarPlay</label>
+                        </div>
+                        <div class="equipment-item">
+                            <input type="checkbox" id="navegacion-gps" name="Formulario.ExtrasMultimedia" value="navegacion-gps" @(Model.Formulario?.ExtrasMultimedia?.Contains("navegacion-gps") == true ? "checked" : "")>
+                            <label for="navegacion-gps">Navegación GPS</label>
+                        </div>
+                        <div class="equipment-item">
+                            <input type="checkbox" id="bluetooth-usb" name="Formulario.ExtrasMultimedia" value="bluetooth-usb" @(Model.Formulario?.ExtrasMultimedia?.Contains("bluetooth-usb") == true ? "checked" : "")>
+                            <label for="bluetooth-usb">Bluetooth / USB / AUX</label>
+                        </div>
+                        <div class="equipment-item">
+                            <input type="checkbox" id="sistema-sonido" name="Formulario.ExtrasMultimedia" value="sistema-sonido" @(Model.Formulario?.ExtrasMultimedia?.Contains("sistema-sonido") == true ? "checked" : "")>
+                            <label for="sistema-sonido">Sistema de sonido premium</label>
+                        </div>
+                        <div class="equipment-item">
+                            <input type="checkbox" id="head-up-display" name="Formulario.ExtrasMultimedia" value="head-up-display" @(Model.Formulario?.ExtrasMultimedia?.Contains("head-up-display") == true ? "checked" : "")>
+                            <label for="head-up-display">Head-Up Display</label>
+                        </div>
+                        <div class="equipment-item">
+                            <input type="checkbox" id="cluster-digital" name="Formulario.ExtrasMultimedia" value="cluster-digital" @(Model.Formulario?.ExtrasMultimedia?.Contains("cluster-digital") == true ? "checked" : "")>
+                            <label for="cluster-digital">Clúster digital</label>
+                        </div>
+                        <div class="equipment-item">
+                            <input type="checkbox" id="wifi" name="Formulario.ExtrasMultimedia" value="wifi" @(Model.Formulario?.ExtrasMultimedia?.Contains("wifi") == true ? "checked" : "")>
+                            <label for="wifi">Conectividad WiFi</label>
+                        </div>
+                        <div class="equipment-item">
+                            <input type="checkbox" id="control-voz" name="Formulario.ExtrasMultimedia" value="control-voz" @(Model.Formulario?.ExtrasMultimedia?.Contains("control-voz") == true ? "checked" : "")>
+                            <label for="control-voz">Control por voz</label>
+                        </div>
+                        <div class="equipment-item">
+                            <input type="checkbox" id="control-gestual" name="Formulario.ExtrasMultimedia" value="control-gestual" @(Model.Formulario?.ExtrasMultimedia?.Contains("control-gestual") == true ? "checked" : "")>
+                            <label for="control-gestual">Control gestual</label>
+                        </div>
+                        <div class="equipment-item">
+                            <input type="checkbox" id="tomacorrientes" name="Formulario.ExtrasMultimedia" value="tomacorrientes" @(Model.Formulario?.ExtrasMultimedia?.Contains("tomacorrientes") == true ? "checked" : "")>
+                            <label for="tomacorrientes">Tomacorriente 12V / USB-C / tomas domésticas</label>
+                        </div>
+                    </div>
+
+                    <h2>Seguridad al volante</h2>
+                    <div class="equipment-grid">
+                        <div class="equipment-item">
+                            <input type="checkbox" id="frenos-abs" name="Formulario.ExtrasSeguridad" value="frenos-abs" @(Model.Formulario?.ExtrasSeguridad?.Contains("frenos-abs") == true ? "checked" : "")>
+                            <label for="frenos-abs">Frenos ABS</label>
+                        </div>
+                        <div class="equipment-item">
+                            <input type="checkbox" id="control-traccion" name="Formulario.ExtrasSeguridad" value="control-traccion" @(Model.Formulario?.ExtrasSeguridad?.Contains("control-traccion") == true ? "checked" : "")>
+                            <label for="control-traccion">Control de tracción</label>
+                        </div>
+                        <div class="equipment-item">
+                            <input type="checkbox" id="control-estabilidad" name="Formulario.ExtrasSeguridad" value="control-estabilidad" @(Model.Formulario?.ExtrasSeguridad?.Contains("control-estabilidad") == true ? "checked" : "")>
+                            <label for="control-estabilidad">Control de estabilidad</label>
+                        </div>
+                        <div class="equipment-item">
+                            <input type="checkbox" id="arranque-pendientes" name="Formulario.ExtrasSeguridad" value="arranque-pendientes" @(Model.Formulario?.ExtrasSeguridad?.Contains("arranque-pendientes") == true ? "checked" : "")>
+                            <label for="arranque-pendientes">Asistente de arranque en pendientes</label>
+                        </div>
+                        <div class="equipment-item">
+                            <input type="checkbox" id="freno-emergencia" name="Formulario.ExtrasSeguridad" value="freno-emergencia" @(Model.Formulario?.ExtrasSeguridad?.Contains("freno-emergencia") == true ? "checked" : "")>
+                            <label for="freno-emergencia">Freno automático de emergencia</label>
+                        </div>
+                        <div class="equipment-item">
+                            <input type="checkbox" id="colision-frontal" name="Formulario.ExtrasSeguridad" value="colision-frontal" @(Model.Formulario?.ExtrasSeguridad?.Contains("colision-frontal") == true ? "checked" : "")>
+                            <label for="colision-frontal">Advertencia de colisión frontal</label>
+                        </div>
+                        <div class="equipment-item">
+                            <input type="checkbox" id="deteccion-peatones" name="Formulario.ExtrasSeguridad" value="deteccion-peatones" @(Model.Formulario?.ExtrasSeguridad?.Contains("deteccion-peatones") == true ? "checked" : "")>
+                            <label for="deteccion-peatones">Detección de peatones / ciclistas</label>
+                        </div>
+                        <div class="equipment-item">
+                            <input type="checkbox" id="mantenimiento-carril" name="Formulario.ExtrasSeguridad" value="mantenimiento-carril" @(Model.Formulario?.ExtrasSeguridad?.Contains("mantenimiento-carril") == true ? "checked" : "")>
+                            <label for="mantenimiento-carril">Asistente de mantenimiento de carril</label>
+                        </div>
+                        <div class="equipment-item">
+                            <input type="checkbox" id="airbags" name="Formulario.ExtrasSeguridad" value="airbags" @(Model.Formulario?.ExtrasSeguridad?.Contains("airbags") == true ? "checked" : "")>
+                            <label for="airbags">Airbags</label>
+                        </div>
+                        <div class="equipment-item">
+                            <input type="checkbox" id="punto-ciego" name="Formulario.ExtrasSeguridad" value="punto-ciego" @(Model.Formulario?.ExtrasSeguridad?.Contains("punto-ciego") == true ? "checked" : "")>
+                            <label for="punto-ciego">Alerta de punto ciego</label>
+                        </div>
+                        <div class="equipment-item">
+                            <input type="checkbox" id="monitor-presion" name="Formulario.ExtrasSeguridad" value="monitor-presion" @(Model.Formulario?.ExtrasSeguridad?.Contains("monitor-presion") == true ? "checked" : "")>
+                            <label for="monitor-presion">Monitor de presión de neumáticos</label>
+                        </div>
+                    </div>
+
+                    <h2>Desempeño</h2>
+                    <div class="equipment-grid">
+                        <div class="equipment-item">
+                            <input type="checkbox" id="modos-manejo" name="Formulario.ExtrasRendimiento" value="modos-manejo" @(Model.Formulario?.ExtrasRendimiento?.Contains("modos-manejo") == true ? "checked" : "")>
+                            <label for="modos-manejo">Modos de manejo</label>
+                        </div>
+                        <div class="equipment-item">
+                            <input type="checkbox" id="direccion-asistida" name="Formulario.ExtrasRendimiento" value="direccion-asistida" @(Model.Formulario?.ExtrasRendimiento?.Contains("direccion-asistida") == true ? "checked" : "")>
+                            <label for="direccion-asistida">Dirección asistida</label>
+                        </div>
+                        <div class="equipment-item">
+                            <input type="checkbox" id="turbo" name="Formulario.ExtrasRendimiento" value="turbo" @(Model.Formulario?.ExtrasRendimiento?.Contains("turbo") == true ? "checked" : "")>
+                            <label for="turbo">Turbo/Twin Turbo/Biturbo</label>
+                        </div>
+                        <div class="equipment-item">
+                            <input type="checkbox" id="supercargado" name="Formulario.ExtrasRendimiento" value="supercargado" @(Model.Formulario?.ExtrasRendimiento?.Contains("supercargado") == true ? "checked" : "")>
+                            <label for="supercargado">Supercargado</label>
+                        </div>
+                        <div class="equipment-item">
+                            <input type="checkbox" id="suspension-adaptativa" name="Formulario.ExtrasRendimiento" value="suspension-adaptativa" @(Model.Formulario?.ExtrasRendimiento?.Contains("suspension-adaptativa") == true ? "checked" : "")>
+                            <label for="suspension-adaptativa">Suspensión adaptativa</label>
+                        </div>
+                        <div class="equipment-item">
+                            <input type="checkbox" id="freno-regenerativo" name="Formulario.ExtrasRendimiento" value="freno-regenerativo" @(Model.Formulario?.ExtrasRendimiento?.Contains("freno-regenerativo") == true ? "checked" : "")>
+                            <label for="freno-regenerativo">Sistema de freno regenerativo</label>
+                        </div>
+                    </div>
+
+                    <h2>Antirrobo</h2>
+                    <div class="equipment-grid">
+                        <div class="equipment-item">
+                            <input type="checkbox" id="alarma" name="Formulario.ExtrasAntiRobo" value="alarma" @(Model.Formulario?.ExtrasAntiRobo?.Contains("alarma") == true ? "checked" : "")>
+                            <label for="alarma">Alarma</label>
+                        </div>
+                        <div class="equipment-item">
+                            <input type="checkbox" id="cierre-central" name="Formulario.ExtrasAntiRobo" value="cierre-central" @(Model.Formulario?.ExtrasAntiRobo?.Contains("cierre-central") == true ? "checked" : "")>
+                            <label for="cierre-central">Cierre central</label>
+                        </div>
+                        <div class="equipment-item">
+                            <input type="checkbox" id="gps-tracker" name="Formulario.ExtrasAntiRobo" value="gps-tracker" @(Model.Formulario?.ExtrasAntiRobo?.Contains("gps-tracker") == true ? "checked" : "")>
+                            <label for="gps-tracker">GPS</label>
+                        </div>
+                        <div class="equipment-item">
+                            <input type="checkbox" id="bloqueo-distancia" name="Formulario.ExtrasAntiRobo" value="bloqueo-distancia" @(Model.Formulario?.ExtrasAntiRobo?.Contains("bloqueo-distancia") == true ? "checked" : "")>
+                            <label for="bloqueo-distancia">Bloqueo a distancia</label>
+                        </div>
+                    </div>
+                </div>
+            </div> <!-- Cierre del container -->
+
+                <!-- Section 3: Ubicación -->
+                <div class="form-section" data-section="3" id="seccion3">
+                    <h2>Ubicación</h2>
+                    <div class="form-grid">
+                        <div class="form-group">
+                            <label for="provincia">Provincia <span class="required">*</span></label>
+                            <select id="provincia" name="Formulario.Provincia" required onchange="updateCantones(this)">
+                                <option value="">Elige una provincia</option>
+                                <option value="San José">San José</option>
+                                <option value="Alajuela">Alajuela</option>
+                                <option value="Cartago">Cartago</option>
+                                <option value="Heredia">Heredia</option>
+                                <option value="Guanacaste">Guanacaste</option>
+                                <option value="Puntarenas">Puntarenas</option>
+                                <option value="Limón">Limón</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="canton">Cantón <span class="optional">(Opcional)</span></label>
+                            <select id="canton" name="Formulario.Canton">
+                                <option value="">Elige un cantón</option>
+                            </select>
+                        </div>
+                        <div class="form-group full-width">
+                            <label for="ubicacion-exacta">Ubicación exacta del vehículo <span class="optional">(Opcional)</span></label>
+                            <textarea id="ubicacion-exacta" name="Formulario.UbicacionExacta" placeholder="Escribe dirección exacta" rows="6"></textarea>
+                        </div>
+                        <div class="form-group full-width">
+                            <label for="guardar-direccion">Guardar esta dirección para futuras publicaciones? <span class="required">*</span></label>
+                            <select id="guardar-direccion" name="guardar-direccion" required>
+                                <option value="no">NO</option>
+                                <option value="si">SÍ</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Section 4: Planes de visibilidad -->
+                <div class="form-section" data-section="4" id="seccion4">
+                    <div class="visibility-header">
+                        <h2>Planes de visibilidad <span class="optional">(Opcional)</span></h2>
+                        <div class="info-icon">?</div>
+                    </div>
+                    
+                    <div class="plan-options">
+                        <div class="plan-option">
+                            <input type="radio" id="plan-instantaneo" name="plan-visibilidad" value="instantaneo">
+                            <label for="plan-instantaneo" class="plan-card">
+                                <div class="plan-content">
+                                    <h3>Posteo instantáneo</h3>
+                                    <p>Seleccione esta opción si desea que su anuncio se publique inmediatamente, sin necesidad de esperar nuestra aprobación.</p>
+                                </div>
+                                <div class="plan-price">
+                                    <span class="price">₡2500</span>
+                                    <span class="price-usd">≈($5)</span>
+                                </div>
+                            </label>
+                        </div>
+
+                        <div class="plan-option">
+                            <input type="radio" id="plan-super" name="plan-visibilidad" value="super">
+                            <label for="plan-super" class="plan-card">
+                                <div class="plan-content">
+                                    <h3>Súper visible <span class="plan-addon">+ posteo instantáneo</span></h3>
+                                    <p>Su anuncio se mostrará como "Destacado" en la sección correspondiente, según lo que los usuarios estén buscando.<br/>
+                                    Su anuncio aparecerá de forma temporal en la página principal, dependiendo de cuántos anuncios destacados haya en ese momento.<br/>
+                                    Podrá subir 8 fotografías en vez de 5.<br/>
+                                    Su anuncio se publicará instantáneamente.</p>
+                                </div>
+                                <div class="plan-price">
+                                    <span class="price">₡9500</span>
+                                    <span class="price-usd">≈($19)</span>
+                                </div>
+                            </label>
+                        </div>
+
+                        <div class="plan-option">
+                            <input type="radio" id="plan-ultra" name="plan-visibilidad" value="ultra">
+                            <label for="plan-ultra" class="plan-card">
+                                <div class="plan-content">
+                                    <h3>Ultra visible <span class="plan-addon">+ posteo instantáneo</span></h3>
+                                    <p>Su anuncio se mostrará como "Destacado" en la sección correspondiente, según lo que los usuarios estén buscando.<br/>
+                                    Su anuncio aparecerá de forma temporal en la página principal, dependiendo de cuántos anuncios destacados haya en ese momento.<br/>
+                                    Podrá subir 10 fotografías en vez de 5.<br/>
+                                    Podrá subir un video de su vehículo.<br/>
+                                    Posteamos su anuncio en nuestras redes sociales.<br/>
+                                    Su anuncio se publicará instantáneamente.</p>
+                                </div>
+                                <div class="plan-price">
+                                    <span class="price">₡12900</span>
+                                    <span class="price-usd">≈($25)</span>
+                                </div>
+                            </label>
+                        </div>
+
+                        <div class="plan-option">
+                            <input type="radio" id="plan-profesional" name="plan-visibilidad" value="profesional">
+                            <label for="plan-profesional" class="plan-card">
+                                <div class="plan-content">
+                                    <h3>Fotografía profesional</h3>
+                                    <p>Todo lo incluído en el "Ultra visible".<br/>
+                                    Una sesión fotográfica profesional de su vehículo a domicilio dentro de la GAM.</p>
+                                </div>
+                                <div class="plan-price">
+                                    <span class="price">₡47500</span>
+                                    <span class="price-usd">≈($95)</span>
+                                </div>
+                            </label>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Section 5: Adquirir Tags -->
+                <div class="form-section" data-section="5" id="seccion5">
+                    <div class="tags-header">
+                        <h2>Adquirir Tags <span class="optional">(Opcional)</span></h2>
+                        <div class="info-icon">?</div>
+                    </div>
+                    
+                    <div class="tags-grid">
+                        @for(int i = 0; i < 20; i++)
+                        {
+                            <div class="tag-option">
+                                <input type="checkbox" id="tag-@i" name="tags[]" value="version-americana-@i">
+                                <label for="tag-@i" class="tag-card">
+                                    <span class="tag-price">₡5000</span>
+                                    <div class="tag-image">
+                                        <img src="~/images/tag-placeholder.png" alt="Tag" />
+                                    </div>
+                                    <span class="tag-name">Versión americana</span>
+                                </label>
+                            </div>
+                        }
+                    </div>
+                </div>
+
+                <!-- Section 6: Método de pago -->
+                <div class="form-section" data-section="6" id="seccion6">
+                    <h2>Selecciona método de pago</h2>
+                    
+                    <div class="payment-tabs">
+                        <div class="payment-tab active" data-tab="tarjeta">Tarjeta de débito/crédito</div>
+                        <div class="payment-tab" data-tab="paypal">Paypal</div>
+                        <div class="payment-tab" data-tab="sinpe">Sinpe móvil</div>
+                    </div>
+
+                    <div class="payment-content">
+                        <div class="payment-form">
+                            <div class="form-group full-width">
+                                <label for="numero-tarjeta">Número de tarjeta <span class="required">*</span></label>
+                                <input type="text" id="numero-tarjeta" name="numero-tarjeta" placeholder="Introducir número de tarjeta" required>
+                            </div>
+                            <div class="form-group full-width">
+                                <label for="nombre-tarjeta">Nombre de la tarjeta <span class="required">*</span></label>
+                                <input type="text" id="nombre-tarjeta" name="nombre-tarjeta" placeholder="Introducir nombre de la tarjeta" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="fecha-expiracion">Fecha de expiración <span class="required">*</span></label>
+                                <input type="text" id="fecha-expiracion" name="fecha-expiracion" placeholder="mm/aa" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="cvv">CVV <span class="required">*</span></label>
+                                <input type="text" id="cvv" name="cvv" placeholder="cvv" required>
+                            </div>
+                            
+                            <div class="payment-options">
+                                <div class="payment-option">
+                                    <input type="checkbox" id="guardar-metodo" name="guardar-metodo">
+                                    <label for="guardar-metodo">Guardar método de pago</label>
+                                </div>
+                                <div class="payment-option">
+                                    <input type="checkbox" id="acepto-terminos" name="acepto-terminos" required>
+                                    <label for="acepto-terminos">Acepto <a href="/TerminosCondiciones" target="_blank" class="terms-link">términos y condiciones</a></label>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="payment-summary">
+                            <div class="summary-header">
+                                <img src="~/images/autoclick-logo-payment.png" alt="AutoClick.cr" />
+                            </div>
+                            <h3>Desglose de pago</h3>
+                            <div class="summary-line">
+                                <span>Plan: Posteo instantáneo</span>
+                                <span>₡2,500.00</span>
+                            </div>
+                            <div class="summary-line">
+                                <span>Tag: Versión americana</span>
+                                <span>₡5,000.00</span>
+                            </div>
+                            <div class="summary-line">
+                                <span>IVA</span>
+                                <span>₡1,475.00</span>
+                            </div>
+                            <div class="summary-line">
+                                <span>Tarifa por servicio</span>
+                                <span>₡180.00</span>
+                            </div>
+                            <div class="summary-total">
+                                <span>Total</span>
+                                <span class="total-amount">₡9,155.00</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Section 7: Subir archivos -->
+                <div class="form-section" data-section="7" id="seccion7">
+                    <h2>Subir archivos multimedia</h2>
+                    
+                    <div class="upload-info" style="background: rgba(255, 255, 255, 0.05); padding: 16px; border-radius: 8px; margin-bottom: 24px; border-left: 4px solid #00CC00;">
+                        <p style="color: rgba(255, 255, 255, 0.9); font-size: 14px; margin: 0 0 8px 0; font-weight: 600;">💡 Consejos para mejores fotos:</p>
+                        <ul style="color: rgba(255, 255, 255, 0.7); font-size: 13px; margin: 0; padding-left: 20px;">
+                            <li>Use buena iluminación natural</li>
+                            <li>Muestre el vehículo desde diferentes ángulos</li>
+                            <li>Incluya fotos del interior y exterior</li>
+                            <li>Las imágenes se ajustarán automáticamente para mostrarse completas</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="upload-section">
+                        <!-- Input oculto para las fotos -->
+                        <input type="file" id="fotosInput" name="Formulario.Fotos" multiple accept="image/*" style="display: none;">
+                        
+                        <div class="upload-area photos">
+                            <div class="upload-placeholder">
+                                <div class="upload-icon"></div>
+                                <p>📸 Subir máximo 10 fotos</p>
+                                <small style="color: rgba(255,255,255,0.6); font-size: 12px;">Haga clic o arrastre las imágenes aquí</small>
+                            </div>
+                        </div>
+                        
+                        <div class="upload-area video">
+                            <div class="upload-placeholder">
+                                <div class="play-icon"></div>
+                                <p>🎬 Subir 1 video</p>
+                                <small style="color: rgba(255,255,255,0.6); font-size: 12px;">Formatos soportados: MP4, MOV, AVI</small>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="photo-order-section">
+                        <h3>Ordenar fotos</h3>
+                        <div class="photo-grid">
+                            @for(int i = 1; i <= 10; i++)
+                            {
+                                <div class="photo-slot">
+                                    <div class="photo-number">@i</div>
+                                    <div class="photo-placeholder"></div>
+                                </div>
+                            }
+                            <div class="video-slot">
+                                <div class="video-placeholder"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Section 8: Confirmación -->
+                <div class="form-section" data-section="8" id="seccion8">
+                    <div class="confirmation-content">
+                        <div class="success-icon">
+                            <div class="checkmark"></div>
+                        </div>
+                        <h2>¡Tu auto ha sido publicado!</h2>
+                        
+                        <div class="confirmation-actions">
+                            <button type="button" class="btn-upgrade">
+                                <span class="upgrade-icon"></span>
+                                <span>Adquirir planes de visibilidad</span>
+                            </button>
+                            <button type="button" class="btn-view">
+                                <span class="view-icon"></span>
+                                <span>Ver anuncio</span>
+                            </button>
+                            <button type="button" class="btn-edit">
+                                <span class="edit-icon"></span>
+                                <span>Modificar anuncio</span>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- How it works section -->
+    <div class="how-it-works">
+        <h2>¿Como funciona?</h2>
+        <p>Publicar su vehículo es rápido, fácil y 100% en línea. Siga estos 3 simples pasos:</p>
+        
+        <div class="steps">
+            <div class="step">
+                <div class="step-icon"></div>
+                <h3>Paso 1</h3>
+                <p>Haga click en "Anunciar mi vehículo"</p>
+            </div>
+            <div class="step">
+                <div class="step-icon"></div>
+                <h3>Paso 2</h3>
+                <p>Llene este formulario</p>
+            </div>
+            <div class="step">
+                <div class="step-icon"></div>
+                <h3>Paso 3</h3>
+                <p>Suba las mejores fotos de su vehículo y ¡LISTO!</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- FAQ Section -->
+    <div class="faq-section">
+        <h2>Preguntas frecuentes</h2>
+        <div class="faq-list">
+            <div class="faq-item">
+                <div class="faq-question">
+                    <span>¿Hay algún costo por publicar?</span>
+                    <div class="faq-arrow"></div>
+                </div>
+            </div>
+            <div class="faq-item">
+                <div class="faq-question">
+                    <span>¿Puedo editar los datos luego de publicar?</span>
+                    <div class="faq-arrow"></div>
+                </div>
+            </div>
+            <div class="faq-item">
+                <div class="faq-question">
+                    <span>¿Mi información de contacto es pública?</span>
+                    <div class="faq-arrow"></div>
+                </div>
+            </div>
+            <div class="faq-item">
+                <div class="faq-question">
+                    <span>¿Puedo guardar el formulario y continuar después?</span>
+                    <div class="faq-arrow"></div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="ad-placeholder">
+            <img src="~/images/autoclick-logo.png" alt="AutoClick.cr" />
+            <h3>SU ANUNCIO AQUÍ</h3>
+            <p>¡Haga click en este recuadro para empezar!</p>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <div class="anunciar-footer">
+        <div class="footer-content">
+            <div class="footer-logo">
+                <img src="~/images/autoclick-logo-footer.png" alt="AutoClick.cr" />
+                <div class="social-icons">
+                    <div class="social-icon facebook"></div>
+                    <div class="social-icon instagram"></div>
+                    <div class="social-icon whatsapp"></div>
+                </div>
+            </div>
+            
+            <div class="footer-links">
+                <div class="footer-column">
+                    <h4>AutoClick.cr</h4>
+                    <a href="/contactanos">Contáctenos</a>
+                    <a asp-page="/SobreNosotros">Sobre Nosotros</a>
+                    <a href="/reportar-problema">Reportar un problema</a>
+                </div>
+                <div class="footer-column">
+                    <a href="/TerminosCondiciones">Términos y condiciones</a>
+                    <a href="/PoliticaPrivacidad">Política de privacidad</a>
+                </div>
+                <div class="footer-column">
+                    <h4>Suscribete</h4>
+                    <div class="newsletter">
+                        <input type="email" placeholder="Introducir correo" />
+                        <p>Suscríbase para recibir las últimas noticias y promociones</p>
+                        <button type="button">Suscribirse</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <span>© 2025. Todos los derechos reservados - AutoClick.cr</span>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,39 @@
+@page
+@model AutoClick.Pages.QuickLoginModel
+@{
+    ViewData["Title"] = "Quick Login Test";
+}
+
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            <div class="card">
+                <div class="card-header">
+                    <h4>Quick Login Test</h4>
+                </div>
+                <div class="card-body">
+                    <form method="post">
+                        <div class="mb-3">
+                            <label for="email" class="form-label">Email</label>
+                            <input type="email" class="form-control" id="email" asp-for="Email" value="admin@gmail.com">
+                            <span asp-validation-for="Email" class="text-danger"></span>
+                        </div>
+                        <div class="mb-3">
+                            <label for="password" class="form-label">Password</label>
+                            <input type="password" class="form-control" id="password" asp-for="Password" value="prueba123">
+                            <span asp-validation-for="Password" class="text-danger"></span>
+                        </div>
+                        <div class="d-grid">
+                            <button type="submit" class="btn btn-primary">Login</button>
+                        </div>
+                    </form>
+                    
+                    @if (ViewData["Message"] != null)
+                    {
+                        <div class="alert alert-info mt-3">@ViewData["Message"]</div>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

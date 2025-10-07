@@ -1,0 +1,325 @@
+/* Estilos para la página de Contactános */
+
+.contactanos-container {
+    min-height: 100vh;
+    background: #02081C;
+    padding: 2rem;
+    font-family: 'Montserrat', sans-serif;
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+}
+
+.contactanos-panel {
+    width: 100%;
+    max-width: 609px;
+    background: #030D2B;
+    border-radius: 4px;
+    border: 1px solid rgba(255, 255, 255, 0.25);
+    padding: 2rem;
+    position: relative;
+}
+
+.contactanos-title {
+    color: white;
+    font-size: 24px;
+    font-weight: 700;
+    text-align: center;
+    margin-bottom: 2rem;
+    margin-top: 0;
+}
+
+.section-title {
+    color: white;
+    font-size: 20px;
+    font-weight: 700;
+    margin-bottom: 1.5rem;
+    margin-top: 2rem;
+}
+
+.contactanos-form {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+.form-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1rem;
+}
+
+.form-group {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.form-group.full-width {
+    grid-column: 1 / -1;
+}
+
+.form-group label {
+    color: white;
+    font-size: 14px;
+    font-weight: 500;
+    display: flex;
+    align-items: center;
+    gap: 4px;
+}
+
+.form-group input,
+.form-group select,
+.form-group textarea {
+    background: #02081C;
+    border: 0.5px solid rgba(255, 255, 255, 0.5);
+    border-radius: 4px;
+    color: white;
+    font-family: 'Montserrat', sans-serif;
+    font-size: 14px;
+    font-weight: 500;
+    padding: 0.5rem 1rem;
+    transition: all 0.3s ease;
+    outline: none;
+}
+
+.form-group input {
+    height: 44px;
+}
+
+.form-group select {
+    height: 44px;
+    background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 12 6'%3e%3cpath fill='white' d='M0,0 L6,6 L12,0'/%3e%3c/svg%3e");
+    background-repeat: no-repeat;
+    background-position: right 1rem center;
+    background-size: 12px 6px;
+    appearance: none;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+}
+
+.form-group textarea {
+    min-height: 140px;
+    resize: vertical;
+    padding-top: 1rem;
+}
+
+.form-group input::placeholder,
+.form-group select option:first-child,
+.form-group textarea::placeholder {
+    color: rgba(255, 255, 255, 0.5);
+}
+
+.form-group input:focus,
+.form-group select:focus,
+.form-group textarea:focus {
+    border-color: rgba(255, 255, 255, 0.8);
+    box-shadow: 0 0 0 2px rgba(255, 255, 255, 0.1);
+}
+
+.form-group input:invalid,
+.form-group select:invalid,
+.form-group textarea:invalid {
+    border-color: #FF0000;
+}
+
+.submit-button {
+    background: white;
+    color: black;
+    border: none;
+    border-radius: 8px;
+    padding: 1rem 2rem;
+    font-family: 'Montserrat', sans-serif;
+    font-size: 14px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    margin-top: 1.5rem;
+    align-self: center;
+    min-width: 120px;
+}
+
+.submit-button:hover {
+    background: rgba(255, 255, 255, 0.9);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+}
+
+.submit-button:active {
+    transform: translateY(0);
+}
+
+.submit-button:disabled {
+    background: rgba(255, 255, 255, 0.5);
+    cursor: not-allowed;
+    transform: none;
+}
+
+/* Estilos para mensajes de alerta */
+.alert {
+    padding: 1rem;
+    border-radius: 4px;
+    margin-bottom: 1rem;
+    font-weight: 500;
+}
+
+.alert-success {
+    background: rgba(0, 204, 0, 0.1);
+    border: 1px solid rgba(0, 204, 0, 0.3);
+    color: #00CC00;
+}
+
+.alert-error {
+    background: rgba(255, 0, 0, 0.1);
+    border: 1px solid rgba(255, 0, 0, 0.3);
+    color: #FF4444;
+}
+
+.alert-danger {
+    background: rgba(255, 0, 0, 0.1);
+    border: 1px solid rgba(255, 0, 0, 0.3);
+    color: #FF4444;
+}
+
+.error-list {
+    margin: 0;
+    padding-left: 1.2rem;
+}
+
+.error-list li {
+    margin-bottom: 0.3rem;
+}
+
+.field-error {
+    color: #FF0000;
+    font-size: 12px;
+    font-weight: 400;
+    margin-top: 0.25rem;
+}
+
+/* Estilos responsive */
+@media (max-width: 768px) {
+    .contactanos-container {
+        padding: 1rem;
+    }
+
+    .contactanos-panel {
+        padding: 1.5rem;
+    }
+
+    .form-row {
+        grid-template-columns: 1fr;
+        gap: 1rem;
+    }
+
+    .contactanos-title {
+        font-size: 20px;
+    }
+
+    .section-title {
+        font-size: 18px;
+    }
+}
+
+@media (max-width: 480px) {
+    .contactanos-container {
+        padding: 0.5rem;
+    }
+
+    .contactanos-panel {
+        padding: 1rem;
+        border-radius: 0;
+        min-height: 100vh;
+    }
+
+    .contactanos-title {
+        font-size: 18px;
+    }
+
+    .section-title {
+        font-size: 16px;
+    }
+
+    .form-group input,
+    .form-group select {
+        height: 40px;
+        font-size: 13px;
+    }
+
+    .form-group textarea {
+        min-height: 120px;
+        font-size: 13px;
+    }
+
+    .submit-button {
+        width: 100%;
+        padding: 0.875rem;
+        font-size: 13px;
+    }
+}
+
+/* Animaciones */
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.contactanos-panel {
+    animation: fadeIn 0.6s ease-out;
+}
+
+.form-group {
+    animation: fadeIn 0.6s ease-out;
+}
+
+/* Estados de validación mejorados */
+.form-group input.input-validation-error,
+.form-group select.input-validation-error,
+.form-group textarea.input-validation-error {
+    border-color: #FF0000;
+    box-shadow: 0 0 0 2px rgba(255, 0, 0, 0.1);
+}
+
+.form-group input.valid,
+.form-group select.valid,
+.form-group textarea.valid {
+    border-color: #00CC00;
+}
+
+/* Efectos hover mejorados */
+.form-group input:hover,
+.form-group select:hover,
+.form-group textarea:hover {
+    border-color: rgba(255, 255, 255, 0.7);
+}
+
+/* Estilos para loading state */
+.submit-button.loading {
+    position: relative;
+    color: transparent;
+}
+
+.submit-button.loading::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 20px;
+    height: 20px;
+    border: 2px solid rgba(0, 0, 0, 0.3);
+    border-top: 2px solid black;
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+    0% { transform: translate(-50%, -50%) rotate(0deg); }
+    100% { transform: translate(-50%, -50%) rotate(360deg); }
+}

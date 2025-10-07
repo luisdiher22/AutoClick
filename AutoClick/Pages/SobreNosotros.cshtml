@@ -1,0 +1,135 @@
+@page
+@model AutoClick.Pages.SobreNosotrosModel
+@{
+    ViewData["Title"] = "Sobre nosotros - AutoClick.cr";
+}
+
+@section Styles {
+    <link rel="stylesheet" href="~/css/sobre-nosotros.css" />
+}
+
+@await Html.PartialAsync("_Header")
+
+<div class="sobre-nosotros-container">
+    <!-- Breadcrumb -->
+    <nav class="breadcrumb">
+        <a href="/" class="breadcrumb-item">Inicio</a>
+        <span class="breadcrumb-separator">/</span>
+        <span class="breadcrumb-current">Sobre nosotros</span>
+    </nav>
+
+    <!-- Historia Section -->
+    <section class="content-section historia-section">
+        <div class="section-background-text">HISTORIA</div>
+        <div class="section-content left-aligned">
+            <div class="section-text">
+                <p>AutoClick.cr nace de una idea clara: los autos merecen una vitrina digital a su altura.</p>
+                <p>En un mercado saturado de plataformas genéricas, decidimos crear un espacio exclusivo en Costa Rica donde el diseño, la experiencia y la calidad se encuentren en cada detalle.</p>
+                <p>Más que un marketplace, somos un ecosistema que conecta a compradores con vendedores y marcas que comparten la misma visión de confianza y excelencia.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Misión Section -->
+    <section class="content-section mision-section">
+        <div class="section-background-text right-aligned">MISIÓN</div>
+        <div class="section-content right-aligned">
+            <div class="section-text">
+                <p>Convertirnos en el referente número uno en Costa Rica para el comercio digital de vehículos, impulsando una comunidad donde confianza, innovación y tecnología se integran sin esfuerzo.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Visión Section -->
+    <section class="content-section vision-section">
+        <div class="section-background-text">VISIÓN</div>
+        <div class="section-content left-aligned">
+            <div class="section-text">
+                <p>Convertirnos en el referente número uno en Costa Rica para el comercio digital de vehículos, impulsando una comunidad donde confianza, innovación y tecnología se integran sin esfuerzo.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Valores Section -->
+    <section class="content-section valores-section">
+        <div class="section-background-text right-aligned">VALORES</div>
+        <div class="section-content right-aligned">
+            <div class="section-text valores-text">
+                <div class="valor-item">
+                    <h3>Innovación</h3>
+                    <p>En AutoClick.cr apostamos por la mejora continua. Incorporamos nuevas tecnologías, herramientas y experiencias digitales que hacen más fácil y seguro el proceso de compra y venta de vehículos.</p>
+                </div>
+
+                <div class="valor-item">
+                    <h3>Vanguardismo</h3>
+                    <p>Somos pioneros en ofrecer un espacio moderno y diferente, siempre un paso adelante de las plataformas tradicionales, marcando tendencia en el comercio digital automotriz en Costa Rica.</p>
+                </div>
+
+                <div class="valor-item">
+                    <h3>Confianza</h3>
+                    <p>Brindamos un entorno transparente y seguro donde compradores y vendedores pueden relacionarse con tranquilidad, sabiendo que cada publicación cumple con altos estándares de calidad.</p>
+                </div>
+
+                <div class="valor-item">
+                    <h3>Eficiencia</h3>
+                    <p>Optimizamos cada proceso para que los usuarios ahorren tiempo y encuentren rápidamente lo que buscan, con una navegación clara, intuitiva y enfocada en resultados.</p>
+                </div>
+
+                <div class="valor-item">
+                    <h3>Transparencia</h3>
+                    <p>La honestidad es la base de nuestra plataforma: información clara, costos visibles y procesos directos, sin letra pequeña ni complicaciones.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+</div>
+
+<!-- Footer -->
+<footer class="main-footer">
+    <div class="footer-content">
+        <div class="footer-brand">
+            <img src="https://placehold.co/289x46" alt="AutoClick.cr Logo" class="footer-logo" />
+            <div class="social-links">
+                <div class="social-icon facebook-icon"></div>
+                <div class="social-icon instagram-icon"></div>
+                <div class="social-icon whatsapp-icon"></div>
+            </div>
+        </div>
+        
+        <div class="footer-links">
+            <h3 class="footer-section-title">AutoClick.cr</h3>
+            <nav class="footer-nav">
+                <a asp-page="/Contactanos">Contáctenos</a>
+                <a asp-page="/SobreNosotros">Sobre Nosotros</a>
+                <a asp-page="/ReportarProblema">Reportar un problema</a>
+            </nav>
+        </div>
+        
+        <div class="footer-links footer-legal">
+            <nav class="footer-nav">
+                <a href="/TerminosCondiciones">Términos y condiciones</a>
+                <a href="/PoliticaPrivacidad">Política de privacidad</a>
+            </nav>
+        </div>
+        
+        <div class="newsletter">
+            <h3 class="footer-section-title">Suscribete</h3>
+            <form class="newsletter-form" method="post" asp-page-handler="Newsletter">
+                <div class="newsletter-input-container">
+                    <input type="email" name="email" class="newsletter-input" placeholder="Introducir correo" required />
+                </div>
+                <p class="newsletter-description">Suscríbase para recibir las últimas noticias y promociones</p>
+                <button type="submit" class="newsletter-btn">Suscribirse</button>
+            </form>
+        </div>
+    </div>
+    
+    <div class="footer-copyright">
+        <img src="https://placehold.co/20x20" alt="Copyright" class="copyright-icon" />
+        <span>2025. Todos los derechos reservados - AutoClick.cr</span>
+    </div>
+</footer>
+
+@section Scripts {
+    <script src="~/js/sobre-nosotros.js"></script>
+}

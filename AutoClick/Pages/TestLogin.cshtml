@@ -1,0 +1,16 @@
+@page
+@model AutoClick.Pages.TestLoginModel
+
+<h2>Test Login</h2>
+<p>@Model.Message</p>
+
+@if (!string.IsNullOrEmpty(Model.Message))
+{
+    <div style="border: 1px solid #ccc; padding: 10px; margin: 10px 0;">
+        <pre>@Model.Message</pre>
+    </div>
+}
+
+<form method="post">
+    <input type="submit" value="Test Login admin@gmail.com / prueba123" />
+</form>

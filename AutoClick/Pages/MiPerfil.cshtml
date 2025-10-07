@@ -1,0 +1,246 @@
+@page
+@model AutoClick.Pages.MiPerfilModel
+@{
+    ViewData["Title"] = "Mi perfil - AutoClick.cr";
+}
+
+@section Styles {
+    <link rel="stylesheet" href="~/css/mi-perfil.css" />
+}
+
+@await Html.PartialAsync("_Header")
+
+<div class="page-wrapper">
+    <div class="mi-perfil-container">
+        <!-- Sidebar -->
+        <aside class="profile-sidebar">
+        <nav class="sidebar-nav">
+            <a href="/MiPerfil" class="nav-item active" data-section="personal">
+                <div class="nav-icon personal-icon"></div>
+                <span>Información personal</span>
+            </a>
+            
+            <a href="/HistorialPagos" class="nav-item" data-section="payments">
+                <div class="nav-icon payments-icon"></div>
+                <span>Historial de pagos</span>
+            </a>
+            
+            <a href="/ConfiguracionCuenta" class="nav-item" data-section="settings">
+                <div class="nav-icon settings-icon"></div>
+                <span>Configuración de cuenta</span>
+            </a>
+        </nav>
+        <div class="sidebar-indicator"></div>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="profile-content">
+        <form method="post" class="profile-form" enctype="multipart/form-data">
+            <!-- Profile Header -->
+            <div class="profile-header">
+                <div class="profile-avatar-section">
+                    <div class="profile-avatar">
+                        @if (!string.IsNullOrEmpty(Model.LogoUrl))
+                        {
+                            <img src="@Model.LogoUrl" alt="Logo de la empresa" />
+                        }
+                        else
+                        {
+                            <div class="avatar-placeholder">
+                                <span>LOGO<br/>(SI TIENE)</span>
+                            </div>
+                        }
+                    </div>
+                    
+                    <h1 class="company-name">@(Model.NombreEmpresa ?? "Nombre de la empresa")</h1>
+                    
+                    <button type="button" class="edit-profile-btn" id="editProfileBtn">
+                        <div class="edit-icon"></div>
+                        <span>Editar</span>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Company Data Section -->
+            <section class="form-section">
+                <h2 class="section-title">Datos de la empresa</h2>
+                
+                <div class="form-grid">
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="nombreComercial">Nombre comercial</label>
+                            <input type="text" id="nombreComercial" name="NombreComercial" 
+                                   asp-for="NombreComercial" class="form-input" 
+                                   placeholder="Nombre de la empresa" />
+                            <span asp-validation-for="NombreComercial" class="validation-message"></span>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="cedulaJuridica">Cédula Jurídica</label>
+                            <input type="text" id="cedulaJuridica" name="CedulaJuridica" 
+                                   asp-for="CedulaJuridica" class="form-input" 
+                                   placeholder="3-008-4534245" />
+                            <span asp-validation-for="CedulaJuridica" class="validation-message"></span>
+                        </div>
+                    </div>
+                    
+                    <div class="form-row">
+                        <div class="form-group full-width">
+                            <label for="representanteLegal">Representante legal</label>
+                            <input type="text" id="representanteLegal" name="RepresentanteLegal" 
+                                   asp-for="RepresentanteLegal" class="form-input" 
+                                   placeholder="Guillermo Montero Picado" />
+                            <span asp-validation-for="RepresentanteLegal" class="validation-message"></span>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="telefono1">Teléfono 1</label>
+                            <input type="tel" id="telefono1" name="Telefono1" 
+                                   asp-for="Telefono1" class="form-input" 
+                                   placeholder="8468-8843" />
+                            <span asp-validation-for="Telefono1" class="validation-message"></span>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="whatsapp">WhatsApp</label>
+                            <input type="tel" id="whatsapp" name="WhatsApp" 
+                                   asp-for="WhatsApp" class="form-input" 
+                                   placeholder="6275-2760" />
+                            <span asp-validation-for="WhatsApp" class="validation-message"></span>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Address Section -->
+            <section class="form-section">
+                <h2 class="section-title">Dirección</h2>
+                
+                <div class="form-grid">
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="provincia">Provincia <span class="required">*</span></label>
+                            <select id="provincia" name="Provincia" asp-for="Provincia" class="form-input" required>
+                                <option value="">Seleccione provincia</option>
+                                <option value="San José">San José</option>
+                                <option value="Alajuela">Alajuela</option>
+                                <option value="Cartago">Cartago</option>
+                                <option value="Heredia">Heredia</option>
+                                <option value="Guanacaste">Guanacaste</option>
+                                <option value="Puntarenas">Puntarenas</option>
+                                <option value="Limón">Limón</option>
+                            </select>
+                            <span asp-validation-for="Provincia" class="validation-message"></span>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="canton">Cantón <span class="required">*</span></label>
+                            <select id="canton" name="Canton" asp-for="Canton" class="form-input" required>
+                                <option value="">Seleccione cantón</option>
+                            </select>
+                            <span asp-validation-for="Canton" class="validation-message"></span>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="distrito">Distrito <span class="required">*</span></label>
+                            <select id="distrito" name="Distrito" asp-for="Distrito" class="form-input" required>
+                                <option value="">Seleccione distrito</option>
+                            </select>
+                            <span asp-validation-for="Distrito" class="validation-message"></span>
+                        </div>
+                    </div>
+                    
+                    <div class="form-row">
+                        <div class="form-group full-width">
+                            <label for="direccionExacta">Dirección exacta</label>
+                            <textarea id="direccionExacta" name="DireccionExacta" 
+                                      asp-for="DireccionExacta" class="form-textarea" 
+                                      placeholder="Montecillos, Urbanización Pandora"></textarea>
+                            <span asp-validation-for="DireccionExacta" class="validation-message"></span>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Logos Section -->
+            <section class="form-section logos-section">
+                <h2 class="section-title">Logos</h2>
+                
+                <div class="logos-container">
+                    <div class="logo-upload-area" id="logoUpload1">
+                        <input type="file" id="logoFile1" name="LogoFile1" accept="image/*" style="display: none;" />
+                        <div class="logo-placeholder">
+                            <div class="upload-icon"></div>
+                            <div class="upload-text">Subir logo</div>
+                        </div>
+                    </div>
+                    
+                    <div class="logo-upload-area" id="logoUpload2">
+                        <input type="file" id="logoFile2" name="LogoFile2" accept="image/*" style="display: none;" />
+                        <div class="logo-placeholder">
+                            <div class="upload-icon"></div>
+                            <div class="upload-text">Subir logo adicional</div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Form Actions -->
+            <div class="form-actions">
+                <button type="button" class="btn-secondary" onclick="resetForm()">Cancelar</button>
+                <button type="submit" class="btn-primary">Guardar cambios</button>
+            </div>
+        </form>
+    </main>
+    </div>
+
+    <!-- Footer -->
+<footer class="main-footer">
+    <div class="footer-content">
+        <div class="footer-brand">
+            <img src="https://placehold.co/289x46" alt="AutoClick.cr Logo" class="footer-logo" />
+            <div class="social-links">
+                <div class="social-icon facebook-icon"></div>
+                <div class="social-icon instagram-icon"></div>
+                <div class="social-icon whatsapp-icon"></div>
+            </div>
+        </div>
+        
+        <div class="footer-links">
+            <h3 class="footer-section-title">AutoClick.cr</h3>
+            <nav class="footer-nav">
+                <a asp-page="/Contactanos">Contáctenos</a>
+                <a asp-page="/SobreNosotros">Sobre Nosotros</a>
+                <a asp-page="/ReportarProblema">Reportar un problema</a>
+            </nav>
+        </div>
+        
+        <div class="footer-links footer-legal">
+            <nav class="footer-nav">
+                <a href="/TerminosCondiciones">Términos y condiciones</a>
+                <a href="/PoliticaPrivacidad">Política de privacidad</a>
+            </nav>
+        </div>
+        
+        <div class="newsletter">
+            <h3 class="footer-section-title">Suscribete</h3>
+            <form class="newsletter-form" method="post" asp-page-handler="Newsletter">
+                <div class="newsletter-input-container">
+                    <input type="email" name="email" class="newsletter-input" placeholder="Introducir correo" required />
+                </div>
+                <p class="newsletter-description">Suscríbase para recibir las últimas noticias y promociones</p>
+                <button type="submit" class="newsletter-btn">Suscribirse</button>
+            </form>
+        </div>
+    </div>
+    
+    <div class="footer-copyright">
+        <img src="https://placehold.co/20x20" alt="Copyright" class="copyright-icon" />
+        <span>2025. Todos los derechos reservados - AutoClick.cr</span>
+    </div>
+</footer>
+</div>
+
+@section Scripts {
+    <script src="~/js/mi-perfil.js"></script>
+}
