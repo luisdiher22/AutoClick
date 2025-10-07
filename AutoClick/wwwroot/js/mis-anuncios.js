@@ -463,7 +463,7 @@ function showNotificationMessage(message, type = 'info') {
     }, 4000);
 }
 
-// Listing action functions (placeholders for actual implementation)
+// Listing action functions (placeholders for actual implementations)
 function editListing(id) {
     console.log('=== Edit Listing Function Called ===');
     console.log('ID received:', id);
