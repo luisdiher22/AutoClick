@@ -1,11 +1,19 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using System.ComponentModel.DataAnnotations;
+using AutoClick.Services;
+using AutoClick.Models;
 
 namespace AutoClick.Pages
 {
     public class ReportarProblemaModel : PageModel
     {
+        private readonly ISoporteService _soporteService;
+
+        public ReportarProblemaModel(ISoporteService soporteService)
+        {
+            _soporteService = soporteService;
+        }
         [BindProperty]
         [Required(ErrorMessage = "El nombre es obligatorio")]
         [Display(Name = "Nombre")]
@@ -30,32 +38,45 @@ namespace AutoClick.Pages
         public string ConfirmarEmail { get; set; } = string.Empty;
 
         [BindProperty]
-        [Required(ErrorMessage = "Debe seleccionar un tipo de problema")]
-        [Display(Name = "Tipo de problema")]
-        public string TipoProblema { get; set; } = string.Empty;
-
-        [BindProperty]
         [Required(ErrorMessage = "El teléfono es obligatorio")]
         [Phone(ErrorMessage = "Formato de teléfono inválido")]
         [Display(Name = "Teléfono")]
         public string Telefono { get; set; } = string.Empty;
 
         [BindProperty]
+        [Required(ErrorMessage = "Debe seleccionar un tipo de problema")]
+        [Display(Name = "Tipo de problema")]
+        public string TipoProblema { get; set; } = string.Empty;
+
+        [BindProperty]
+        [StringLength(100, ErrorMessage = "El asunto no puede exceder 100 caracteres")]
+        [Display(Name = "Asunto")]
+        public string Asunto { get; set; } = string.Empty;
+
+        [BindProperty]
         [Required(ErrorMessage = "La descripción del problema es obligatoria")]
-        [StringLength(2000, ErrorMessage = "La descripción no puede exceder 2000 caracteres")]
+        [StringLength(1000, ErrorMessage = "La descripción no puede exceder 1000 caracteres")]
         [Display(Name = "Descripción del problema")]
         public string DescripcionProblema { get; set; } = string.Empty;
 
         public string SuccessMessage { get; set; } = string.Empty;
         public string ErrorMessage { get; set; } = string.Empty;
+        
+        public List<string> TiposProblemaDisponibles { get; set; } = new();
 
-        public void OnGet()
+        public async Task OnGetAsync()
         {
-            // Initialize page
+            TiposProblemaDisponibles = await _soporteService.GetTiposProblemaAsync();
         }
 
         public async Task<IActionResult> OnPostAsync()
         {
+            // Recargar tipos de problema para la vista en caso de error
+            TiposProblemaDisponibles = await _soporteService.GetTiposProblemaAsync();
+            
+            // Remover errores del campo Asunto del ModelState ya que se genera automáticamente
+            ModelState.Remove(nameof(Asunto));
+            
             if (!ModelState.IsValid)
             {
                 ErrorMessage = "Por favor, corrija los errores en el formulario.";
@@ -64,7 +85,6 @@ namespace AutoClick.Pages
 
             try
             {
-                // Simulate processing the problem report
                 await ProcessProblemReportAsync();
 
                 SuccessMessage = "Su reporte ha sido enviado exitosamente. Nos pondremos en contacto con usted pronto.";
@@ -74,47 +94,37 @@ namespace AutoClick.Pages
                 
                 return Page();
             }
-            catch (Exception)
+            catch (Exception ex)
             {
                 ErrorMessage = "Ocurrió un error al enviar su reporte. Por favor, inténtelo nuevamente.";
+                Console.WriteLine($"Error en ReportarProblema: {ex.Message}");
                 return Page();
             }
         }
 
         private async Task ProcessProblemReportAsync()
         {
-            // In a real application, you would:
-            // 1. Save to database
-            // 2. Send email notification to support team
-            // 3. Send confirmation email to user
-            // 4. Log the issue for tracking
-
-            // Simulate async operation
-            await Task.Delay(100);
-
-            // Example of what you might do:
-            /*
-            var problemReport = new ProblemReport
+            // Generar asunto automáticamente basado en el tipo de problema
+            var asuntoGenerado = GenerarAsuntoAutomatico(TipoProblema);
+            
+            var reclamo = new Reclamo
             {
+                EmailCliente = Email,
                 Nombre = Nombre,
-                Apellido = Apellido,
-                Email = Email,
+                Apellidos = Apellido,
                 Telefono = Telefono,
                 TipoProblema = TipoProblema,
-                DescripcionProblema = DescripcionProblema,
-                FechaReporte = DateTime.Now,
-                Estado = "Pendiente"
+                Asunto = asuntoGenerado,
+                Descripcion = DescripcionProblema,
+                Prioridad = "Media"
             };
 
-            await _dbContext.ProblemReports.AddAsync(problemReport);
-            await _dbContext.SaveChangesAsync();
-
-            // Send email to support team
-            await _emailService.SendProblemReportNotificationAsync(problemReport);
+            var reclamoId = await _soporteService.CrearReclamoAsync(reclamo);
             
-            // Send confirmation email to user
-            await _emailService.SendProblemReportConfirmationAsync(problemReport);
-            */
+            if (reclamoId == 0)
+            {
+                throw new Exception("Error al guardar el reclamo");
+            }
         }
 
         private void ClearFormData()
@@ -123,9 +133,23 @@ namespace AutoClick.Pages
             Apellido = string.Empty;
             Email = string.Empty;
             ConfirmarEmail = string.Empty;
-            TipoProblema = string.Empty;
             Telefono = string.Empty;
+            TipoProblema = string.Empty;
+            Asunto = string.Empty;
             DescripcionProblema = string.Empty;
+        }
+
+        private string GenerarAsuntoAutomatico(string tipoProblema)
+        {
+            return tipoProblema switch
+            {
+                "Problema técnico del sitio" => "Problema técnico del sitio",
+                "Problema con mi cuenta" => "Problema con la cuenta", 
+                "Problema con anuncio" => "Problema con anuncio",
+                "Problema de pagos y facturación" => "Problema con pago y facturación",
+                "Otro problema" => "Incidencia reportada",
+                _ => "Incidencia reportada - AutoClick.cr"
+            };
         }
     }
 }

@@ -13,6 +13,8 @@ public class ApplicationDbContext : DbContext
     // Add your DbSets here
     public DbSet<Usuario> Usuarios { get; set; }
     public DbSet<Auto> Autos { get; set; }
+    public DbSet<Reclamo> Reclamos { get; set; }
+    public DbSet<Mensaje> Mensajes { get; set; }
     // Car model eliminado
     
     protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -99,6 +101,131 @@ public class ApplicationDbContext : DbContext
                   .WithMany()
                   .HasForeignKey(a => a.EmailPropietario)
                   .OnDelete(DeleteBehavior.Restrict);
+        });
+        
+        // Configure Reclamo entity
+        modelBuilder.Entity<Reclamo>(entity =>
+        {
+            // Primary key
+            entity.HasKey(r => r.Id);
+            
+            // Índices para mejorar performance
+            entity.HasIndex(r => r.EmailCliente);
+            entity.HasIndex(r => r.FechaCreacion);
+            entity.HasIndex(r => r.Estado);
+            entity.HasIndex(r => r.TipoProblema);
+            entity.HasIndex(r => r.Prioridad);
+            
+            // Configuraciones de propiedades
+            entity.Property(r => r.EmailCliente)
+                  .IsRequired()
+                  .HasMaxLength(150);
+                  
+            entity.Property(r => r.Nombre)
+                  .IsRequired()
+                  .HasMaxLength(50);
+                  
+            entity.Property(r => r.Apellidos)
+                  .IsRequired()
+                  .HasMaxLength(100);
+                  
+            entity.Property(r => r.TipoProblema)
+                  .IsRequired()
+                  .HasMaxLength(50);
+                  
+            entity.Property(r => r.Asunto)
+                  .IsRequired()
+                  .HasMaxLength(100);
+                  
+            entity.Property(r => r.Descripcion)
+                  .IsRequired()
+                  .HasMaxLength(1000);
+                  
+            entity.Property(r => r.Prioridad)
+                  .HasMaxLength(50)
+                  .HasDefaultValue("Media");
+                  
+            entity.Property(r => r.RespuestaAdmin)
+                  .HasMaxLength(1000);
+                  
+            entity.Property(r => r.EmailAdminRespuesta)
+                  .HasMaxLength(150);
+            
+            // Relaciones con Usuario (opcional)
+            entity.HasOne(r => r.Cliente)
+                  .WithMany()
+                  .HasForeignKey(r => r.EmailCliente)
+                  .OnDelete(DeleteBehavior.SetNull);
+                  
+            entity.HasOne(r => r.AdminRespuesta)
+                  .WithMany()
+                  .HasForeignKey(r => r.EmailAdminRespuesta)
+                  .OnDelete(DeleteBehavior.SetNull);
+        });
+        
+        // Configure Mensaje entity
+        modelBuilder.Entity<Mensaje>(entity =>
+        {
+            // Primary key
+            entity.HasKey(m => m.Id);
+            
+            // Índices para mejorar performance
+            entity.HasIndex(m => m.EmailCliente);
+            entity.HasIndex(m => m.FechaCreacion);
+            entity.HasIndex(m => m.Estado);
+            entity.HasIndex(m => m.TipoConsulta);
+            entity.HasIndex(m => m.Prioridad);
+            
+            // Configuraciones de propiedades
+            entity.Property(m => m.EmailCliente)
+                  .IsRequired()
+                  .HasMaxLength(150);
+                  
+            entity.Property(m => m.Nombre)
+                  .IsRequired()
+                  .HasMaxLength(50);
+                  
+            entity.Property(m => m.Apellidos)
+                  .IsRequired()
+                  .HasMaxLength(100);
+                  
+            entity.Property(m => m.TipoConsulta)
+                  .IsRequired()
+                  .HasMaxLength(50);
+                  
+            entity.Property(m => m.Asunto)
+                  .IsRequired()
+                  .HasMaxLength(100);
+                  
+            entity.Property(m => m.ContenidoMensaje)
+                  .IsRequired()
+                  .HasMaxLength(1000);
+                  
+            entity.Property(m => m.Telefono)
+                  .HasMaxLength(20);
+                  
+            entity.Property(m => m.Prioridad)
+                  .HasMaxLength(50)
+                  .HasDefaultValue("Media");
+                  
+            entity.Property(m => m.RespuestaAdmin)
+                  .HasMaxLength(1000);
+                  
+            entity.Property(m => m.EmailAdminRespuesta)
+                  .HasMaxLength(150);
+            
+            // Relaciones con Usuario (opcional) - Sin restricciones de clave foránea
+            entity.HasOne(m => m.Cliente)
+                  .WithMany()
+                  .HasForeignKey(m => m.EmailCliente)
+                  .IsRequired(false)
+                  .OnDelete(DeleteBehavior.SetNull);
+                  
+            entity.HasOne(m => m.AdminRespuesta)
+                  .WithMany()
+                  .HasForeignKey(m => m.EmailAdminRespuesta)
+                  .IsRequired(false)
+                  .OnDelete(DeleteBehavior.SetNull);
         });
         
         // Configure your other entity relationships here

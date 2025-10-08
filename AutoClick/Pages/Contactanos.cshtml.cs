@@ -1,11 +1,19 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using System.ComponentModel.DataAnnotations;
+using AutoClick.Services;
+using AutoClick.Models;
 
 namespace AutoClick.Pages
 {
     public class ContactanosModel : PageModel
     {
+        private readonly ISoporteService _soporteService;
+
+        public ContactanosModel(ISoporteService soporteService)
+        {
+            _soporteService = soporteService;
+        }
         [BindProperty]
         [Required(ErrorMessage = "El nombre es obligatorio")]
         [StringLength(50, ErrorMessage = "El nombre no puede exceder 50 caracteres")]
@@ -45,70 +53,122 @@ namespace AutoClick.Pages
         public string Telefono { get; set; } = string.Empty;
 
         [BindProperty]
+        [StringLength(100, ErrorMessage = "El asunto no puede exceder 100 caracteres")]
+        [Display(Name = "Asunto")]
+        public string Asunto { get; set; } = string.Empty;
+
+        [BindProperty]
         [Required(ErrorMessage = "El mensaje es obligatorio")]
         [StringLength(1000, ErrorMessage = "El mensaje no puede exceder 1000 caracteres")]
         [MinLength(10, ErrorMessage = "El mensaje debe tener al menos 10 caracteres")]
         [Display(Name = "Mensaje")]
         public string Mensaje { get; set; } = string.Empty;
 
-        public void OnGet()
+        public string SuccessMessage { get; set; } = string.Empty;
+        public string ErrorMessage { get; set; } = string.Empty;
+
+        public List<string> TiposConsultaDisponibles { get; set; } = new();
+
+        public async Task OnGetAsync()
         {
-            // Inicialización de la página si es necesario
+            TiposConsultaDisponibles = await _soporteService.GetTiposConsultaAsync();
         }
 
         public async Task<IActionResult> OnPostAsync()
         {
+            // Recargar tipos de consulta para la vista en caso de error
+            TiposConsultaDisponibles = await _soporteService.GetTiposConsultaAsync();
+            
+            // Remover errores del campo Asunto del ModelState ya que se genera automáticamente
+            ModelState.Remove(nameof(Asunto));
+            
             if (!ModelState.IsValid)
             {
+                ErrorMessage = "Por favor, corrija los errores en el formulario.";
                 return Page();
             }
 
             try
             {
-                // Aquí se procesaría el mensaje de contacto
                 await ProcessContactMessageAsync();
 
-                TempData["SuccessMessage"] = "¡Gracias por contactarnos! Su mensaje ha sido enviado correctamente. Nos pondremos en contacto con usted pronto.";
+                SuccessMessage = "Su consulta ha sido enviada exitosamente. Nos pondremos en contacto con usted pronto.";
                 
                 // Limpiar el formulario después del envío exitoso
-                return RedirectToPage();
+                ClearFormData();
+                
+                return Page();
             }
             catch (Exception ex)
             {
-                // Log del error (en un escenario real)
-                // _logger.LogError(ex, "Error processing contact message");
-
-                TempData["ErrorMessage"] = "Ocurrió un error al enviar su mensaje. Por favor, inténtelo nuevamente.";
+                ErrorMessage = $"Ocurrió un error al enviar su consulta: {ex.Message}";
+                Console.WriteLine($"Error en Contactanos: {ex}");
                 return Page();
             }
         }
 
         private async Task ProcessContactMessageAsync()
         {
-            // Simular procesamiento asíncrono
-            await Task.Delay(100);
-
-            // En un escenario real, aquí se podría:
-            // 1. Guardar el mensaje en una base de datos
-            // 2. Enviar notificación por correo electrónico al equipo de soporte
-            // 3. Enviar confirmación por correo al usuario
-            // 4. Integrar con un sistema de tickets/CRM
-
-            // Ejemplo de datos que se procesarían:
-            var contactData = new
+            // Validar que todos los campos requeridos tengan valores
+            if (string.IsNullOrEmpty(Email) || string.IsNullOrEmpty(Nombre) || 
+                string.IsNullOrEmpty(Apellido) || string.IsNullOrEmpty(TipoConsulta) || 
+                string.IsNullOrEmpty(Mensaje))
             {
-                Nombre = this.Nombre,
-                Apellido = this.Apellido,
-                Email = this.Email,
-                TipoConsulta = this.TipoConsulta,
-                Telefono = this.Telefono,
-                Mensaje = this.Mensaje,
-                FechaEnvio = DateTime.Now,
-                DireccionIP = HttpContext.Connection.RemoteIpAddress?.ToString(),
-                UserAgent = Request.Headers["User-Agent"].ToString()
+                throw new ArgumentException("Faltan campos requeridos para procesar la consulta");
+            }
+
+            // Generar asunto automáticamente basado en el tipo de consulta
+            var asuntoGenerado = GenerarAsuntoAutomatico(TipoConsulta);
+            
+            if (string.IsNullOrEmpty(asuntoGenerado))
+            {
+                throw new ArgumentException("No se pudo generar el asunto automáticamente");
+            }
+            
+            var mensaje = new Mensaje
+            {
+                EmailCliente = Email?.Trim() ?? string.Empty,
+                Nombre = Nombre?.Trim() ?? string.Empty,
+                Apellidos = Apellido?.Trim() ?? string.Empty,
+                TipoConsulta = TipoConsulta?.Trim() ?? string.Empty,
+                Asunto = asuntoGenerado,
+                ContenidoMensaje = this.Mensaje?.Trim() ?? string.Empty,
+                Telefono = Telefono?.Trim() ?? string.Empty,
+                Prioridad = "Media"
             };
 
-            // Simular guardado en base de datos o envío de email
+            var mensajeId = await _soporteService.CrearMensajeAsync(mensaje);
+            
+            if (mensajeId == 0)
+            {
+                throw new Exception("Error al guardar el mensaje");
+            }
+        }
+
+        private string GenerarAsuntoAutomatico(string tipoConsulta)
+        {
+            return tipoConsulta switch
+            {
+                "Consulta General" => "Consulta general",
+                "Soporte Técnico" => "Soporte técnico",
+                "Publicar Anuncio" => "Publicar anuncio",
+                "Problema con Anuncio" => "Problema con anuncio",
+                "Facturación" => "Consulta de facturación",
+                "Sugerencias" => "Sugerencias",
+                _ => "Consulta - AutoClick.cr"
+            };
+        }
+
+        private void ClearFormData()
+        {
+            Nombre = string.Empty;
+            Apellido = string.Empty;
+            Email = string.Empty;
+            ConfirmEmail = string.Empty;
+            Telefono = string.Empty;
+            TipoConsulta = string.Empty;
+            Asunto = string.Empty;
+            Mensaje = string.Empty;
         }
     }
 }

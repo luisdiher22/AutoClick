@@ -83,6 +83,10 @@ builder.Services.AddScoped<IAutoService, AutoService>();
 
 // Add Authentication Service
 builder.Services.AddScoped<IAuthService, AuthService>();
+
+// Add Soporte Service
+builder.Services.AddScoped<ISoporteService, SoporteService>();
+
 builder.Services.AddHttpContextAccessor();
 
 var app = builder.Build();

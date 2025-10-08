@@ -1,10 +1,12 @@
-@page "/reportar-problema"
+@page
 @model AutoClick.Pages.ReportarProblemaModel
 @{
     ViewData["Title"] = "Reportar un problema";
 }
 
+@section Styles {
 <link rel="stylesheet" href="~/css/reportar-problema.css" asp-append-version="true" />
+}
 
 <div class="reportar-problema-container">
     <div class="reportar-problema-content">
@@ -55,11 +57,11 @@
                         </label>
                         <select asp-for="TipoProblema" class="form-select">
                             <option value="">Seleccione tipo de problema</option>
-                            <option value="Técnico">Problema técnico</option>
-                            <option value="Cuenta">Problema con mi cuenta</option>
-                            <option value="Anuncio">Problema con anuncio</option>
-                            <option value="Pago">Problema de pago</option>
-                            <option value="Otro">Otro problema</option>
+                            <option value="Problema técnico del sitio">Problema técnico del sitio</option>
+                            <option value="Problema con mi cuenta">Problema con mi cuenta</option>
+                            <option value="Problema con anuncio">Problema con anuncio</option>
+                            <option value="Problema de pagos y facturación">Problema de pagos y facturación</option>
+                            <option value="Otro problema">Otro problema</option>
                         </select>
                         <span asp-validation-for="TipoProblema" class="text-danger"></span>
                     </div>
