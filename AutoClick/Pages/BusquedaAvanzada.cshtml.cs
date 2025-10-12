@@ -77,8 +77,22 @@ namespace AutoClick.Pages
         // Applied Filters for Display
         public List<string> AppliedFilters { get; set; } = new List<string>();
 
+        // Dropdown Options
+        public List<string> AvailableProvinces { get; set; } = new List<string>();
+        public List<string> AvailableCantons { get; set; } = new List<string>();
+        public List<string> AvailableBrands { get; set; } = new List<string>();
+        public List<string> AvailableModels { get; set; } = new List<string>();
+        public List<string> AvailableBodyTypes { get; set; } = new List<string>();
+        public List<string> AvailableFuelTypes { get; set; } = new List<string>();
+        public List<string> AvailableTransmissions { get; set; } = new List<string>();
+        public List<string> AvailableConditions { get; set; } = new List<string>();
+        public List<int> AvailableYears { get; set; } = new List<int>();
+
         public async Task OnGetAsync()
         {
+            // Load dropdown options
+            await LoadDropdownOptions();
+
             var query = _context.Autos.AsQueryable();
 
             // Build applied filters list for UI
@@ -111,6 +125,24 @@ namespace AutoClick.Pages
                 
             if (MaxYear.HasValue)
                 query = query.Where(a => a.Ano <= MaxYear.Value);
+                
+            if (!string.IsNullOrEmpty(BodyType))
+                query = query.Where(a => a.Carroceria == BodyType);
+                
+            if (!string.IsNullOrEmpty(FuelType))
+                query = query.Where(a => a.Combustible == FuelType);
+                
+            if (!string.IsNullOrEmpty(Transmission))
+                query = query.Where(a => a.Transmision == Transmission);
+                
+            if (!string.IsNullOrEmpty(Condition))
+                query = query.Where(a => a.Condicion == Condition);
+                
+            if (MinKm.HasValue)
+                query = query.Where(a => a.Kilometraje >= MinKm.Value);
+                
+            if (MaxKm.HasValue)
+                query = query.Where(a => a.Kilometraje <= MaxKm.Value);
 
             // Apply sorting
             query = SortBy switch
@@ -166,14 +198,46 @@ namespace AutoClick.Pages
             if (!string.IsNullOrEmpty(Model))
                 AppliedFilters.Add(Model);
                 
+            if (!string.IsNullOrEmpty(BodyType))
+                AppliedFilters.Add(BodyType);
+                
+            if (!string.IsNullOrEmpty(FuelType))
+                AppliedFilters.Add(FuelType);
+                
+            if (!string.IsNullOrEmpty(Transmission))
+                AppliedFilters.Add(Transmission);
+                
+            if (!string.IsNullOrEmpty(Condition))
+                AppliedFilters.Add(Condition);
+                
             if (MinPrice.HasValue || MaxPrice.HasValue)
             {
                 var priceRange = "";
-                if (MinPrice.HasValue) priceRange += $"${MinPrice:N0}";
+                if (MinPrice.HasValue) priceRange += $"₡{MinPrice:N0}";
                 if (MinPrice.HasValue && MaxPrice.HasValue) priceRange += " - ";
-                if (MaxPrice.HasValue) priceRange += $"${MaxPrice:N0}";
+                if (MaxPrice.HasValue) priceRange += $"₡{MaxPrice:N0}";
                 if (!string.IsNullOrEmpty(priceRange))
-                    AppliedFilters.Add($"Precio: {priceRange}");
+                    AppliedFilters.Add(priceRange);
+            }
+            
+            if (MinKm.HasValue || MaxKm.HasValue)
+            {
+                var kmRange = "";
+                if (MinKm.HasValue) kmRange += $"{MinKm:N0} km";
+                if (MinKm.HasValue && MaxKm.HasValue) kmRange += " - ";
+                if (MaxKm.HasValue) kmRange += $"{MaxKm:N0} km";
+                if (!string.IsNullOrEmpty(kmRange))
+                    AppliedFilters.Add(kmRange);
+            }
+            
+            if (MinYear.HasValue || MaxYear.HasValue)
+            {
+                var yearRange = "";
+                if (MinYear.HasValue) yearRange += $"{MinYear}";
+                if (MinYear.HasValue && MaxYear.HasValue) yearRange += " - ";
+                if (MaxYear.HasValue) yearRange += $"{MaxYear}";
+                if (!string.IsNullOrEmpty(yearRange))
+                    AppliedFilters.Add(yearRange);
             }
         }
 
@@ -196,6 +260,24 @@ namespace AutoClick.Pages
                 
             if (MaxYear.HasValue)
                 autos = autos.Where(a => a.Ano <= MaxYear.Value).ToList();
+                
+            if (!string.IsNullOrEmpty(BodyType))
+                autos = autos.Where(a => a.Carroceria == BodyType).ToList();
+                
+            if (!string.IsNullOrEmpty(FuelType))
+                autos = autos.Where(a => a.Combustible == FuelType).ToList();
+                
+            if (!string.IsNullOrEmpty(Transmission))
+                autos = autos.Where(a => a.Transmision == Transmission).ToList();
+                
+            if (!string.IsNullOrEmpty(Condition))
+                autos = autos.Where(a => a.Condicion == Condition).ToList();
+                
+            if (MinKm.HasValue)
+                autos = autos.Where(a => a.Kilometraje >= MinKm.Value).ToList();
+                
+            if (MaxKm.HasValue)
+                autos = autos.Where(a => a.Kilometraje <= MaxKm.Value).ToList();
 
             // Apply sorting
             autos = SortBy switch
@@ -208,6 +290,162 @@ namespace AutoClick.Pages
             };
 
             return autos;
+        }
+
+        private async Task LoadDropdownOptions()
+        {
+            try
+            {
+                // Load from database if available
+                var hasData = await _context.Autos.AnyAsync();
+                
+                if (hasData)
+                {
+                    AvailableProvinces = await _context.Autos
+                        .Where(a => !string.IsNullOrEmpty(a.Provincia))
+                        .Select(a => a.Provincia)
+                        .Distinct()
+                        .OrderBy(p => p)
+                        .ToListAsync();
+
+                    AvailableCantons = await _context.Autos
+                        .Where(a => !string.IsNullOrEmpty(a.Canton))
+                        .Where(a => string.IsNullOrEmpty(Province) || a.Provincia == Province)
+                        .Select(a => a.Canton)
+                        .Distinct()
+                        .OrderBy(c => c)
+                        .ToListAsync();
+
+                    AvailableBrands = await _context.Autos
+                        .Where(a => !string.IsNullOrEmpty(a.Marca))
+                        .Select(a => a.Marca)
+                        .Distinct()
+                        .OrderBy(b => b)
+                        .ToListAsync();
+
+                    AvailableModels = await _context.Autos
+                        .Where(a => !string.IsNullOrEmpty(a.Modelo))
+                        .Where(a => string.IsNullOrEmpty(Brand) || a.Marca == Brand)
+                        .Select(a => a.Modelo)
+                        .Distinct()
+                        .OrderBy(m => m)
+                        .ToListAsync();
+
+                    AvailableBodyTypes = await _context.Autos
+                        .Where(a => !string.IsNullOrEmpty(a.Carroceria))
+                        .Select(a => a.Carroceria)
+                        .Distinct()
+                        .OrderBy(bt => bt)
+                        .ToListAsync();
+
+                    AvailableFuelTypes = await _context.Autos
+                        .Where(a => !string.IsNullOrEmpty(a.Combustible))
+                        .Select(a => a.Combustible)
+                        .Distinct()
+                        .OrderBy(ft => ft)
+                        .ToListAsync();
+
+                    AvailableTransmissions = await _context.Autos
+                        .Where(a => !string.IsNullOrEmpty(a.Transmision))
+                        .Select(a => a.Transmision)
+                        .Distinct()
+                        .OrderBy(t => t)
+                        .ToListAsync();
+
+                    AvailableConditions = await _context.Autos
+                        .Where(a => !string.IsNullOrEmpty(a.Condicion))
+                        .Select(a => a.Condicion)
+                        .Distinct()
+                        .OrderBy(c => c)
+                        .ToListAsync();
+
+                    AvailableYears = await _context.Autos
+                        .Where(a => a.Ano > 0)
+                        .Select(a => a.Ano)
+                        .Distinct()
+                        .OrderByDescending(y => y)
+                        .ToListAsync();
+                }
+                else
+                {
+                    // Use sample data options
+                    LoadSampleDropdownOptions();
+                }
+            }
+            catch
+            {
+                // Fallback to sample data
+                LoadSampleDropdownOptions();
+            }
+        }
+
+        private void LoadSampleDropdownOptions()
+        {
+            AvailableProvinces = new List<string>
+            {
+                "San José", "Alajuela", "Cartago", "Heredia", "Guanacaste", "Puntarenas", "Limón"
+            };
+
+            AvailableCantons = new List<string>();
+            if (string.IsNullOrEmpty(Province) || Province == "San José")
+                AvailableCantons.AddRange(new[] { "San José", "Escazú", "Desamparados", "Puriscal", "Tarrazú", "Aserrí", "Mora", "Goicoechea", "Santa Ana", "Alajuelita", "Vázquez de Coronado", "Acosta", "Tibás", "Moravia", "Montes de Oca", "Turrubares", "Dota", "Curridabat" });
+            
+            if (string.IsNullOrEmpty(Province) || Province == "Alajuela")
+                AvailableCantons.AddRange(new[] { "Alajuela", "San Ramón", "Grecia", "San Mateo", "Atenas", "Naranjo", "Palmares", "Poás", "Orotina", "San Carlos", "Zarcero", "Valverde Vega", "Upala", "Los Chiles", "Guatuso" });
+
+            if (string.IsNullOrEmpty(Province))
+                AvailableCantons = AvailableCantons.Distinct().OrderBy(c => c).ToList();
+
+            AvailableBrands = new List<string>
+            {
+                "Audi", "BMW", "Mercedes-Benz", "Toyota", "Honda", "Nissan", "Hyundai", "Kia", 
+                "Chevrolet", "Ford", "Volkswagen", "Mazda", "Subaru", "Mitsubishi", "Peugeot", 
+                "Renault", "Jeep", "Land Rover", "Volvo", "Acura", "Infiniti", "Lexus"
+            };
+
+            AvailableModels = new List<string>();
+            if (string.IsNullOrEmpty(Brand))
+            {
+                AvailableModels.AddRange(new[] { "A3", "A4", "A6", "Q3", "Q5", "Q7", "X1", "X3", "X5", "Serie 3", "Serie 5", "C-Class", "E-Class", "GLC", "GLE", "Corolla", "Camry", "RAV4", "Highlander", "Civic", "Accord", "CR-V", "Pilot" });
+            }
+            else if (Brand == "BMW")
+            {
+                AvailableModels.AddRange(new[] { "X1", "X3", "X5", "X6", "X7", "Serie 1", "Serie 2", "Serie 3", "Serie 4", "Serie 5", "Serie 6", "Serie 7", "Z4", "i3", "i8" });
+            }
+            else if (Brand == "Audi")
+            {
+                AvailableModels.AddRange(new[] { "A1", "A3", "A4", "A5", "A6", "A7", "A8", "Q2", "Q3", "Q5", "Q7", "Q8", "TT", "R8", "e-tron" });
+            }
+            else if (Brand == "Mercedes-Benz")
+            {
+                AvailableModels.AddRange(new[] { "A-Class", "B-Class", "C-Class", "CLA", "CLS", "E-Class", "S-Class", "GLA", "GLB", "GLC", "GLE", "GLS", "G-Class", "SLK", "SL" });
+            }
+            else if (Brand == "Toyota")
+            {
+                AvailableModels.AddRange(new[] { "Corolla", "Camry", "Avalon", "Prius", "RAV4", "Highlander", "4Runner", "Sequoia", "Sienna", "Tacoma", "Tundra", "Land Cruiser" });
+            }
+
+            AvailableBodyTypes = new List<string>
+            {
+                "Sedán", "Hatchback", "SUV", "Pickup", "Coupé", "Convertible", "Station Wagon", "Van", "Crossover"
+            };
+
+            AvailableFuelTypes = new List<string>
+            {
+                "Gasolina", "Diésel", "Híbrido", "Eléctrico", "GLP", "Gas Natural"
+            };
+
+            AvailableTransmissions = new List<string>
+            {
+                "Manual", "Automática", "CVT", "Semi-automática"
+            };
+
+            AvailableConditions = new List<string>
+            {
+                "Excelente", "Muy Buena", "Buena", "Regular", "Necesita Reparación"
+            };
+
+            AvailableYears = Enumerable.Range(1990, DateTime.Now.Year - 1989).OrderByDescending(y => y).ToList();
         }
 
         private List<Auto> GetSampleSearchResults()

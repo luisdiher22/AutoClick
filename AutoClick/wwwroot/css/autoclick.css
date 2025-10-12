@@ -2555,9 +2555,9 @@ body {
 
 /* Container and Layout */
 .busqueda-container {
-    max-width: 1200px;
+    max-width: 1400px;
     margin: 0 auto;
-    padding: 20px;
+    padding: 20px 10px;
 }
 
 /* Breadcrumb */
@@ -2587,8 +2587,8 @@ body {
 /* Content Layout */
 .busqueda-content {
     display: grid;
-    grid-template-columns: 320px 1fr;
-    gap: 40px;
+    grid-template-columns: 280px 1fr;
+    gap: 25px;
     align-items: start;
 }
 
@@ -2602,7 +2602,7 @@ body {
 .busqueda-filters-container {
     background: rgba(255, 255, 255, 0.05);
     border-radius: 8px;
-    padding: 24px;
+    padding: 20px;
     border: 1px solid rgba(255, 255, 255, 0.1);
 }
 
@@ -2874,8 +2874,8 @@ body {
 /* Cars Grid */
 .busqueda-cars-grid {
     display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    gap: 24px;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 20px;
     margin-bottom: 40px;
 }
 
@@ -3294,14 +3294,27 @@ body {
 }
 
 /* Responsive Design for Búsqueda Avanzada */
+@media (max-width: 1200px) {
+    .busqueda-container {
+        max-width: 1200px;
+        padding: 20px 15px;
+    }
+    
+    .busqueda-content {
+        grid-template-columns: 260px 1fr;
+        gap: 20px;
+    }
+}
+
 @media (max-width: 1024px) {
     .busqueda-content {
-        grid-template-columns: 280px 1fr;
-        gap: 30px;
+        grid-template-columns: 250px 1fr;
+        gap: 20px;
     }
     
     .busqueda-cars-grid {
-        grid-template-columns: 1fr;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 18px;
     }
     
     .busqueda-footer-content {
@@ -3322,7 +3335,7 @@ body {
     }
     
     .busqueda-container {
-        padding: 15px;
+        padding: 15px 10px;
     }
     
     .busqueda-content {
@@ -3342,6 +3355,11 @@ body {
         width: 100%;
     }
     
+    .busqueda-cars-grid {
+        grid-template-columns: 1fr;
+        gap: 16px;
+    }
+    
     .busqueda-footer-content {
         grid-template-columns: 1fr;
         gap: 20px;
@@ -3359,7 +3377,7 @@ body {
     }
     
     .busqueda-container {
-        padding: 10px;
+        padding: 10px 8px;
     }
     
     .busqueda-filters-container,
@@ -4544,3 +4562,298 @@ body {
     color: white;
     text-decoration: none;
 }
+
+/* =========================== */
+/* SIMPLE AUTO TILE - Based on Index original */
+/* =========================== */
+
+.simple-auto-tile {
+    height: 360px;
+    padding: 8px;
+    border-radius: 8px;
+    overflow: hidden;
+    background: rgba(255, 255, 255, 0.05);
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: flex-start;
+    display: flex;
+    cursor: pointer;
+    text-decoration: none !important;
+    color: inherit;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.simple-auto-tile:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+    text-decoration: none !important;
+    color: inherit;
+}
+
+.simple-auto-tile-image {
+    width: 100%;
+    height: 260px;
+    position: relative;
+    overflow: hidden;
+    border-radius: 4px;
+}
+
+.simple-auto-tile-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.3s ease;
+}
+
+.simple-auto-tile:hover .simple-auto-tile-image img {
+    transform: scale(1.05);
+}
+
+.simple-auto-tile-info {
+    width: 100%;
+    height: 88px;
+    padding: 12px 0 2px 0;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: flex-start;
+    display: flex;
+}
+
+.simple-auto-tile-title {
+    width: 100%;
+    color: white;
+    font-size: 18px;
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 700;
+    word-wrap: break-word;
+    line-height: 1.2;
+    margin: 0;
+}
+
+.simple-auto-tile-price {
+    color: white;
+    font-size: 20px;
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 600;
+    word-wrap: break-word;
+    margin: 0;
+}
+
+/* =========================== */
+/* BUSQUEDA AVANZADA IMPROVEMENTS */
+/* =========================== */
+
+/* Filter Tags */
+.applied-filters-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-bottom: 20px;
+}
+
+/* Búsqueda Avanzada Filter Tags */
+.busqueda-avanzada-page .filter-tag {
+    display: inline-flex;
+    align-items: center;
+    background: rgba(255, 107, 53, 0.2);
+    border: 1px solid #FF6B35;
+    border-radius: 20px;
+    padding: 6px 12px;
+    gap: 8px;
+    font-size: 12px;
+    color: white;
+}
+
+.busqueda-avanzada-page .remove-filter-btn {
+    background: none;
+    border: none;
+    color: #FF6B35;
+    cursor: pointer;
+    font-size: 14px;
+    font-weight: bold;
+    padding: 0;
+    margin: 0;
+    width: 16px;
+    height: 16px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    transition: all 0.2s ease;
+    line-height: 1;
+}
+
+.busqueda-avanzada-page .remove-filter-btn:hover {
+    background: #FF6B35;
+    color: white;
+}
+
+/* Custom Dropdown Styling for Búsqueda Avanzada */
+.busqueda-avanzada-page .busqueda-filter-select {
+    appearance: none;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    background: rgba(2, 8, 28, 0.90);
+    color: white;
+    border: 0.5px solid rgba(255, 255, 255, 0.75);
+    border-radius: 4px;
+    padding: 12px 35px 12px 12px;
+    font-family: 'Montserrat', sans-serif;
+    font-size: 16px;
+    font-weight: 500;
+    width: 100%;
+    outline: none;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.busqueda-avanzada-page .busqueda-filter-select:hover {
+    border-color: rgba(255, 255, 255, 0.9);
+}
+
+.busqueda-avanzada-page .busqueda-filter-select:focus {
+    border-color: #FF6B35;
+    box-shadow: 0 0 0 2px rgba(255, 107, 53, 0.2);
+}
+
+/* Custom dropdown arrow */
+.busqueda-avanzada-page .busqueda-select-wrapper {
+    position: relative;
+}
+
+.busqueda-avanzada-page .busqueda-select-wrapper::after {
+    content: '▼';
+    position: absolute;
+    right: 12px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: rgba(255, 255, 255, 0.75);
+    font-size: 12px;
+    pointer-events: none;
+    transition: all 0.3s ease;
+}
+
+.busqueda-avanzada-page .busqueda-select-wrapper:hover::after {
+    color: white;
+}
+
+/* Option styling - Note: Limited browser support for styling options */
+.busqueda-avanzada-page .busqueda-filter-select option {
+    background: rgba(2, 8, 28, 0.95);
+    color: white;
+    padding: 12px 8px;
+    font-family: 'Montserrat', sans-serif;
+    font-size: 16px;
+    font-weight: 500;
+    border: none;
+    min-height: 40px;
+    line-height: 1.5;
+}
+
+.busqueda-avanzada-page .busqueda-filter-select option:hover {
+    background: rgba(255, 107, 53, 0.3);
+    color: white;
+}
+
+.busqueda-avanzada-page .busqueda-filter-select option:checked,
+.busqueda-avanzada-page .busqueda-filter-select option:selected {
+    background: #FF6B35;
+    color: white;
+    font-weight: 600;
+}
+
+/* Better cross-browser dropdown styling */
+.busqueda-avanzada-page .busqueda-filter-select::-ms-expand {
+    display: none;
+}
+
+.busqueda-avanzada-page .busqueda-filter-select {
+    background-image: none;
+    text-indent: 0.01px;
+    text-overflow: '';
+}
+
+/* Price fields styling */
+.busqueda-avanzada-page .busqueda-price-field {
+    background: rgba(2, 8, 28, 0.90);
+    color: white;
+    border: 0.5px solid rgba(255, 255, 255, 0.75);
+    border-radius: 4px;
+    padding: 12px;
+    font-family: 'Montserrat', sans-serif;
+    font-size: 16px;
+    font-weight: 500;
+    outline: none;
+    transition: all 0.3s ease;
+}
+
+.busqueda-avanzada-page .busqueda-price-field:hover {
+    border-color: rgba(255, 255, 255, 0.9);
+}
+
+.busqueda-avanzada-page .busqueda-price-field:focus {
+    border-color: #FF6B35;
+    box-shadow: 0 0 0 2px rgba(255, 107, 53, 0.2);
+}
+
+.busqueda-avanzada-page .busqueda-price-field::placeholder {
+    color: rgba(255, 255, 255, 0.5);
+}
+
+/* Sort dropdown styling */
+.busqueda-avanzada-page .busqueda-sort-select {
+    appearance: none;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    background: rgba(2, 8, 28, 0.90);
+    color: white;
+    border: 0.5px solid rgba(255, 255, 255, 0.75);
+    border-radius: 4px;
+    padding: 12px 35px 12px 12px;
+    font-family: 'Montserrat', sans-serif;
+    font-size: 16px;
+    font-weight: 500;
+    outline: none;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.busqueda-avanzada-page .busqueda-sort-select:hover {
+    border-color: rgba(255, 255, 255, 0.9);
+}
+
+.busqueda-avanzada-page .busqueda-sort-select:focus {
+    border-color: #FF6B35;
+    box-shadow: 0 0 0 2px rgba(255, 107, 53, 0.2);
+}
+
+.busqueda-avanzada-page .busqueda-sort-wrapper {
+    position: relative;
+}
+
+.busqueda-avanzada-page .busqueda-sort-wrapper::after {
+    content: '▼';
+    position: absolute;
+    right: 12px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: rgba(255, 255, 255, 0.75);
+    font-size: 12px;
+    pointer-events: none;
+    transition: all 0.3s ease;
+}
+
+.busqueda-avanzada-page .busqueda-sort-wrapper:hover::after {
+    color: white;
+}
+
+/* Additional styling for better UX */
+.busqueda-avanzada-page .busqueda-filter-select:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+}
+
+.busqueda-avanzada-page .busqueda-filter-select:disabled + .busqueda-select-wrapper::after {
+    opacity: 0.6;
+}
+

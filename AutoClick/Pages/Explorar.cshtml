@@ -236,43 +236,16 @@
             <div class="explorar-cars-grid">
                 @foreach (var auto in Model.Autos)
                 {
-                    <a asp-page="/Producto" asp-route-id="@auto.Id" style="text-decoration: none; color: inherit;">
-                        <div class="explorar-car-card">
-                            <div class="explorar-car-image-container">
-                                <img src="@auto.ImagenPrincipal" alt="@auto.NombreCompleto" class="explorar-car-image" />
-                                
-                                <!-- Destacado Badge -->
-                                <div class="destacado-badge">Destacado</div>
-                                
-                                <!-- Favorite Button -->
-                                <div class="explorar-car-favorite">
-                                    <button class="explorar-favorite-btn" title="Agregar a favoritos" onclick="event.stopPropagation(); event.preventDefault();">
-                                        <svg width="20" height="17" viewBox="0 0 24 24" fill="none">
-                                            <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z" fill="none" stroke="currentColor" stroke-width="2"/>
-                                        </svg>
-                                    </button>
-                                </div>
-                            </div>
-                            
-                            <div class="explorar-car-info">
-                                <h3 class="explorar-car-title">@auto.NombreCompleto</h3>
-                                <p class="explorar-car-price">@auto.ValorFiscalFormateado</p>
-                                
-                                <!-- Good Deal Badge -->
-                                <div class="good-deal-badge">
-                                    <img src="https://placehold.co/22x11" alt="Icono buena oferta" />
-                                    <span>Buena oferta</span>
-                                </div>
-                                
-                                <!-- Contact Button -->
-                                <button class="contact-seller-btn" onclick="event.stopPropagation(); event.preventDefault();">Contactar vendedor</button>
-                                
-                                <!-- Additional Info -->
-                                <div class="car-additional-info">
-                                    <div class="car-km">@((new Random().Next(2000, 50000)).ToString("N0")) km</div>
-                                    <div class="car-estimate">Est. $@((auto.ValorFiscal / 100).ToString("N0"))/mes</div>
-                                </div>
-                            </div>
+                    <a asp-page="/Producto" asp-route-id="@auto.Id" class="simple-auto-tile">
+                        <!-- Car Image -->
+                        <div class="simple-auto-tile-image">
+                            <img src="@auto.ImagenPrincipal" alt="@auto.NombreCompleto" />
+                        </div>
+                        
+                        <!-- Car Info -->
+                        <div class="simple-auto-tile-info">
+                            <div class="simple-auto-tile-title">@auto.NombreCompleto</div>
+                            <div class="simple-auto-tile-price">@auto.ValorFiscalFormateado</div>
                         </div>
                     </a>
                 }
