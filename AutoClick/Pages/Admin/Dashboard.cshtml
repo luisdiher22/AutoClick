@@ -1,0 +1,533 @@
+@page
+@model AutoClick.Pages.Admin.DashboardModel
+@{
+    ViewData["Title"] = "Dashboard de Administrador";
+    Layout = "~/Pages/Shared/_Layout.cshtml";
+}
+
+<style>
+    /* Reset body styles for admin dashboard */
+    body {
+        margin: 0;
+        padding: 0;
+        background: #02081C !important;
+        font-family: 'Montserrat', sans-serif !important;
+        overflow-x: hidden;
+    }
+    
+    .main-container {
+        background: #02081C !important;
+        min-height: 100vh;
+        position: relative;
+        width: 100%;
+        overflow: hidden;
+    }
+    
+    /* Admin Dashboard Container */
+    .admin-dashboard-container {
+        width: 100%;
+        height: 100vh;
+        position: relative;
+        background: #02081C;
+        overflow: hidden;
+    }
+    
+    /* Sidebar */
+    .admin-sidebar {
+        width: 376px;
+        height: calc(100vh - 80px);
+        padding: 12px 16px;
+        position: fixed;
+        left: 0;
+        top: 80px;
+        background: #030D2B;
+        border-right: 0.5px solid rgba(255, 255, 255, 0.25);
+        z-index: 100;
+        overflow-y: auto;
+    }
+    
+    /* Menu Items */
+    .menu-item {
+        width: 344px;
+        height: 56px;
+        position: relative;
+        margin-bottom: 0;
+    }
+    
+    .menu-item-button {
+        width: 344px;
+        height: 50px;
+        padding: 14px 16px;
+        background: transparent;
+        border: none;
+        border-radius: 2px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        cursor: pointer;
+        transition: all 0.2s ease;
+        text-decoration: none;
+        color: white;
+        outline: 1px solid rgba(255, 255, 255, 0.15);
+        outline-offset: -0.5px;
+        margin-top: 3px;
+    }
+    
+    .menu-item-button:hover {
+        background: rgba(255, 255, 255, 0.1);
+        color: white;
+        text-decoration: none;
+    }
+    
+    .menu-item-button.active {
+        background: rgba(255, 255, 255, 0.25);
+    }
+    
+    .menu-item-content {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+    }
+    
+    .menu-item-icon {
+        width: 22px;
+        height: 22px;
+        background: white;
+    }
+    
+    .menu-item-text {
+        color: white;
+        font-size: 16px;
+        font-family: 'Montserrat', sans-serif;
+        font-weight: 500;
+    }
+    
+    .menu-item-arrow {
+        width: 12px;
+        height: 6px;
+        background: white;
+        border: 1px solid rgba(255, 255, 255, 0.25);
+    }
+    
+    /* Main Content Area */
+    .admin-main-content {
+        margin-left: 376px;
+        padding: 40px;
+        min-height: calc(100vh - 80px);
+        background: #02081C;
+    }
+    
+    /* Page Title */
+    .page-title {
+        color: rgba(255, 255, 255, 0.5);
+        font-size: 32px;
+        font-family: 'Montserrat', sans-serif;
+        font-weight: 700;
+        margin-bottom: 48px;
+        margin-top: 40px;
+    }
+    
+    /* Section Headers */
+    .section-header {
+        padding: 16px 16px 16px 0;
+        display: flex;
+        align-items: center;
+        margin-bottom: 16px;
+    }
+    
+    .section-title {
+        color: white;
+        font-size: 24px;
+        font-family: 'Montserrat', sans-serif;
+        font-weight: 700;
+    }
+    
+    /* Stats Cards */
+    .stats-container {
+        width: 853px;
+        padding: 40px;
+        background: rgba(255, 255, 255, 0.15);
+        border-radius: 4px;
+        border: 0.5px solid rgba(255, 255, 255, 0.25);
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 40px;
+    }
+    
+    .stat-item {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        gap: 22px;
+    }
+    
+    .stat-number {
+        color: white;
+        font-size: 49.87px;
+        font-family: 'Montserrat', sans-serif;
+        font-weight: 700;
+        text-align: center;
+    }
+    
+    .stat-label {
+        color: white;
+        font-size: 22.17px;
+        font-family: 'Montserrat', sans-serif;
+        font-weight: 500;
+        text-align: center;
+        width: 207px;
+    }
+    
+    .stat-label-short {
+        width: 198px;
+    }
+    
+    /* Footer */
+    .admin-footer {
+        width: 100%;
+        height: 304px;
+        background: #030D2B;
+        border-top: 0.5px solid rgba(255, 255, 255, 0.45);
+        position: relative;
+        margin-top: auto;
+        margin-left: -376px;
+    }
+    
+    .footer-content {
+        display: flex;
+        justify-content: center;
+        align-items: flex-start;
+        gap: 62px;
+        padding: 45px 0;
+    }
+    
+    .footer-section {
+        display: flex;
+        flex-direction: column;
+        gap: 40px;
+    }
+    
+    .footer-title {
+        color: rgba(255, 255, 255, 0.5);
+        font-size: 24px;
+        font-family: 'Plus Jakarta Sans', sans-serif;
+        font-weight: 700;
+    }
+    
+    .footer-links {
+        display: flex;
+        flex-direction: column;
+        gap: 32px;
+    }
+    
+    .footer-link {
+        color: white;
+        font-size: 16px;
+        font-family: 'Montserrat', sans-serif;
+        font-weight: 400;
+        text-decoration: none;
+    }
+    
+    .footer-link:hover {
+        color: rgba(255, 255, 255, 0.8);
+        text-decoration: none;
+    }
+    
+    .footer-logo {
+        width: 289px;
+        height: 143px;
+        position: absolute;
+        left: 40px;
+        top: 40px;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: flex-start;
+        gap: 32px;
+    }
+    
+    .footer-social {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        gap: 48px;
+    }
+    
+    .social-icon {
+        width: 32px;
+        height: 32px;
+        background: white;
+    }
+    
+    .footer-copyright {
+        position: absolute;
+        bottom: 36px;
+        left: 50%;
+        transform: translateX(-50%);
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        gap: 10px;
+    }
+    
+    .copyright-text {
+        color: white;
+        font-size: 16px;
+        font-family: 'Montserrat', sans-serif;
+        font-weight: 300;
+        text-align: center;
+    }
+    
+    /* Responsive */
+    @@media (max-width: 1200px) {
+        .admin-sidebar {
+            transform: translateX(-100%);
+            transition: transform 0.3s ease;
+        }
+        
+        .admin-main-content {
+            margin-left: 0;
+        }
+        
+        .stats-container {
+            width: 100%;
+            max-width: 853px;
+        }
+        
+        .admin-footer {
+            margin-left: 0;
+        }
+    }
+</style>
+
+<div class="admin-dashboard-container">
+    <!-- Sidebar -->
+    <div class="admin-sidebar">
+        <!-- Dashboard (Active) -->
+        <div class="menu-item">
+            <a href="/Admin/Dashboard" class="menu-item-button active">
+                <div class="menu-item-content">
+                    <div class="menu-item-icon" style="width: auto; height: auto; background: none; display: flex; gap: 4px;">
+                        <div style="width: 7.71px; height: 11.57px; border: 1.23px solid white;"></div>
+                        <div style="width: 7.71px; height: 5.14px; border: 1.23px solid white;"></div>
+                        <div style="width: 7.71px; height: 11.57px; border: 1.23px solid white;"></div>
+                        <div style="width: 7.71px; height: 5.14px; border: 1.23px solid white;"></div>
+                    </div>
+                    <span class="menu-item-text">Dashboard</span>
+                </div>
+            </a>
+        </div>
+        
+        <!-- Estadísticas -->
+        <div class="menu-item">
+            <a href="/Admin/Estadisticas" class="menu-item-button">
+                <div class="menu-item-content">
+                    <div class="menu-item-icon"></div>
+                    <span class="menu-item-text">Estadísticas</span>
+                </div>
+                <div class="menu-item-arrow"></div>
+            </a>
+        </div>
+        
+        <!-- Gestión de anuncios -->
+        <div class="menu-item">
+            <a href="/Admin/GestionAnuncios" class="menu-item-button">
+                <div class="menu-item-content">
+                    <div class="menu-item-icon"></div>
+                    <span class="menu-item-text">Gestión de anuncios</span>
+                </div>
+                <div class="menu-item-arrow"></div>
+            </a>
+        </div>
+        
+        <!-- Publicidad -->
+        <div class="menu-item">
+            <a href="/Admin/Publicidad" class="menu-item-button">
+                <div class="menu-item-content">
+                    <div class="menu-item-icon"></div>
+                    <span class="menu-item-text">Publicidad</span>
+                </div>
+            </a>
+        </div>
+        
+        <!-- Solicitudes de fotografía -->
+        <div class="menu-item">
+            <a href="/Admin/SolicitudesFotografia" class="menu-item-button">
+                <div class="menu-item-content">
+                    <div class="menu-item-icon"></div>
+                    <span class="menu-item-text">Solicitudes de fotografía</span>
+                </div>
+            </a>
+        </div>
+        
+        <!-- Reportes del sistema -->
+        <div class="menu-item">
+            <a href="/Admin/Reportes" class="menu-item-button">
+                <div class="menu-item-content">
+                    <div class="menu-item-icon"></div>
+                    <span class="menu-item-text">Reportes del sistema</span>
+                </div>
+                <div class="menu-item-arrow"></div>
+            </a>
+        </div>
+        
+        <!-- Centro de soporte -->
+        <div class="menu-item">
+            <a href="/Admin/CentroSoporte" class="menu-item-button">
+                <div class="menu-item-content">
+                    <div class="menu-item-icon"></div>
+                    <span class="menu-item-text">Centro de soporte</span>
+                </div>
+                <div class="menu-item-arrow"></div>
+            </a>
+        </div>
+        
+        <!-- Control de la plataforma -->
+        <div class="menu-item">
+            <a href="/Admin/ControlPlataforma" class="menu-item-button">
+                <div class="menu-item-content">
+                    <div class="menu-item-icon"></div>
+                    <span class="menu-item-text">Control de la plataforma</span>
+                </div>
+                <div class="menu-item-arrow"></div>
+            </a>
+        </div>
+    </div>
+    
+    <!-- Main Content -->
+    <div class="admin-main-content">
+        <!-- Page Title -->
+        <h1 class="page-title">Dashboard</h1>
+        
+        <!-- Estadísticas Section -->
+        <div class="section-header">
+            <h2 class="section-title">Estadísticas</h2>
+        </div>
+        
+        <div class="stats-container">
+            <div class="stat-item">
+                <div class="stat-number">159.4K</div>
+                <div class="stat-label">Visitas mensuales</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-number">80%</div>
+                <div class="stat-label stat-label-short">Visitas orgánicas</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-number">20%</div>
+                <div class="stat-label stat-label-short">Visitas pagadas</div>
+            </div>
+        </div>
+        
+        <!-- Anuncios Section -->
+        <div class="section-header">
+            <h2 class="section-title">Anuncios</h2>
+        </div>
+        
+        <div class="stats-container">
+            <div class="stat-item">
+                <div class="stat-number">@Model.TotalAutos</div>
+                <div class="stat-label">Nuevos anuncios</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-number">221</div>
+                <div class="stat-label stat-label-short">Posteo instantáneo</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-number">14</div>
+                <div class="stat-label stat-label-short">Pendiente aprob.</div>
+            </div>
+        </div>
+        
+        <!-- Solicitudes fotografía Section -->
+        <div class="section-header">
+            <h2 class="section-title">Solicitudes fotografía</h2>
+        </div>
+        
+        <div class="stats-container">
+            <div class="stat-item">
+                <div class="stat-number">15</div>
+                <div class="stat-label">Agendadas</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-number">8</div>
+                <div class="stat-label stat-label-short">Pendientes</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-number">7</div>
+                <div class="stat-label stat-label-short">Finalizadas</div>
+            </div>
+        </div>
+        
+        <!-- Mensajes Section -->
+        <div class="section-header">
+            <h2 class="section-title">Mensajes</h2>
+        </div>
+        
+        <div class="stats-container">
+            <div class="stat-item">
+                <div class="stat-number">@Model.TotalMensajes</div>
+                <div class="stat-label">Nuevos</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-number">13</div>
+                <div class="stat-label stat-label-short">Pendientes</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-number">2</div>
+                <div class="stat-label stat-label-short">Respondidos</div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Footer -->
+    <div class="admin-footer">
+        <div class="footer-logo">
+            <img style="height: 45.86px" src="~/images/logos/autoclick-logo-hd.png" alt="AutoClick.cr" />
+            <div class="footer-social">
+                <div class="social-icon"></div>
+                <div class="social-icon"></div>
+                <div class="social-icon"></div>
+            </div>
+        </div>
+        
+        <div class="footer-content">
+            <div class="footer-section" style="width: 193px;">
+                <div class="footer-title">AutoClick.cr</div>
+                <div class="footer-links">
+                    <a href="#" class="footer-link">Contáctenos</a>
+                    <a href="#" class="footer-link">Sobre Nosotros</a>
+                    <a href="#" class="footer-link">Reportar un problema</a>
+                </div>
+            </div>
+            
+            <div class="footer-section">
+                <div style="padding-top: 56px;">
+                    <div class="footer-links">
+                        <a href="#" class="footer-link">Términos y condiciones</a>
+                        <a href="#" class="footer-link">Política de privacidad</a>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="footer-section" style="width: 285px;">
+                <div class="footer-title">Suscríbete</div>
+                <div style="margin-bottom: 16px;">
+                    <input type="email" placeholder="Introducir correo" style="width: 175px; padding: 8px 16px; background: #02081C; border: 0.5px solid rgba(255, 255, 255, 0.5); border-radius: 4px; color: rgba(255, 255, 255, 0.5); font-family: 'Montserrat', sans-serif; font-size: 14px;" />
+                </div>
+                <div style="color: white; font-size: 14px; font-family: 'Montserrat', sans-serif; font-weight: 500; margin-bottom: 16px;">
+                    Suscríbase para recibir las últimas noticias y promociones
+                </div>
+                <button style="padding: 16px; background: #0A2680; border: 0.5px solid white; border-radius: 4px; color: white; font-size: 16px; font-family: 'Montserrat', sans-serif; font-weight: 700; cursor: pointer;">
+                    Suscribirse
+                </button>
+            </div>
+        </div>
+        
+        <div class="footer-copyright">
+            <div class="copyright-text">2025. Todos los derechos reservados - AutoClick.cr</div>
+        </div>
+    </div>
+</div>

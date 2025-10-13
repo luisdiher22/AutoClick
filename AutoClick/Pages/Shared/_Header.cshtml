@@ -4,7 +4,7 @@
         <!-- Logo Section -->
         <div class="logo-section">
             <a asp-page="/Index" class="logo-link">
-                <img src="~/images/logo.png" alt="AutoClick.cr" class="logo-image" />
+                <img src="~/images/logos/autoclick-logo-hd.png" alt="AutoClick.cr" class="logo-image" />
             </a>
         </div>
         
@@ -62,10 +62,19 @@
             
             @if (isUserLoggedIn)
             {
+                var isAdmin = User.FindFirst("IsAdmin")?.Value == "true";
+                
                 <!-- Logged in user -->
                 <div class="user-section nav-dropdown" data-dropdown="user">
                     <button class="user-name nav-item">@userName</button>
                     <div class="user-dropdown dropdown-content" id="userDropdown">
+                        @if (isAdmin)
+                        {
+                            <a asp-page="/Admin/Dashboard" class="user-menu-item dropdown-link admin-link">
+                                <span class="admin-icon">⚙️</span> Admin Dashboard
+                            </a>
+                            <hr class="menu-divider">
+                        }
                         <a asp-page="/MiPerfil" class="user-menu-item dropdown-link">Mi Perfil</a>
                         <a asp-page="/MisAnuncios" class="user-menu-item dropdown-link">Mis Anuncios</a>
                         <a asp-page="/HistorialPagos" class="user-menu-item dropdown-link">Historial de Pagos</a>
@@ -427,6 +436,23 @@
         }
         
         .logout-icon {
+            font-size: 16px;
+        }
+        
+        /* Admin Dashboard Link Styles */
+        .admin-link {
+            background: linear-gradient(135deg, #02081C, #030D2B) !important;
+            color: #ffffff !important;
+            font-weight: 600;
+        }
+        
+        .admin-link:hover {
+            background: linear-gradient(135deg, #030D2B, #04122D) !important;
+            color: #ffffff !important;
+        }
+        
+        .admin-icon {
+            margin-right: 8px;
             font-size: 16px;
         }
         

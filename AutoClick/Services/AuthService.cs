@@ -74,6 +74,12 @@ public class AuthService : IAuthService
                 claims.Add(new Claim("AgencyName", user.NombreAgencia!));
             }
 
+            if (user.EsAdministrador)
+            {
+                claims.Add(new Claim("IsAdmin", "true"));
+                claims.Add(new Claim(ClaimTypes.Role, "Administrator"));
+            }
+
             var claimsIdentity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
             var authProperties = new AuthenticationProperties
             {

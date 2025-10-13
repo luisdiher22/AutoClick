@@ -40,6 +40,9 @@ public class Usuario
     [Display(Name = "Es Agencia")]
     public bool EsAgencia => !string.IsNullOrEmpty(NombreAgencia);
     
+    [Display(Name = "Es Administrador")]
+    public bool EsAdministrador { get; set; } = false;
+    
     // Propiedades computadas para facilitar el uso
     [NotMapped]
     [Display(Name = "Nombre Completo")]
