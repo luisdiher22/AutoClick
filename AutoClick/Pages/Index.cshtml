@@ -56,8 +56,18 @@
             <!-- Imagen del auto -->
             <div style="width: 100%; height: 260px; position: relative; overflow: hidden; border-radius: 4px;">
                 <img style="width: 100%; height: 100%; object-fit: cover;" src="@(string.IsNullOrEmpty(auto.ImagenPrincipal) ? "https://placehold.co/392x200" : auto.ImagenPrincipal)" alt="@auto.NombreCompleto" />
+
+                @* Banderín Tag Video *@
+                @if (!string.IsNullOrEmpty(auto.BanderinVideoUrl))
+                {
+                    <div style="position: absolute; top: 8px; right: 8px; width: 80px; height: 80px; pointer-events: none; z-index: 10;">
+                        <video autoplay loop muted playsinline preload="auto" style="width: 100%; height: 100%; object-fit: contain; filter: drop-shadow(2px 2px 4px rgba(0, 0, 0, 0.5));">
+                            <source src="@auto.BanderinVideoUrl" type="video/mp4">
+                        </video>
+                    </div>
+                }
             </div>
-            
+
             <!-- Información del auto -->
             <div style="width: 100%; height: 88px; padding: 12px 0 2px 0; flex-direction: column; justify-content: space-between; align-items: flex-start; display: flex;">
                 <div style="width: 100%; text-box-trim: trim-both; text-box-edge: cap alphabetic; color: white; font-size: 18px; font-family: Montserrat; font-weight: 700; word-wrap: break-word; line-height: 1.2;">@auto.NombreCompleto</div>
@@ -91,8 +101,18 @@
             <!-- Imagen del auto -->
             <div style="width: 100%; height: 260px; position: relative; overflow: hidden; border-radius: 4px;">
                 <img style="width: 100%; height: 100%; object-fit: cover;" src="@(string.IsNullOrEmpty(auto.ImagenPrincipal) ? "https://placehold.co/392x200" : auto.ImagenPrincipal)" alt="@auto.NombreCompleto" />
+
+                @* Banderín Tag Video *@
+                @if (!string.IsNullOrEmpty(auto.BanderinVideoUrl))
+                {
+                    <div style="position: absolute; top: 8px; right: 8px; width: 80px; height: 80px; pointer-events: none; z-index: 10;">
+                        <video autoplay loop muted playsinline preload="auto" style="width: 100%; height: 100%; object-fit: contain; filter: drop-shadow(2px 2px 4px rgba(0, 0, 0, 0.5));">
+                            <source src="@auto.BanderinVideoUrl" type="video/mp4">
+                        </video>
+                    </div>
+                }
             </div>
-            
+
             <!-- Información del auto -->
             <div style="width: 100%; height: 88px; padding: 12px 0 2px 0; flex-direction: column; justify-content: space-between; align-items: flex-start; display: flex;">
                 <div style="width: 100%; text-box-trim: trim-both; text-box-edge: cap alphabetic; color: white; font-size: 18px; font-family: Montserrat; font-weight: 700; word-wrap: break-word; line-height: 1.2;">@auto.NombreCompleto</div>
@@ -122,8 +142,18 @@
             <!-- Imagen del auto -->
             <div style="width: 100%; height: 260px; position: relative; overflow: hidden; border-radius: 4px;">
                 <img style="width: 100%; height: 100%; object-fit: cover;" src="@(string.IsNullOrEmpty(auto.ImagenPrincipal) ? "https://placehold.co/395x200" : auto.ImagenPrincipal)" alt="@auto.NombreCompleto" />
+
+                @* Banderín Tag Video *@
+                @if (!string.IsNullOrEmpty(auto.BanderinVideoUrl))
+                {
+                    <div style="position: absolute; top: 8px; right: 8px; width: 80px; height: 80px; pointer-events: none; z-index: 10;">
+                        <video autoplay loop muted playsinline preload="auto" style="width: 100%; height: 100%; object-fit: contain; filter: drop-shadow(2px 2px 4px rgba(0, 0, 0, 0.5));">
+                            <source src="@auto.BanderinVideoUrl" type="video/mp4">
+                        </video>
+                    </div>
+                }
             </div>
-            
+
             <!-- Información del auto -->
             <div style="width: 100%; height: 88px; padding: 12px 0 2px 0; flex-direction: column; justify-content: space-between; align-items: flex-start; display: flex;">
                 <div style="width: 100%; text-box-trim: trim-both; text-box-edge: cap alphabetic; color: white; font-size: 18px; font-family: Montserrat; font-weight: 700; word-wrap: break-word; line-height: 1.2;">@auto.NombreCompleto</div>
@@ -153,8 +183,18 @@
             <!-- Imagen del auto -->
             <div style="width: 100%; height: 260px; position: relative; overflow: hidden; border-radius: 4px;">
                 <img style="width: 100%; height: 100%; object-fit: cover;" src="@(string.IsNullOrEmpty(auto.ImagenPrincipal) ? "https://placehold.co/395x200" : auto.ImagenPrincipal)" alt="@auto.NombreCompleto" />
+
+                @* Banderín Tag Video *@
+                @if (!string.IsNullOrEmpty(auto.BanderinVideoUrl))
+                {
+                    <div style="position: absolute; top: 8px; right: 8px; width: 80px; height: 80px; pointer-events: none; z-index: 10;">
+                        <video autoplay loop muted playsinline preload="auto" style="width: 100%; height: 100%; object-fit: contain; filter: drop-shadow(2px 2px 4px rgba(0, 0, 0, 0.5));">
+                            <source src="@auto.BanderinVideoUrl" type="video/mp4">
+                        </video>
+                    </div>
+                }
             </div>
-            
+
             <!-- Información del auto -->
             <div style="width: 100%; height: 88px; padding: 12px 0 2px 0; flex-direction: column; justify-content: space-between; align-items: flex-start; display: flex;">
                 <div style="width: 100%; text-box-trim: trim-both; text-box-edge: cap alphabetic; color: white; font-size: 18px; font-family: Montserrat; font-weight: 700; word-wrap: break-word; line-height: 1.2;">@auto.NombreCompleto</div>

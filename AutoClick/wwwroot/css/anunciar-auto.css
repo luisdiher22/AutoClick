@@ -482,9 +482,12 @@
     align-items: center;
     justify-content: center;
     margin-bottom: 16px;
+    width: 120.85px;
+    height: 118px;
 }
 
-.tag-image img {
+.tag-image img,
+.tag-image video {
     width: 120.85px;
     height: 118px;
     object-fit: contain;

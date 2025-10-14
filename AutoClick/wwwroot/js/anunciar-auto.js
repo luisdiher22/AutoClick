@@ -117,6 +117,9 @@ document.addEventListener('DOMContentLoaded', function() {
         tagCheckboxes.forEach(checkbox => {
             checkbox.addEventListener('change', updateTagSelection);
         });
+
+        // Initialize tag videos
+        initializeTagVideos();
         
         // Marca/Modelo cascade
         const marcaSelect = document.querySelector('#marca');
@@ -1310,11 +1313,113 @@ document.addEventListener('DOMContentLoaded', function() {
     function updateTagSelection(event) {
         const checkbox = event.target;
         const tagOption = checkbox.closest('.tag-option');
-        
+
         if (checkbox.checked) {
             tagOption.classList.add('selected');
         } else {
             tagOption.classList.remove('selected');
+        }
+    }
+
+    function initializeTagVideos() {
+        console.log('Initializing tag videos...');
+        const tagVideos = document.querySelectorAll('.tag-video');
+        console.log(`Found ${tagVideos.length} tag videos`);
+
+        tagVideos.forEach((video, index) => {
+            const videoSrc = video.getAttribute('data-src');
+
+            if (videoSrc) {
+                console.log(`Loading video ${index + 1}:`, videoSrc);
+
+                // Set sources on source elements if they exist
+                const sources = video.querySelectorAll('source[data-src]');
+                sources.forEach(source => {
+                    const src = source.getAttribute('data-src');
+                    if (src) {
+                        source.src = src;
+                        console.log(`  - Set source with type: ${source.type}`);
+                    }
+                });
+
+                // Also set directly on video element as fallback
+                video.src = videoSrc;
+
+                // Add error handler
+                video.addEventListener('error', function(e) {
+                    console.error(`❌ Error loading video ${index + 1} (${videoSrc}):`, e);
+                    console.error('Error details:', {
+                        code: video.error?.code,
+                        message: video.error?.message,
+                        MEDIA_ERR_ABORTED: video.error?.MEDIA_ERR_ABORTED === 1 ? 'ABORTED' : false,
+                        MEDIA_ERR_NETWORK: video.error?.MEDIA_ERR_NETWORK === 2 ? 'NETWORK' : false,
+                        MEDIA_ERR_DECODE: video.error?.MEDIA_ERR_DECODE === 3 ? 'DECODE' : false,
+                        MEDIA_ERR_SRC_NOT_SUPPORTED: video.error?.MEDIA_ERR_SRC_NOT_SUPPORTED === 4 ? 'NOT_SUPPORTED' : false
+                    });
+
+                    // Show fallback text
+                    const container = video.closest('.tag-image');
+                    if (container) {
+                        container.innerHTML = `
+                            <div style="width: 100%; height: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center; background: rgba(255,255,255,0.05); border-radius: 4px; padding: 10px;">
+                                <span style="color: rgba(255,255,255,0.5); font-size: 12px; text-align: center;">
+                                    🎬 Video no disponible
+                                </span>
+                                <small style="color: rgba(255,255,255,0.3); font-size: 10px; text-align: center; margin-top: 4px;">
+                                    Formato .MOV no soportado en este navegador
+                                </small>
+                            </div>
+                        `;
+                    }
+                }, { once: true });
+
+                // Add success handler
+                video.addEventListener('loadeddata', function() {
+                    console.log(`✓ Video ${index + 1} loaded successfully`);
+                }, { once: true });
+
+                // Add loadstart handler
+                video.addEventListener('loadstart', function() {
+                    console.log(`→ Video ${index + 1} started loading...`);
+                });
+
+                // Force video to load
+                video.load();
+
+                // Try to play with better error handling
+                const playPromise = video.play();
+                if (playPromise !== undefined) {
+                    playPromise.then(() => {
+                        console.log(`▶ Video ${index + 1} is now playing`);
+                    }).catch(err => {
+                        console.warn(`⚠ Could not autoplay video ${index + 1}:`, err.name, err.message);
+
+                        // If autoplay fails, try on user interaction
+                        video.addEventListener('canplay', () => {
+                            video.play().catch(e => {
+                                console.warn(`⚠ Still cannot play video ${index + 1}:`, e.name);
+                            });
+                        }, { once: true });
+                    });
+                }
+            }
+        });
+
+        // Log overall browser video support
+        const testVideo = document.createElement('video');
+        const supportInfo = {
+            'MP4 (H.264)': testVideo.canPlayType('video/mp4; codecs="avc1.42E01E"'),
+            'WebM': testVideo.canPlayType('video/webm; codecs="vp8, vorbis"'),
+            'Ogg': testVideo.canPlayType('video/ogg; codecs="theora"'),
+            'QuickTime MOV': testVideo.canPlayType('video/quicktime'),
+            'MOV (H.264)': testVideo.canPlayType('video/mp4; codecs="avc1.42E01E"')
+        };
+        console.log('📹 Browser video format support:', supportInfo);
+
+        // Check if QuickTime is supported
+        if (!supportInfo['QuickTime MOV'] || supportInfo['QuickTime MOV'] === '') {
+            console.warn('⚠ This browser does not support QuickTime MOV files.');
+            console.warn('💡 Consider converting .MOV files to .MP4 for better browser compatibility.');
         }
     }
 });

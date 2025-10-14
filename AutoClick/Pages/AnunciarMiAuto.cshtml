@@ -678,18 +678,62 @@
                         <h2>Adquirir Tags <span class="optional">(Opcional)</span></h2>
                         <div class="info-icon">?</div>
                     </div>
-                    
+
                     <div class="tags-grid">
-                        @for(int i = 0; i < 20; i++)
+                        @{
+                            var tags = new[] {
+                                new { id = "version-americana", name = "Versión Americana", file = "Versión Americana_1.mp4", price = "₡5000" },
+                                new { id = "unico-dueno", name = "Único Dueño", file = "ÚNICO DUEÑO_1.mp4", price = "₡5000" },
+                                new { id = "full-extras", name = "Full Extras", file = "FULL EXTRAS-.mp4", price = "₡5000" },
+                                new { id = "mantenimiento-agencia", name = "Mantenimiento de Agencia", file = "MANTENIMIENTO DE AGENCIA-.mp4", price = "₡5000" },
+                                new { id = "perfecto-estado", name = "Perfecto Estado", file = "PERFECTO ESTADO_1.mp4", price = "₡5000" },
+                                new { id = "al-dia", name = "Al Día", file = "AL DÍA_1.mp4", price = "₡5000" },
+                                new { id = "bajo-kilometraje", name = "Bajo Kilometraje", file = "BAJO KILOMETRAJE_1.mp4", price = "₡5000" },
+                                new { id = "negociable", name = "Negociable", file = "NEGOCIABLE_1.mp4", price = "₡5000" },
+                                new { id = "financiamiento-disponible", name = "Financiamiento Disponible", file = "FINANCIAMIENTO DISPONIBLE_1.mp4", price = "₡5000" },
+                                new { id = "escucho-ofertas", name = "Escucho Ofertas", file = "ESCUCHO OFERTAS_1.mp4", price = "₡5000" },
+                                new { id = "impecable", name = "Impecable", file = "IMPECABLE_1.mp4", price = "₡5000" },
+                                new { id = "cero-detalles", name = "Cero Detalles", file = "CERO DETALLES_1.mp4", price = "₡5000" },
+                                new { id = "poco-uso", name = "Poco Uso", file = "POCO USO_1.mp4", price = "₡5000" },
+                                new { id = "registro-limpio", name = "Registro Limpio", file = "REGISTRO LIMPIO_1.mp4", price = "₡5000" },
+                                new { id = "traspaso-incluido", name = "Traspaso Incluído", file = "TRASPASO INCLUÍDO_1.mp4", price = "₡5000" },
+                                new { id = "recibo", name = "Recibo", file = "RECIBO_1.mp4", price = "₡5000" },
+                                new { id = "vendo-o-cambio", name = "Vendo o Cambio", file = "VENDO O CAMBIO_1.mp4", price = "₡5000" },
+                                new { id = "urge-vender", name = "Urge Vender", file = "URGE VENDER_1.mp4", price = "₡5000" },
+                                new { id = "precio-especial", name = "Precio Especial", file = "PRECIO ESPECIAL_1.mp4", price = "₡5000" },
+                                new { id = "oportunidad-unica", name = "Oportunidad Única", file = "OPORTUNIDAD UNICA_1.mp4", price = "₡5000" },
+                                new { id = "llame-ahora", name = "Llame Ahora", file = "LLAME AHORA_1.mp4", price = "₡5000" },
+                                new { id = "unico-en-el-pais", name = "Único en el País", file = "ÚNICO EN EL PAÍS_1.mp4", price = "₡5000" },
+                                new { id = "edicion-limitada", name = "Edición Limitada", file = "EDICIÓN LIMITADA_1.mp4", price = "₡5000" },
+                                new { id = "para-inscribir", name = "Para Inscribir", file = "PARA INSCRIBIR_1.mp4", price = "₡5000" },
+                                new { id = "bajo-consumo", name = "Bajo Consumo", file = "BAJO CONSUMO_1.mp4", price = "₡5000" },
+                                new { id = "garantia-extendida", name = "Garantía Extendida", file = "GARANTÍA EXTENDIDA_1.mp4", price = "₡5000" },
+                                new { id = "full-ppf", name = "Full PPF", file = "FULL PPF_1.mp4", price = "₡5000" },
+                                new { id = "tratamiento-ceramico", name = "Tratamiento Cerámico", file = "TRATAMIENTO CERÁMICO_1.mp4", price = "₡5000" },
+                                new { id = "taylor-made", name = "Taylor Made", file = "TAYLOR MADE_1.mp4", price = "₡5000" },
+                                new { id = "cedo-deuda", name = "Cedo Deuda", file = "CEDO DEUDA.mp4", price = "₡5000" }
+                            };
+                        }
+                        @foreach(var tag in tags)
                         {
                             <div class="tag-option">
-                                <input type="checkbox" id="tag-@i" name="tags[]" value="version-americana-@i">
-                                <label for="tag-@i" class="tag-card">
-                                    <span class="tag-price">₡5000</span>
+                                <input type="checkbox" id="tag-@tag.id" name="Formulario.Tags" value="@tag.id">
+                                <label for="tag-@tag.id" class="tag-card">
+                                    <span class="tag-price">@tag.price</span>
                                     <div class="tag-image">
-                                        <img src="~/images/tag-placeholder.png" alt="Tag" />
+                                        <video class="tag-video"
+                                               autoplay
+                                               loop
+                                               muted
+                                               playsinline
+                                               preload="auto"
+                                               data-src="/images/Banderines/@tag.file"
+                                               style="width: 100%; height: 100%; object-fit: contain; background: rgba(255,255,255,0.02);">
+                                            <source data-src="/images/Banderines/@tag.file" type="video/mp4">
+                                            Su navegador no soporta este formato de video.
+                                        </video>
                                     </div>
-                                    <span class="tag-name">Versión americana</span>
+                                    <span class="tag-name">@tag.name</span>
                                 </label>
                             </div>
                         }

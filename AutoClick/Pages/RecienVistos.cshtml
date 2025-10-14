@@ -56,12 +56,23 @@
             <div data-estado="Default" style="width: 412px; height: 296px; padding-left: 10px; padding-right: 10px; padding-top: 8px; padding-bottom: 8px; left: @(leftPosition)px; top: @(topPosition)px; position: absolute; border-radius: 4px; flex-direction: column; justify-content: flex-start; align-items: flex-start; gap: 8px; display: inline-flex; cursor: pointer;" onclick="window.location.href='@Url.Page("/Producto", new { id = auto.Id })'">
                 <div style="align-self: stretch; flex: 1 1 0; position: relative; overflow: hidden; border-radius: 4px; flex-direction: column; justify-content: flex-start; align-items: flex-start; gap: 8px; display: flex">
                     <img style="align-self: stretch; height: 209px; padding: 8px; border-radius: 4px; object-fit: cover;" src="@(string.IsNullOrEmpty(auto.ImagenPrincipal) ? "https://placehold.co/392x209" : auto.ImagenPrincipal)" alt="@auto.NombreCompleto" />
+
+                    @* Banderín Tag Video *@
+                    @if (!string.IsNullOrEmpty(auto.BanderinVideoUrl))
+                    {
+                        <div style="position: absolute; top: 16px; right: 16px; width: 80px; height: 80px; pointer-events: none; z-index: 10;">
+                            <video autoplay loop muted playsinline preload="auto" style="width: 100%; height: 100%; object-fit: contain; filter: drop-shadow(2px 2px 4px rgba(0, 0, 0, 0.5));">
+                                <source src="@auto.BanderinVideoUrl" type="video/mp4">
+                            </video>
+                        </div>
+                    }
+
                     <div style="width: 355px; left: 0px; top: 225px; position: absolute; text-box-trim: trim-both; text-box-edge: cap alphabetic; color: white; font-size: 20px; font-family: Montserrat; font-weight: 700; word-wrap: break-word">@auto.NombreCompleto</div>
                     <div style="left: 0px; top: 263px; position: absolute; text-box-trim: trim-both; text-box-edge: cap alphabetic; color: white; font-size: 20px; font-family: Montserrat; font-weight: 500; word-wrap: break-word">@auto.ValorFiscalFormateado</div>
-                    
+
                     <!-- Share Icon -->
                     <div style="width: 16.67px; height: 20px; left: 375.33px; top: 260px; position: absolute; background: white"></div>
-                    
+
                     <!-- Favorite Icon -->
                     <div data-estado="Favoritos" style="left: 371px; top: 225px; position: absolute; flex-direction: column; justify-content: flex-start; align-items: flex-start; gap: 8px; display: flex">
                         <div style="width: 20px; height: 17px; background: white; outline: 2px white solid; outline-offset: -1px"></div>

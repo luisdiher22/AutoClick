@@ -26,94 +26,20 @@
     /* Admin Dashboard Container */
     .admin-dashboard-container {
         width: 100%;
-        height: 100vh;
+        min-height: 100vh;
         position: relative;
         background: #02081C;
-        overflow: hidden;
-    }
-    
-    /* Sidebar */
-    .admin-sidebar {
-        width: 376px;
-        height: calc(100vh - 80px);
-        padding: 12px 16px;
-        position: fixed;
-        left: 0;
-        top: 80px;
-        background: #030D2B;
-        border-right: 0.5px solid rgba(255, 255, 255, 0.25);
-        z-index: 100;
+        overflow-x: hidden;
         overflow-y: auto;
     }
     
-    /* Menu Items */
-    .menu-item {
-        width: 344px;
-        height: 56px;
-        position: relative;
-        margin-bottom: 0;
-    }
-    
-    .menu-item-button {
-        width: 344px;
-        height: 50px;
-        padding: 14px 16px;
-        background: transparent;
-        border: none;
-        border-radius: 2px;
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        cursor: pointer;
-        transition: all 0.2s ease;
-        text-decoration: none;
-        color: white;
-        outline: 1px solid rgba(255, 255, 255, 0.15);
-        outline-offset: -0.5px;
-        margin-top: 3px;
-    }
-    
-    .menu-item-button:hover {
-        background: rgba(255, 255, 255, 0.1);
-        color: white;
-        text-decoration: none;
-    }
-    
-    .menu-item-button.active {
-        background: rgba(255, 255, 255, 0.25);
-    }
-    
-    .menu-item-content {
-        display: flex;
-        align-items: center;
-        gap: 8px;
-    }
-    
-    .menu-item-icon {
-        width: 22px;
-        height: 22px;
-        background: white;
-    }
-    
-    .menu-item-text {
-        color: white;
-        font-size: 16px;
-        font-family: 'Montserrat', sans-serif;
-        font-weight: 500;
-    }
-    
-    .menu-item-arrow {
-        width: 12px;
-        height: 6px;
-        background: white;
-        border: 1px solid rgba(255, 255, 255, 0.25);
-    }
+    /* Sidebar - Mantenemos solo lo esencial para responsive */
     
     /* Main Content Area */
     .admin-main-content {
         margin-left: 376px;
         padding: 40px;
-        min-height: calc(100vh - 80px);
+        padding-bottom: 0;
         background: #02081C;
     }
     
@@ -144,7 +70,8 @@
     
     /* Stats Cards */
     .stats-container {
-        width: 853px;
+        width: 100%;
+        max-width: 853px;
         padding: 40px;
         background: rgba(255, 255, 255, 0.15);
         border-radius: 4px;
@@ -153,6 +80,12 @@
         justify-content: space-between;
         align-items: center;
         margin-bottom: 40px;
+    }
+
+    .stat-divider {
+        width: 0.5px;
+        height: 96px;
+        background: rgba(255, 255, 255, 0.25);
     }
     
     .stat-item {
@@ -186,13 +119,14 @@
     
     /* Footer */
     .admin-footer {
-        width: 100%;
+        width: 100vw;
         height: 304px;
         background: #030D2B;
         border-top: 0.5px solid rgba(255, 255, 255, 0.45);
         position: relative;
-        margin-top: auto;
+        margin-top: 80px;
         margin-left: -376px;
+        margin-right: -40px;
     }
     
     .footer-content {
@@ -254,11 +188,16 @@
         align-items: center;
         gap: 48px;
     }
-    
-    .social-icon {
-        width: 32px;
-        height: 32px;
-        background: white;
+
+    .footer-social a {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        transition: opacity 0.2s ease;
+    }
+
+    .footer-social a:hover {
+        opacity: 0.8;
     }
     
     .footer-copyright {
@@ -304,95 +243,143 @@
 
 <div class="admin-dashboard-container">
     <!-- Sidebar -->
-    <div class="admin-sidebar">
-        <!-- Dashboard (Active) -->
-        <div class="menu-item">
-            <a href="/Admin/Dashboard" class="menu-item-button active">
-                <div class="menu-item-content">
-                    <div class="menu-item-icon" style="width: auto; height: auto; background: none; display: flex; gap: 4px;">
-                        <div style="width: 7.71px; height: 11.57px; border: 1.23px solid white;"></div>
-                        <div style="width: 7.71px; height: 5.14px; border: 1.23px solid white;"></div>
-                        <div style="width: 7.71px; height: 11.57px; border: 1.23px solid white;"></div>
-                        <div style="width: 7.71px; height: 5.14px; border: 1.23px solid white;"></div>
+    <div style="width: 376px; height: calc(100vh - 80px); padding-left: 16px; padding-right: 16px; padding-top: 12px; padding-bottom: 12px; position: fixed; left: 0; top: 80px; background: #030D2B; overflow: hidden; border-right: 0.50px rgba(255, 255, 255, 0.25) solid; flex-direction: column; justify-content: flex-start; align-items: flex-start; display: inline-flex; z-index: 100; gap: 0;">
+        
+        <!-- Dashboard -->
+        <div class="sidebar-item" data-estado="active" style="width: 344px; height: 56px; position: relative;">
+            <div style="width: 344px; height: 50px; padding-top: 14px; padding-bottom: 14px; padding-left: 16px; padding-right: 22px; left: 0px; top: 3px; position: absolute; overflow: hidden; border-radius: 2px; justify-content: flex-start; align-items: center; display: inline-flex; background: rgba(255, 255, 255, 0.25); transition: background-color 0.2s ease;">
+                <a href="/Admin/Dashboard" style="text-decoration: none; color: white; display: flex; align-items: center; gap: 8px; width: 100%;">
+                    <div style="justify-content: flex-start; align-items: center; gap: 8px; display: flex">
+                        <svg width="18" height="20" viewBox="0 0 18 20" fill="none" xmlns="http://www.w3.org/2000/svg" style="flex-shrink: 0;">
+                            <path d="M0 19.2857V6.42857L9 0L18 6.42857V19.2857H11.1429V11.5714H6.85714V19.2857H0Z" fill="white"/>
+                        </svg>
+                        <div style="text-box-trim: trim-both; text-box-edge: cap alphabetic; color: white; font-size: 16px; font-family: Montserrat; font-weight: 500; word-wrap: break-word">Dashboard</div>
                     </div>
-                    <span class="menu-item-text">Dashboard</span>
-                </div>
-            </a>
+                </a>
+            </div>
         </div>
         
-        <!-- Estadísticas -->
-        <div class="menu-item">
-            <a href="/Admin/Estadisticas" class="menu-item-button">
-                <div class="menu-item-content">
-                    <div class="menu-item-icon"></div>
-                    <span class="menu-item-text">Estadísticas</span>
+        <!-- Estadísticas (Desplegado) -->
+        <div data-estado="desplegado" style="width: 344px; position: relative; flex-direction: column; justify-content: flex-start; align-items: flex-start; display: flex;">
+            <div onclick="toggleDropdown('estadisticas')" style="width: 344px; height: 50px; padding-top: 14px; padding-bottom: 14px; padding-left: 16px; padding-right: 22px; background: rgba(255, 255, 255, 0.25); overflow: hidden; border-radius: 2px; justify-content: space-between; align-items: center; display: inline-flex; cursor: pointer; transition: background-color 0.2s ease;">
+                <div style="justify-content: flex-start; align-items: center; gap: 8px; display: flex">
+                    <svg width="22" height="22" viewBox="0 0 22 22" fill="none" xmlns="http://www.w3.org/2000/svg" style="flex-shrink: 0;">
+                        <path d="M0 22V14.6667H7.33333V22H0ZM0 12.4444V0H7.33333V12.4444H0ZM9.77778 22V9.77778H17.1111V22H9.77778ZM9.77778 7.55556V0H17.1111V7.55556H9.77778Z" fill="white"/>
+                    </svg>
+                    <div style="text-box-trim: trim-both; text-box-edge: cap alphabetic; color: white; font-size: 16px; font-family: Montserrat; font-weight: 500; word-wrap: break-word">Estadísticas</div>
                 </div>
-                <div class="menu-item-arrow"></div>
-            </a>
+                <svg id="estadisticas-arrow" width="12" height="6" viewBox="0 0 12 6" fill="none" xmlns="http://www.w3.org/2000/svg" style="transition: transform 0.3s ease; transform: rotate(180deg);">
+                    <path d="M0 0L6 6L12 0H0Z" fill="white"/>
+                </svg>
+            </div>
+            <div id="estadisticas-dropdown" style="width: 344px; flex-direction: column; justify-content: flex-start; align-items: flex-start; gap: 4px; display: flex; margin-top: 8px;">
+                <div class="dropdown-item" style="width: 344px; height: 40px; padding-top: 8px; padding-bottom: 8px; padding-left: 12px; padding-right: 8px; border-radius: 4px; justify-content: flex-start; align-items: center; display: inline-flex; transition: background-color 0.2s ease;">
+                    <a href="/Admin/VisitasMensuales" style="text-decoration: none; color: white; width: 100%;">
+                        <div style="text-box-trim: trim-both; text-box-edge: cap alphabetic; color: white; font-size: 16px; font-family: Montserrat; font-weight: 500; word-wrap: break-word">Visitas mensuales</div>
+                    </a>
+                </div>
+                <div class="dropdown-item" style="width: 344px; height: 40px; padding-top: 8px; padding-bottom: 8px; padding-left: 12px; padding-right: 8px; border-radius: 4px; justify-content: flex-start; align-items: center; display: inline-flex; transition: background-color 0.2s ease;">
+                    <a href="/Admin/IngresosDeLaPlataforma" style="text-decoration: none; color: white; width: 100%;">
+                        <div style="text-box-trim: trim-both; text-box-edge: cap alphabetic; color: white; font-size: 16px; font-family: Montserrat; font-weight: 500; word-wrap: break-word">Ingresos de la plataforma</div>
+                    </a>
+                </div>
+            </div>
         </div>
         
         <!-- Gestión de anuncios -->
-        <div class="menu-item">
-            <a href="/Admin/GestionAnuncios" class="menu-item-button">
-                <div class="menu-item-content">
-                    <div class="menu-item-icon"></div>
-                    <span class="menu-item-text">Gestión de anuncios</span>
-                </div>
-                <div class="menu-item-arrow"></div>
-            </a>
+        <div class="sidebar-item" data-estado="Default" style="width: 344px; height: 56px; position: relative;">
+            <div style="width: 344px; height: 50px; padding-top: 14px; padding-bottom: 14px; padding-left: 16px; padding-right: 22px; left: 0px; top: 3px; position: absolute; overflow: hidden; border-radius: 2px; justify-content: space-between; align-items: center; display: inline-flex; transition: background-color 0.2s ease;">
+                <a href="/Admin/GestionAnuncios" style="text-decoration: none; color: white; display: flex; align-items: center; gap: 8px; width: 100%;">
+                    <div style="justify-content: flex-start; align-items: center; gap: 8px; display: flex">
+                        <svg width="22" height="22" viewBox="0 0 22 22" fill="none" xmlns="http://www.w3.org/2000/svg" style="flex-shrink: 0;">
+                            <path d="M2 22C1.45 22 0.979167 21.8042 0.5875 21.4125C0.195833 21.0208 0 20.55 0 20V2C0 1.45 0.195833 0.979167 0.5875 0.5875C0.979167 0.195833 1.45 0 2 0H13L11 2H2V20H20V11L22 9V20C22 20.55 21.8042 21.0208 21.4125 21.4125C21.0208 21.8042 20.55 22 20 22H2ZM14.175 5.825L15.575 7.225L8.4 14.4V15.8H9.8L16.975 8.625L18.375 10.025L10.6 17.8H6.4V13.6L14.175 5.825ZM18.375 10.025L14.175 5.825L16.875 3.125C17.2583 2.74167 17.725 2.55 18.275 2.55C18.825 2.55 19.2917 2.74167 19.675 3.125L20.875 4.325C21.2583 4.70833 21.45 5.16667 21.45 5.7C21.45 6.23333 21.2583 6.69167 20.875 7.075L18.375 10.025Z" fill="white"/>
+                        </svg>
+                        <div style="text-box-trim: trim-both; text-box-edge: cap alphabetic; color: white; font-size: 16px; font-family: Montserrat; font-weight: 500; word-wrap: break-word">Gestión de anuncios</div>
+                    </div>
+                </a>
+                <svg width="12" height="6" viewBox="0 0 12 6" fill="none" xmlns="http://www.w3.org/2000/svg" style="flex-shrink: 0;">
+                    <path d="M0 0L6 6L12 0H0Z" fill="white"/>
+                </svg>
+            </div>
         </div>
         
         <!-- Publicidad -->
-        <div class="menu-item">
-            <a href="/Admin/Publicidad" class="menu-item-button">
-                <div class="menu-item-content">
-                    <div class="menu-item-icon"></div>
-                    <span class="menu-item-text">Publicidad</span>
-                </div>
-            </a>
+        <div class="sidebar-item" data-estado="Default" style="width: 344px; height: 56px; position: relative;">
+            <div style="width: 344px; height: 50px; padding-top: 14px; padding-bottom: 14px; padding-left: 16px; padding-right: 22px; left: 0px; top: 3px; position: absolute; overflow: hidden; border-radius: 2px; justify-content: flex-start; align-items: center; display: inline-flex; transition: background-color 0.2s ease;">
+                <a href="/Admin/Publicidad" style="text-decoration: none; color: white; display: flex; align-items: center; gap: 8px; width: 100%;">
+                    <div style="justify-content: flex-start; align-items: center; gap: 8px; display: flex">
+                        <svg width="22" height="17" viewBox="0 0 22 17" fill="none" xmlns="http://www.w3.org/2000/svg" style="flex-shrink: 0;">
+                            <path d="M0 16.5V0.5H7V16.5H0ZM9 16.5V0.5H22V16.5H9Z" fill="white"/>
+                        </svg>
+                        <div style="text-box-trim: trim-both; text-box-edge: cap alphabetic; color: white; font-size: 16px; font-family: Montserrat; font-weight: 500; word-wrap: break-word">Publicidad</div>
+                    </div>
+                </a>
+            </div>
         </div>
         
         <!-- Solicitudes de fotografía -->
-        <div class="menu-item">
-            <a href="/Admin/SolicitudesFotografia" class="menu-item-button">
-                <div class="menu-item-content">
-                    <div class="menu-item-icon"></div>
-                    <span class="menu-item-text">Solicitudes de fotografía</span>
-                </div>
-            </a>
+        <div class="sidebar-item" data-estado="Default" style="width: 344px; height: 56px; position: relative;">
+            <div style="width: 344px; height: 50px; padding-top: 14px; padding-bottom: 14px; padding-left: 16px; padding-right: 22px; left: 0px; top: 3px; position: absolute; overflow: hidden; border-radius: 2px; justify-content: flex-start; align-items: center; display: inline-flex; transition: background-color 0.2s ease;">
+                <a href="/Admin/SolicitudesFotografia" style="text-decoration: none; color: white; display: flex; align-items: center; gap: 8px; width: 100%;">
+                    <div style="justify-content: flex-start; align-items: center; gap: 8px; display: flex">
+                        <svg width="22" height="17" viewBox="0 0 22 17" fill="none" xmlns="http://www.w3.org/2000/svg" style="flex-shrink: 0;">
+                            <path d="M2 16.794C1.45 16.794 0.979167 16.5982 0.5875 16.2065C0.195833 15.8149 0 15.344 0 14.794V2.794C0 2.244 0.195833 1.77317 0.5875 1.3815C0.979167 0.989834 1.45 0.794006 2 0.794006H6.15L8 2.794H20C20.55 2.794 21.0208 2.98984 21.4125 3.3815C21.8042 3.77317 22 4.244 22 4.794V14.794C22 15.344 21.8042 15.8149 21.4125 16.2065C21.0208 16.5982 20.55 16.794 20 16.794H2ZM11 14.794C12.3833 14.794 13.5625 14.3232 14.5375 13.3815C15.5125 12.4399 16 11.2773 16 9.89401C16 8.51067 15.5125 7.34817 14.5375 6.4065C13.5625 5.46484 12.3833 4.99401 11 4.99401C9.61667 4.99401 8.4375 5.46484 7.4625 6.4065C6.4875 7.34817 6 8.51067 6 9.89401C6 11.2773 6.4875 12.4399 7.4625 13.3815C8.4375 14.3232 9.61667 14.794 11 14.794Z" fill="white"/>
+                        </svg>
+                        <div style="text-box-trim: trim-both; text-box-edge: cap alphabetic; color: white; font-size: 16px; font-family: Montserrat; font-weight: 500; word-wrap: break-word">Solicitudes de fotografía</div>
+                    </div>
+                </a>
+            </div>
         </div>
         
         <!-- Reportes del sistema -->
-        <div class="menu-item">
-            <a href="/Admin/Reportes" class="menu-item-button">
-                <div class="menu-item-content">
-                    <div class="menu-item-icon"></div>
-                    <span class="menu-item-text">Reportes del sistema</span>
-                </div>
-                <div class="menu-item-arrow"></div>
-            </a>
+        <div class="sidebar-item" data-estado="Default" style="width: 344px; height: 56px; position: relative;">
+            <div style="width: 344px; height: 50px; padding-top: 14px; padding-bottom: 14px; padding-left: 16px; padding-right: 22px; left: 0px; top: 3px; position: absolute; overflow: hidden; border-radius: 2px; justify-content: space-between; align-items: center; display: inline-flex; transition: background-color 0.2s ease;">
+                <a href="/Admin/Reportes" style="text-decoration: none; color: white; display: flex; align-items: center; gap: 8px; width: 100%;">
+                    <div style="justify-content: flex-start; align-items: center; gap: 8px; display: flex">
+                        <svg width="22" height="22" viewBox="0 0 22 22" fill="none" xmlns="http://www.w3.org/2000/svg" style="flex-shrink: 0;">
+                            <path d="M2 22C1.45 22 0.979167 21.8042 0.5875 21.4125C0.195833 21.0208 0 20.55 0 20V2C0 1.45 0.195833 0.979167 0.5875 0.5875C0.979167 0.195833 1.45 0 2 0H20C20.55 0 21.0208 0.195833 21.4125 0.5875C21.8042 0.979167 22 1.45 22 2V20C22 20.55 21.8042 21.0208 21.4125 21.4125C21.0208 21.8042 20.55 22 20 22H2ZM2 20H20V2H2V20ZM4 18H11V16H4V18ZM13 18H18V13H13V18ZM4 14H11V12H4V14ZM4 10H11V8H4V10ZM13 11H18V4H13V11Z" fill="white"/>
+                        </svg>
+                        <div style="text-box-trim: trim-both; text-box-edge: cap alphabetic; color: white; font-size: 16px; font-family: Montserrat; font-weight: 500; word-wrap: break-word">Reportes del sistema</div>
+                    </div>
+                </a>
+                <svg width="12" height="6" viewBox="0 0 12 6" fill="none" xmlns="http://www.w3.org/2000/svg" style="flex-shrink: 0;">
+                    <path d="M0 0L6 6L12 0H0Z" fill="white"/>
+                </svg>
+            </div>
         </div>
         
         <!-- Centro de soporte -->
-        <div class="menu-item">
-            <a href="/Admin/CentroSoporte" class="menu-item-button">
-                <div class="menu-item-content">
-                    <div class="menu-item-icon"></div>
-                    <span class="menu-item-text">Centro de soporte</span>
-                </div>
-                <div class="menu-item-arrow"></div>
-            </a>
+        <div class="sidebar-item" data-estado="Default" style="width: 344px; height: 56px; position: relative;">
+            <div style="width: 344px; height: 50px; padding-top: 14px; padding-bottom: 14px; padding-left: 16px; padding-right: 22px; left: 0px; top: 3px; position: absolute; overflow: hidden; border-radius: 2px; justify-content: space-between; align-items: center; display: inline-flex; transition: background-color 0.2s ease;">
+                <a href="/Admin/CentroDeSoporte" style="text-decoration: none; color: white; display: flex; align-items: center; gap: 8px; width: 100%;">
+                    <div style="justify-content: flex-start; align-items: center; gap: 8px; display: flex">
+                        <svg width="22" height="22" viewBox="0 0 22 22" fill="none" xmlns="http://www.w3.org/2000/svg" style="flex-shrink: 0;">
+                            <path d="M11 22C9.61667 22 8.31667 21.7375 7.1 21.2125C5.88333 20.6875 4.825 19.975 3.925 19.075C3.025 18.175 2.3125 17.1167 1.7875 15.9C1.2625 14.6833 1 13.3833 1 12C1 10.6167 1.2625 9.31667 1.7875 8.1C2.3125 6.88333 3.025 5.825 3.925 4.925C4.825 4.025 5.88333 3.3125 7.1 2.7875C8.31667 2.2625 9.61667 2 11 2C12.05 2 13.0542 2.15417 14.0125 2.4625C14.9708 2.77083 15.8667 3.21667 16.7 3.8L15.3 5.2C14.65 4.75 13.9458 4.39583 13.1875 4.1375C12.4292 3.87917 11.6333 3.75 10.8 3.75C8.56667 3.75 6.66667 4.52083 5.1 6.0625C3.53333 7.60417 2.75 9.5 2.75 11.75C2.75 14 3.52917 15.9042 5.0875 17.4625C6.64583 19.0208 8.55 19.8 10.8 19.8C13.05 19.8 14.9542 19.0208 16.5125 17.4625C18.0708 15.9042 18.85 14 18.85 11.75V11.2H14.7V9.3H20.6V11.75C20.6 13.1333 20.3375 14.4333 19.8125 15.65C19.2875 16.8667 18.575 17.925 17.675 18.825C16.775 19.725 15.7167 20.4375 14.5 20.9625C13.2833 21.4875 11.9833 21.75 10.6 21.75L11 22Z" fill="white"/>
+                        </svg>
+                        <div style="text-box-trim: trim-both; text-box-edge: cap alphabetic; color: white; font-size: 16px; font-family: Montserrat; font-weight: 500; word-wrap: break-word">Centro de soporte</div>
+                    </div>
+                </a>
+                <svg width="12" height="6" viewBox="0 0 12 6" fill="none" xmlns="http://www.w3.org/2000/svg" style="flex-shrink: 0;">
+                    <path d="M0 0L6 6L12 0H0Z" fill="white"/>
+                </svg>
+            </div>
         </div>
         
         <!-- Control de la plataforma -->
-        <div class="menu-item">
-            <a href="/Admin/ControlPlataforma" class="menu-item-button">
-                <div class="menu-item-content">
-                    <div class="menu-item-icon"></div>
-                    <span class="menu-item-text">Control de la plataforma</span>
-                </div>
-                <div class="menu-item-arrow"></div>
-            </a>
+        <div class="sidebar-item" data-estado="Default" style="width: 344px; height: 56px; position: relative;">
+            <div style="width: 344px; height: 50px; padding-top: 14px; padding-bottom: 14px; padding-left: 16px; padding-right: 22px; left: 0px; top: 3px; position: absolute; overflow: hidden; border-radius: 2px; justify-content: space-between; align-items: center; display: inline-flex; transition: background-color 0.2s ease;">
+                <a href="/Admin/ControlPlataforma" style="text-decoration: none; color: white; display: flex; align-items: center; gap: 8px; width: 100%;">
+                    <div style="justify-content: flex-start; align-items: center; gap: 8px; display: flex">
+                        <svg width="22" height="22" viewBox="0 0 22 22" fill="none" xmlns="http://www.w3.org/2000/svg" style="flex-shrink: 0;">
+                            <path d="M9.02632 21.3158L8.5 19.6316C8.18421 19.5263 7.88421 19.3947 7.6 19.2368C7.31579 19.0789 7.04211 18.9 6.77895 18.7L5.21053 19.4211L3.23684 16.0526L4.57895 15C4.55789 14.8421 4.54737 14.6895 4.54737 14.5421V13.9737C4.54737 13.8263 4.55789 13.6737 4.57895 13.5158L3.23684 12.4632L5.21053 9.09474L6.77895 9.81579C7.04211 9.61579 7.32105 9.43684 7.61579 9.27895C7.91053 9.12105 8.20526 8.98947 8.5 8.88421L9.02632 7.2H12.9737L13.5 8.88421C13.8158 8.98947 14.1158 9.12105 14.4 9.27895C14.6842 9.43684 14.9579 9.61579 15.2211 9.81579L16.7895 9.09474L18.7632 12.4632L17.4211 13.5158C17.4421 13.6737 17.4526 13.8263 17.4526 13.9737V14.5421C17.4526 14.6895 17.4316 14.8421 17.3895 15L18.7316 16.0526L16.7579 19.4211L15.2211 18.7C14.9579 18.9 14.6789 19.0789 14.3842 19.2368C14.0895 19.3947 13.7947 19.5263 13.5 19.6316L12.9737 21.3158H9.02632ZM11 16.5789C11.9579 16.5789 12.7789 16.2421 13.4632 15.5684C14.1474 14.8947 14.4895 14.0842 14.4895 13.1368C14.4895 12.1895 14.1474 11.3789 13.4632 10.7053C12.7789 10.0316 11.9579 9.69474 11 9.69474C10.0316 9.69474 9.20526 10.0316 8.52632 10.7053C7.84737 11.3789 7.50789 12.1895 7.50789 13.1368C7.50789 14.0842 7.84737 14.8947 8.52632 15.5684C9.20526 16.2421 10.0316 16.5789 11 16.5789ZM11 14.9368C10.5053 14.9368 10.0895 14.7632 9.75263 14.4158C9.41579 14.0684 9.24737 13.6421 9.24737 13.1368C9.24737 12.6316 9.41579 12.2053 9.75263 11.8579C10.0895 11.5105 10.5053 11.3368 11 11.3368C11.4947 11.3368 11.9105 11.5105 12.2474 11.8579C12.5842 12.2053 12.7526 12.6316 12.7526 13.1368C12.7526 13.6421 12.5842 14.0684 12.2474 14.4158C11.9105 14.7632 11.4947 14.9368 11 14.9368ZM10.2316 19.6737H11.7684L12.2 17.6632C12.7789 17.5158 13.3211 17.2895 13.8263 16.9842C14.3316 16.6789 14.7789 16.3053 15.1684 15.8632L17.1053 16.6684L17.8737 15.3158L16.1474 14.0211C16.2316 13.7579 16.2947 13.4895 16.3368 13.2158C16.3789 12.9421 16.4 12.6684 16.4 12.3947C16.4 12.1211 16.3789 11.8474 16.3368 11.5737C16.2947 11.3 16.2316 11.0316 16.1474 10.7684L17.8737 9.47368L17.1053 8.12105L15.1684 8.92632C14.7789 8.48421 14.3316 8.11053 13.8263 7.80526C13.3211 7.5 12.7789 7.27368 12.2 7.12632L11.7684 5.11579H10.2316L9.8 7.12632C9.22105 7.27368 8.67895 7.5 8.17368 7.80526C7.66842 8.11053 7.22105 8.48421 6.83158 8.92632L4.89474 8.12105L4.12632 9.47368L5.85263 10.7684C5.76842 11.0316 5.70526 11.3 5.66316 11.5737C5.62105 11.8474 5.6 12.1211 5.6 12.3947C5.6 12.6684 5.62105 12.9421 5.66316 13.2158C5.70526 13.4895 5.76842 13.7579 5.85263 14.0211L4.12632 15.3158L4.89474 16.6684L6.83158 15.8632C7.22105 16.3053 7.66842 16.6789 8.17368 16.9842C8.67895 17.2895 9.22105 17.5158 9.8 17.6632L10.2316 19.6737ZM11 0L14.5579 3.57895H7.44211L11 0ZM0 11L3.57895 7.44211V14.5579L0 11ZM22 11L18.4211 14.5579V7.44211L22 11Z" fill="white"/>
+                        </svg>
+                        <div style="text-box-trim: trim-both; text-box-edge: cap alphabetic; color: white; font-size: 16px; font-family: Montserrat; font-weight: 500; word-wrap: break-word">Control de la plataforma</div>
+                    </div>
+                </a>
+                <svg width="12" height="6" viewBox="0 0 12 6" fill="none" xmlns="http://www.w3.org/2000/svg" style="flex-shrink: 0;">
+                    <path d="M0 0L6 6L12 0H0Z" fill="white"/>
+                </svg>
+            </div>
         </div>
     </div>
     
@@ -411,10 +398,12 @@
                 <div class="stat-number">159.4K</div>
                 <div class="stat-label">Visitas mensuales</div>
             </div>
+            <div class="stat-divider"></div>
             <div class="stat-item">
                 <div class="stat-number">80%</div>
                 <div class="stat-label stat-label-short">Visitas orgánicas</div>
             </div>
+            <div class="stat-divider"></div>
             <div class="stat-item">
                 <div class="stat-number">20%</div>
                 <div class="stat-label stat-label-short">Visitas pagadas</div>
@@ -428,13 +417,15 @@
         
         <div class="stats-container">
             <div class="stat-item">
-                <div class="stat-number">@Model.TotalAutos</div>
+                <div class="stat-number">235</div>
                 <div class="stat-label">Nuevos anuncios</div>
             </div>
+            <div class="stat-divider"></div>
             <div class="stat-item">
                 <div class="stat-number">221</div>
                 <div class="stat-label stat-label-short">Posteo instantáneo</div>
             </div>
+            <div class="stat-divider"></div>
             <div class="stat-item">
                 <div class="stat-number">14</div>
                 <div class="stat-label stat-label-short">Pendiente aprob.</div>
@@ -451,10 +442,12 @@
                 <div class="stat-number">15</div>
                 <div class="stat-label">Agendadas</div>
             </div>
+            <div class="stat-divider"></div>
             <div class="stat-item">
                 <div class="stat-number">8</div>
                 <div class="stat-label stat-label-short">Pendientes</div>
             </div>
+            <div class="stat-divider"></div>
             <div class="stat-item">
                 <div class="stat-number">7</div>
                 <div class="stat-label stat-label-short">Finalizadas</div>
@@ -468,13 +461,15 @@
         
         <div class="stats-container">
             <div class="stat-item">
-                <div class="stat-number">@Model.TotalMensajes</div>
+                <div class="stat-number">15</div>
                 <div class="stat-label">Nuevos</div>
             </div>
+            <div class="stat-divider"></div>
             <div class="stat-item">
                 <div class="stat-number">13</div>
                 <div class="stat-label stat-label-short">Pendientes</div>
             </div>
+            <div class="stat-divider"></div>
             <div class="stat-item">
                 <div class="stat-number">2</div>
                 <div class="stat-label stat-label-short">Respondidos</div>
@@ -487,9 +482,25 @@
         <div class="footer-logo">
             <img style="height: 45.86px" src="~/images/logos/autoclick-logo-hd.png" alt="AutoClick.cr" />
             <div class="footer-social">
-                <div class="social-icon"></div>
-                <div class="social-icon"></div>
-                <div class="social-icon"></div>
+                <!-- Facebook Icon -->
+                <a href="#" style="text-decoration: none;">
+                    <svg width="32" height="32" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M32 16C32 7.1625 24.8375 0 16 0C7.1625 0 0 7.1625 0 16C0 23.9875 5.85 30.6062 13.5 31.8062V20.625H9.4375V16H13.5V12.475C13.5 8.46563 15.8875 6.25 19.5438 6.25C21.2938 6.25 23.125 6.5625 23.125 6.5625V10.5H21.1063C19.1188 10.5 18.5 11.7344 18.5 13V16H22.9375L22.2281 20.625H18.5V31.8062C26.15 30.6062 32 23.9875 32 16Z" fill="white"/>
+                    </svg>
+                </a>
+                <!-- Instagram Icon -->
+                <a href="#" style="text-decoration: none;">
+                    <svg width="32" height="32" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M16 10.6667C13.0545 10.6667 10.6667 13.0545 10.6667 16C10.6667 18.9455 13.0545 21.3333 16 21.3333C18.9455 21.3333 21.3333 18.9455 21.3333 16C21.3333 13.0545 18.9455 10.6667 16 10.6667ZM31.9636 16C31.9636 13.8424 31.9818 11.7030 31.8606 9.54909C31.7394 7.03636 31.1697 4.79273 29.3091 2.93212C27.4455 1.06848 25.2048 0.501818 22.6921 0.380606C20.5352 0.259394 18.3958 0.277576 16.2424 0.277576C14.0859 0.277576 11.9467 0.259394 9.79273 0.380606C7.28 0.501818 5.03636 1.07152 3.17576 2.93212C1.31212 4.79576 0.745454 7.03636 0.624242 9.54909C0.503031 11.7061 0.521212 13.8455 0.521212 16C0.521212 18.1545 0.503031 20.297 0.624242 22.4509C0.745454 24.9636 1.31515 27.2073 3.17576 29.0679C5.03939 30.9315 7.28 31.4982 9.79273 31.6194C11.9497 31.7406 14.0891 31.7224 16.2424 31.7224C18.3988 31.7224 20.5382 31.7406 22.6921 31.6194C25.2048 31.4982 27.4485 30.9285 29.3091 29.0679C31.1727 27.2042 31.7394 24.9636 31.8606 22.4509C31.9848 20.297 31.9636 18.1576 31.9636 16ZM16 24.2061C11.4667 24.2061 7.79394 20.5333 7.79394 16C7.79394 11.4667 11.4667 7.79394 16 7.79394C20.5333 7.79394 24.2061 11.4667 24.2061 16C24.2061 20.5333 20.5333 24.2061 16 24.2061ZM24.5394 9.52727C23.497 9.52727 22.6545 8.68485 22.6545 7.64242C22.6545 6.6 23.497 5.75758 24.5394 5.75758C25.5818 5.75758 26.4242 6.6 26.4242 7.64242C26.4245 7.89523 26.3748 8.14563 26.2779 8.37925C26.181 8.61287 26.0387 8.82524 25.8588 9.00515C25.6789 9.18506 25.4665 9.32734 25.2329 9.42425C24.9993 9.52116 24.7489 9.57084 24.4961 9.57061L24.5394 9.52727Z" fill="white"/>
+                    </svg>
+                </a>
+                <!-- WhatsApp Icon -->
+                <a href="#" style="text-decoration: none;">
+                    <svg width="32" height="32" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M27.281 4.65C24.318 1.686 20.371 0.0410004 16.181 0.0380004C7.465 0.0380004 0.375 7.126 0.372 15.845C0.371 18.584 1.103 21.262 2.485 23.619L0.25 31.962L8.789 29.766C11.05 31.028 13.589 31.693 16.175 31.694H16.181C24.896 31.694 31.987 24.606 31.99 15.887C31.992 11.7 30.346 7.756 27.381 4.791L27.281 4.65ZM16.181 29.019H16.176C13.855 29.018 11.58 28.386 9.604 27.193L9.124 26.906L3.947 28.229L5.289 23.174L4.975 22.679C3.667 20.628 2.976 18.271 2.977 15.845C2.979 8.565 8.903 2.643 16.186 2.643C19.722 2.644 23.058 4.021 25.561 6.526C28.064 9.031 29.438 12.369 29.437 15.903C29.435 23.183 23.511 29.105 16.231 29.105L16.181 29.019Z" fill="white"/>
+                        <path d="M12.049 9.216C11.763 8.575 11.462 8.562 11.191 8.551C10.968 8.541 10.717 8.542 10.466 8.542C10.215 8.542 9.807 8.626 9.456 9.019C9.105 9.412 8.124 10.336 8.124 12.212C8.124 14.088 9.484 15.907 9.666 16.158C9.848 16.409 12.275 20.311 16.044 21.912C19.214 23.263 19.814 23.039 20.45 22.981C21.086 22.923 22.629 22.055 22.952 21.159C23.275 20.263 23.275 19.507 23.191 19.339C23.107 19.171 22.856 19.087 22.477 18.919C22.098 18.751 20.226 17.827 19.875 17.715C19.524 17.603 19.273 17.547 19.022 17.912C18.771 18.277 18.028 19.087 17.805 19.339C17.582 19.591 17.359 19.619 16.98 19.451C16.601 19.283 15.361 18.883 13.886 17.576C12.728 16.548 11.945 15.279 11.722 14.914C11.499 14.549 11.695 14.353 11.863 14.185C12.013 14.035 12.242 13.788 12.411 13.566C12.58 13.344 12.635 13.178 12.747 12.927C12.859 12.676 12.803 12.454 12.719 12.286C12.635 12.118 11.863 10.235 11.541 9.522L12.049 9.216Z" fill="white"/>
+                    </svg>
+                </a>
             </div>
         </div>
         
@@ -531,3 +542,61 @@
         </div>
     </div>
 </div>
+
+<script>
+function toggleDropdown(dropdownId) {
+    const dropdown = document.getElementById(dropdownId + '-dropdown');
+    const arrow = document.getElementById(dropdownId + '-arrow');
+    
+    if (dropdown.style.display === 'none' || dropdown.style.display === '') {
+        dropdown.style.display = 'flex';
+        arrow.style.transform = 'rotate(180deg)';
+    } else {
+        dropdown.style.display = 'none';
+        arrow.style.transform = 'rotate(0deg)';
+    }
+}
+
+// Agregar efectos hover mejorados
+document.addEventListener('DOMContentLoaded', function() {
+    // Hover effects para los dropdown items
+    const dropdownItems = document.querySelectorAll('.dropdown-item');
+    dropdownItems.forEach(item => {
+        item.addEventListener('mouseenter', function() {
+            this.style.background = 'rgba(255, 255, 255, 0.15)';
+        });
+        item.addEventListener('mouseleave', function() {
+            this.style.background = 'transparent';
+        });
+    });
+    
+    // Hover effects para los menu items principales (excluir Dashboard y Estadísticas que tienen estados especiales)
+    const sidebarItems = document.querySelectorAll('.sidebar-item[data-estado="Default"]');
+    sidebarItems.forEach(item => {
+        const menuDiv = item.querySelector('div[style*="position: absolute"]');
+        if (menuDiv) {
+            menuDiv.addEventListener('mouseenter', function() {
+                this.style.background = 'rgba(255, 255, 255, 0.1)';
+            });
+            menuDiv.addEventListener('mouseleave', function() {
+                this.style.background = 'transparent';
+            });
+        }
+    });
+    
+    // Hover effect para Estadísticas (que no es el Dashboard activo)
+    const estadisticasDiv = document.querySelector('[onclick="toggleDropdown(\'estadisticas\')"]');
+    if (estadisticasDiv) {
+        estadisticasDiv.addEventListener('mouseenter', function() {
+            // Solo aplicar hover si no tiene el fondo activo ya aplicado
+            if (!this.style.background.includes('0.25')) {
+                this.style.background = 'rgba(255, 255, 255, 0.15)';
+            }
+        });
+        estadisticasDiv.addEventListener('mouseleave', function() {
+            // Mantener el fondo activo si corresponde
+            this.style.background = 'rgba(255, 255, 255, 0.25)';
+        });
+    }
+});
+</script>

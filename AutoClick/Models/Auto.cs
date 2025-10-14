@@ -246,8 +246,56 @@ public class Auto
     {
         if (string.IsNullOrEmpty(input))
             return input;
-            
+
         var textInfo = System.Globalization.CultureInfo.CurrentCulture.TextInfo;
         return textInfo.ToTitleCase(input.ToLower());
+    }
+
+    // Helper method to get the tag video file based on BanderinAdquirido
+    [NotMapped]
+    public string? BanderinVideoUrl
+    {
+        get
+        {
+            if (BanderinAdquirido <= 0) return null;
+
+            var tagFiles = new Dictionary<int, string>
+            {
+                { 1, "Versión Americana_1.mp4" },
+                { 2, "ÚNICO DUEÑO_1.mp4" },
+                { 3, "FULL EXTRAS-.mp4" },
+                { 4, "MANTENIMIENTO DE AGENCIA-.mp4" },
+                { 5, "PERFECTO ESTADO_1.mp4" },
+                { 6, "AL DÍA_1.mp4" },
+                { 7, "BAJO KILOMETRAJE_1.mp4" },
+                { 8, "NEGOCIABLE_1.mp4" },
+                { 9, "FINANCIAMIENTO DISPONIBLE_1.mp4" },
+                { 10, "ESCUCHO OFERTAS_1.mp4" },
+                { 11, "IMPECABLE_1.mp4" },
+                { 12, "CERO DETALLES_1.mp4" },
+                { 13, "POCO USO_1.mp4" },
+                { 14, "REGISTRO LIMPIO_1.mp4" },
+                { 15, "TRASPASO INCLUÍDO_1.mp4" },
+                { 16, "RECIBO_1.mp4" },
+                { 17, "VENDO O CAMBIO_1.mp4" },
+                { 18, "URGE VENDER_1.mp4" },
+                { 19, "PRECIO ESPECIAL_1.mp4" },
+                { 20, "OPORTUNIDAD UNICA_1.mp4" },
+                { 21, "LLAME AHORA_1.mp4" },
+                { 22, "ÚNICO EN EL PAÍS_1.mp4" },
+                { 23, "EDICIÓN LIMITADA_1.mp4" },
+                { 24, "PARA INSCRIBIR_1.mp4" },
+                { 25, "BAJO CONSUMO_1.mp4" },
+                { 26, "GARANTÍA EXTENDIDA_1.mp4" },
+                { 27, "FULL PPF_1.mp4" },
+                { 28, "TRATAMIENTO CERÁMICO_1.mp4" },
+                { 29, "TAYLOR MADE_1.mp4" },
+                { 30, "CEDO DEUDA.mp4" }
+            };
+
+            return tagFiles.ContainsKey(BanderinAdquirido)
+                ? $"/images/Banderines/{tagFiles[BanderinAdquirido]}"
+                : null;
+        }
     }
 }

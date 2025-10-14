@@ -1,0 +1,11 @@
+{
+  "mcpServers": {
+    "figma": {
+      "type": "http",
+      "url": "http://127.0.0.1:3845/mcp",
+      "env": {
+        "FIGMA_ACCESS_TOKEN": "figd_yiOunXfHITnPbDMDVw3ceY01nMJj4MI77CgfPM8X"
+      }
+    }
+  }
+}
