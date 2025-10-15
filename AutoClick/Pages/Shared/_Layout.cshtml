@@ -28,11 +28,11 @@
     <!-- Universal Header (exclude from auth pages) -->
     @{
         string currentPage = ViewContext.RouteData.Values["page"]?.ToString() ?? "";
-        bool isAuthPage = currentPage.Contains("/Auth") || 
-                         currentPage.Contains("/RegistroIndividuo") || 
+        bool isAuthPage = currentPage.Contains("/Auth") ||
+                         currentPage.Contains("/RegistroIndividuo") ||
                          currentPage.Contains("/RegistroAgencia");
     }
-    
+
     @if (!isAuthPage)
     {
         @await Html.PartialAsync("_Header")

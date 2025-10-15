@@ -321,48 +321,7 @@
 </div>
 
 <!-- Footer -->
-<footer class="main-footer">
-    <div class="footer-content">
-        <div class="footer-brand">
-            <img src="https://placehold.co/289x46" alt="AutoClick.cr Logo" class="footer-logo" />
-            <div class="social-links">
-                <div class="social-icon"></div>
-                <div class="social-icon"></div>
-                <div class="social-icon"></div>
-            </div>
-        </div>
-        
-        <div class="footer-links">
-            <h3 class="footer-section-title font-jakarta">AutoClick.cr</h3>
-            <nav class="footer-nav">
-                <a href="/contactanos">Contáctenos</a>
-                <a asp-page="/SobreNosotros">Sobre Nosotros</a>
-                <a href="/reportar-problema">Reportar un problema</a>
-            </nav>
-        </div>
-        
-        <div class="footer-links" style="padding-top: 56px;">
-            <nav class="footer-nav">
-                <a href="/TerminosCondiciones">Términos y condiciones</a>
-                <a href="/PoliticaPrivacidad">Política de privacidad</a>
-            </nav>
-        </div>
-        
-        <div class="newsletter">
-            <h3 class="footer-section-title font-jakarta">Suscribete</h3>
-            <form>
-                <input type="email" class="newsletter-input" placeholder="Introducir correo" />
-                <p style="color: white; font-size: 14px; font-weight: 500; margin: 16px 0;">Suscríbase para recibir las últimas noticias y promociones</p>
-                <button type="submit" class="newsletter-btn">Suscribirse</button>
-            </form>
-        </div>
-    </div>
-    
-    <div class="footer-copyright">
-        <img src="https://placehold.co/20x20" alt="Copyright" style="width: 20px; height: 20px; margin-right: 10px;" />
-        2025. Todos los derechos reservados - AutoClick.cr
-    </div>
-</footer>
+<partial name="_Footer" />
 
 <script>
 function changeExplorarSorting(sortBy) {

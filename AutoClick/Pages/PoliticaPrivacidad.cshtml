@@ -384,51 +384,7 @@
     </div>
 
     <!-- Footer -->
-    <footer class="main-footer">
-        <div class="footer-content">
-            <!-- Logo and Social Links -->
-            <div class="footer-brand">
-                <img src="~/images/autoclick-logo-footer.png" alt="AutoClick.cr" class="footer-logo" />
-                <div class="footer-social-links">
-                    <a href="#" class="social-link" aria-label="Facebook"><i class="fab fa-facebook-f"></i></a>
-                    <a href="#" class="social-link" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
-                    <a href="#" class="social-link" aria-label="WhatsApp"><i class="fab fa-whatsapp"></i></a>
-                </div>
-            </div>
-
-            <!-- Navigation Links -->
-            <div class="footer-links">
-                <h3 class="footer-section-title">AutoClick.cr</h3>
-                <nav class="footer-nav">
-                    <a href="/Contactanos">Contáctenos</a>
-                    <a href="/SobreNosotros">Sobre Nosotros</a>
-                    <a href="/ReportarProblema">Reportar un problema</a>
-                </nav>
-            </div>
-
-            <!-- Legal Links -->
-            <div class="footer-links footer-legal">
-                <nav class="footer-nav">
-                    <a href="/TerminosCondiciones">Términos y condiciones</a>
-                    <a href="/PoliticaPrivacidad" class="active">Política de privacidad</a>
-                </nav>
-            </div>
-
-            <!-- Newsletter -->
-            <div class="footer-newsletter">
-                <h3 class="footer-section-title">Suscribete</h3>
-                <p class="newsletter-description">Suscríbase para recibir las últimas noticias y promociones</p>
-                <form class="newsletter-form">
-                    <input type="email" placeholder="Introducir correo" class="newsletter-input" required>
-                    <button type="submit" class="newsletter-btn">Suscribirse</button>
-                </form>
-            </div>
-        </div>
-        
-        <div class="footer-copyright">
-            <p>© 2025. Todos los derechos reservados - AutoClick.cr</p>
-        </div>
-    </footer>
+    <partial name="_Footer" />
 
     <script src="~/js/politica-privacidad.js" asp-append-version="true"></script>
 </body>

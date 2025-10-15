@@ -85,50 +85,7 @@
 </div>
 
 <!-- Footer -->
-<footer class="main-footer">
-    <div class="footer-content">
-        <div class="footer-brand">
-            <img src="https://placehold.co/289x46" alt="AutoClick.cr Logo" class="footer-logo" />
-            <div class="social-links">
-                <div class="social-icon facebook-icon"></div>
-                <div class="social-icon instagram-icon"></div>
-                <div class="social-icon whatsapp-icon"></div>
-            </div>
-        </div>
-        
-        <div class="footer-links">
-            <h3 class="footer-section-title">AutoClick.cr</h3>
-            <nav class="footer-nav">
-                <a asp-page="/Contactanos">Contáctenos</a>
-                <a asp-page="/SobreNosotros">Sobre Nosotros</a>
-                <a asp-page="/ReportarProblema">Reportar un problema</a>
-            </nav>
-        </div>
-        
-        <div class="footer-links footer-legal">
-            <nav class="footer-nav">
-                <a href="/TerminosCondiciones">Términos y condiciones</a>
-                <a href="/PoliticaPrivacidad">Política de privacidad</a>
-            </nav>
-        </div>
-        
-        <div class="newsletter">
-            <h3 class="footer-section-title">Suscribete</h3>
-            <form class="newsletter-form" method="post" asp-page-handler="Newsletter">
-                <div class="newsletter-input-container">
-                    <input type="email" name="email" class="newsletter-input" placeholder="Introducir correo" required />
-                </div>
-                <p class="newsletter-description">Suscríbase para recibir las últimas noticias y promociones</p>
-                <button type="submit" class="newsletter-btn">Suscribirse</button>
-            </form>
-        </div>
-    </div>
-    
-    <div class="footer-copyright">
-        <img src="https://placehold.co/20x20" alt="Copyright" class="copyright-icon" />
-        <span>2025. Todos los derechos reservados - AutoClick.cr</span>
-    </div>
-</footer>
+<partial name="_Footer" />
 
 @section Scripts {
     <script src="~/js/sobre-nosotros.js"></script>
