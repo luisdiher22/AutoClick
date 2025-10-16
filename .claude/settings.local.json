@@ -2,7 +2,9 @@
   "permissions": {
     "allow": [
       "Bash(claude mcp add:*)",
-      "Read(//c/Users/luisd/AppData/Roaming/Code/User/**)"
+      "Read(//c/Users/luisd/AppData/Roaming/Code/User/**)",
+      "Bash(powershell:*)",
+      "Bash(del CentroDeSoporte.cshtml)"
     ],
     "deny": [],
     "ask": []
