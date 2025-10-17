@@ -106,13 +106,20 @@
                     <div class="destacados-car-image-container">
                         <img src="@auto.ImagenPrincipal" alt="@auto.NombreCompleto" class="destacados-car-image" />
 
-                        @* Banderín Tag Video *@
+                        @* Banderín Tag - Soporte para Video (MP4) y GIF *@
                         @if (!string.IsNullOrEmpty(auto.BanderinVideoUrl))
                         {
                             <div style="position: absolute; top: 8px; right: 8px; width: 80px; height: 80px; pointer-events: none; z-index: 20;">
-                                <video autoplay loop muted playsinline preload="auto" style="width: 100%; height: 100%; object-fit: contain; filter: drop-shadow(2px 2px 4px rgba(0, 0, 0, 0.5));">
-                                    <source src="@auto.BanderinVideoUrl" type="video/mp4">
-                                </video>
+                                @if (auto.BanderinVideoUrl.EndsWith(".gif", StringComparison.OrdinalIgnoreCase))
+                                {
+                                    <img src="@auto.BanderinVideoUrl" style="width: 100%; height: 100%; object-fit: contain; filter: drop-shadow(2px 2px 4px rgba(0, 0, 0, 0.5));" alt="Banderín" />
+                                }
+                                else
+                                {
+                                    <video autoplay loop muted playsinline preload="auto" style="width: 100%; height: 100%; object-fit: contain; filter: drop-shadow(2px 2px 4px rgba(0, 0, 0, 0.5));">
+                                        <source src="@auto.BanderinVideoUrl" type="video/mp4">
+                                    </video>
+                                }
                             </div>
                         }
 

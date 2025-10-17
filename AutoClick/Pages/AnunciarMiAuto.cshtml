@@ -699,7 +699,8 @@
                                 new { id = "traspaso-incluido", name = "Traspaso Incluído", file = "TRASPASO INCLUÍDO_1.mp4", price = "₡5000" },
                                 new { id = "recibo", name = "Recibo", file = "RECIBO_1.mp4", price = "₡5000" },
                                 new { id = "vendo-o-cambio", name = "Vendo o Cambio", file = "VENDO O CAMBIO_1.mp4", price = "₡5000" },
-                                new { id = "urge-vender", name = "Urge Vender", file = "URGE VENDER_1.mp4", price = "₡5000" },
+                                new { id = "urge-vender", name = "Urge Vender (MP4)", file = "URGE VENDER_1.mp4", price = "₡5000" },
+                                new { id = "urge-vender-gif", name = "Urge Vender (GIF)", file = "URGE VENDER_GIF.gif", price = "₡5000" },
                                 new { id = "precio-especial", name = "Precio Especial", file = "PRECIO ESPECIAL_1.mp4", price = "₡5000" },
                                 new { id = "oportunidad-unica", name = "Oportunidad Única", file = "OPORTUNIDAD UNICA_1.mp4", price = "₡5000" },
                                 new { id = "llame-ahora", name = "Llame Ahora", file = "LLAME AHORA_1.mp4", price = "₡5000" },
@@ -721,17 +722,27 @@
                                 <label for="tag-@tag.id" class="tag-card">
                                     <span class="tag-price">@tag.price</span>
                                     <div class="tag-image">
-                                        <video class="tag-video"
-                                               autoplay
-                                               loop
-                                               muted
-                                               playsinline
-                                               preload="auto"
-                                               data-src="/images/Banderines/@tag.file"
-                                               style="width: 100%; height: 100%; object-fit: contain; background: rgba(255,255,255,0.02);">
-                                            <source data-src="/images/Banderines/@tag.file" type="video/mp4">
-                                            Su navegador no soporta este formato de video.
-                                        </video>
+                                        @if (tag.file.EndsWith(".gif", StringComparison.OrdinalIgnoreCase))
+                                        {
+                                            <img class="tag-video"
+                                                 src="/images/Banderines/@tag.file"
+                                                 style="width: 100%; height: 100%; object-fit: contain; background: rgba(255,255,255,0.02);"
+                                                 alt="@tag.name">
+                                        }
+                                        else
+                                        {
+                                            <video class="tag-video"
+                                                   autoplay
+                                                   loop
+                                                   muted
+                                                   playsinline
+                                                   preload="auto"
+                                                   data-src="/images/Banderines/@tag.file"
+                                                   style="width: 100%; height: 100%; object-fit: contain; background: rgba(255,255,255,0.02);">
+                                                <source data-src="/images/Banderines/@tag.file" type="video/mp4">
+                                                Su navegador no soporta este formato de video.
+                                            </video>
+                                        }
                                     </div>
                                     <span class="tag-name">@tag.name</span>
                                 </label>

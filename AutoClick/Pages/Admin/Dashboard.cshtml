@@ -286,20 +286,35 @@
             </div>
         </div>
         
-        <!-- Gestión de anuncios -->
-        <div class="sidebar-item" data-estado="Default" style="width: 344px; height: 56px; position: relative;">
-            <div style="width: 344px; height: 50px; padding-top: 14px; padding-bottom: 14px; padding-left: 16px; padding-right: 22px; left: 0px; top: 3px; position: absolute; overflow: hidden; border-radius: 2px; justify-content: space-between; align-items: center; display: inline-flex; transition: background-color 0.2s ease;">
-                <a href="/Admin/GestionAnuncios" style="text-decoration: none; color: white; display: flex; align-items: center; gap: 8px; width: 100%;">
-                    <div style="justify-content: flex-start; align-items: center; gap: 8px; display: flex">
-                        <svg width="22" height="22" viewBox="0 0 22 22" fill="none" xmlns="http://www.w3.org/2000/svg" style="flex-shrink: 0;">
-                            <path d="M2 22C1.45 22 0.979167 21.8042 0.5875 21.4125C0.195833 21.0208 0 20.55 0 20V2C0 1.45 0.195833 0.979167 0.5875 0.5875C0.979167 0.195833 1.45 0 2 0H13L11 2H2V20H20V11L22 9V20C22 20.55 21.8042 21.0208 21.4125 21.4125C21.0208 21.8042 20.55 22 20 22H2ZM14.175 5.825L15.575 7.225L8.4 14.4V15.8H9.8L16.975 8.625L18.375 10.025L10.6 17.8H6.4V13.6L14.175 5.825ZM18.375 10.025L14.175 5.825L16.875 3.125C17.2583 2.74167 17.725 2.55 18.275 2.55C18.825 2.55 19.2917 2.74167 19.675 3.125L20.875 4.325C21.2583 4.70833 21.45 5.16667 21.45 5.7C21.45 6.23333 21.2583 6.69167 20.875 7.075L18.375 10.025Z" fill="white"/>
-                        </svg>
-                        <div style="text-box-trim: trim-both; text-box-edge: cap alphabetic; color: white; font-size: 16px; font-family: Montserrat; font-weight: 500; word-wrap: break-word">Gestión de anuncios</div>
-                    </div>
-                </a>
-                <svg width="12" height="6" viewBox="0 0 12 6" fill="none" xmlns="http://www.w3.org/2000/svg" style="flex-shrink: 0;">
+        <!-- Gestión de anuncios (Dropdown) -->
+        <div data-estado="Default" style="width: 344px; position: relative; flex-direction: column; justify-content: flex-start; align-items: flex-start; display: flex;">
+            <div onclick="toggleDropdown('gestion-anuncios')" style="width: 344px; height: 50px; padding-top: 14px; padding-bottom: 14px; padding-left: 16px; padding-right: 22px; overflow: hidden; border-radius: 2px; justify-content: space-between; align-items: center; display: inline-flex; cursor: pointer; transition: background-color 0.2s ease;">
+                <div style="justify-content: flex-start; align-items: center; gap: 8px; display: flex">
+                    <svg width="22" height="22" viewBox="0 0 22 22" fill="none" xmlns="http://www.w3.org/2000/svg" style="flex-shrink: 0;">
+                        <path d="M2 22C1.45 22 0.979167 21.8042 0.5875 21.4125C0.195833 21.0208 0 20.55 0 20V2C0 1.45 0.195833 0.979167 0.5875 0.5875C0.979167 0.195833 1.45 0 2 0H13L11 2H2V20H20V11L22 9V20C22 20.55 21.8042 21.0208 21.4125 21.4125C21.0208 21.8042 20.55 22 20 22H2ZM14.175 5.825L15.575 7.225L8.4 14.4V15.8H9.8L16.975 8.625L18.375 10.025L10.6 17.8H6.4V13.6L14.175 5.825ZM18.375 10.025L14.175 5.825L16.875 3.125C17.2583 2.74167 17.725 2.55 18.275 2.55C18.825 2.55 19.2917 2.74167 19.675 3.125L20.875 4.325C21.2583 4.70833 21.45 5.16667 21.45 5.7C21.45 6.23333 21.2583 6.69167 20.875 7.075L18.375 10.025Z" fill="white"/>
+                    </svg>
+                    <div style="text-box-trim: trim-both; text-box-edge: cap alphabetic; color: white; font-size: 16px; font-family: Montserrat; font-weight: 500; word-wrap: break-word">Gestión de anuncios</div>
+                </div>
+                <svg id="gestion-anuncios-arrow" width="12" height="6" viewBox="0 0 12 6" fill="none" xmlns="http://www.w3.org/2000/svg" style="transition: transform 0.3s ease;">
                     <path d="M0 0L6 6L12 0H0Z" fill="white"/>
                 </svg>
+            </div>
+            <div id="gestion-anuncios-dropdown" style="width: 344px; flex-direction: column; justify-content: flex-start; align-items: flex-start; gap: 4px; display: none; margin-top: 8px;">
+                <div class="dropdown-item" style="width: 344px; height: 40px; padding-top: 8px; padding-bottom: 8px; padding-left: 12px; padding-right: 8px; border-radius: 4px; justify-content: flex-start; align-items: center; display: inline-flex; transition: background-color 0.2s ease;">
+                    <a href="/Admin/PendientesAprobacion" style="text-decoration: none; color: white; width: 100%;">
+                        <div style="text-box-trim: trim-both; text-box-edge: cap alphabetic; color: white; font-size: 16px; font-family: Montserrat; font-weight: 500; word-wrap: break-word">Pendientes de aprobación</div>
+                    </a>
+                </div>
+                <div class="dropdown-item" style="width: 344px; height: 40px; padding-top: 8px; padding-bottom: 8px; padding-left: 12px; padding-right: 8px; border-radius: 4px; justify-content: flex-start; align-items: center; display: inline-flex; transition: background-color 0.2s ease;">
+                    <a href="/Admin/HistorialRechazos" style="text-decoration: none; color: white; width: 100%;">
+                        <div style="text-box-trim: trim-both; text-box-edge: cap alphabetic; color: white; font-size: 16px; font-family: Montserrat; font-weight: 500; word-wrap: break-word">Historial de rechazos</div>
+                    </a>
+                </div>
+                <div class="dropdown-item" style="width: 344px; height: 40px; padding-top: 8px; padding-bottom: 8px; padding-left: 12px; padding-right: 8px; border-radius: 4px; justify-content: flex-start; align-items: center; display: inline-flex; transition: background-color 0.2s ease;">
+                    <a href="/Admin/PublicacionesPagadas" style="text-decoration: none; color: white; width: 100%;">
+                        <div style="text-box-trim: trim-both; text-box-edge: cap alphabetic; color: white; font-size: 16px; font-family: Montserrat; font-weight: 500; word-wrap: break-word">Publicaciones pagadas</div>
+                    </a>
+                </div>
             </div>
         </div>
         
@@ -596,6 +611,17 @@ document.addEventListener('DOMContentLoaded', function() {
         estadisticasDiv.addEventListener('mouseleave', function() {
             // Mantener el fondo activo si corresponde
             this.style.background = 'rgba(255, 255, 255, 0.25)';
+        });
+    }
+
+    // Hover effect para Gestión de anuncios dropdown
+    const gestionAnunciosDiv = document.querySelector('[onclick="toggleDropdown(\'gestion-anuncios\')"]');
+    if (gestionAnunciosDiv) {
+        gestionAnunciosDiv.addEventListener('mouseenter', function() {
+            this.style.background = 'rgba(255, 255, 255, 0.15)';
+        });
+        gestionAnunciosDiv.addEventListener('mouseleave', function() {
+            this.style.background = 'transparent';
         });
     }
 });
