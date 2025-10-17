@@ -1,0 +1,276 @@
+@page "/admin/banderines"
+@model AdminBanderinesModel
+@{
+    ViewData["Title"] = "Administrar Banderines";
+}
+
+<div class="container-fluid mt-4">
+    <div class="row">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-header bg-primary text-white">
+                    <h4 class="mb-0">
+                        <i class="fas fa-flag"></i> Administrar Banderines
+                    </h4>
+                </div>
+                <div class="card-body">
+                    
+                    <!-- Información de estado -->
+                    <div class="alert alert-info">
+                        <h6><i class="fas fa-info-circle"></i> Estado actual:</h6>
+                        <ul class="mb-0">
+                            <li><strong>Archivos locales:</strong> @Model.LocalFilesCount</li>
+                            <li><strong>Archivos en Azure:</strong> @Model.AzureFilesCount</li>
+                            <li><strong>Modo actual:</strong> @(Model.IsUsingAzure ? "Azure Blob Storage" : "Almacenamiento Local")</li>
+                        </ul>
+                    </div>
+
+                    <!-- Botones de acción -->
+                    <div class="row mb-4">
+                        <div class="col-md-6">
+                            <div class="card">
+                                <div class="card-body text-center">
+                                    <h5 class="card-title">
+                                        <i class="fas fa-cloud-upload-alt text-primary"></i> 
+                                        Migrar a Azure
+                                    </h5>
+                                    <p class="card-text">
+                                        Migra todos los banderines locales a Azure Blob Storage para mejorar el rendimiento.
+                                    </p>
+                                    <button id="migrateBtn" class="btn btn-primary">
+                                        <i class="fas fa-upload"></i> Migrar Banderines
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="card">
+                                <div class="card-body text-center">
+                                    <h5 class="card-title">
+                                        <i class="fas fa-plus text-success"></i> 
+                                        Subir Nuevo
+                                    </h5>
+                                    <p class="card-text">
+                                        Sube un nuevo banderin (GIF, PNG, JPG) máximo 5MB.
+                                    </p>
+                                    <form id="uploadForm" enctype="multipart/form-data">
+                                        <div class="input-group mb-2">
+                                            <input type="file" class="form-control" id="fileInput" accept=".gif,.png,.jpg,.jpeg">
+                                            <button type="submit" class="btn btn-success">
+                                                <i class="fas fa-upload"></i> Subir
+                                            </button>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Galería de banderines -->
+                    <div class="card">
+                        <div class="card-header">
+                            <h5 class="mb-0">
+                                <i class="fas fa-images"></i> Galería de Banderines
+                                <button id="refreshBtn" class="btn btn-sm btn-outline-primary float-end">
+                                    <i class="fas fa-sync-alt"></i> Actualizar
+                                </button>
+                            </h5>
+                        </div>
+                        <div class="card-body">
+                            <div id="banderinesGallery" class="row">
+                                <!-- Los banderines se cargarán aquí via JavaScript -->
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Información de costos -->
+                    <div class="card mt-4">
+                        <div class="card-header bg-warning">
+                            <h5 class="mb-0">
+                                <i class="fas fa-dollar-sign"></i> Estimación de Costos Azure
+                            </h5>
+                        </div>
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col-md-4">
+                                    <div class="text-center">
+                                        <h6>Almacenamiento</h6>
+                                        <span class="badge bg-success fs-6">~$0.01/mes</span>
+                                        <small class="d-block text-muted">540MB en Hot Tier</small>
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="text-center">
+                                        <h6>1,000 visitantes/mes</h6>
+                                        <span class="badge bg-warning fs-6">~$8.85/mes</span>
+                                        <small class="d-block text-muted">Incluye transferencia</small>
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="text-center">
+                                        <h6>10,000 visitantes/mes</h6>
+                                        <span class="badge bg-danger fs-6">~$88.50/mes</span>
+                                        <small class="d-block text-muted">Incluye transferencia</small>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal de progreso -->
+<div class="modal fade" id="progressModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="progressTitle">Procesando...</h5>
+            </div>
+            <div class="modal-body text-center">
+                <div class="spinner-border text-primary mb-3" role="status">
+                    <span class="visually-hidden">Cargando...</span>
+                </div>
+                <div id="progressMessage">Realizando operación...</div>
+            </div>
+        </div>
+    </modal-content>
+</div>
+
+@section Scripts {
+<script>
+$(document).ready(function() {
+    loadBanderines();
+
+    // Migrar banderines
+    $('#migrateBtn').click(function() {
+        showProgress('Migrando Banderines', 'Migrando archivos a Azure Blob Storage...');
+        
+        $.post('/api/banderines/migrate')
+            .done(function(response) {
+                hideProgress();
+                if (response.success) {
+                    Swal.fire('¡Éxito!', response.message, 'success');
+                    location.reload();
+                } else {
+                    Swal.fire('Advertencia', response.message, 'warning');
+                }
+            })
+            .fail(function(xhr) {
+                hideProgress();
+                Swal.fire('Error', 'Error durante la migración: ' + (xhr.responseJSON?.message || 'Error desconocido'), 'error');
+            });
+    });
+
+    // Subir archivo
+    $('#uploadForm').submit(function(e) {
+        e.preventDefault();
+        
+        const fileInput = $('#fileInput')[0];
+        if (!fileInput.files[0]) {
+            Swal.fire('Error', 'Por favor selecciona un archivo', 'error');
+            return;
+        }
+
+        const formData = new FormData();
+        formData.append('file', fileInput.files[0]);
+
+        showProgress('Subiendo Archivo', 'Subiendo banderin a Azure...');
+
+        $.ajax({
+            url: '/api/banderines/upload',
+            type: 'POST',
+            data: formData,
+            processData: false,
+            contentType: false,
+            success: function(response) {
+                hideProgress();
+                Swal.fire('¡Éxito!', response.message, 'success');
+                $('#fileInput').val('');
+                loadBanderines();
+            },
+            error: function(xhr) {
+                hideProgress();
+                Swal.fire('Error', xhr.responseJSON?.message || 'Error subiendo archivo', 'error');
+            }
+        });
+    });
+
+    // Actualizar galería
+    $('#refreshBtn').click(function() {
+        loadBanderines();
+    });
+});
+
+function loadBanderines() {
+    $('#refreshBtn').prop('disabled', true);
+    
+    $.get('/api/banderines')
+        .done(function(urls) {
+            displayBanderines(urls);
+        })
+        .fail(function(xhr) {
+            console.error('Error loading banderines:', xhr);
+            $('#banderinesGallery').html('<div class="col-12 text-center text-danger">Error cargando banderines</div>');
+        })
+        .always(function() {
+            $('#refreshBtn').prop('disabled', false);
+        });
+}
+
+function displayBanderines(urls) {
+    const gallery = $('#banderinesGallery');
+    gallery.empty();
+    
+    if (urls.length === 0) {
+        gallery.html('<div class="col-12 text-center text-muted">No hay banderines disponibles</div>');
+        return;
+    }
+    
+    urls.forEach(function(url) {
+        const fileName = url.split('/').pop();
+        const col = $(`
+            <div class="col-md-3 col-sm-6 mb-3">
+                <div class="card">
+                    <img src="${url}" class="card-img-top" alt="${fileName}" style="height: 150px; object-fit: contain;">
+                    <div class="card-body text-center p-2">
+                        <small class="text-muted">${fileName}</small>
+                        <br>
+                        <button class="btn btn-sm btn-outline-primary copy-url-btn" data-url="${url}">
+                            <i class="fas fa-copy"></i> Copiar URL
+                        </button>
+                    </div>
+                </div>
+            </div>
+        `);
+        gallery.append(col);
+    });
+    
+    // Copiar URL al clipboard
+    $('.copy-url-btn').click(function() {
+        const url = $(this).data('url');
+        navigator.clipboard.writeText(url).then(function() {
+            Swal.fire({
+                icon: 'success',
+                title: 'Copiado',
+                text: 'URL copiada al portapapeles',
+                timer: 1500,
+                showConfirmButton: false
+            });
+        });
+    });
+}
+
+function showProgress(title, message) {
+    $('#progressTitle').text(title);
+    $('#progressMessage').text(message);
+    $('#progressModal').modal('show');
+}
+
+function hideProgress() {
+    $('#progressModal').modal('hide');
+}
+</script>
+}

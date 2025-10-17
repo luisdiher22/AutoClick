@@ -8,5 +8,6 @@ namespace AutoClick.Services
         Task<List<string>> ListFilesAsync(string containerName);
         Task<bool> FileExistsAsync(string containerName, string fileName);
         Task<long> GetFileSizeAsync(string containerName, string fileName);
+        Task<string> GenerateSasUrlAsync(string containerName, string fileName, TimeSpan expiry);
     }
 }

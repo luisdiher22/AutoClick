@@ -1,5 +1,6 @@
 using Azure.Storage.Blobs;
 using Azure.Storage.Blobs.Models;
+using Azure.Storage.Sas;
 
 namespace AutoClick.Services
 {
@@ -20,10 +21,22 @@ namespace AutoClick.Services
             try
             {
                 var containerClient = _blobServiceClient.GetBlobContainerClient(containerName);
-                await containerClient.CreateIfNotExistsAsync(PublicAccessType.None);
+                // Cambiar a PublicAccessType.Blob para permitir acceso público a las imágenes
+                await containerClient.CreateIfNotExistsAsync(PublicAccessType.Blob);
                 
                 var blobClient = containerClient.GetBlobClient(fileName);
-                await blobClient.UploadAsync(fileStream, overwrite: true);
+                
+                // Configurar headers para optimizar cache y rendimiento
+                var blobUploadOptions = new BlobUploadOptions
+                {
+                    HttpHeaders = new BlobHttpHeaders
+                    {
+                        ContentType = GetContentType(fileName),
+                        CacheControl = "public, max-age=31536000" // Cache por 1 año
+                    }
+                };
+                
+                await blobClient.UploadAsync(fileStream, blobUploadOptions, cancellationToken: default);
                 
                 _logger.LogInformation("File uploaded to Azure Blob Storage: {FileName} in container {ContainerName}", fileName, containerName);
                 return blobClient.Uri.ToString();
@@ -33,6 +46,21 @@ namespace AutoClick.Services
                 _logger.LogError(ex, "Error uploading file {FileName} to Azure container {ContainerName}", fileName, containerName);
                 throw;
             }
+        }
+
+        private static string GetContentType(string fileName)
+        {
+            var extension = Path.GetExtension(fileName).ToLowerInvariant();
+            return extension switch
+            {
+                ".gif" => "image/gif",
+                ".jpg" => "image/jpeg",
+                ".jpeg" => "image/jpeg",
+                ".png" => "image/png",
+                ".webp" => "image/webp",
+                ".svg" => "image/svg+xml",
+                _ => "application/octet-stream"
+            };
         }
 
         public async Task<Stream> DownloadFileAsync(string containerName, string fileName)
@@ -153,6 +181,49 @@ namespace AutoClick.Services
             {
                 _logger.LogError(ex, "Error getting file size for {FileName} in Azure container {ContainerName}", fileName, containerName);
                 throw;
+            }
+        }
+
+        public async Task<string> GenerateSasUrlAsync(string containerName, string fileName, TimeSpan expiry)
+        {
+            try
+            {
+                var containerClient = _blobServiceClient.GetBlobContainerClient(containerName);
+                var blobClient = containerClient.GetBlobClient(fileName);
+                
+                if (!await blobClient.ExistsAsync())
+                {
+                    _logger.LogWarning("Blob not found for SAS URL generation: {FileName}", fileName);
+                    return string.Empty;
+                }
+                
+                // Verificar si el blob client puede generar SAS URLs
+                if (blobClient.CanGenerateSasUri)
+                {
+                    var sasBuilder = new BlobSasBuilder
+                    {
+                        BlobContainerName = containerName,
+                        BlobName = fileName,
+                        Resource = "b",
+                        ExpiresOn = DateTimeOffset.UtcNow.Add(expiry)
+                    };
+                    
+                    sasBuilder.SetPermissions(BlobSasPermissions.Read);
+                    
+                    var sasUri = blobClient.GenerateSasUri(sasBuilder);
+                    _logger.LogInformation("Generated SAS URL for {FileName}", fileName);
+                    return sasUri.ToString();
+                }
+                else
+                {
+                    _logger.LogError("Cannot generate SAS URL for {FileName} - client not configured with account key", fileName);
+                    return string.Empty;
+                }
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error generating SAS URL for {FileName} in container {ContainerName}", fileName, containerName);
+                return string.Empty;
             }
         }
     }

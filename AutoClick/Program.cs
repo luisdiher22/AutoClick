@@ -8,6 +8,9 @@ var builder = WebApplication.CreateBuilder(args);
 // Add services to the container.
 builder.Services.AddRazorPages();
 
+// Add Controllers (for API endpoints)
+builder.Services.AddControllers();
+
 // Add Authentication services
 builder.Services.AddAuthentication("Cookies")
     .AddCookie("Cookies", options =>
@@ -87,6 +90,9 @@ builder.Services.AddScoped<IAuthService, AuthService>();
 // Add Soporte Service
 builder.Services.AddScoped<ISoporteService, SoporteService>();
 
+// Add Banderines Service
+builder.Services.AddScoped<IBanderinesService, BanderinesService>();
+
 builder.Services.AddHttpContextAccessor();
 
 var app = builder.Build();
@@ -113,6 +119,9 @@ app.UseSession();
 app.MapStaticAssets();
 app.MapRazorPages()
    .WithStaticAssets();
+
+// Map API controllers
+app.MapControllers();
 
 // Create admin user if it doesn't exist
 _ = Task.Run(async () =>

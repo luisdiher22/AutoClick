@@ -9,17 +9,40 @@ public class IndexModel : PageModel
 {
     private readonly ILogger<IndexModel> _logger;
     private readonly IAutoService _autoService;
+    private readonly IBanderinesService _banderinesService;
 
-    public IndexModel(ILogger<IndexModel> logger, IAutoService autoService)
+    public IndexModel(ILogger<IndexModel> logger, IAutoService autoService, IBanderinesService banderinesService)
     {
         _logger = logger;
         _autoService = autoService;
+        _banderinesService = banderinesService;
     }
 
     public List<Auto> AutosDestacados { get; set; } = new();
     public List<Auto> AutosRecientes { get; set; } = new();
     public List<Auto> AutosGuardados { get; set; } = new();
     public List<Auto> AutosExploracion { get; set; } = new();
+    public Dictionary<int, string?> BanderinUrls { get; set; } = new();
+
+    public async Task<string?> GetBanderinUrlAsync(string? fileName)
+    {
+        if (string.IsNullOrEmpty(fileName))
+            return null;
+            
+        return await _banderinesService.GetBanderinUrlAsync(fileName);
+    }
+
+    private async Task LoadBanderinUrlsAsync(List<Auto> autos)
+    {
+        foreach (var auto in autos)
+        {
+            if (!string.IsNullOrEmpty(auto.BanderinVideoUrl) && !BanderinUrls.ContainsKey(auto.Id))
+            {
+                var url = await _banderinesService.GetBanderinUrlAsync(auto.BanderinVideoUrl);
+                BanderinUrls[auto.Id] = url;
+            }
+        }
+    }
 
     public async Task OnGetAsync()
     {
@@ -49,6 +72,15 @@ public class IndexModel : PageModel
             if (!AutosRecientes.Any()) AutosRecientes = GetSampleAutos().Take(3).ToList();
             if (!AutosGuardados.Any()) AutosGuardados = GetSampleAutos().Take(3).ToList();
             if (!AutosExploracion.Any()) AutosExploracion = GetSampleAutos().Take(3).ToList();
+
+            // Cargar URLs de banderines para todos los autos
+            var allAutos = new List<Auto>();
+            allAutos.AddRange(AutosDestacados);
+            allAutos.AddRange(AutosRecientes);
+            allAutos.AddRange(AutosGuardados);
+            allAutos.AddRange(AutosExploracion);
+            
+            await LoadBanderinUrlsAsync(allAutos);
         }
         catch (Exception ex)
         {
@@ -60,6 +92,9 @@ public class IndexModel : PageModel
             AutosRecientes = sampleAutos.Skip(3).Take(3).ToList();
             AutosGuardados = sampleAutos.Take(3).ToList();
             AutosExploracion = sampleAutos.Skip(6).Take(3).ToList();
+            
+            // Cargar URLs de banderines para datos de muestra
+            await LoadBanderinUrlsAsync(sampleAutos);
         }
     }
 
@@ -85,7 +120,8 @@ public class IndexModel : PageModel
                 Condicion = "Nuevo",
                 EmailPropietario = "admin@gmail.com",
                 FechaCreacion = DateTime.Now.AddDays(-1),
-                PlanVisibilidad = 2
+                PlanVisibilidad = 2,
+                BanderinAdquirido = 1 // Versión Americana
             },
             new Auto
             {
@@ -105,7 +141,8 @@ public class IndexModel : PageModel
                 Condicion = "Excelente",
                 EmailPropietario = "admin@gmail.com",
                 FechaCreacion = DateTime.Now.AddDays(-2),
-                PlanVisibilidad = 3
+                PlanVisibilidad = 3,
+                BanderinAdquirido = 5 // Perfecto Estado
             },
             new Auto
             {
@@ -125,7 +162,8 @@ public class IndexModel : PageModel
                 Condicion = "Nuevo",
                 EmailPropietario = "admin@gmail.com",
                 FechaCreacion = DateTime.Now.AddDays(-3),
-                PlanVisibilidad = 1
+                PlanVisibilidad = 1,
+                BanderinAdquirido = 9 // Financiamiento Disponible
             }
         };
     }

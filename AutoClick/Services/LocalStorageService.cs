@@ -146,5 +146,29 @@ namespace AutoClick.Services
                 throw;
             }
         }
+
+        public Task<string> GenerateSasUrlAsync(string containerName, string fileName, TimeSpan expiry)
+        {
+            try
+            {
+                var filePath = Path.Combine(_basePath, containerName, fileName);
+                
+                if (!File.Exists(filePath))
+                {
+                    _logger.LogWarning("File not found for URL generation: {FilePath}", filePath);
+                    return Task.FromResult(string.Empty);
+                }
+                
+                // Para storage local, devolvemos una URL relativa
+                var url = $"/LocalStorage/{containerName}/{fileName}";
+                _logger.LogInformation("Generated local URL for {FileName}: {Url}", fileName, url);
+                return Task.FromResult(url);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error generating URL for {FileName} in container {ContainerName}", fileName, containerName);
+                return Task.FromResult(string.Empty);
+            }
+        }
     }
 }

@@ -1,0 +1,261 @@
+@page "/"
+@model IndexModel
+@{
+    ViewData["Title"] = "AutoClick.cr - Compra y venta de autos en Costa Rica";
+    Layout = "~/Pages/Shared/_LayoutMinimal.cshtml"; // Usar un layout especial para la página de inicio
+}
+
+<div style="width: 100%; min-height: 3290px; position: relative; background: #02081C; overflow: hidden">
+    <!-- Hero Image Section -->
+    <div data-property-1="1" style="width: calc(100% - 64px); height: 736px; left: 32px; top: 0px; position: absolute; overflow: hidden; border-radius: 12px">
+        <img style="width: 100%; height: 736px; left: 0px; top: 0px; position: absolute; object-fit: cover; object-position: center top; background: rgba(0, 0, 0, 0.3);" src="~/images/e032f5d0f2fa0108a989af4988eba3f7de835a51.jpg" />
+        <div style="width: 100%; height: 736px; left: 0px; top: 0px; position: absolute; background: linear-gradient(180deg, rgba(0, 0, 0, 0) 0%, rgba(0, 0, 0, 0.90) 100%); overflow: hidden">
+            <!-- Búsqueda rápida centrada -->
+            <div style="width: 624px; padding-left: 20px; padding-right: 20px; padding-top: 19px; padding-bottom: 19px; left: 50%; top: 266px; position: absolute; transform: translateX(-50%); background: rgba(0, 0, 0, 0.25); box-shadow: 5px 5px 6px rgba(0, 0, 0, 0.25); overflow: hidden; border-radius: 4px; outline: 1px white solid; outline-offset: -1px; backdrop-filter: blur(6px); flex-direction: column; justify-content: flex-start; align-items: center; gap: 32px; display: inline-flex">
+                <div style="align-self: stretch; text-box-trim: trim-both; text-box-edge: cap alphabetic; text-align: center; color: white; font-size: 32px; font-family: Montserrat; font-weight: 700; word-wrap: break-word">Búsqueda rápida</div>
+                <div data-property-1="Default" style="align-self: stretch; flex-direction: column; justify-content: flex-start; align-items: flex-start; gap: 16px; display: flex">
+                    <div style="align-self: stretch; text-box-trim: trim-both; text-box-edge: cap alphabetic; color: white; font-size: 16px; font-family: Montserrat; font-weight: 500; word-wrap: break-word">¿Qué auto anda buscando?</div>
+                    <div style="align-self: stretch; padding: 16px; background: white; overflow: hidden; border-radius: 4px; justify-content: space-between; align-items: center; display: inline-flex">
+                        <input type="text" placeholder="Digite marca o modelo" style="width: 100%; border: none; outline: none; text-box-trim: trim-both; text-box-edge: cap alphabetic; color: rgba(0, 0, 0, 0.50); font-size: 16px; font-family: Montserrat; font-weight: 500; word-wrap: break-word; background: transparent;" />
+                    </div>
+                </div>
+                <div data-estado="Default" style="width: 129px; height: 44px; padding: 16px; background: white; border-radius: 4px; justify-content: center; align-items: center; gap: 8px; display: inline-flex; cursor: pointer;" onclick="window.location.href='@Url.Page("/BusquedaAvanzada")'">
+                    <div style="text-box-trim: trim-both; text-box-edge: cap alphabetic; color: #06174D; font-size: 16px; font-family: Montserrat; font-weight: 700; word-wrap: break-word">Buscar</div>
+                </div>
+            </div>
+            
+            <!-- Botón Anuncie su auto ahora -->
+            <div data-estado="Default" style="padding: 16px; right: 64px; top: 626px; position: absolute; background: white; border-radius: 4px; justify-content: center; align-items: center; gap: 8px; display: inline-flex; cursor: pointer;" onclick="window.location.href='@Url.Page("/AnunciarMiAuto")'">
+                <div style="text-box-trim: trim-both; text-box-edge: cap alphabetic; color: #06174D; font-size: 20px; font-family: Montserrat; font-weight: 700; word-wrap: break-word">Anuncie su auto ahora</div>
+            </div>
+            
+            <!-- Texto principal -->
+            <div style="width: 601px; left: 64px; top: 611px; position: absolute; text-box-trim: trim-both; text-box-edge: cap alphabetic; color: white; font-size: 32px; font-family: Montserrat; font-weight: 700; word-wrap: break-word; text-shadow: 2px 2px 2px rgba(0, 0, 0, 0.75)">¡En AutoClick.cr, usted puede anunciar tu auto sin ningún costo!</div>
+        </div>
+    </div>
+
+
+
+    <!-- Sección Autos destacados -->
+    <div style="width: 100%; left: 0px; top: 841px; position: absolute; justify-content: flex-start; align-items: center; gap: 10px; display: inline-flex">
+        <div style="width: 22px; height: 6px; position: relative; background: white; border-top-right-radius: 100px; border-bottom-right-radius: 100px"></div>
+        <div style="width: calc(100% - 64px); padding-right: 32px; justify-content: space-between; align-items: center; display: flex">
+            <div style="text-box-trim: trim-both; text-box-edge: cap alphabetic; color: white; font-size: 24px; font-family: Montserrat; font-weight: 700; word-wrap: break-word">Autos destacados</div>
+            <div data-estado="Default" style="height: 40px; justify-content: center; align-items: center; gap: 8px; display: flex">
+                <div style="justify-content: center; align-items: center; gap: 8px; display: flex">
+                    <a asp-page="/Destacados" style="text-box-trim: trim-both; text-box-edge: cap alphabetic; color: white; font-size: 18px; font-family: Montserrat; font-weight: 500; text-decoration: underline; word-wrap: break-word">Ver todos los destacados</a>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    @{int destacadoIndex = 0;}
+    @foreach (var auto in Model.AutosDestacados.Take(3))
+    {
+        <div data-estado="Default" style="width: calc((100% - 160px) / 4); height: 360px; padding: 8px; left: calc(32px + @destacadoIndex * (100% - 160px) / 4 + @destacadoIndex * 32px); top: 897px; position: absolute; border-radius: 8px; overflow: visible; background: rgba(255, 255, 255, 0.05); flex-direction: column; justify-content: flex-start; align-items: flex-start; display: flex; cursor: pointer;" onclick="window.location.href='@Url.Page("/Producto", new { id = auto.Id })'">
+            <!-- Imagen del auto -->
+            <div style="width: 100%; height: 260px; position: relative; overflow: hidden; border-radius: 4px;">
+                <img style="width: 100%; height: 100%; object-fit: cover;" src="@(string.IsNullOrEmpty(auto.ImagenPrincipal) ? "https://placehold.co/392x200" : auto.ImagenPrincipal)" alt="@auto.NombreCompleto" />
+
+                @* Banderín Tag - Soporte para Video (MP4) y GIF *@
+                @if (!string.IsNullOrEmpty(auto.BanderinVideoUrl) && Model.BanderinUrls.ContainsKey(auto.Id))
+                {
+                    <div style="position: absolute; top: -30px; right: 10px; width: 104px; height: 103px; pointer-events: none; z-index: 20;">
+                        @if (auto.BanderinVideoUrl.EndsWith(".gif", StringComparison.OrdinalIgnoreCase))
+                        {
+                            <img src="@Model.BanderinUrls[auto.Id]" style="width: 100%; height: 100%; object-fit: contain; filter: drop-shadow(2px 2px 4px rgba(0, 0, 0, 0.5));" alt="Banderín" />
+                        }
+                        else
+                        {
+                            <video autoplay loop muted playsinline preload="auto" style="width: 100%; height: 100%; object-fit: contain; filter: drop-shadow(2px 2px 4px rgba(0, 0, 0, 0.5));">
+                                <source src="@Model.BanderinUrls[auto.Id]" type="video/mp4">
+                            </video>
+                        }
+                    </div>
+                }
+            </div>
+
+            <!-- Información del auto -->
+            <div style="width: 100%; height: 88px; padding: 12px 0 2px 0; flex-direction: column; justify-content: space-between; align-items: flex-start; display: flex;">
+                <div style="width: 100%; text-box-trim: trim-both; text-box-edge: cap alphabetic; color: white; font-size: 18px; font-family: Montserrat; font-weight: 700; word-wrap: break-word; line-height: 1.2;">@auto.NombreCompleto</div>
+                <div style="text-box-trim: trim-both; text-box-edge: cap alphabetic; color: white; font-size: 20px; font-family: Montserrat; font-weight: 600; word-wrap: break-word;">@auto.ValorFiscalFormateado</div>
+            </div>
+            @if (auto.PlanVisibilidad > 1)
+            {
+                <img style="width: 104px; height: 102.84px; right: -10px; top: -4px; position: absolute" src="https://placehold.co/104x103" />
+            }
+        </div>
+        destacadoIndex++;
+    }
+
+    <!-- Sección Recién vistos -->
+    <div style="width: 100%; left: 0px; top: 1249px; position: absolute; justify-content: flex-start; align-items: center; gap: 10px; display: inline-flex">
+        <div style="width: 22px; height: 6px; position: relative; background: white; border-top-right-radius: 100px; border-bottom-right-radius: 100px"></div>
+        <div style="width: calc(100% - 64px); padding-left: 32px; padding-right: 32px; justify-content: space-between; align-items: center; display: flex">
+            <div style="text-box-trim: trim-both; text-box-edge: cap alphabetic; color: white; font-size: 24px; font-family: Montserrat; font-weight: 700; word-wrap: break-word">Recién vistos</div>
+            <div data-estado="Default" style="height: 40px; justify-content: center; align-items: center; gap: 8px; display: flex">
+                <div style="justify-content: center; align-items: center; gap: 8px; display: flex">
+                    <a asp-page="/RecienVistos" style="text-box-trim: trim-both; text-box-edge: cap alphabetic; color: white; font-size: 18px; font-family: Montserrat; font-weight: 500; text-decoration: underline; word-wrap: break-word">Ver todos los recién vistos</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    @{int recientesIndex = 0;}
+    @foreach (var auto in Model.AutosRecientes.Take(3))
+    {
+        <div data-estado="Default" style="width: calc((100% - 160px) / 4); height: 360px; padding: 8px; left: calc(32px + @recientesIndex * (100% - 160px) / 4 + @recientesIndex * 32px); top: 1305px; position: absolute; border-radius: 8px; overflow: visible; background: rgba(255, 255, 255, 0.05); flex-direction: column; justify-content: flex-start; align-items: flex-start; display: flex; cursor: pointer;" onclick="window.location.href='@Url.Page("/Producto", new { id = auto.Id })'">
+            <!-- Imagen del auto -->
+            <div style="width: 100%; height: 260px; position: relative; overflow: hidden; border-radius: 4px;">
+                <img style="width: 100%; height: 100%; object-fit: cover;" src="@(string.IsNullOrEmpty(auto.ImagenPrincipal) ? "https://placehold.co/392x200" : auto.ImagenPrincipal)" alt="@auto.NombreCompleto" />
+
+                @* Banderín Tag - Soporte para Video (MP4) y GIF *@
+                @if (!string.IsNullOrEmpty(auto.BanderinVideoUrl) && Model.BanderinUrls.ContainsKey(auto.Id))
+                {
+                    <div style="position: absolute; top: -30px; right: 10px; width: 104px; height: 103px; pointer-events: none; z-index: 20;">
+                        @if (auto.BanderinVideoUrl.EndsWith(".gif", StringComparison.OrdinalIgnoreCase))
+                        {
+                            <img src="@Model.BanderinUrls[auto.Id]" style="width: 100%; height: 100%; object-fit: contain; filter: drop-shadow(2px 2px 4px rgba(0, 0, 0, 0.5));" alt="Banderín" />
+                        }
+                        else
+                        {
+                            <video autoplay loop muted playsinline preload="auto" style="width: 100%; height: 100%; object-fit: contain; filter: drop-shadow(2px 2px 4px rgba(0, 0, 0, 0.5));">
+                                <source src="@Model.BanderinUrls[auto.Id]" type="video/mp4">
+                            </video>
+                        }
+                    </div>
+                }
+            </div>
+
+            <!-- Información del auto -->
+            <div style="width: 100%; height: 88px; padding: 12px 0 2px 0; flex-direction: column; justify-content: space-between; align-items: flex-start; display: flex;">
+                <div style="width: 100%; text-box-trim: trim-both; text-box-edge: cap alphabetic; color: white; font-size: 18px; font-family: Montserrat; font-weight: 700; word-wrap: break-word; line-height: 1.2;">@auto.NombreCompleto</div>
+                <div style="text-box-trim: trim-both; text-box-edge: cap alphabetic; color: white; font-size: 20px; font-family: Montserrat; font-weight: 600; word-wrap: break-word;">@auto.ValorFiscalFormateado</div>
+            </div>
+        </div>
+        recientesIndex++;
+    }
+
+    <!-- Sección Autos guardados -->
+    <div style="width: 100%; left: 0px; top: 1657px; position: absolute; justify-content: flex-start; align-items: center; gap: 10px; display: inline-flex">
+        <div style="width: 22px; height: 6px; position: relative; background: white; border-top-right-radius: 100px; border-bottom-right-radius: 100px"></div>
+        <div style="width: calc(100% - 64px); padding-left: 32px; padding-right: 32px; justify-content: space-between; align-items: center; display: flex">
+            <div style="text-box-trim: trim-both; text-box-edge: cap alphabetic; color: white; font-size: 24px; font-family: Montserrat; font-weight: 700; word-wrap: break-word">Autos guardados</div>
+            <div data-estado="Default" style="height: 40px; justify-content: center; align-items: center; gap: 8px; display: flex">
+                <div style="justify-content: center; align-items: center; gap: 8px; display: flex">
+                    <a asp-page="/Guardados" style="text-box-trim: trim-both; text-box-edge: cap alphabetic; color: white; font-size: 18px; font-family: Montserrat; font-weight: 500; text-decoration: underline; word-wrap: break-word">Ver todos los guardados</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    @{int guardadosIndex = 0;}
+    @foreach (var auto in Model.AutosGuardados.Take(3))
+    {
+        <div data-estado="Default" style="width: calc((100% - 160px) / 4); height: 360px; padding: 8px; left: calc(32px + @guardadosIndex * (100% - 160px) / 4 + @guardadosIndex * 32px); top: 1713px; position: absolute; border-radius: 8px; overflow: visible; background: rgba(255, 255, 255, 0.05); flex-direction: column; justify-content: flex-start; align-items: flex-start; display: flex; cursor: pointer;" onclick="window.location.href='@Url.Page("/Producto", new { id = auto.Id })'">
+            <!-- Imagen del auto -->
+            <div style="width: 100%; height: 260px; position: relative; overflow: hidden; border-radius: 4px;">
+                <img style="width: 100%; height: 100%; object-fit: cover;" src="@(string.IsNullOrEmpty(auto.ImagenPrincipal) ? "https://placehold.co/395x200" : auto.ImagenPrincipal)" alt="@auto.NombreCompleto" />
+
+                @* Banderín Tag - Soporte para Video (MP4) y GIF *@
+                @if (!string.IsNullOrEmpty(auto.BanderinVideoUrl) && Model.BanderinUrls.ContainsKey(auto.Id))
+                {
+                    <div style="position: absolute; top: -30px; right: 10px; width: 104px; height: 103px; pointer-events: none; z-index: 20;">
+                        @if (auto.BanderinVideoUrl.EndsWith(".gif", StringComparison.OrdinalIgnoreCase))
+                        {
+                            <img src="@Model.BanderinUrls[auto.Id]" style="width: 100%; height: 100%; object-fit: contain; filter: drop-shadow(2px 2px 4px rgba(0, 0, 0, 0.5));" alt="Banderín" />
+                        }
+                        else
+                        {
+                            <video autoplay loop muted playsinline preload="auto" style="width: 100%; height: 100%; object-fit: contain; filter: drop-shadow(2px 2px 4px rgba(0, 0, 0, 0.5));">
+                                <source src="@Model.BanderinUrls[auto.Id]" type="video/mp4">
+                            </video>
+                        }
+                    </div>
+                }
+            </div>
+
+            <!-- Información del auto -->
+            <div style="width: 100%; height: 88px; padding: 12px 0 2px 0; flex-direction: column; justify-content: space-between; align-items: flex-start; display: flex;">
+                <div style="width: 100%; text-box-trim: trim-both; text-box-edge: cap alphabetic; color: white; font-size: 18px; font-family: Montserrat; font-weight: 700; word-wrap: break-word; line-height: 1.2;">@auto.NombreCompleto</div>
+                <div style="text-box-trim: trim-both; text-box-edge: cap alphabetic; color: white; font-size: 20px; font-family: Montserrat; font-weight: 600; word-wrap: break-word;">@auto.ValorFiscalFormateado</div>
+            </div>
+        </div>
+        guardadosIndex++;
+    }
+
+    <!-- Sección Explorar todos los autos -->
+    <div style="width: 100%; left: 0px; top: 2065px; position: absolute; justify-content: flex-start; align-items: center; gap: 10px; display: inline-flex">
+        <div style="width: 22px; height: 6px; position: relative; background: white; border-top-right-radius: 100px; border-bottom-right-radius: 100px"></div>
+        <div style="width: calc(100% - 64px); padding-left: 32px; padding-right: 32px; justify-content: space-between; align-items: center; display: flex">
+            <div style="text-box-trim: trim-both; text-box-edge: cap alphabetic; color: white; font-size: 24px; font-family: Montserrat; font-weight: 700; word-wrap: break-word">Explorar todos los autos</div>
+            <div data-estado="Default" style="height: 40px; justify-content: center; align-items: center; gap: 8px; display: flex">
+                <div style="justify-content: center; align-items: center; gap: 8px; display: flex">
+                    <a asp-page="/BusquedaAvanzada" style="text-box-trim: trim-both; text-box-edge: cap alphabetic; color: white; font-size: 18px; font-family: Montserrat; font-weight: 500; text-decoration: underline; word-wrap: break-word">Ver todos los autos</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    @{int exploracionIndex = 0;}
+    @foreach (var auto in Model.AutosExploracion.Take(3))
+    {
+        <div data-estado="Default" style="width: calc((100% - 160px) / 4); height: 360px; padding: 8px; left: calc(32px + @exploracionIndex * (100% - 160px) / 4 + @exploracionIndex * 32px); top: 2121px; position: absolute; border-radius: 8px; overflow: visible; background: rgba(255, 255, 255, 0.05); flex-direction: column; justify-content: flex-start; align-items: flex-start; display: flex; cursor: pointer;" onclick="window.location.href='@Url.Page("/Producto", new { id = auto.Id })'">
+            <!-- Imagen del auto -->
+            <div style="width: 100%; height: 260px; position: relative; overflow: hidden; border-radius: 4px;">
+                <img style="width: 100%; height: 100%; object-fit: cover;" src="@(string.IsNullOrEmpty(auto.ImagenPrincipal) ? "https://placehold.co/395x200" : auto.ImagenPrincipal)" alt="@auto.NombreCompleto" />
+
+                @* Banderín Tag - Soporte para Video (MP4) y GIF *@
+                @if (!string.IsNullOrEmpty(auto.BanderinVideoUrl) && Model.BanderinUrls.ContainsKey(auto.Id))
+                {
+                    <div style="position: absolute; top: -30px; right: 10px; width: 104px; height: 103px; pointer-events: none; z-index: 20;">
+                        @if (auto.BanderinVideoUrl.EndsWith(".gif", StringComparison.OrdinalIgnoreCase))
+                        {
+                            <img src="@Model.BanderinUrls[auto.Id]" style="width: 100%; height: 100%; object-fit: contain; filter: drop-shadow(2px 2px 4px rgba(0, 0, 0, 0.5));" alt="Banderín" />
+                        }
+                        else
+                        {
+                            <video autoplay loop muted playsinline preload="auto" style="width: 100%; height: 100%; object-fit: contain; filter: drop-shadow(2px 2px 4px rgba(0, 0, 0, 0.5));">
+                                <source src="@Model.BanderinUrls[auto.Id]" type="video/mp4">
+                            </video>
+                        }
+                    </div>
+                }
+            </div>
+
+            <!-- Información del auto -->
+            <div style="width: 100%; height: 88px; padding: 12px 0 2px 0; flex-direction: column; justify-content: space-between; align-items: flex-start; display: flex;">
+                <div style="width: 100%; text-box-trim: trim-both; text-box-edge: cap alphabetic; color: white; font-size: 18px; font-family: Montserrat; font-weight: 700; word-wrap: break-word; line-height: 1.2;">@auto.NombreCompleto</div>
+                <div style="text-box-trim: trim-both; text-box-edge: cap alphabetic; color: white; font-size: 20px; font-family: Montserrat; font-weight: 600; word-wrap: break-word;">@auto.ValorFiscalFormateado</div>
+            </div>
+        </div>
+        exploracionIndex++;
+    }
+
+    <!-- Sección Explorar por marca -->
+    <div style="width: 100%; left: 0px; top: 2489px; position: absolute; justify-content: flex-start; align-items: center; gap: 10px; display: inline-flex">
+        <div style="width: 22px; height: 6px; position: relative; background: white; border-top-right-radius: 100px; border-bottom-right-radius: 100px"></div>
+        <div style="padding-left: 32px; text-box-trim: trim-both; text-box-edge: cap alphabetic; color: white; font-size: 24px; font-family: Montserrat; font-weight: 700; word-wrap: break-word">Explorar por marca</div>
+    </div>
+
+    <!-- Brands Section (placeholders mantenidos) -->
+    @for (int i = 0; i < 8; i++)
+    {
+        int row = i / 4;
+        int col = i % 4;
+        <div data-property-1="Default" style="width: calc((100% - 160px) / 4); height: 192px; padding-left: 80px; padding-right: 80px; padding-top: 32px; padding-bottom: 32px; left: calc(32px + @col * (100% - 160px) / 4 + @col * 32px); top: @(2530 + row * 208)px; position: absolute; background: #030D2B; overflow: hidden; border-radius: 4px; justify-content: space-between; align-items: center; display: inline-flex">
+            <img style="width: 129px; height: 84px" src="https://placehold.co/129x84" alt="Brand @(i + 1)" />
+        </div>
+    }
+
+
+
+    <!-- Footer -->
+    <div style="left: 0px; top: 2986px; position: absolute; width: 100%;">
+        <partial name="_Footer" />
+    </div>
+</div>
+
+
+
+

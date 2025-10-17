@@ -261,41 +261,44 @@ public class Auto
 
             var tagFiles = new Dictionary<int, string>
             {
-                { 1, "Versión Americana_1.mp4" },
-                { 2, "ÚNICO DUEÑO_1.mp4" },
-                { 3, "FULL EXTRAS-.mp4" },
-                { 4, "MANTENIMIENTO DE AGENCIA-.mp4" },
-                { 5, "PERFECTO ESTADO_1.mp4" },
-                { 6, "AL DÍA_1.mp4" },
-                { 7, "BAJO KILOMETRAJE_1.mp4" },
-                { 8, "NEGOCIABLE_1.mp4" },
-                { 9, "FINANCIAMIENTO DISPONIBLE_1.mp4" },
-                { 10, "ESCUCHO OFERTAS_1.mp4" },
-                { 11, "IMPECABLE_1.mp4" },
-                { 12, "CERO DETALLES_1.mp4" },
-                { 13, "POCO USO_1.mp4" },
-                { 14, "REGISTRO LIMPIO_1.mp4" },
-                { 15, "TRASPASO INCLUÍDO_1.mp4" },
-                { 16, "RECIBO_1.mp4" },
-                { 17, "VENDO O CAMBIO_1.mp4" },
-                { 18, "URGE VENDER_1.mp4" },
-                { 19, "PRECIO ESPECIAL_1.mp4" },
-                { 20, "OPORTUNIDAD UNICA_1.mp4" },
-                { 21, "LLAME AHORA_1.mp4" },
-                { 22, "ÚNICO EN EL PAÍS_1.mp4" },
-                { 23, "EDICIÓN LIMITADA_1.mp4" },
-                { 24, "PARA INSCRIBIR_1.mp4" },
-                { 25, "BAJO CONSUMO_1.mp4" },
-                { 26, "GARANTÍA EXTENDIDA_1.mp4" },
-                { 27, "FULL PPF_1.mp4" },
-                { 28, "TRATAMIENTO CERÁMICO_1.mp4" },
-                { 29, "TAYLOR MADE_1.mp4" },
-                { 30, "CEDO DEUDA.mp4" }
+                { 1, "Versión Americana.gif" },
+                { 2, "ÚNICO DUEÑO.gif" },
+                { 3, "FULL EXTRAS-.gif" },
+                { 4, "MANTENIMIENTO DE AGENCIA-.gif" },
+                { 5, "PERFECTO ESTADO.gif" },
+                { 6, "AL DÍA.gif" },
+                { 7, "BAJO KILOMETRAJE.gif" },
+                { 8, "NEGOCIABLE.gif" },
+                { 9, "FINANCIAMIENTO DISPONIBLE.gif" },
+                { 10, "ESCUCHO OFERTAS.gif" },
+                { 11, "IMPECABLE.gif" },
+                { 12, "CERO DETALLES.gif" },
+                { 13, "POCO USO.gif" },
+                { 14, "REGISTRO LIMPIO.gif" },
+                { 15, "TRASPASO INCLUÍDO.gif" },
+                { 16, "RECIBO.gif" },
+                { 17, "VENDO O CAMBIO.gif" },
+                { 18, "URGE VENDER.gif" },
+                { 19, "PRECIO ESPECIAL.gif" },
+                { 20, "OPORTUNIDAD UNICA.gif" },
+                { 21, "LLAME AHORA.gif" },
+                { 22, "ÚNICO EN EL PAÍS.gif" },
+                { 23, "EDICIÓN LIMITADA.gif" },
+                { 24, "PARA INSCRIBIR.gif" },
+                { 25, "BAJO CONSUMO.gif" },
+                { 26, "GARANTÍA EXTENDIDA.gif" },
+                { 27, "FULL PPF.gif" },
+                { 28, "TRATAMIENTO CERÁMICO.gif" },
+                { 29, "TAYLOR MADE.gif" },
+                { 30, "CEDO DEUDA.gif" }
             };
 
-            return tagFiles.ContainsKey(BanderinAdquirido)
-                ? $"/images/Banderines/{tagFiles[BanderinAdquirido]}"
-                : null;
+            if (!tagFiles.ContainsKey(BanderinAdquirido))
+                return null;
+                
+            // Simplemente devolver el nombre del archivo
+            // La URL completa se manejará en el PageModel usando BanderinesService
+            return tagFiles[BanderinAdquirido];
         }
     }
 }
