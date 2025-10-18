@@ -34,6 +34,17 @@ public class Auto
     [Display(Name = "Valor Fiscal")]
     public decimal ValorFiscal { get; set; }
     
+    [Required]
+    [Column(TypeName = "decimal(18,2)")]
+    [Range(0, double.MaxValue)]
+    [Display(Name = "Precio")]
+    public decimal Precio { get; set; }
+    
+    [Required]
+    [MaxLength(5)]
+    [Display(Name = "Divisa")]
+    public string Divisa { get; set; } = "CRC";
+    
     // Especificaciones técnicas
     [Required]
     [MaxLength(50)]
@@ -124,6 +135,11 @@ public class Auto
     [Display(Name = "Ubicación Exacta")]
     public string UbicacionExacta { get; set; } = string.Empty;
     
+    // Descripción del vehículo
+    [Column(TypeName = "TEXT")]
+    [Display(Name = "Descripción")]
+    public string Descripcion { get; set; } = string.Empty;
+    
     // Configuración del anuncio
     [Required]
     [Range(1, 5)]
@@ -182,63 +198,89 @@ public class Auto
     [NotMapped]
     [Display(Name = "Valor Fiscal Formateado")]
     public string ValorFiscalFormateado => 
-        $"₡{ValorFiscal:N0}"; // Formato para colones costarricenses
+        Divisa == "USD" ? $"${ValorFiscal:N0}" : $"₡{ValorFiscal:N0}";
+    
+    [NotMapped]
+    [Display(Name = "Precio Formateado")]
+    public string PrecioFormateado => 
+        Divisa == "USD" ? $"${Precio:N0}" : $"₡{Precio:N0}";
     
     // Métodos helper para manejar los arrays JSON
     [NotMapped]
     public List<string> ExtrasExteriorList
     {
-        get => System.Text.Json.JsonSerializer.Deserialize<List<string>>(ExtrasExterior) ?? new List<string>();
+        get => SafeJsonDeserialize(ExtrasExterior);
         set => ExtrasExterior = System.Text.Json.JsonSerializer.Serialize(value);
     }
     
     [NotMapped]
     public List<string> ExtrasInteriorList
     {
-        get => System.Text.Json.JsonSerializer.Deserialize<List<string>>(ExtrasInterior) ?? new List<string>();
+        get => SafeJsonDeserialize(ExtrasInterior);
         set => ExtrasInterior = System.Text.Json.JsonSerializer.Serialize(value);
     }
     
     [NotMapped]
     public List<string> ExtrasMultimediaList
     {
-        get => System.Text.Json.JsonSerializer.Deserialize<List<string>>(ExtrasMultimedia) ?? new List<string>();
+        get => SafeJsonDeserialize(ExtrasMultimedia);
         set => ExtrasMultimedia = System.Text.Json.JsonSerializer.Serialize(value);
     }
     
     [NotMapped]
     public List<string> ExtrasSeguridadList
     {
-        get => System.Text.Json.JsonSerializer.Deserialize<List<string>>(ExtrasSeguridad) ?? new List<string>();
+        get => SafeJsonDeserialize(ExtrasSeguridad);
         set => ExtrasSeguridad = System.Text.Json.JsonSerializer.Serialize(value);
     }
     
     [NotMapped]
     public List<string> ExtrasRendimientoList
     {
-        get => System.Text.Json.JsonSerializer.Deserialize<List<string>>(ExtrasRendimiento) ?? new List<string>();
+        get => SafeJsonDeserialize(ExtrasRendimiento);
         set => ExtrasRendimiento = System.Text.Json.JsonSerializer.Serialize(value);
     }
     
     [NotMapped]
     public List<string> ExtrasAntiRoboList
     {
-        get => System.Text.Json.JsonSerializer.Deserialize<List<string>>(ExtrasAntiRobo) ?? new List<string>();
+        get => SafeJsonDeserialize(ExtrasAntiRobo);
         set => ExtrasAntiRobo = System.Text.Json.JsonSerializer.Serialize(value);
     }
     
     [NotMapped]
     public List<string> ImagenesUrlsList
     {
-        get => System.Text.Json.JsonSerializer.Deserialize<List<string>>(ImagenesUrls) ?? new List<string>();
+        get => SafeJsonDeserialize(ImagenesUrls);
         set => ImagenesUrls = System.Text.Json.JsonSerializer.Serialize(value);
     }
     
     [NotMapped]
     public List<string> VideosUrlsList
     {
-        get => System.Text.Json.JsonSerializer.Deserialize<List<string>>(VideosUrls) ?? new List<string>();
+        get => SafeJsonDeserialize(VideosUrls);
         set => VideosUrls = System.Text.Json.JsonSerializer.Serialize(value);
+    }
+    
+    // Helper method for safe JSON deserialization
+    private List<string> SafeJsonDeserialize(string jsonString)
+    {
+        if (string.IsNullOrWhiteSpace(jsonString))
+            return new List<string>();
+            
+        // Si no comienza con '[' no es un array JSON válido
+        if (!jsonString.Trim().StartsWith('['))
+            return new List<string>();
+            
+        try
+        {
+            return System.Text.Json.JsonSerializer.Deserialize<List<string>>(jsonString) ?? new List<string>();
+        }
+        catch (System.Text.Json.JsonException)
+        {
+            // Si falla la deserialización, retorna lista vacía
+            return new List<string>();
+        }
     }
     
     // Helper method for title case formatting
@@ -301,4 +343,9 @@ public class Auto
             return tagFiles[BanderinAdquirido];
         }
     }
+    
+    // Propiedad para recibir archivos del formulario (no se mapea a BD)
+    [NotMapped]
+    [Display(Name = "Fotos del Vehículo")]
+    public List<IFormFile>? Fotos { get; set; }
 }

@@ -88,8 +88,16 @@ document.addEventListener('DOMContentLoaded', function() {
         // Form validation on input change
         const formInputs = document.querySelectorAll('input, select, textarea');
         formInputs.forEach(input => {
+            // Skip real-time validation for numeric fields that have formatting
+            const isNumericField = input.id === 'precio' || input.id === 'kilometraje' || 
+                                   input.id === 'cilindrada' || input.id === 'valor-fiscal';
+            
             input.addEventListener('change', validateCurrentSection);
-            input.addEventListener('input', validateCurrentSection);
+            
+            // Only add input event listener for non-numeric fields
+            if (!isNumericField) {
+                input.addEventListener('input', validateCurrentSection);
+            }
             
             // Add character counter for description field
             if (input.name === 'Formulario.Descripcion') {
@@ -144,6 +152,16 @@ document.addEventListener('DOMContentLoaded', function() {
         const kilometrajeInput = document.querySelector('#kilometraje');
         if (kilometrajeInput) {
             kilometrajeInput.addEventListener('input', () => formatKilometer(kilometrajeInput));
+        }
+
+        const valorFiscalInput = document.querySelector('#valor-fiscal');
+        if (valorFiscalInput) {
+            valorFiscalInput.addEventListener('input', () => formatPrice(valorFiscalInput));
+        }
+
+        const cilindradaInput = document.querySelector('#cilindrada');
+        if (cilindradaInput) {
+            cilindradaInput.addEventListener('input', () => formatKilometer(cilindradaInput));
         }
 
         // File upload handlers
@@ -254,19 +272,21 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     }
 
-    // Price and kilometer formatting
+    // Price and kilometer formatting - No comma formatting for number inputs
     window.formatPrice = function(input) {
+        // For number inputs, we don't format with commas as they cause parsing errors
+        // Just ensure only digits are allowed
         let value = input.value.replace(/[^\d]/g, '');
         if (value) {
-            value = parseInt(value).toLocaleString('es-CR');
             input.value = value;
         }
     };
 
     window.formatKilometer = function(input) {
+        // For number inputs, we don't format with commas as they cause parsing errors
+        // Just ensure only digits are allowed
         let value = input.value.replace(/[^\d]/g, '');
         if (value) {
-            value = parseInt(value).toLocaleString('es-CR');
             input.value = value;
         }
     };
@@ -338,22 +358,22 @@ document.addEventListener('DOMContentLoaded', function() {
 
     
     function validateVehicleData() {
-        const año = document.querySelector('select[name="Formulario.Año"]');
-        const kilometraje = document.querySelector('input[name="Formulario.Kilometraje"]');
-        const descripcion = document.querySelector('textarea[name="Formulario.Descripcion"]');
-        const precio = document.querySelector('input[name="Formulario.Precio"]');
-        const marca = document.querySelector('select[name="Formulario.Marca"]');
-        const modelo = document.querySelector('select[name="Formulario.Modelo"]');
-        const carroceria = document.querySelector('select[name="Formulario.Carroceria"]');
-        const combustible = document.querySelector('select[name="Formulario.Combustible"]');
-        const cilindrada = document.querySelector('input[name="Formulario.Cilindrada"]');
-        const colorExterior = document.querySelector('input[name="Formulario.ColorExterior"]');
-        const colorInterior = document.querySelector('input[name="Formulario.ColorInterior"]');
-        const puertas = document.querySelector('select[name="Formulario.Puertas"]');
-        const pasajeros = document.querySelector('select[name="Formulario.Pasajeros"]');
-        const transmision = document.querySelector('select[name="Formulario.Transmision"]');
-        const traccion = document.querySelector('select[name="Formulario.Traccion"]');
-        const condicion = document.querySelector('select[name="Formulario.Condicion"]');
+        const año = document.querySelector('#ano');
+        const kilometraje = document.querySelector('#kilometraje');
+        const descripcion = document.querySelector('#descripcion');
+        const precio = document.querySelector('#precio');
+        const marca = document.querySelector('#marca');
+        const modelo = document.querySelector('#modelo');
+        const carroceria = document.querySelector('#carroceria');
+        const combustible = document.querySelector('#combustible');
+        const cilindrada = document.querySelector('#cilindrada');
+        const colorExterior = document.querySelector('#color-exterior');
+        const colorInterior = document.querySelector('#color-interior');
+        const puertas = document.querySelector('#puertas');
+        const pasajeros = document.querySelector('#pasajeros');
+        const transmision = document.querySelector('#transmision');
+        const traccion = document.querySelector('#traccion');
+        const condicion = document.querySelector('#condicion');
         
         let isValid = true;
         
@@ -1012,31 +1032,60 @@ document.addEventListener('DOMContentLoaded', function() {
             nextBtn.disabled = true;
         }
         
-        // Prepare equipment data before submission
-        prepareEquipmentData();
+        const form = document.querySelector('#anuncioForm');
+        if (!form) {
+            console.error('Form not found!');
+            return;
+        }
         
-        // Prepare file data before submission
+        console.log('Form found, preparing FormData...');
+        
+        // Prepare all data before creating FormData
+        prepareEquipmentData();
         prepareFileData();
         
-        // Add action input to form
-        const form = document.querySelector('#anuncioForm');
-        if (form) {
-            // Remove any existing action input
-            const existingAction = form.querySelector('input[name="accion"]');
-            if (existingAction) {
-                existingAction.remove();
+        // Create FormData object which automatically handles files
+        const formData = new FormData(form);
+        
+        // Add handler for the specific endpoint
+        formData.append('handler', 'Finalizar');
+        
+        // Debug: log all FormData entries
+        console.log('=== FormData Contents ===');
+        for (let [key, value] of formData.entries()) {
+            if (value instanceof File) {
+                console.log(`${key}: File - ${value.name} (${value.size} bytes)`);
+            } else {
+                console.log(`${key}: ${value}`);
             }
-            
-            // Add new action input
-            const actionInput = document.createElement('input');
-            actionInput.type = 'hidden';
-            actionInput.name = 'accion';
-            actionInput.value = 'finalizar';
-            form.appendChild(actionInput);
-            
-            console.log('=== SUBMITTING FORM ===');
-            form.submit();
         }
+        
+        // Submit using fetch with FormData
+        fetch(form.action || window.location.pathname, {
+            method: 'POST',
+            body: formData
+        })
+        .then(response => {
+            console.log('Response received:', response.status);
+            if (response.ok) {
+                console.log('Form submitted successfully');
+                window.location.href = '/Index'; // Redirect on success
+            } else {
+                console.error('Form submission failed:', response.status);
+                alert('Error al enviar el formulario');
+            }
+        })
+        .catch(error => {
+            console.error('Network error:', error);
+            alert('Error de conexión');
+        })
+        .finally(() => {
+            // Reset button state
+            if (nextBtn) {
+                nextBtn.textContent = 'Finalizar';
+                nextBtn.disabled = false;
+            }
+        });
     }
     
     function prepareEquipmentData() {
@@ -1180,17 +1229,7 @@ document.addEventListener('DOMContentLoaded', function() {
     }
     
     // Utility functions for form inputs
-    window.formatKilometraje = function(input) {
-        let value = input.value.replace(/\D/g, '');
-        value = value.replace(/\B(?=(\d{3})+(?!\d))/g, ',');
-        input.value = value;
-    };
-    
-    window.formatPrice = function(input) {
-        let value = input.value.replace(/\D/g, '');
-        value = value.replace(/\B(?=(\d{3})+(?!\d))/g, ',');
-        input.value = value;
-    };
+    // Removed duplicate formatPrice and formatKilometer functions - using the ones above
     
     // Province/Canton cascade
     window.updateCantones = function(provinciaSelect) {
@@ -1422,4 +1461,39 @@ document.addEventListener('DOMContentLoaded', function() {
             console.warn('💡 Consider converting .MOV files to .MP4 for better browser compatibility.');
         }
     }
+
+    // Load banderines from Azure Blob Storage
+    loadBanderinesFromBlobStorage();
 });
+
+async function loadBanderinesFromBlobStorage() {
+    console.log('🏷️ Loading banderines from Azure Blob Storage...');
+    
+    try {
+        // Get all banderines with data-banderinfile attribute
+        const banderinImages = document.querySelectorAll('img[data-banderinfile]');
+        
+        for (const img of banderinImages) {
+            const fileName = img.getAttribute('data-banderinfile');
+            if (fileName) {
+                try {
+                    const response = await fetch(`/api/banderines/${encodeURIComponent(fileName)}`);
+                    if (response.ok) {
+                        const url = await response.text(); // Controller returns URL as string
+                        if (url && url.startsWith('http')) {
+                            img.src = url.replace(/"/g, ''); // Remove any quotes
+                            console.log(`✅ Loaded banderin: ${fileName}`);
+                        }
+                    } else {
+                        console.warn(`⚠ Failed to load banderin ${fileName}: ${response.status}`);
+                        // Keep the image hidden on error
+                    }
+                } catch (error) {
+                    console.warn(`⚠ Error loading banderin ${fileName}:`, error);
+                }
+            }
+        }
+    } catch (error) {
+        console.error('❌ Error loading banderines:', error);
+    }
+}

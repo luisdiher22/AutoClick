@@ -3,6 +3,7 @@ using System;
 using AutoClick.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -10,9 +11,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace AutoClick.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20251018180213_AddDivisaToAutos")]
+    partial class AddDivisaToAutos
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder.HasAnnotation("ProductVersion", "9.0.9");
@@ -65,10 +68,6 @@ namespace AutoClick.Migrations
                     b.Property<string>("Condicion")
                         .IsRequired()
                         .HasMaxLength(30)
-                        .HasColumnType("TEXT");
-
-                    b.Property<string>("Descripcion")
-                        .IsRequired()
                         .HasColumnType("TEXT");
 
                     b.Property<string>("Divisa")
@@ -145,9 +144,6 @@ namespace AutoClick.Migrations
 
                     b.Property<int>("PlanVisibilidad")
                         .HasColumnType("INTEGER");
-
-                    b.Property<decimal>("Precio")
-                        .HasColumnType("decimal(18,2)");
 
                     b.Property<string>("Provincia")
                         .IsRequired()
