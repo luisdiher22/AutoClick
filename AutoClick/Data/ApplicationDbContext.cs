@@ -15,6 +15,7 @@ public class ApplicationDbContext : DbContext
     public DbSet<Auto> Autos { get; set; }
     public DbSet<Reclamo> Reclamos { get; set; }
     public DbSet<Mensaje> Mensajes { get; set; }
+    public DbSet<VentaExterna> VentasExternas { get; set; }
     // Car model eliminado
     
     protected override void OnModelCreating(ModelBuilder modelBuilder)

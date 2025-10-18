@@ -3,6 +3,7 @@ using System;
 using AutoClick.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -10,9 +11,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace AutoClick.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20251018011057_AddVentasExternasTable")]
+    partial class AddVentasExternasTable
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder.HasAnnotation("ProductVersion", "9.0.9");
@@ -399,13 +402,13 @@ namespace AutoClick.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("INTEGER");
 
-                    b.Property<int?>("Año")
+                    b.Property<int>("Año")
                         .HasColumnType("INTEGER");
 
                     b.Property<DateTime>("FechaImportacion")
                         .HasColumnType("TEXT");
 
-                    b.Property<int?>("Kilometraje")
+                    b.Property<int>("Kilometraje")
                         .HasColumnType("INTEGER");
 
                     b.Property<string>("Link")
@@ -413,10 +416,12 @@ namespace AutoClick.Migrations
                         .HasColumnType("TEXT");
 
                     b.Property<string>("Marca")
+                        .IsRequired()
                         .HasMaxLength(100)
                         .HasColumnType("TEXT");
 
                     b.Property<string>("Modelo")
+                        .IsRequired()
                         .HasMaxLength(100)
                         .HasColumnType("TEXT");
 
@@ -424,7 +429,7 @@ namespace AutoClick.Migrations
                         .HasMaxLength(20)
                         .HasColumnType("TEXT");
 
-                    b.Property<decimal?>("PrecioVenta")
+                    b.Property<decimal>("PrecioVenta")
                         .HasColumnType("decimal(18,2)");
 
                     b.Property<decimal?>("PromedioValorFiscal")

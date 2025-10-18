@@ -93,6 +93,9 @@ builder.Services.AddScoped<ISoporteService, SoporteService>();
 // Add Banderines Service
 builder.Services.AddScoped<IBanderinesService, BanderinesService>();
 
+// Add Ventas Externas Service
+builder.Services.AddScoped<IVentasExternasService, VentasExternasService>();
+
 builder.Services.AddHttpContextAccessor();
 
 var app = builder.Build();

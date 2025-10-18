@@ -125,7 +125,7 @@
 
     <!-- Centro de soporte -->
     <div class="sidebar-item" data-estado="@(currentPage.Contains("CentroDeSoporte") ? "active" : "Default")" style="width: 344px; height: 56px; position: relative;">
-        <div style="width: 344px; height: 50px; padding-top: 14px; padding-bottom: 14px; padding-left: 16px; padding-right: 22px; left: 0px; top: 3px; position: absolute; overflow: hidden; border-radius: 2px; justify-content: space-between; align-items: center; display: inline-flex; @(currentPage.Contains("CentroDeSoporte") ? "background: rgba(255, 255, 255, 0.25);" : "") transition: background-color 0.2s ease;">
+        <div style="width: 344px; height: 50px; padding-top: 14px; padding-bottom: 14px; padding-left: 16px; padding-right: 22px; left: 0px; top: 3px; position: absolute; overflow: hidden; border-radius: 2px; justify-content: flex-start; align-items: center; display: inline-flex; @(currentPage.Contains("CentroDeSoporte") ? "background: rgba(255, 255, 255, 0.25);" : "") transition: background-color 0.2s ease;">
             <a href="/Admin/CentroDeSoporte" style="text-decoration: none; color: white; display: flex; align-items: center; gap: 8px; width: 100%;">
                 <div style="justify-content: flex-start; align-items: center; gap: 8px; display: flex">
                     <svg width="22" height="22" viewBox="0 0 22 22" fill="none" xmlns="http://www.w3.org/2000/svg" style="flex-shrink: 0;">
@@ -134,9 +134,20 @@
                     <div style="text-box-trim: trim-both; text-box-edge: cap alphabetic; color: white; font-size: 16px; font-family: Montserrat; font-weight: 500; word-wrap: break-word">Centro de soporte</div>
                 </div>
             </a>
-            <svg width="12" height="6" viewBox="0 0 12 6" fill="none" xmlns="http://www.w3.org/2000/svg" style="flex-shrink: 0;">
-                <path d="M0 0L6 6L12 0H0Z" fill="white"/>
-            </svg>
+        </div>
+    </div>
+
+    <!-- Importar Ventas Externas -->
+    <div class="sidebar-item" data-estado="@(currentPage.Contains("ImportarVentasExternas") ? "active" : "Default")" style="width: 344px; height: 56px; position: relative;">
+        <div style="width: 344px; height: 50px; padding-top: 14px; padding-bottom: 14px; padding-left: 16px; padding-right: 22px; left: 0px; top: 3px; position: absolute; overflow: hidden; border-radius: 2px; justify-content: flex-start; align-items: center; display: inline-flex; @(currentPage.Contains("ImportarVentasExternas") ? "background: rgba(255, 255, 255, 0.25);" : "") transition: background-color 0.2s ease;">
+            <a href="/Admin/ImportarVentasExternas" style="text-decoration: none; color: white; display: flex; align-items: center; gap: 8px; width: 100%;">
+                <div style="justify-content: flex-start; align-items: center; gap: 8px; display: flex">
+                    <svg width="22" height="18" viewBox="0 0 22 18" fill="none" xmlns="http://www.w3.org/2000/svg" style="flex-shrink: 0;">
+                        <path d="M2 18C1.45 18 0.979167 17.8042 0.5875 17.4125C0.195833 17.0208 0 16.55 0 16V2C0 1.45 0.195833 0.979167 0.5875 0.5875C0.979167 0.195833 1.45 0 2 0H9L11 2H20C20.55 2 21.0208 2.19583 21.4125 2.5875C21.8042 2.97917 22 3.45 22 4V16C22 16.55 21.8042 17.0208 21.4125 17.4125C21.0208 17.8042 20.55 18 20 18H2ZM2 2V16H20V4H10.175L8.175 2H2ZM8 14H14V12H8V14ZM8 10H14V8H8V10Z" fill="white"/>
+                    </svg>
+                    <div style="text-box-trim: trim-both; text-box-edge: cap alphabetic; color: white; font-size: 16px; font-family: Montserrat; font-weight: 500; word-wrap: break-word">Importar Ventas Externas</div>
+                </div>
+            </a>
         </div>
     </div>
 

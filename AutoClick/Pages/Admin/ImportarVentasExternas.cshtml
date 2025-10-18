@@ -1,0 +1,394 @@
+@page
+@model AutoClick.Pages.Admin.ImportarVentasExternasModel
+@{
+    ViewData["Title"] = "Importar Ventas Externas";
+    Layout = "_Layout";
+}
+
+<style>
+body {
+    margin: 0;
+    padding: 0;
+    background: #02081C !important;
+    font-family: 'Montserrat', sans-serif !important;
+    overflow-x: hidden;
+    color: white;
+}
+
+.content-card {
+    background: rgba(255, 255, 255, 0.15);
+    border: 1px solid rgba(255, 255, 255, 0.25);
+    border-radius: 8px;
+    padding: 30px;
+    margin-bottom: 30px;
+}
+
+.section-title {
+    color: white;
+    font-size: 20px;
+    font-weight: 600;
+    margin-bottom: 20px;
+}
+
+.info-box {
+    background: rgba(255, 255, 255, 0.1);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    border-radius: 6px;
+    padding: 20px;
+    margin-bottom: 30px;
+}
+
+.info-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 0;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.info-item:last-child {
+    border-bottom: none;
+}
+
+.info-label {
+    color: rgba(255, 255, 255, 0.7);
+    font-size: 14px;
+}
+
+.info-value {
+    color: white;
+    font-size: 18px;
+    font-weight: 600;
+}
+
+.upload-area {
+    background: rgba(255, 255, 255, 0.05);
+    border: 2px dashed rgba(255, 255, 255, 0.3);
+    border-radius: 8px;
+    padding: 40px;
+    text-align: center;
+    transition: all 0.3s ease;
+    cursor: pointer;
+}
+
+.upload-area:hover {
+    background: rgba(255, 255, 255, 0.1);
+    border-color: rgba(255, 255, 255, 0.5);
+}
+
+.upload-icon {
+    font-size: 48px;
+    color: rgba(255, 255, 255, 0.5);
+    margin-bottom: 15px;
+}
+
+.upload-text {
+    color: rgba(255, 255, 255, 0.7);
+    font-size: 16px;
+    margin-bottom: 10px;
+}
+
+.file-requirements {
+    color: rgba(255, 255, 255, 0.5);
+    font-size: 13px;
+    margin-top: 15px;
+}
+
+.form-label {
+    color: white;
+    font-weight: 500;
+    margin-bottom: 10px;
+    display: block;
+}
+
+.form-control {
+    background: rgba(255, 255, 255, 0.1);
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    color: white;
+    padding: 10px 15px;
+    border-radius: 4px;
+    width: 100%;
+}
+
+.form-control:focus {
+    background: rgba(255, 255, 255, 0.15);
+    border-color: rgba(255, 255, 255, 0.5);
+    outline: none;
+    color: white;
+}
+
+.btn-primary {
+    background: #0d6efd;
+    border: none;
+    color: white;
+    padding: 12px 30px;
+    border-radius: 4px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.btn-primary:hover {
+    background: #0b5ed7;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+.btn-primary:disabled {
+    background: rgba(255, 255, 255, 0.2);
+    cursor: not-allowed;
+    transform: none;
+}
+
+.alert {
+    padding: 15px 20px;
+    border-radius: 6px;
+    margin-bottom: 20px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.alert-success {
+    background: rgba(25, 135, 84, 0.2);
+    border: 1px solid rgba(25, 135, 84, 0.5);
+    color: #75ff94;
+}
+
+.alert-danger {
+    background: rgba(220, 53, 69, 0.2);
+    border: 1px solid rgba(220, 53, 69, 0.5);
+    color: #ff7b8a;
+}
+
+.alert-icon {
+    font-size: 20px;
+}
+
+.instructions-list {
+    list-style: none;
+    padding: 0;
+    margin: 20px 0;
+}
+
+.instructions-list li {
+    padding: 10px 0;
+    padding-left: 30px;
+    position: relative;
+    color: rgba(255, 255, 255, 0.8);
+}
+
+.instructions-list li:before {
+    content: "✓";
+    position: absolute;
+    left: 0;
+    color: #0d6efd;
+    font-weight: bold;
+}
+
+.required-columns {
+    background: rgba(13, 110, 253, 0.1);
+    border-left: 3px solid #0d6efd;
+    padding: 15px;
+    margin: 15px 0;
+    border-radius: 4px;
+}
+
+.column-tag {
+    display: inline-block;
+    background: rgba(255, 255, 255, 0.15);
+    padding: 4px 12px;
+    border-radius: 12px;
+    margin: 4px;
+    font-size: 13px;
+    color: white;
+    font-family: 'Courier New', monospace;
+}
+</style>
+
+<div style="width: 100%; min-height: 100vh; position: relative; background: #02081C; font-family: 'Montserrat', sans-serif;">
+
+    @await Html.PartialAsync("_AdminSidebar")
+
+    <!-- Main Content -->
+    <div style="margin-left: 396px; padding: 40px 20px 20px 20px;">
+
+        <h1 style="color: white; margin-bottom: 30px; font-size: 24px; font-weight: 700;">Importar Ventas Externas</h1>
+
+        @if (!string.IsNullOrEmpty(Model.SuccessMessage))
+        {
+            <div class="alert alert-success">
+                <span class="alert-icon">✓</span>
+                <span>@Model.SuccessMessage</span>
+            </div>
+        }
+
+        @if (!string.IsNullOrEmpty(Model.ErrorMessage))
+        {
+            <div class="alert alert-danger">
+                <span class="alert-icon">⚠</span>
+                <span>@Model.ErrorMessage</span>
+            </div>
+        }
+
+        <!-- Información del Sistema -->
+        <div class="content-card">
+            <h2 class="section-title">Estado del Sistema</h2>
+            <div class="info-box">
+                <div class="info-item">
+                    <span class="info-label">Total de registros en base de datos:</span>
+                    <span class="info-value">@Model.TotalRegistros</span>
+                </div>
+                <div class="info-item">
+                    <span class="info-label">Última actualización:</span>
+                    <span class="info-value">
+                        @if (Model.UltimaImportacion.HasValue)
+                        {
+                            @Model.UltimaImportacion.Value.ToString("dd/MM/yyyy HH:mm")
+                        }
+                        else
+                        {
+                            <span style="color: rgba(255, 255, 255, 0.5);">Sin importaciones previas</span>
+                        }
+                    </span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Formulario de Importación -->
+        <div class="content-card">
+            <h2 class="section-title">Importar Archivo Excel</h2>
+            
+            <div class="required-columns">
+                <strong style="color: white; display: block; margin-bottom: 10px;">Columnas requeridas en el archivo Excel:</strong>
+                <div>
+                    <span class="column-tag">LINK</span>
+                    <span class="column-tag">MARCA *</span>
+                    <span class="column-tag">MODELO *</span>
+                    <span class="column-tag">AÑO *</span>
+                    <span class="column-tag">KILOMETRAJE</span>
+                    <span class="column-tag">PRECIO DE VENTA *</span>
+                    <span class="column-tag">PLACA</span>
+                    <span class="column-tag">VALOR FISCAL</span>
+                    <span class="column-tag">PROMEDIO VALOR MERCADO</span>
+                    <span class="column-tag">PROMEDIO VALOR FISCAL</span>
+                </div>
+                <p style="color: rgba(255, 255, 255, 0.7); font-size: 13px; margin-top: 10px; margin-bottom: 0;">
+                    * Columnas obligatorias
+                </p>
+            </div>
+
+            <form method="post" enctype="multipart/form-data" asp-page-handler="Importar" id="uploadForm">
+                <div class="mb-4">
+                    <label class="form-label">Seleccione el archivo Excel (.xlsx o .xls)</label>
+                    
+                    <label for="fileInput" class="upload-area">
+                        <div class="upload-icon">📁</div>
+                        <div class="upload-text" id="fileName">
+                            Haga clic aquí o arrastre el archivo para subirlo
+                        </div>
+                        <div class="file-requirements">
+                            Formatos aceptados: .xlsx, .xls | Tamaño máximo: 10MB
+                        </div>
+                    </label>
+                    
+                    <input 
+                        type="file" 
+                        id="fileInput" 
+                        name="ArchivoExcel" 
+                        accept=".xlsx,.xls" 
+                        style="display: none;"
+                        required />
+                </div>
+
+                <div style="margin-top: 30px;">
+                    <button type="submit" class="btn-primary" id="submitBtn">
+                        <span id="btnText">Importar Datos</span>
+                        <span id="btnLoader" style="display: none;">
+                            <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+                            Procesando...
+                        </span>
+                    </button>
+                </div>
+            </form>
+        </div>
+
+        <!-- Instrucciones -->
+        <div class="content-card">
+            <h2 class="section-title">Instrucciones</h2>
+            <ul class="instructions-list">
+                <li>El archivo Excel debe contener los encabezados en la primera fila</li>
+                <li>Las columnas MARCA, MODELO, AÑO y PRECIO DE VENTA son obligatorias</li>
+                <li>Al importar un nuevo archivo, todos los registros existentes serán eliminados y reemplazados</li>
+                <li>Los datos se utilizan para calcular el valor promedio de mercado de vehículos</li>
+                <li>Asegúrese de que los valores numéricos estén correctamente formateados</li>
+                <li>El proceso puede tardar algunos segundos dependiendo del tamaño del archivo</li>
+            </ul>
+        </div>
+
+    </div>
+</div>
+
+@section Scripts {
+<script>
+    const fileInput = document.getElementById('fileInput');
+    const fileName = document.getElementById('fileName');
+    const uploadForm = document.getElementById('uploadForm');
+    const submitBtn = document.getElementById('submitBtn');
+    const btnText = document.getElementById('btnText');
+    const btnLoader = document.getElementById('btnLoader');
+    
+    // Actualizar nombre del archivo al seleccionar
+    fileInput.addEventListener('change', function() {
+        if (this.files && this.files[0]) {
+            const file = this.files[0];
+            fileName.textContent = `📄 ${file.name} (${(file.size / 1024 / 1024).toFixed(2)} MB)`;
+            fileName.style.color = 'white';
+        } else {
+            fileName.textContent = 'Haga clic aquí o arrastre el archivo para subirlo';
+            fileName.style.color = 'rgba(255, 255, 255, 0.7)';
+        }
+    });
+    
+    // Drag and drop
+    const uploadArea = document.querySelector('.upload-area');
+    
+    uploadArea.addEventListener('dragover', function(e) {
+        e.preventDefault();
+        this.style.background = 'rgba(255, 255, 255, 0.15)';
+        this.style.borderColor = 'rgba(255, 255, 255, 0.6)';
+    });
+    
+    uploadArea.addEventListener('dragleave', function(e) {
+        e.preventDefault();
+        this.style.background = 'rgba(255, 255, 255, 0.05)';
+        this.style.borderColor = 'rgba(255, 255, 255, 0.3)';
+    });
+    
+    uploadArea.addEventListener('drop', function(e) {
+        e.preventDefault();
+        this.style.background = 'rgba(255, 255, 255, 0.05)';
+        this.style.borderColor = 'rgba(255, 255, 255, 0.3)';
+        
+        const files = e.dataTransfer.files;
+        if (files.length > 0) {
+            fileInput.files = files;
+            const event = new Event('change');
+            fileInput.dispatchEvent(event);
+        }
+    });
+    
+    // Mostrar loader al enviar formulario
+    uploadForm.addEventListener('submit', function(e) {
+        if (fileInput.files.length === 0) {
+            e.preventDefault();
+            alert('Por favor seleccione un archivo Excel');
+            return;
+        }
+        
+        submitBtn.disabled = true;
+        btnText.style.display = 'none';
+        btnLoader.style.display = 'inline';
+    });
+</script>
+}
