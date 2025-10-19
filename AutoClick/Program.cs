@@ -5,8 +5,17 @@ using AutoClick.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
+// Configure encoding to support UTF-8 characters
+System.Text.Encoding.RegisterProvider(System.Text.CodePagesEncodingProvider.Instance);
+
 // Add services to the container.
 builder.Services.AddRazorPages();
+
+// Configure localization and encoding
+builder.Services.Configure<Microsoft.AspNetCore.Http.Json.JsonOptions>(options =>
+{
+    options.SerializerOptions.Encoder = System.Text.Encodings.Web.JavaScriptEncoder.UnsafeRelaxedJsonEscaping;
+});
 
 // Add Controllers (for API endpoints)
 builder.Services.AddControllers();
@@ -29,6 +38,7 @@ builder.Services.AddAuthentication("Cookies")
 
 // Add session support
 builder.Services.AddDistributedMemoryCache();
+builder.Services.AddMemoryCache(); // Agregar Memory Cache para performance
 builder.Services.AddSession(options =>
 {
     options.IdleTimeout = TimeSpan.FromMinutes(30);
@@ -37,19 +47,33 @@ builder.Services.AddSession(options =>
     options.Cookie.Name = "AutoClick.Session";
 });
 
-// Add Entity Framework - SQLite for development, SQL Server for production
+// Add Entity Framework - Azure SQL Database for all environments
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
 {
+    var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
+    
+    // Use Azure SQL Server for all environments
+    options.UseSqlServer(connectionString, sqlOptions =>
+    {
+        // Enable connection resiliency for Azure SQL Database
+        sqlOptions.EnableRetryOnFailure(
+            maxRetryCount: 3,
+            maxRetryDelay: TimeSpan.FromSeconds(10),
+            errorNumbersToAdd: null);
+        
+        // Set command timeout for long-running operations
+        sqlOptions.CommandTimeout(15);
+    });
+    
+    // Enable sensitive data logging in development for debugging
     if (builder.Environment.IsDevelopment())
     {
-        // Use SQLite for local development to preserve Azure credits
-        options.UseSqlite(builder.Configuration.GetConnectionString("DefaultConnection"));
+        options.EnableSensitiveDataLogging();
+        options.EnableDetailedErrors();
     }
-    else
-    {
-        // Use SQL Server for production (Azure)
-        options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"));
-    }
+    
+    // Add performance optimizations
+    options.UseQueryTrackingBehavior(QueryTrackingBehavior.NoTracking);
 });
 
 // Add Storage Service - Local for development, Azure for production

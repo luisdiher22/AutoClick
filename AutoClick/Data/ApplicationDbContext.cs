@@ -119,7 +119,7 @@ public class ApplicationDbContext : DbContext
             
             // Configuraciones de propiedades
             entity.Property(r => r.EmailCliente)
-                  .IsRequired()
+                  .IsRequired(false) // Allow null for foreign key
                   .HasMaxLength(150);
                   
             entity.Property(r => r.Nombre)
@@ -156,12 +156,14 @@ public class ApplicationDbContext : DbContext
             entity.HasOne(r => r.Cliente)
                   .WithMany()
                   .HasForeignKey(r => r.EmailCliente)
-                  .OnDelete(DeleteBehavior.SetNull);
+                  .IsRequired(false)
+                  .OnDelete(DeleteBehavior.NoAction);
                   
             entity.HasOne(r => r.AdminRespuesta)
                   .WithMany()
                   .HasForeignKey(r => r.EmailAdminRespuesta)
-                  .OnDelete(DeleteBehavior.SetNull);
+                  .IsRequired(false)
+                  .OnDelete(DeleteBehavior.NoAction);
         });
         
         // Configure Mensaje entity
@@ -179,7 +181,7 @@ public class ApplicationDbContext : DbContext
             
             // Configuraciones de propiedades
             entity.Property(m => m.EmailCliente)
-                  .IsRequired()
+                  .IsRequired(false) // Allow null for foreign key
                   .HasMaxLength(150);
                   
             entity.Property(m => m.Nombre)
@@ -220,13 +222,13 @@ public class ApplicationDbContext : DbContext
                   .WithMany()
                   .HasForeignKey(m => m.EmailCliente)
                   .IsRequired(false)
-                  .OnDelete(DeleteBehavior.SetNull);
+                  .OnDelete(DeleteBehavior.NoAction);
                   
             entity.HasOne(m => m.AdminRespuesta)
                   .WithMany()
                   .HasForeignKey(m => m.EmailAdminRespuesta)
                   .IsRequired(false)
-                  .OnDelete(DeleteBehavior.SetNull);
+                  .OnDelete(DeleteBehavior.NoAction);
         });
         
         // Configure your other entity relationships here

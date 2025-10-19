@@ -131,14 +131,14 @@ namespace AutoClick.Pages
                     Console.WriteLine($"Updating auto with ID: {editId}");
                     var auto = await ActualizarAutoAsync(editId, userEmail);
                     Console.WriteLine($"Auto updated successfully: {auto.Id}");
-                    return RedirectToPage("/Index");
+                    return RedirectToPage("/");
                 }
                 else
                 {
                     Console.WriteLine("Creating new auto");
                     var auto = await CrearAutoAsync(userEmail);
                     Console.WriteLine($"Auto created successfully: {auto.Id}");
-                    return RedirectToPage("/Index");
+                    return RedirectToPage("/");
                 }
             }
             catch (Exception ex)

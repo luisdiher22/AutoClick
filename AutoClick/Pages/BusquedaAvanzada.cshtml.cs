@@ -3,16 +3,32 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 using AutoClick.Models;
 using AutoClick.Data;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Caching.Memory;
 
 namespace AutoClick.Pages
 {
+    public class DropdownOptions
+    {
+        public List<string> Provincias { get; set; } = new();
+        public List<string> Cantones { get; set; } = new();
+        public List<string> Marcas { get; set; } = new();
+        public List<string> Modelos { get; set; } = new();
+        public List<string> TiposCarroceria { get; set; } = new();
+        public List<string> TiposCombustible { get; set; } = new();
+        public List<string> Transmisiones { get; set; } = new();
+        public List<string> Condiciones { get; set; } = new();
+        public List<int> Anos { get; set; } = new();
+    }
+
     public class BusquedaAvanzadaModel : PageModel
     {
         private readonly ApplicationDbContext _context;
+        private readonly IMemoryCache _cache;
 
-        public BusquedaAvanzadaModel(ApplicationDbContext context)
+        public BusquedaAvanzadaModel(ApplicationDbContext context, IMemoryCache cache)
         {
             _context = context;
+            _cache = cache;
         }
 
         public IList<Auto> Autos { get; set; } = new List<Auto>();
@@ -90,23 +106,26 @@ namespace AutoClick.Pages
 
         public async Task OnGetAsync()
         {
-            // Load dropdown options
+            // Load dropdown options (con caché optimizado)
             await LoadDropdownOptions();
 
-            var query = _context.Autos.AsQueryable();
+            // Crear consulta base optimizada con AsNoTracking desde el inicio
+            var query = _context.Autos
+                .AsNoTracking()
+                .Where(a => a.Activo); // Solo autos activos
 
             // Build applied filters list for UI
             BuildAppliedFiltersList();
 
-            // Apply filters
+            // Apply filters de forma optimizada
             if (!string.IsNullOrEmpty(Search))
                 query = query.Where(a => a.Marca.Contains(Search) || a.Modelo.Contains(Search));
                 
             if (!string.IsNullOrEmpty(Province))
-                query = query.Where(a => a.Provincia.Contains(Province));
+                query = query.Where(a => a.Provincia == Province); // Usar == en lugar de Contains para mejor performance
                 
             if (!string.IsNullOrEmpty(Canton))
-                query = query.Where(a => a.Canton.Contains(Canton));
+                query = query.Where(a => a.Canton == Canton); // Usar == en lugar de Contains
                 
             if (!string.IsNullOrEmpty(Brand))
                 query = query.Where(a => a.Marca == Brand);
@@ -154,12 +173,13 @@ namespace AutoClick.Pages
                 _ => query.OrderByDescending(a => a.Id) // Default: most recent
             };
 
-            // Count total cars for pagination
-            TotalCars = await query.CountAsync();
+            // Count total cars for pagination (con AsNoTracking para performance)
+            TotalCars = await query.AsNoTracking().CountAsync();
             TotalPages = (int)Math.Ceiling((double)TotalCars / PageSize);
 
-            // Apply pagination
+            // Apply pagination (con AsNoTracking para performance)
             Autos = await query
+                .AsNoTracking()
                 .Skip((Page - 1) * PageSize)
                 .Take(PageSize)
                 .ToListAsync();
@@ -294,88 +314,131 @@ namespace AutoClick.Pages
 
         private async Task LoadDropdownOptions()
         {
-            try
+            // Intentar obtener desde caché primero
+            var cacheKey = "busqueda-dropdown-options";
+            if (!_cache.TryGetValue(cacheKey, out DropdownOptions? cachedOptions))
             {
-                // Load from database if available
-                var hasData = await _context.Autos.AnyAsync();
-                
-                if (hasData)
+                try
                 {
-                    AvailableProvinces = await _context.Autos
-                        .Where(a => !string.IsNullOrEmpty(a.Provincia))
-                        .Select(a => a.Provincia)
-                        .Distinct()
-                        .OrderBy(p => p)
-                        .ToListAsync();
+                    // Load from database if available
+                    var hasData = await _context.Autos.AsNoTracking().AnyAsync();
+                    
+                    if (hasData)
+                    {
+                        // Hacer UNA sola consulta optimizada para obtener todos los datos necesarios
+                        var autosData = await _context.Autos
+                            .AsNoTracking()
+                            .Where(a => a.Activo) // Solo autos activos
+                            .Select(a => new {
+                                a.Provincia,
+                                a.Canton,
+                                a.Marca,
+                                a.Modelo,
+                                a.Carroceria,
+                                a.Combustible,
+                                a.Transmision,
+                                a.Condicion,
+                                a.Ano
+                            })
+                            .ToListAsync();
 
-                    AvailableCantons = await _context.Autos
-                        .Where(a => !string.IsNullOrEmpty(a.Canton))
-                        .Where(a => string.IsNullOrEmpty(Province) || a.Provincia == Province)
-                        .Select(a => a.Canton)
-                        .Distinct()
-                        .OrderBy(c => c)
-                        .ToListAsync();
+                        // Procesar en memoria para evitar múltiples consultas a BD
+                        cachedOptions = new DropdownOptions
+                        {
+                            Provincias = autosData
+                                .Where(a => !string.IsNullOrEmpty(a.Provincia))
+                                .Select(a => a.Provincia)
+                                .Distinct()
+                                .OrderBy(p => p)
+                                .ToList(),
+                            Cantones = autosData
+                                .Where(a => !string.IsNullOrEmpty(a.Canton))
+                                .Select(a => a.Canton)
+                                .Distinct()
+                                .OrderBy(c => c)
+                                .ToList(),
+                            Marcas = autosData
+                                .Where(a => !string.IsNullOrEmpty(a.Marca))
+                                .Select(a => a.Marca)
+                                .Distinct()
+                                .OrderBy(b => b)
+                                .ToList(),
+                            Modelos = autosData
+                                .Where(a => !string.IsNullOrEmpty(a.Modelo))
+                                .Select(a => a.Modelo)
+                                .Distinct()
+                                .OrderBy(m => m)
+                                .ToList(),
+                            TiposCarroceria = autosData
+                                .Where(a => !string.IsNullOrEmpty(a.Carroceria))
+                                .Select(a => a.Carroceria)
+                                .Distinct()
+                                .OrderBy(bt => bt)
+                                .ToList(),
+                            TiposCombustible = autosData
+                                .Where(a => !string.IsNullOrEmpty(a.Combustible))
+                                .Select(a => a.Combustible)
+                                .Distinct()
+                                .OrderBy(ft => ft)
+                                .ToList(),
+                            Transmisiones = autosData
+                                .Where(a => !string.IsNullOrEmpty(a.Transmision))
+                                .Select(a => a.Transmision)
+                                .Distinct()
+                                .OrderBy(t => t)
+                                .ToList(),
+                            Condiciones = autosData
+                                .Where(a => !string.IsNullOrEmpty(a.Condicion))
+                                .Select(a => a.Condicion)
+                                .Distinct()
+                                .OrderBy(c => c)
+                                .ToList(),
+                            Anos = autosData
+                                .Where(a => a.Ano > 0)
+                                .Select(a => a.Ano)
+                                .Distinct()
+                                .OrderByDescending(y => y)
+                                .ToList()
+                        };
 
-                    AvailableBrands = await _context.Autos
-                        .Where(a => !string.IsNullOrEmpty(a.Marca))
-                        .Select(a => a.Marca)
-                        .Distinct()
-                        .OrderBy(b => b)
-                        .ToListAsync();
-
-                    AvailableModels = await _context.Autos
-                        .Where(a => !string.IsNullOrEmpty(a.Modelo))
-                        .Where(a => string.IsNullOrEmpty(Brand) || a.Marca == Brand)
-                        .Select(a => a.Modelo)
-                        .Distinct()
-                        .OrderBy(m => m)
-                        .ToListAsync();
-
-                    AvailableBodyTypes = await _context.Autos
-                        .Where(a => !string.IsNullOrEmpty(a.Carroceria))
-                        .Select(a => a.Carroceria)
-                        .Distinct()
-                        .OrderBy(bt => bt)
-                        .ToListAsync();
-
-                    AvailableFuelTypes = await _context.Autos
-                        .Where(a => !string.IsNullOrEmpty(a.Combustible))
-                        .Select(a => a.Combustible)
-                        .Distinct()
-                        .OrderBy(ft => ft)
-                        .ToListAsync();
-
-                    AvailableTransmissions = await _context.Autos
-                        .Where(a => !string.IsNullOrEmpty(a.Transmision))
-                        .Select(a => a.Transmision)
-                        .Distinct()
-                        .OrderBy(t => t)
-                        .ToListAsync();
-
-                    AvailableConditions = await _context.Autos
-                        .Where(a => !string.IsNullOrEmpty(a.Condicion))
-                        .Select(a => a.Condicion)
-                        .Distinct()
-                        .OrderBy(c => c)
-                        .ToListAsync();
-
-                    AvailableYears = await _context.Autos
-                        .Where(a => a.Ano > 0)
-                        .Select(a => a.Ano)
-                        .Distinct()
-                        .OrderByDescending(y => y)
-                        .ToListAsync();
+                        // Guardar en caché por 15 minutos
+                        _cache.Set(cacheKey, cachedOptions, TimeSpan.FromMinutes(15));
+                    }
+                    else
+                    {
+                        // Use sample data options
+                        LoadSampleDropdownOptions();
+                        return;
+                    }
                 }
-                else
+                catch
                 {
-                    // Use sample data options
+                    // Fallback to sample data
                     LoadSampleDropdownOptions();
+                    return;
                 }
             }
-            catch
+
+            // Usar datos del caché si están disponibles
+            if (cachedOptions != null)
             {
-                // Fallback to sample data
-                LoadSampleDropdownOptions();
+                AvailableProvinces = cachedOptions.Provincias;
+                AvailableBrands = cachedOptions.Marcas;
+                AvailableBodyTypes = cachedOptions.TiposCarroceria;
+                AvailableFuelTypes = cachedOptions.TiposCombustible;
+                AvailableTransmissions = cachedOptions.Transmisiones;
+                AvailableConditions = cachedOptions.Condiciones;
+                AvailableYears = cachedOptions.Anos;
+
+                // Filtrar cantones basados en provincia seleccionada
+                AvailableCantons = string.IsNullOrEmpty(Province) 
+                    ? cachedOptions.Cantones 
+                    : cachedOptions.Cantones; // TODO: Implementar filtro provincia-cantón
+
+                // Filtrar modelos basados en marca seleccionada  
+                AvailableModels = string.IsNullOrEmpty(Brand) 
+                    ? cachedOptions.Modelos 
+                    : cachedOptions.Modelos; // TODO: Implementar filtro marca-modelo
             }
         }
 

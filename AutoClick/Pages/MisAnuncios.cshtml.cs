@@ -200,7 +200,7 @@ namespace AutoClick.Pages
 
                 // Apply pagination
                 var skip = (PaginaActual - 1) * AnunciosPorPagina;
-                var autos = await query.Skip(skip).Take(AnunciosPorPagina).ToListAsync();
+                var autos = await query.AsNoTracking().Skip(skip).Take(AnunciosPorPagina).ToListAsync();
 
                 // Convert to view model with more realistic data
                 Anuncios = autos.Select(auto => new AnuncioViewModel

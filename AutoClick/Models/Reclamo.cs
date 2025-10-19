@@ -8,11 +8,10 @@ public class Reclamo
     [Key]
     public int Id { get; set; }
     
-    [Required]
     [MaxLength(150)]
     [EmailAddress]
     [Display(Name = "Correo Electrónico")]
-    public string EmailCliente { get; set; } = string.Empty;
+    public string? EmailCliente { get; set; }
     
     [Required]
     [MaxLength(50)]

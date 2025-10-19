@@ -54,30 +54,34 @@ namespace AutoClick.Pages.Admin
 
             try
             {
-                // Obtener estadísticas generales
-                TotalUsuarios = await _context.Usuarios.CountAsync();
-                TotalAutos = await _context.Autos.CountAsync();
-                TotalMensajes = await _context.Mensajes.CountAsync();
-                TotalReclamos = await _context.Reclamos.CountAsync();
+                // Obtener estadísticas generales (sin tracking para mejor performance)
+                TotalUsuarios = await _context.Usuarios.AsNoTracking().CountAsync();
+                TotalAutos = await _context.Autos.AsNoTracking().CountAsync();
+                TotalMensajes = await _context.Mensajes.AsNoTracking().CountAsync();
+                TotalReclamos = await _context.Reclamos.AsNoTracking().CountAsync();
 
-                // Obtener datos recientes
+                // Obtener datos recientes (sin tracking y con proyección)
                 UsuariosRecientes = await _context.Usuarios
+                    .AsNoTracking()
                     .OrderBy(u => u.Email)
                     .Take(5)
                     .ToListAsync();
 
                 AutosRecientes = await _context.Autos
+                    .AsNoTracking()
                     .OrderByDescending(a => a.Id)
                     .Take(5)
                     .ToListAsync();
 
                 MensajesRecientes = await _context.Mensajes
+                    .AsNoTracking()
                     .Include(m => m.Cliente)
                     .OrderByDescending(m => m.FechaCreacion)
                     .Take(5)
                     .ToListAsync();
 
                 ReclamosRecientes = await _context.Reclamos
+                    .AsNoTracking()
                     .Include(r => r.Cliente)
                     .OrderByDescending(r => r.FechaCreacion)
                     .Take(5)
