@@ -93,12 +93,40 @@ builder.Services.AddScoped<ISoporteService, SoporteService>();
 // Add Banderines Service
 builder.Services.AddScoped<IBanderinesService, BanderinesService>();
 
+// Add Tasa Cambio Service (Singleton para caché compartido)
+builder.Services.AddSingleton<ITasaCambioService, TasaCambioService>();
+
 // Add Ventas Externas Service
 builder.Services.AddScoped<IVentasExternasService, VentasExternasService>();
+
+// Add HttpClient Factory para TasaCambioService
+builder.Services.AddHttpClient();
 
 builder.Services.AddHttpContextAccessor();
 
 var app = builder.Build();
+
+// Inicializar PrecioHelper con el servicio de tasa de cambio
+using (var scope = app.Services.CreateScope())
+{
+    var tasaCambioService = scope.ServiceProvider.GetRequiredService<ITasaCambioService>();
+    AutoClick.Helpers.PrecioHelper.Initialize(tasaCambioService);
+    
+    // Obtener tasa inicial de forma asíncrona
+    _ = Task.Run(async () => 
+    {
+        try
+        {
+            var tasa = await tasaCambioService.ObtenerTasaCambioUSDaCRC();
+            AutoClick.Helpers.PrecioHelper.ActualizarTasaCacheada(tasa);
+        }
+        catch (Exception ex)
+        {
+            // Log error pero no bloquear inicio de app
+            Console.WriteLine($"Error al obtener tasa inicial: {ex.Message}");
+        }
+    });
+}
 
 // Configure the HTTP request pipeline.
 if (!app.Environment.IsDevelopment())

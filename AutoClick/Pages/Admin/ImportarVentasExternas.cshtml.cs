@@ -42,6 +42,7 @@ namespace AutoClick.Pages.Admin
             // Por ejemplo, verificar rol o email específico
 
             TotalRegistros = await _ventasExternasService.ObtenerTotalRegistros();
+            UltimaImportacion = await _ventasExternasService.ObtenerFechaUltimaImportacion();
             
             return Page();
         }

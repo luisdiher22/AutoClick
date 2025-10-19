@@ -78,7 +78,7 @@
                 <div class="producto-info-card">
                     <h1 class="producto-car-title">@Model.Vehicle?.NombreCompleto</h1>
                     <p class="producto-car-mileage">@Model.FormatKilometrage(Model.Vehicle?.Kilometraje ?? 0)</p>
-                    <p class="producto-car-price">@Model.FormatPrice(Model.Vehicle?.ValorFiscal ?? 0)</p>
+                    <p class="producto-car-price">@Model.Vehicle?.PrecioEnCRC</p>
 
                     <div class="producto-payment-estimate">
                         <h3>Cuota estimada</h3>
@@ -315,34 +315,102 @@
             </section>
         }
 
-        <!-- Market Value Section -->
-        @if (Model.Vehicle != null)
+        <!-- Market Value Analysis Section -->
+        @if (Model.ValorMercado != null)
         {
-            <section class="producto-market-value">
+            <section class="producto-market-analysis">
                 <h2>Valor de mercado</h2>
-                <p class="market-description">
-                    Este vehículo se comparó con otros @Model.ToTitleCase(Model.Vehicle.Marca) @Model.ToTitleCase(Model.Vehicle.Modelo) @Model.Vehicle.Ano en AutoClick.cr, considerando precio, kilometraje, equipamiento y estado.
-                </p>
+                
+                @if (!Model.ValorMercado.TieneDatos)
+                {
+                    <!-- Sin datos disponibles -->
+                    <div class="market-no-data">
+                        <svg width="48" height="48" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M12 22C17.5228 22 22 17.5228 22 12C22 6.47715 17.5228 2 12 2C6.47715 2 2 6.47715 2 12C2 17.5228 6.47715 22 12 22Z" stroke="rgba(255, 255, 255, 0.3)" stroke-width="2"/>
+                            <path d="M12 8V12" stroke="rgba(255, 255, 255, 0.3)" stroke-width="2" stroke-linecap="round"/>
+                            <circle cx="12" cy="16" r="1" fill="rgba(255, 255, 255, 0.3)"/>
+                        </svg>
+                        <p>@Model.ValorMercado.MensajeSinDatos</p>
+                    </div>
+                }
+                else
+                {
+                    <!-- Badge de clasificación -->
+                    <div class="market-badge-container">
+                        <div class="market-badge" style="background-color: @Model.ValorMercado.ColorOferta;">
+                            @Model.ValorMercado.DescripcionOferta
+                        </div>
+                        <p class="market-comparison">
+                            @if (Model.ValorMercado.PorcentajeDiferencia < 0)
+                            {
+                                <span>@Math.Abs(Model.ValorMercado.PorcentajeDiferencia)% por debajo del promedio</span>
+                            }
+                            else if (Model.ValorMercado.PorcentajeDiferencia > 0)
+                            {
+                                <span>@Model.ValorMercado.PorcentajeDiferencia% por arriba del promedio</span>
+                            }
+                            else
+                            {
+                                <span>Al precio promedio del mercado</span>
+                            }
+                        </p>
+                    </div>
 
-                <div class="market-chart">
-                    <div class="market-indicator">
-                        <div class="market-price-indicator">
-                            <div class="indicator-arrow"></div>
-                            <div class="price-info">
-                                <h3>@Model.FormatPrice(Model.Vehicle.ValorFiscal)</h3>
-                                <div class="market-status">@Model.GetMarketStatus()</div>
-                                <div class="market-difference">Precio competitivo</div>
+                    <!-- Gráfico de rango de precios -->
+                    <div class="market-chart">
+                        <div class="market-chart-header">
+                            <div class="chart-label">
+                                <span class="label-title">Mínimo</span>
+                                <span class="label-value">₡@Model.FormatNumber(Model.ValorMercado.PrecioMinimo)</span>
+                            </div>
+                            <div class="chart-label">
+                                <span class="label-title">Promedio</span>
+                                <span class="label-value">₡@Model.FormatNumber(Model.ValorMercado.PromedioPrecio)</span>
+                            </div>
+                            <div class="chart-label">
+                                <span class="label-title">Máximo</span>
+                                <span class="label-value">₡@Model.FormatNumber(Model.ValorMercado.PrecioMaximo)</span>
                             </div>
                         </div>
 
-                        <div class="average-value">
-                            <div class="average-arrow"></div>
-                            <div class="average-text">Valor promedio<br />@Model.FormatPrice(Model.GetMarketValue())</div>
+                        <div class="market-range-bar">
+                            <!-- Barra de rango completo -->
+                            <div class="range-bar-background"></div>
+                            
+                            <!-- Marcador del promedio -->
+                            <div class="range-marker average-marker" style="left: 50%;">
+                                <div class="marker-line"></div>
+                            </div>
+                            
+                            <!-- Marcador del precio actual -->
+                            <div class="range-marker current-marker" style="left: @(Model.ValorMercado.PosicionEnRango)%; background-color: @Model.ValorMercado.ColorOferta;">
+                                <div class="marker-dot"></div>
+                                <div class="marker-label">
+                                    <span>Este auto</span>
+                                    <span class="marker-price">₡@Model.FormatNumber(Model.ValorMercado.PrecioActual)</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="market-chart-footer">
+                            <p>Basado en @Model.ValorMercado.CantidadRegistros @(Model.ValorMercado.CantidadRegistros == 1 ? "venta similar" : "ventas similares")</p>
                         </div>
                     </div>
-                </div>
 
-                <p class="market-powered">Impulsado por AutoClick.cr</p>
+                    <!-- Información adicional -->
+                    <div class="market-info-grid">
+                        <div class="market-info-item">
+                            <h4>Diferencia con el promedio</h4>
+                            <p class="@(Model.ValorMercado.DiferenciaConPromedio < 0 ? "positive" : "negative")">
+                                @(Model.ValorMercado.DiferenciaConPromedio < 0 ? "-" : "+")₡@Model.FormatNumber(Math.Abs(Model.ValorMercado.DiferenciaConPromedio))
+                            </p>
+                        </div>
+                        <div class="market-info-item">
+                            <h4>Precio actual</h4>
+                            <p>₡@Model.FormatNumber(Model.ValorMercado.PrecioActual)</p>
+                        </div>
+                    </div>
+                }
             </section>
         }
 
@@ -419,7 +487,7 @@
                         }
                         <div class="similar-car-info">
                             <h3 class="similar-car-title">@auto.NombreCompleto</h3>
-                            <p class="similar-car-price">@auto.ValorFiscalFormateado</p>
+                            <p class="similar-car-price">@auto.PrecioEnCRC</p>
                         </div>
                         <div class="similar-car-actions">
                             <button class="similar-favorite-btn" onclick="event.stopPropagation();">
@@ -491,4 +559,258 @@ function solicitarPreAprobacion() {
     window.location.href = '/LandingBanco?' + params.toString();
 }
 </script>
+
+<style>
+/* Market Value Analysis Styles */
+.producto-market-analysis {
+    background: rgba(3, 13, 43, 0.6);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 12px;
+    padding: 32px;
+    margin-top: 32px;
+    margin-bottom: 32px;
+}
+
+.producto-market-analysis h2 {
+    color: white;
+    font-size: 24px;
+    font-weight: 700;
+    margin-bottom: 24px;
+    font-family: 'Montserrat', sans-serif;
+}
+
+/* Sin datos */
+.market-no-data {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 48px 24px;
+    text-align: center;
+}
+
+.market-no-data svg {
+    margin-bottom: 16px;
+    opacity: 0.5;
+}
+
+.market-no-data p {
+    color: rgba(255, 255, 255, 0.6);
+    font-size: 16px;
+    line-height: 1.6;
+    max-width: 600px;
+}
+
+/* Badge de clasificación */
+.market-badge-container {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    margin-bottom: 32px;
+    flex-wrap: wrap;
+}
+
+.market-badge {
+    padding: 8px 20px;
+    border-radius: 24px;
+    color: white;
+    font-weight: 700;
+    font-size: 16px;
+    font-family: 'Montserrat', sans-serif;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+}
+
+.market-comparison {
+    color: rgba(255, 255, 255, 0.8);
+    font-size: 14px;
+    margin: 0;
+}
+
+/* Gráfico de rango */
+.market-chart {
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 8px;
+    padding: 24px;
+    margin-bottom: 24px;
+}
+
+.market-chart-header {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 24px;
+    gap: 16px;
+    flex-wrap: wrap;
+}
+
+.chart-label {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.label-title {
+    color: rgba(255, 255, 255, 0.5);
+    font-size: 12px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.label-value {
+    color: white;
+    font-size: 18px;
+    font-weight: 600;
+}
+
+/* Barra de rango */
+.market-range-bar {
+    position: relative;
+    height: 60px;
+    margin: 32px 0;
+}
+
+.range-bar-background {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 100%;
+    height: 8px;
+    background: linear-gradient(90deg, 
+        rgba(147, 51, 234, 0.3) 0%,
+        rgba(34, 197, 94, 0.3) 50%,
+        rgba(239, 68, 68, 0.3) 100%
+    );
+    border-radius: 4px;
+}
+
+.range-marker {
+    position: absolute;
+    top: 50%;
+    transform: translate(-50%, -50%);
+}
+
+.average-marker .marker-line {
+    width: 2px;
+    height: 40px;
+    background: rgba(255, 255, 255, 0.5);
+    border-radius: 1px;
+}
+
+.current-marker {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    z-index: 2;
+}
+
+.marker-dot {
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    background: inherit;
+    border: 3px solid white;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
+}
+
+.marker-label {
+    position: absolute;
+    top: -60px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    white-space: nowrap;
+    background: rgba(0, 0, 0, 0.8);
+    padding: 8px 12px;
+    border-radius: 6px;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.marker-label span:first-child {
+    color: rgba(255, 255, 255, 0.7);
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.marker-price {
+    color: white;
+    font-weight: 700;
+    font-size: 14px;
+}
+
+.market-chart-footer {
+    text-align: center;
+    margin-top: 16px;
+}
+
+.market-chart-footer p {
+    color: rgba(255, 255, 255, 0.5);
+    font-size: 13px;
+    margin: 0;
+}
+
+/* Grid de información */
+.market-info-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 16px;
+}
+
+.market-info-item {
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 8px;
+    padding: 16px;
+}
+
+.market-info-item h4 {
+    color: rgba(255, 255, 255, 0.6);
+    font-size: 13px;
+    font-weight: 500;
+    margin: 0 0 8px 0;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.market-info-item p {
+    color: white;
+    font-size: 20px;
+    font-weight: 700;
+    margin: 0;
+}
+
+.market-info-item p.positive {
+    color: #22C55E;
+}
+
+.market-info-item p.negative {
+    color: #EF4444;
+}
+
+/* Responsive */
+@@media (max-width: 768px) {
+    .producto-market-analysis {
+        padding: 20px;
+    }
+
+    .market-badge-container {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .market-chart-header {
+        flex-direction: column;
+        gap: 12px;
+    }
+
+    .marker-label {
+        font-size: 11px;
+        padding: 6px 10px;
+    }
+
+    .marker-price {
+        font-size: 12px;
+    }
+}
+</style>
 

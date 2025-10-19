@@ -205,6 +205,11 @@ public class Auto
     public string PrecioFormateado => 
         Divisa == "USD" ? $"${Precio:N0}" : $"₡{Precio:N0}";
     
+    [NotMapped]
+    [Display(Name = "Precio en CRC")]
+    public string PrecioEnCRC => 
+        AutoClick.Helpers.PrecioHelper.FormatearPrecioEnCRC(Precio, Divisa);
+    
     // Métodos helper para manejar los arrays JSON
     [NotMapped]
     public List<string> ExtrasExteriorList
