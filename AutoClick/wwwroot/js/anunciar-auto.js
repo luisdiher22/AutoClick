@@ -85,20 +85,9 @@ document.addEventListener('DOMContentLoaded', function() {
             console.log('Back button not found (this is normal for section 1)');
         }
         
-        // Form validation on input change
+        // Form input handlers (sin validación en tiempo real)
         const formInputs = document.querySelectorAll('input, select, textarea');
         formInputs.forEach(input => {
-            // Skip real-time validation for numeric fields that have formatting
-            const isNumericField = input.id === 'precio' || input.id === 'kilometraje' || 
-                                   input.id === 'cilindrada' || input.id === 'valor-fiscal';
-            
-            input.addEventListener('change', validateCurrentSection);
-            
-            // Only add input event listener for non-numeric fields
-            if (!isNumericField) {
-                input.addEventListener('input', validateCurrentSection);
-            }
-            
             // Add character counter for description field
             if (input.name === 'Formulario.Descripcion') {
                 input.addEventListener('input', function() {
@@ -106,6 +95,15 @@ document.addEventListener('DOMContentLoaded', function() {
                 });
                 updateCharacterCounter(input); // Initialize counter
             }
+            
+            // Limpiar errores cuando el usuario empieza a corregir
+            input.addEventListener('input', function() {
+                clearFieldError(this);
+            });
+            
+            input.addEventListener('change', function() {
+                clearFieldError(this);
+            });
         });
         
         // Equipment checkboxes
@@ -154,11 +152,6 @@ document.addEventListener('DOMContentLoaded', function() {
             kilometrajeInput.addEventListener('input', () => formatKilometer(kilometrajeInput));
         }
 
-        const valorFiscalInput = document.querySelector('#valor-fiscal');
-        if (valorFiscalInput) {
-            valorFiscalInput.addEventListener('input', () => formatPrice(valorFiscalInput));
-        }
-
         const cilindradaInput = document.querySelector('#cilindrada');
         if (cilindradaInput) {
             cilindradaInput.addEventListener('input', () => formatKilometer(cilindradaInput));
@@ -177,12 +170,26 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     }
     
-    function handleNextClick(e) {
+    async function handleNextClick(e) {
         console.log('handleNextClick called');
         e.preventDefault();
         
-        const isValid = validateCurrentSection();
+        // Mostrar estado de carga
+        const nextBtn = document.querySelector('#btn-next');
+        const originalText = nextBtn ? nextBtn.textContent : '';
+        if (nextBtn) {
+            nextBtn.disabled = true;
+            nextBtn.textContent = 'Validando...';
+        }
+        
+        const isValid = await validateCurrentSection();
         console.log('Current section valid:', isValid, 'Current section:', currentSection);
+        
+        // Restaurar botón
+        if (nextBtn) {
+            nextBtn.disabled = false;
+            nextBtn.textContent = originalText;
+        }
         
         if (isValid) {
             if (currentSection < totalSections) {
@@ -200,6 +207,8 @@ document.addEventListener('DOMContentLoaded', function() {
             }
         } else {
             console.log('Validation failed for current section');
+            // Hacer scroll hacia arriba para que el usuario vea el error
+            window.scrollTo({ top: 0, behavior: 'smooth' });
         }
     }
     
@@ -291,7 +300,7 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     };
 
-    function validateCurrentSection() {
+    async function validateCurrentSection() {
         console.log(`Validating section ${currentSection}`);
         const currentSectionElement = document.querySelector(`#seccion${currentSection}`);
         if (!currentSectionElement) {
@@ -322,7 +331,7 @@ document.addEventListener('DOMContentLoaded', function() {
         switch (currentSection) {
             case 1: // Datos del vehículo
                 console.log('Running vehicle data validation...');
-                const vehicleValid = validateVehicleData();
+                const vehicleValid = await validateVehicleData();
                 isValid = vehicleValid && isValid;
                 console.log('Vehicle validation result:', vehicleValid);
                 break;
@@ -357,7 +366,7 @@ document.addEventListener('DOMContentLoaded', function() {
     
 
     
-    function validateVehicleData() {
+    async function validateVehicleData() {
         const año = document.querySelector('#ano');
         const kilometraje = document.querySelector('#kilometraje');
         const descripcion = document.querySelector('#descripcion');
@@ -374,6 +383,7 @@ document.addEventListener('DOMContentLoaded', function() {
         const transmision = document.querySelector('#transmision');
         const traccion = document.querySelector('#traccion');
         const condicion = document.querySelector('#condicion');
+        const placa = document.querySelector('#placa');
         
         let isValid = true;
         
@@ -393,7 +403,8 @@ document.addEventListener('DOMContentLoaded', function() {
             kilometraje: !!kilometraje,
             condicion: !!condicion,
             precio: !!precio,
-            descripcion: !!descripcion
+            descripcion: !!descripcion,
+            placa: !!placa
         });
         
         // Required field validations
@@ -534,6 +545,55 @@ document.addEventListener('DOMContentLoaded', function() {
                 isValid = false;
             } else {
                 clearFieldError(descripcion);
+            }
+        }
+        
+        // Validación de placa duplicada
+        if (placa && placa.value && placa.value.trim()) {
+            console.log('Validando placa:', placa.value);
+            
+            // Obtener el ID de edición si existe
+            const editId = new URLSearchParams(window.location.search).get('edit');
+            
+            try {
+                // Mostrar indicador de validación en el campo
+                const validationIndicator = document.createElement('span');
+                validationIndicator.className = 'validation-indicator';
+                validationIndicator.style.cssText = `
+                    color: #FFA500;
+                    font-size: 12px;
+                    margin-left: 8px;
+                `;
+                validationIndicator.textContent = 'Verificando placa...';
+                placa.parentNode.appendChild(validationIndicator);
+                
+                // Llamar al endpoint para verificar la placa
+                const response = await fetch(`/AnunciarMiAuto?handler=VerificarPlaca&placa=${encodeURIComponent(placa.value)}&editId=${editId || ''}`);
+                const data = await response.json();
+                
+                // Remover indicador
+                validationIndicator.remove();
+                
+                console.log('Resultado verificación placa:', data);
+                
+                if (data.existe) {
+                    showFieldError(placa, 'Esta placa ya está registrada en el sistema');
+                    showGlobalError('⚠️ La placa del vehículo ya existe en nuestro sistema. Si cree que esto es un error, por favor contáctenos.');
+                    isValid = false;
+                } else {
+                    clearFieldError(placa);
+                    clearGlobalError();
+                }
+            } catch (error) {
+                console.error('Error al verificar la placa:', error);
+                // Remover indicador en caso de error
+                const validationIndicator = placa.parentNode.querySelector('.validation-indicator');
+                if (validationIndicator) {
+                    validationIndicator.remove();
+                }
+                // En caso de error de conexión, permitir continuar pero mostrar advertencia
+                console.warn('No se pudo verificar la placa, continuando...');
+                clearFieldError(placa);
             }
         }
         

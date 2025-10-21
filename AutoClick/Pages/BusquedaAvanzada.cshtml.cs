@@ -134,10 +134,10 @@ namespace AutoClick.Pages
                 query = query.Where(a => a.Modelo == Model);
                 
             if (MinPrice.HasValue)
-                query = query.Where(a => a.ValorFiscal >= MinPrice.Value);
+                query = query.Where(a => a.Precio >= MinPrice.Value);
                 
             if (MaxPrice.HasValue)
-                query = query.Where(a => a.ValorFiscal <= MaxPrice.Value);
+                query = query.Where(a => a.Precio <= MaxPrice.Value);
                 
             if (MinYear.HasValue)
                 query = query.Where(a => a.Ano >= MinYear.Value);
@@ -166,8 +166,8 @@ namespace AutoClick.Pages
             // Apply sorting
             query = SortBy switch
             {
-                "price-asc" => query.OrderBy(a => a.ValorFiscal),
-                "price-desc" => query.OrderByDescending(a => a.ValorFiscal),
+                "price-asc" => query.OrderBy(a => a.Precio),
+                "price-desc" => query.OrderByDescending(a => a.Precio),
                 "year" => query.OrderByDescending(a => a.Ano),
                 "brand" => query.OrderBy(a => a.Marca).ThenBy(a => a.Modelo),
                 _ => query.OrderByDescending(a => a.Id) // Default: most recent
@@ -270,10 +270,10 @@ namespace AutoClick.Pages
                 autos = autos.Where(a => a.Modelo == Model).ToList();
                 
             if (MinPrice.HasValue)
-                autos = autos.Where(a => a.ValorFiscal >= MinPrice.Value).ToList();
+                autos = autos.Where(a => a.Precio >= MinPrice.Value).ToList();
                 
             if (MaxPrice.HasValue)
-                autos = autos.Where(a => a.ValorFiscal <= MaxPrice.Value).ToList();
+                autos = autos.Where(a => a.Precio <= MaxPrice.Value).ToList();
                 
             if (MinYear.HasValue)
                 autos = autos.Where(a => a.Ano >= MinYear.Value).ToList();
@@ -302,8 +302,8 @@ namespace AutoClick.Pages
             // Apply sorting
             autos = SortBy switch
             {
-                "price-asc" => autos.OrderBy(a => a.ValorFiscal).ToList(),
-                "price-desc" => autos.OrderByDescending(a => a.ValorFiscal).ToList(),
+                "price-asc" => autos.OrderBy(a => a.Precio).ToList(),
+                "price-desc" => autos.OrderByDescending(a => a.Precio).ToList(),
                 "year" => autos.OrderByDescending(a => a.Ano).ToList(),
                 "brand" => autos.OrderBy(a => a.Marca).ThenBy(a => a.Modelo).ToList(),
                 _ => autos.OrderByDescending(a => a.Id).ToList()
@@ -521,7 +521,7 @@ namespace AutoClick.Pages
                     Marca = "BMW",
                     Modelo = "X5M",
                     Ano = 2025,
-                    ValorFiscal = 170000,
+                    Precio = 170000,
                     ImagenPrincipal = "https://placehold.co/415x262/333333/FFFFFF?text=BMW+X5M",
                     Carroceria = "SUV",
                     Combustible = "Gasolina",
@@ -539,7 +539,7 @@ namespace AutoClick.Pages
                     Marca = "Audi",
                     Modelo = "Q5 Sportback",
                     Ano = 2022,
-                    ValorFiscal = 75000,
+                    Precio = 75000,
                     ImagenPrincipal = "https://placehold.co/415x262/8B0000/FFFFFF?text=Audi+Q5",
                     Carroceria = "SUV",
                     Combustible = "Gasolina",
@@ -557,7 +557,7 @@ namespace AutoClick.Pages
                     Marca = "Mercedes-Benz",
                     Modelo = "GLE 450",
                     Ano = 2023,
-                    ValorFiscal = 85000,
+                    Precio = 85000,
                     ImagenPrincipal = "https://placehold.co/415x262/000000/FFFFFF?text=Mercedes+GLE",
                     Carroceria = "SUV",
                     Combustible = "Gasolina",

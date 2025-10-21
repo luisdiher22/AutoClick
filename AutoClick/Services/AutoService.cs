@@ -75,10 +75,10 @@ public class AutoService : IAutoService
             query = query.Where(a => a.Canton.ToLower().Contains(filtros.Canton.ToLower()));
 
         if (filtros.PrecioMin.HasValue)
-            query = query.Where(a => a.ValorFiscal >= filtros.PrecioMin.Value);
+            query = query.Where(a => a.Precio >= filtros.PrecioMin.Value);
 
         if (filtros.PrecioMax.HasValue)
-            query = query.Where(a => a.ValorFiscal <= filtros.PrecioMax.Value);
+            query = query.Where(a => a.Precio <= filtros.PrecioMax.Value);
 
         if (filtros.AnoMin.HasValue)
             query = query.Where(a => a.Ano >= filtros.AnoMin.Value);
@@ -131,10 +131,10 @@ public class AutoService : IAutoService
                 query = query.Where(a => a.Modelo.ToLower().Contains(filtros.Modelo.ToLower()));
 
             if (filtros.PrecioMin.HasValue)
-                query = query.Where(a => a.ValorFiscal >= filtros.PrecioMin.Value);
+                query = query.Where(a => a.Precio >= filtros.PrecioMin.Value);
 
             if (filtros.PrecioMax.HasValue)
-                query = query.Where(a => a.ValorFiscal <= filtros.PrecioMax.Value);
+                query = query.Where(a => a.Precio <= filtros.PrecioMax.Value);
 
             if (filtros.AnoMin.HasValue)
                 query = query.Where(a => a.Ano >= filtros.AnoMin.Value);
@@ -149,8 +149,8 @@ public class AutoService : IAutoService
         // Apply sorting - Convert decimal to double for SQLite compatibility
         query = sortBy switch
         {
-            "price-asc" => query.OrderBy(a => (double)a.ValorFiscal),
-            "price-desc" => query.OrderByDescending(a => (double)a.ValorFiscal),
+            "price-asc" => query.OrderBy(a => (double)a.Precio),
+            "price-desc" => query.OrderByDescending(a => (double)a.Precio),
             "year" => query.OrderByDescending(a => a.Ano),
             "brand" => query.OrderBy(a => a.Marca).ThenBy(a => a.Modelo),
             "featured" => query.OrderByDescending(a => a.PlanVisibilidad).ThenByDescending(a => a.FechaCreacion),

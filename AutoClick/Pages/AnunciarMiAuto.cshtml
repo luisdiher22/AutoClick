@@ -117,17 +117,9 @@
                             </div>
                         </div>
                         
-                        <!-- Segunda fila: Valor Fiscal del Vehículo + Precio con Divisa -->
-                        <!-- Valor Fiscal del Vehículo -->
-                        <div data-estado="Default" data-label2="true" style="width: 276px; height: 60px; left: 32px; top: 140px; position: absolute">
-                            <input asp-for="Formulario.ValorFiscal" type="number" id="valorFiscal" placeholder="Introducir valor fiscal" min="1" max="999999999" step="1" style="width: 276px; height: 42px; padding-top: 8px; padding-bottom: 8px; padding-left: 16px; padding-right: 16px; left: 0px; top: 18px; position: absolute; background: #02081C; border-radius: 4px; outline: 0.50px rgba(255, 255, 255, 0.50) solid; outline-offset: -0.50px; justify-content: flex-start; align-items: center; gap: 8px; display: inline-flex; color: rgba(255, 255, 255, 0.50); font-size: 14px; font-family: Montserrat; font-weight: 500; border: none;" />
-                            <div style="left: 0px; top: 0px; position: absolute; justify-content: flex-start; align-items: center; gap: 4px; display: inline-flex">
-                                <div style="text-box-trim: trim-both; text-box-edge: cap alphabetic; color: white; font-size: 16px; font-family: Montserrat; font-weight: 700; word-wrap: break-word">Valor fiscal del vehículo</div>
-                            </div>
-                        </div>
-
+                        <!-- Segunda fila: Precio con Divisa -->
                         <!-- Precio -->
-                        <div data-estado="Default" data-label2="true" style="width: 196px; height: 60px; left: 325px; top: 140px; position: absolute">
+                        <div data-estado="Default" data-label2="true" style="width: 196px; height: 60px; left: 32px; top: 140px; position: absolute">
                             <input asp-for="Formulario.Precio" type="number" id="precio" placeholder="Introducir precio" required min="1" max="999999999" step="1" style="width: 196px; height: 42px; padding-top: 8px; padding-bottom: 8px; padding-left: 16px; padding-right: 16px; left: 0px; top: 18px; position: absolute; background: #02081C; border-radius: 4px; outline: 0.50px rgba(255, 255, 255, 0.50) solid; outline-offset: -0.50px; justify-content: flex-start; align-items: center; gap: 8px; display: inline-flex; color: rgba(255, 255, 255, 0.50); font-size: 12px; font-family: Montserrat; font-weight: 500; border: none;" />
                             <div style="left: 0px; top: 0px; position: absolute; justify-content: flex-start; align-items: center; gap: 4px; display: inline-flex">
                                 <div style="text-box-trim: trim-both; text-box-edge: cap alphabetic; color: white; font-size: 14px; font-family: Montserrat; font-weight: 500; word-wrap: break-word">Precio</div>
@@ -136,16 +128,12 @@
                         </div>
                         
                         <!-- Divisa -->
-                        <div data-asterizco="true" data-property-1="Default" style="width: 44px; height: 44px; left: 535px; top: 158px; position: absolute">
+                        <div data-asterizco="true" data-property-1="Default" style="width: 44px; height: 44px; left: 242px; top: 158px; position: absolute">
                             <select asp-for="Formulario.Divisa" id="divisa" required style="width: 44px; height: 44px; padding-left: 8px; padding-right: 8px; padding-top: 10px; padding-bottom: 10px; left: 0px; top: 0px; position: absolute; background: #02081C; border-radius: 4px; outline: 0.50px rgba(255, 255, 255, 0.50) solid; outline-offset: -0.50px; justify-content: space-between; align-items: center; display: inline-flex; color: white; font-size: 12px; font-family: Montserrat; font-weight: 500; border: none;">
                                 <option value="CRC" selected="@(Model.Formulario?.Divisa == "CRC" ? "selected" : null)">CRC</option>
                                 <option value="USD" selected="@(Model.Formulario?.Divisa == "USD" ? "selected" : null)">USD</option>
                             </select>
                         </div>
-
-                        <!-- Info Texts -->
-                        <div style="left: 325px; top: 210px; position: absolute; text-box-trim: trim-both; text-box-edge: cap alphabetic"><span style="color: white; font-size: 14px; font-family: Montserrat; font-weight: 500; word-wrap: break-word">*El valor fiscal </span><span style="color: #FF0000; font-size: 14px; font-family: Montserrat; font-weight: 700; word-wrap: break-word">NO</span><span style="color: white; font-size: 14px; font-family: Montserrat; font-weight: 500; word-wrap: break-word"> se mostrará publicamente.*</span></div>
-                        <div style="left: 325px; top: 230px; position: absolute; text-box-trim: trim-both; text-box-edge: cap alphabetic; color: #00CC00; font-size: 14px; font-family: Montserrat; font-weight: 600; word-wrap: break-word">Al ingresar el valor fiscal, su anuncio tendrá mayor exposición en la plataforma durante 24 horas.</div>
                         
                         <!-- Tercera fila: Carrocería, Combustible, Cilindrada -->
                         <!-- Carrocería -->

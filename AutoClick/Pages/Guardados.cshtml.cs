@@ -34,8 +34,8 @@ namespace AutoClick.Pages
                 // Apply sorting
                 query = SortBy switch
                 {
-                    "price-asc" => query.OrderBy(a => a.ValorFiscal),
-                    "price-desc" => query.OrderByDescending(a => a.ValorFiscal),
+                    "price-asc" => query.OrderBy(a => a.Precio),
+                    "price-desc" => query.OrderByDescending(a => a.Precio),
                     "year" => query.OrderByDescending(a => a.Ano),
                     _ => query.OrderByDescending(a => a.FechaCreacion) // "recent"
                 };
@@ -70,7 +70,7 @@ namespace AutoClick.Pages
                     Marca = "BMW",
                     Modelo = "X5M",
                     Ano = 2025,
-                    ValorFiscal = 170000,
+                    Precio = 170000,
                     UbicacionExacta = "SUV deportivo de lujo con motor V8 biturbo",
                     ImagenPrincipal = "https://placehold.co/392x209",
                     Carroceria = "SUV",
@@ -90,7 +90,7 @@ namespace AutoClick.Pages
                     Marca = "Audi",
                     Modelo = "Q5 Sportback",
                     Ano = 2022,
-                    ValorFiscal = 75000,
+                    Precio = 75000,
                     UbicacionExacta = "SUV compacto deportivo con líneas dinámicas",
                     ImagenPrincipal = "https://placehold.co/392x209",
                     Carroceria = "SUV",

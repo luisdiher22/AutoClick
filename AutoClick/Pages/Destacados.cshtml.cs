@@ -39,8 +39,8 @@ namespace AutoClick.Pages
                 // Apply sorting
                 query = SortBy switch
                 {
-                    "price-asc" => query.OrderBy(a => a.ValorFiscal),
-                    "price-desc" => query.OrderByDescending(a => a.ValorFiscal),
+                    "price-asc" => query.OrderBy(a => a.Precio),
+                    "price-desc" => query.OrderByDescending(a => a.Precio),
                     "year" => query.OrderByDescending(a => a.Ano),
                     "brand" => query.OrderBy(a => a.Marca).ThenBy(a => a.Modelo),
                     _ => query.OrderByDescending(a => a.PlanVisibilidad).ThenByDescending(a => a.FechaCreacion) // Featured first, then recent
@@ -93,7 +93,7 @@ namespace AutoClick.Pages
                     Marca = "Mercedes-Benz",
                     Modelo = "Clase S",
                     Ano = 2024,
-                    ValorFiscal = 85000,
+                    Precio = 85000,
                     ImagenPrincipal = "https://placehold.co/400x300/0066CC/FFFFFF?text=Mercedes+S-Class",
                     Carroceria = "Sedán",
                     Combustible = "Gasolina",
@@ -114,7 +114,7 @@ namespace AutoClick.Pages
                     Marca = "BMW",
                     Modelo = "X7",
                     Ano = 2023,
-                    ValorFiscal = 92000,
+                    Precio = 92000,
                     ImagenPrincipal = "https://placehold.co/400x300/333333/FFFFFF?text=BMW+X7",
                     Carroceria = "SUV",
                     Combustible = "Gasolina",
@@ -134,8 +134,8 @@ namespace AutoClick.Pages
             // Apply sorting to sample data
             return SortBy switch
             {
-                "price-asc" => sampleAutos.OrderBy(a => a.ValorFiscal).ToList(),
-                "price-desc" => sampleAutos.OrderByDescending(a => a.ValorFiscal).ToList(),
+                "price-asc" => sampleAutos.OrderBy(a => a.Precio).ToList(),
+                "price-desc" => sampleAutos.OrderByDescending(a => a.Precio).ToList(),
                 "year" => sampleAutos.OrderByDescending(a => a.Ano).ToList(),
                 "brand" => sampleAutos.OrderBy(a => a.Marca).ThenBy(a => a.Modelo).ToList(),
                 _ => sampleAutos.OrderByDescending(a => a.PlanVisibilidad).ThenByDescending(a => a.FechaCreacion).ToList()

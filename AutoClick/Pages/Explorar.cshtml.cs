@@ -61,9 +61,9 @@ namespace AutoClick.Pages
                 if (!string.IsNullOrEmpty(Model))
                     query = query.Where(a => a.Modelo.ToLower().Contains(Model.ToLower()));
                 if (MinPrice.HasValue)
-                    query = query.Where(a => a.ValorFiscal >= MinPrice.Value);
+                    query = query.Where(a => a.Precio >= MinPrice.Value);
                 if (MaxPrice.HasValue)
-                    query = query.Where(a => a.ValorFiscal <= MaxPrice.Value);
+                    query = query.Where(a => a.Precio <= MaxPrice.Value);
                 if (MinYear.HasValue)
                     query = query.Where(a => a.Ano >= MinYear.Value);
                 if (MaxYear.HasValue)
@@ -72,8 +72,8 @@ namespace AutoClick.Pages
                 // Apply sorting
                 query = SortBy switch
                 {
-                    "price-asc" => query.OrderBy(a => a.ValorFiscal),
-                    "price-desc" => query.OrderByDescending(a => a.ValorFiscal),
+                    "price-asc" => query.OrderBy(a => a.Precio),
+                    "price-desc" => query.OrderByDescending(a => a.Precio),
                     "year" => query.OrderByDescending(a => a.Ano),
                     _ => query.OrderByDescending(a => a.FechaCreacion) // "recent"
                 };
@@ -94,9 +94,9 @@ namespace AutoClick.Pages
                 if (!string.IsNullOrEmpty(Model))
                     allAutos = allAutos.Where(a => a.Modelo.ToLower().Contains(Model.ToLower())).ToList();
                 if (MinPrice.HasValue)
-                    allAutos = allAutos.Where(a => a.ValorFiscal >= MinPrice.Value).ToList();
+                    allAutos = allAutos.Where(a => a.Precio >= MinPrice.Value).ToList();
                 if (MaxPrice.HasValue)
-                    allAutos = allAutos.Where(a => a.ValorFiscal <= MaxPrice.Value).ToList();
+                    allAutos = allAutos.Where(a => a.Precio <= MaxPrice.Value).ToList();
                 if (MinYear.HasValue)
                     allAutos = allAutos.Where(a => a.Ano >= MinYear.Value).ToList();
                 if (MaxYear.HasValue)
@@ -105,8 +105,8 @@ namespace AutoClick.Pages
                 // Apply sorting to sample data
                 allAutos = SortBy switch
                 {
-                    "price-asc" => allAutos.OrderBy(a => a.ValorFiscal).ToList(),
-                    "price-desc" => allAutos.OrderByDescending(a => a.ValorFiscal).ToList(),
+                    "price-asc" => allAutos.OrderBy(a => a.Precio).ToList(),
+                    "price-desc" => allAutos.OrderByDescending(a => a.Precio).ToList(),
                     "year" => allAutos.OrderByDescending(a => a.Ano).ToList(),
                     _ => allAutos.OrderByDescending(a => a.FechaCreacion).ToList() // "recent"
                 };
@@ -126,7 +126,7 @@ namespace AutoClick.Pages
                     Marca = "BMW",
                     Modelo = "X5M",
                     Ano = 2025,
-                    ValorFiscal = 170000,
+                    Precio = 170000,
                     UbicacionExacta = "SUV deportivo de alto rendimiento",
                     ImagenPrincipal = "https://placehold.co/415x262",
                     Carroceria = "SUV",
@@ -146,7 +146,7 @@ namespace AutoClick.Pages
                     Marca = "Mercedes-Benz",
                     Modelo = "GLC 300 Coupé",
                     Ano = 2021,
-                    ValorFiscal = 90000,
+                    Precio = 90000,
                     UbicacionExacta = "SUV coupé premium",
                     ImagenPrincipal = "https://placehold.co/415x262",
                     Carroceria = "SUV",
@@ -166,7 +166,7 @@ namespace AutoClick.Pages
                     Marca = "Audi",
                     Modelo = "Q5 Sportback",
                     Ano = 2022,
-                    ValorFiscal = 75000,
+                    Precio = 75000,
                     UbicacionExacta = "SUV deportivo compacto",
                     ImagenPrincipal = "https://placehold.co/415x262",
                     Carroceria = "SUV",

@@ -5,52 +5,645 @@
 }
 
 @section Styles {
-    <link rel="stylesheet" href="~/css/anunciar-empresa.css" asp-append-version="true" />
+    <style>
+        /* Anunciar Empresa Page Styles */
+        body {
+            background: #02081C;
+            margin: 0;
+            padding: 0;
+        }
+        
+        .main-container {
+            background: #02081C;
+            min-height: 100vh;
+        }
+        
+        .page-content {
+            width: 100%;
+            background: #02081C;
+            overflow: hidden;
+        }
+        
+        /* Breadcrumb Styles */
+        .breadcrumb-section {
+            padding: 24px 32px;
+            background: #02081C;
+        }
+        
+        .breadcrumb-nav {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .breadcrumb-item {
+            color: white;
+            font-size: 16px;
+            font-family: 'Montserrat', sans-serif;
+            font-weight: 400;
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+        
+        .breadcrumb-item:hover {
+            color: #FF931E;
+        }
+        
+        .breadcrumb-separator {
+            color: white;
+            font-size: 16px;
+            font-weight: 400;
+        }
+        
+        .breadcrumb-current {
+            color: white;
+            font-size: 16px;
+            font-weight: 400;
+        }
+        
+        /* Hero Section */
+        .hero-section {
+            position: relative;
+            width: 100%;
+            height: 888px;
+            overflow: hidden;
+        }
+        
+        .hero-background {
+            position: relative;
+            width: 100%;
+            height: 100%;
+        }
+        
+        .hero-bg-image {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        
+        .hero-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(180deg, rgba(0, 0, 0, 0.90) 18%, rgba(0, 0, 0, 0.60) 100%);
+        }
+        
+        .hero-content {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            text-align: center;
+            max-width: 1049px;
+            width: 100%;
+            padding: 0 20px;
+        }
+        
+        .hero-title {
+            color: white;
+            font-size: 48px;
+            font-family: 'Montserrat', sans-serif;
+            font-weight: 700;
+            text-shadow: 0px 4px 5px rgba(0, 0, 0, 0.50);
+            margin-bottom: 20px;
+            line-height: 1.2;
+        }
+        
+        .text-orange {
+            color: #FF931E;
+        }
+        
+        .hero-subtitle {
+            color: #FF931E;
+            font-size: 32px;
+            font-family: 'Montserrat', sans-serif;
+            font-weight: 700;
+            margin-bottom: 40px;
+        }
+        
+        .benefits-list {
+            display: flex;
+            flex-direction: column;
+            gap: 32px;
+            margin-bottom: 60px;
+            align-items: center;
+        }
+        
+        .benefit-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 8px;
+            max-width: 700px;
+            justify-content: flex-start;
+        }
+        
+        .benefit-icon {
+            width: 45px;
+            height: 45px;
+            background: #00CC00;
+            border-radius: 50%;
+            position: relative;
+            flex-shrink: 0;
+        }
+        
+        .benefit-icon::before {
+            content: '✓';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            color: white;
+            font-weight: bold;
+            font-size: 20px;
+        }
+        
+        .benefit-text {
+            color: white;
+            font-size: 24px;
+            font-family: 'Montserrat', sans-serif;
+            font-weight: 700;
+            text-align: left;
+        }
+        
+        .cta-button {
+            padding: 16px 32px;
+            background: white;
+            border: none;
+            border-radius: 4px;
+            color: #06174D;
+            font-size: 16px;
+            font-family: 'Montserrat', sans-serif;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .cta-button:hover {
+            background: #f0f0f0;
+            transform: translateY(-2px);
+        }
+        
+        /* Services Section */
+        .services-section {
+            padding: 80px 32px;
+            background: #02081C;
+        }
+        
+        .services-title {
+            color: white;
+            font-size: 36px;
+            font-family: 'Montserrat', sans-serif;
+            font-weight: 700;
+            text-align: center;
+            margin-bottom: 60px;
+        }
+        
+        .services-grid {
+            display: flex;
+            gap: 89px;
+            max-width: 1217px;
+            margin: 0 auto;
+            justify-content: center;
+        }
+        
+        .service-column {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            gap: 64px;
+        }
+        
+        .service-item {
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
+        
+        .service-title {
+            color: #FF931E;
+            font-size: 24px;
+            font-family: 'Montserrat', sans-serif;
+            font-weight: 700;
+            margin-bottom: 16px;
+        }
+        
+        .service-description {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+        
+        .service-description p {
+            color: white;
+            font-size: 16px;
+            font-family: 'Montserrat', sans-serif;
+            font-weight: 500;
+            line-height: 1.5;
+            margin: 0;
+        }
+        
+        /* Trusted Brands Section */
+        .trusted-brands {
+            padding: 80px 32px;
+            background: #02081C;
+            text-align: center;
+        }
+        
+        .brands-title {
+            color: white;
+            font-size: 36px;
+            font-family: 'Montserrat', sans-serif;
+            font-weight: 700;
+            margin-bottom: 60px;
+        }
+        
+        .brands-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 40px;
+            flex-wrap: wrap;
+            max-width: 925px;
+            margin: 0 auto;
+        }
+        
+        .brand-logo {
+            max-height: 200px;
+            max-width: 300px;
+            object-fit: contain;
+            filter: brightness(0.8);
+            transition: filter 0.3s ease;
+        }
+        
+        .brand-logo:hover {
+            filter: brightness(1);
+        }
+        
+        /* Contact Section */
+        .contact-section {
+            position: relative;
+            width: 100%;
+            height: 764px;
+            overflow: hidden;
+        }
+        
+        .contact-background {
+            position: relative;
+            width: 100%;
+            height: 100%;
+        }
+        
+        .contact-bg-image {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        
+        .contact-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(270deg, rgba(0, 0, 0, 0.80) 16%, rgba(0, 0, 0, 0) 50%, rgba(0, 0, 0, 0.80) 89%);
+        }
+        
+        .contact-content {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            align-items: flex-start;
+            padding: 34px 79px;
+            gap: 40px;
+        }
+        
+        .contact-text {
+            flex: 1;
+            padding-top: 50px;
+        }
+        
+        .contact-title {
+            color: white;
+            font-size: 36px;
+            font-family: 'Montserrat', sans-serif;
+            font-weight: 700;
+            text-shadow: 0px 4px 5px rgba(0, 0, 0, 0.50);
+            line-height: 1.2;
+            max-width: 442px;
+        }
+        
+        /* Form Styles */
+        .contact-form {
+            width: 505px;
+            height: 637px;
+            background: #030D2B;
+            border-radius: 4px;
+            border: 1px solid rgba(255, 255, 255, 0.25);
+            padding: 24px;
+            overflow-y: auto;
+        }
+        
+        .form-header h3 {
+            color: white;
+            font-size: 20px;
+            font-family: 'Montserrat', sans-serif;
+            font-weight: 700;
+            margin-bottom: 24px;
+        }
+        
+        .form-section-title {
+            color: white;
+            font-size: 20px;
+            font-family: 'Montserrat', sans-serif;
+            font-weight: 700;
+            margin: 24px 0 16px 0;
+        }
+        
+        .form-group {
+            margin-bottom: 24px;
+        }
+        
+        .form-label {
+            display: flex;
+            align-items: center;
+            gap: 4px;
+            color: white;
+            font-size: 14px;
+            font-family: 'Montserrat', sans-serif;
+            font-weight: 500;
+            margin-bottom: 8px;
+        }
+        
+        .required {
+            color: #FF0000;
+        }
+        
+        .form-control {
+            width: 100%;
+            height: 44px;
+            padding: 8px 16px;
+            background: #02081C;
+            border: 0.5px solid rgba(255, 255, 255, 0.5);
+            border-radius: 4px;
+            color: white;
+            font-size: 14px;
+            font-family: 'Montserrat', sans-serif;
+            font-weight: 500;
+            transition: border-color 0.3s ease;
+            box-sizing: border-box;
+        }
+        
+        .form-control:focus {
+            outline: none;
+            border-color: #FF931E;
+        }
+        
+        .form-control::placeholder {
+            color: rgba(255, 255, 255, 0.5);
+        }
+        
+        textarea.form-control {
+            height: auto;
+            min-height: 88px;
+            resize: vertical;
+        }
+        
+        select.form-control {
+            appearance: none;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='6' fill='white'%3E%3Cpath d='M0 0l6 6 6-6z'/%3E%3C/svg%3E");
+            background-repeat: no-repeat;
+            background-position: right 16px center;
+            padding-right: 40px;
+        }
+        
+        .submit-button {
+            width: 100%;
+            height: 44px;
+            padding: 16px;
+            background: white;
+            border: none;
+            border-radius: 4px;
+            color: #06174D;
+            font-size: 16px;
+            font-family: 'Montserrat', sans-serif;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .submit-button:hover {
+            background: #f0f0f0;
+            transform: translateY(-2px);
+        }
+        
+        /* Error and Success Messages */
+        .error-message {
+            background: rgba(255, 0, 0, 0.1);
+            border: 1px solid #ff0000;
+            color: #ff0000;
+            padding: 12px;
+            border-radius: 4px;
+            margin-bottom: 20px;
+            font-size: 14px;
+        }
+        
+        .success-message {
+            background: rgba(0, 255, 0, 0.1);
+            border: 1px solid #00ff00;
+            color: #00ff00;
+            padding: 12px;
+            border-radius: 4px;
+            margin-bottom: 20px;
+            font-size: 14px;
+        }
+        
+        .validation-error {
+            color: #ff0000;
+            font-size: 12px;
+            margin-top: 4px;
+            display: block;
+        }
+        
+        /* FAQ Section */
+        .faq-section {
+            padding: 80px 32px;
+            background: #02081C;
+            max-width: 852px;
+            margin: 0 auto;
+        }
+        
+        .faq-title {
+            color: white;
+            font-size: 32px;
+            font-family: 'Montserrat', sans-serif;
+            font-weight: 700;
+            margin-bottom: 40px;
+            padding-left: 32px;
+        }
+        
+        .faq-list {
+            margin-bottom: 60px;
+        }
+        
+        .faq-item {
+            border-bottom: 1px solid rgba(255, 255, 255, 0.25);
+            cursor: pointer;
+        }
+        
+        .faq-question {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 24px 32px;
+            color: white;
+            font-size: 16px;
+            font-family: 'Montserrat', sans-serif;
+            font-weight: 700;
+            transition: background-color 0.3s ease;
+        }
+        
+        .faq-question:hover {
+            background: rgba(255, 255, 255, 0.05);
+        }
+        
+        .faq-toggle {
+            width: 12px;
+            height: 6px;
+            background: white;
+            clip-path: polygon(0 0, 100% 0, 50% 100%);
+            transition: transform 0.3s ease;
+        }
+        
+        .faq-item.active .faq-toggle {
+            transform: rotate(180deg);
+        }
+        
+        .faq-answer {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s ease, padding 0.3s ease;
+        }
+        
+        .faq-item.active .faq-answer {
+            max-height: 300px;
+            padding: 0 32px 24px;
+        }
+        
+        .faq-answer p {
+            color: white;
+            font-size: 14px;
+            font-family: 'Montserrat', sans-serif;
+            font-weight: 400;
+            line-height: 1.5;
+            margin: 0;
+        }
+        
+        /* Ad Banner */
+        .ad-banner {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 4px;
+            padding: 29px;
+            text-align: center;
+            margin-top: 40px;
+        }
+        
+        .ad-logo {
+            margin-bottom: 20px;
+        }
+        
+        .ad-title {
+            color: white;
+            font-size: 29px;
+            font-family: 'Montserrat', sans-serif;
+            font-weight: 700;
+            text-shadow: 0px 4px 4px rgba(0, 0, 0, 0.50);
+            margin-bottom: 16px;
+        }
+        
+        .ad-subtitle {
+            color: white;
+            font-size: 19px;
+            font-family: 'Montserrat', sans-serif;
+            font-weight: 500;
+            text-shadow: 0px 4px 4px rgba(0, 0, 0, 0.50);
+            margin: 0;
+        }
+        
+        /* Responsive Design */
+        @@media (max-width: 1024px) {
+            .services-grid {
+                flex-direction: column;
+                gap: 40px;
+            }
+            
+            .contact-content {
+                flex-direction: column;
+                padding: 20px;
+                gap: 20px;
+            }
+            
+            .contact-form {
+                width: 100%;
+                max-width: 505px;
+                margin: 0 auto;
+            }
+            
+            .brands-container {
+                gap: 20px;
+            }
+        }
+        
+        @@media (max-width: 768px) {
+            .hero-title {
+                font-size: 28px;
+            }
+            
+            .hero-subtitle {
+                font-size: 24px;
+            }
+            
+            .benefit-text {
+                font-size: 18px;
+            }
+            
+            .services-title,
+            .brands-title {
+                font-size: 28px;
+            }
+            
+            .contact-title {
+                font-size: 28px;
+            }
+        }
+    </style>
 }
 
-<!-- Header removed - Using universal header -->
-    <div class="logo-container">
-        <img src="~/images/logo.png" alt="AutoClick.cr" style="height: 23px;" />
+<div class="page-content">
+    <!-- Breadcrumb -->
+    <div class="breadcrumb-section">
+        <nav class="breadcrumb-nav">
+            <a asp-page="/Index" class="breadcrumb-item">Inicio</a>
+            <span class="breadcrumb-separator">/</span>
+            <span class="breadcrumb-current">Anuncie su empresa</span>
+        </nav>
     </div>
-    
-    <nav class="nav-menu">
-        <div>
-            <img src="~/images/costa-rica-flag.png" alt="Costa Rica" style="width: 67px; height: 31px;" />
-        </div>
-        <div class="nav-dropdown-container">
-            <a href="#" class="nav-item nav-dropdown">Anúnciese</a>
-            <div class="dropdown-menu">
-                <a asp-page="/RegistroAgencia" class="dropdown-item">Registrarse como agencia</a>
-                <a asp-page="/AnunciarEmpresa" class="dropdown-item active">Anuncie su empresa</a>
-            </div>
-        </div>
-        <div class="nav-dropdown-container">
-            <a href="#" class="nav-item nav-dropdown">Productos & Servicios</a>
-            <div class="dropdown-menu">
-                <a asp-page="/PpfCeramico" class="dropdown-item">PPF y Cerámico</a>
-                <a asp-page="/RaloyDetailing" class="dropdown-item">Raloy - Detailing</a>
-            </div>
-        </div>
-        <div class="nav-dropdown-container">
 
-
-<!-- Breadcrumb -->
-<nav class="breadcrumb-nav">
-    <a asp-page="/Index" class="breadcrumb-item">Inicio</a>
-    <span class="breadcrumb-separator">/</span>
-    <span class="breadcrumb-current">Anuncie su empresa</span>
-</nav>
-
-<!-- Hero Section -->
-<section class="hero-section">
-    <div class="hero-background">
-        <img src="https://placehold.co/1280x888" alt="Hero Background" class="hero-bg-image" />
-        <div class="hero-overlay"></div>
-        <div class="hero-content">
-            <h1 class="hero-title">
-                ¡Autoclick.cr es el lugar ideal para <span class="text-orange">impulsar</span> su negocio!
-            </h1>
-            <h2 class="hero-subtitle">¿Por qué elegirnos?</h2>
+    <!-- Hero Section -->
+    <section class="hero-section">
+        <div class="hero-background">
+            <img src="~/images/e032f5d0f2fa0108a989af4988eba3f7de835a51.jpg" alt="Hero Background" class="hero-bg-image" />
+            <div class="hero-overlay"></div>
+            <div class="hero-content">
+                <h1 class="hero-title">
+                    ¡AutoClick.cr es el lugar ideal para <span class="text-orange">impulsar</span> su negocio!
+                </h1>
+                <h2 class="hero-subtitle">¿Por qué elegirnos?</h2>
             
             <div class="benefits-list">
                 <div class="benefit-item">
@@ -76,9 +669,9 @@
     </div>
 </section>
 
-<!-- Services Section -->
-<section class="services-section">
-    <h2 class="services-title">También ofrecemos</h2>
+    <!-- Services Section -->
+    <section class="services-section">
+        <h2 class="services-title">También ofrecemos</h2>
     <div class="services-grid">
         <div class="service-column">
             <div class="service-item">
@@ -122,9 +715,9 @@
     </div>
 </section>
 
-<!-- Trusted Brands Section -->
-<section class="trusted-brands">
-    <h2 class="brands-title">Marcas que ya confían en nosotros</h2>
+    <!-- Trusted Brands Section -->
+    <section class="trusted-brands">
+        <h2 class="brands-title">Marcas que ya confían en nosotros</h2>
     <div class="brands-container">
         <img src="https://placehold.co/285x79" alt="Marca 1" class="brand-logo" />
         <img src="https://placehold.co/226x169" alt="Marca 2" class="brand-logo" />
@@ -132,15 +725,15 @@
     </div>
 </section>
 
-<!-- Contact Form Section -->
-<section class="contact-section" id="contact-form">
-    <div class="contact-background">
-        <img src="https://placehold.co/1280x764" alt="Contact Background" class="contact-bg-image" />
-        <div class="contact-overlay"></div>
-        <div class="contact-content">
-            <div class="contact-text">
-                <h2 class="contact-title">Hablemos de cómo tu marca puede brillar en AutoClick.cr</h2>
-            </div>
+    <!-- Contact Form Section -->
+    <section class="contact-section" id="contact-form">
+        <div class="contact-background">
+            <img src="~/images/e032f5d0f2fa0108a989af4988eba3f7de835a51.jpg" alt="Contact Background" class="contact-bg-image" />
+            <div class="contact-overlay"></div>
+            <div class="contact-content">
+                <div class="contact-text">
+                    <h2 class="contact-title">Hablemos de cómo tu marca puede brillar en AutoClick.cr</h2>
+                </div>
             
             <div class="contact-form">
                 <div class="form-header">
@@ -229,9 +822,9 @@
     </div>
 </section>
 
-<!-- FAQ Section -->
-<section class="faq-section">
-    <h2 class="faq-title">Preguntas frecuentes</h2>
+    <!-- FAQ Section -->
+    <section class="faq-section">
+        <h2 class="faq-title">Preguntas frecuentes</h2>
     <div class="faq-list">
         <div class="faq-item" data-faq="1">
             <div class="faq-question">
@@ -264,19 +857,75 @@
         </div>
     </div>
     
-    <!-- Advertisement Banner -->
-    <div class="ad-banner">
-        <img src="https://placehold.co/143x23" alt="Logo" class="ad-logo" />
-        <h3 class="ad-title">SU ANUNCIO AQUÍ</h3>
-        <p class="ad-subtitle">¡Haga click en este recuadro para empezar!</p>
-    </div>
-</section>
+        <!-- Advertisement Banner -->
+        <div class="ad-banner">
+            <img src="https://placehold.co/143x23" alt="Logo" class="ad-logo" />
+            <h3 class="ad-title">SU ANUNCIO AQUÍ</h3>
+            <p class="ad-subtitle">¡Haga click en este recuadro para empezar!</p>
+        </div>
+    </section>
 
-<!-- Footer -->
-<partial name="_Footer" />
+    <!-- Footer -->
+    <partial name="_Footer" />
+</div>
 
 @section Scripts {
     <script src="~/js/anunciar-empresa.js" asp-append-version="true"></script>
     <partial name="_ValidationScriptsPartial" />
+    
+    <script>
+        // Additional functionality for the updated design
+        document.addEventListener('DOMContentLoaded', function() {
+            // Smooth scroll to form functionality
+            window.scrollToForm = function() {
+                const contactSection = document.getElementById('contact-form');
+                if (contactSection) {
+                    contactSection.scrollIntoView({ 
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                }
+            };
+            
+            // FAQ toggle functionality
+            const faqItems = document.querySelectorAll('.faq-item');
+            
+            faqItems.forEach(item => {
+                const question = item.querySelector('.faq-question');
+                
+                question.addEventListener('click', function() {
+                    const isActive = item.classList.contains('active');
+                    
+                    // Close all FAQ items
+                    faqItems.forEach(faq => {
+                        faq.classList.remove('active');
+                    });
+                    
+                    // Open clicked item if it wasn't active
+                    if (!isActive) {
+                        item.classList.add('active');
+                    }
+                });
+            });
+            
+            // Form validation enhancements
+            const form = document.querySelector('.empresa-form');
+            const submitButton = form?.querySelector('.submit-button');
+            
+            if (form && submitButton) {
+                form.addEventListener('submit', function() {
+                    // Disable button to prevent double submission
+                    submitButton.disabled = true;
+                    submitButton.textContent = 'Enviando...';
+                    
+                    // Re-enable after 5 seconds as fallback
+                    setTimeout(() => {
+                        submitButton.disabled = false;
+                        submitButton.textContent = 'Enviar';
+                    }, 5000);
+                });
+            }
+        });
+    </script>
 }
 

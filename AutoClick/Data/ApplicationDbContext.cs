@@ -89,10 +89,6 @@ public class ApplicationDbContext : DbContext
             entity.Property(a => a.PlacaVehiculo)
                   .HasMaxLength(20);
                   
-            entity.Property(a => a.ValorFiscal)
-                  .HasColumnType("decimal(18,2)")
-                  .IsRequired();
-                  
             entity.Property(a => a.EmailPropietario)
                   .IsRequired()
                   .HasMaxLength(150);

@@ -207,7 +207,7 @@ namespace AutoClick.Pages
                 {
                     Id = auto.Id,
                     Titulo = auto.NombreCompleto,
-                    Precio = auto.ValorFiscal,
+                    Precio = auto.Precio,
                     ImagenPrincipal = !string.IsNullOrEmpty(auto.ImagenPrincipal) ? auto.ImagenPrincipal : 
                                      (auto.ImagenesUrlsList.Any() ? auto.ImagenesUrlsList.First() : "https://via.placeholder.com/416x262"),
                     Vistas = Random.Shared.Next(50, 500), // TODO: Implement real view tracking
@@ -252,12 +252,12 @@ namespace AutoClick.Pages
 
             if (PrecioMin.HasValue)
             {
-                query = query.Where(a => a.ValorFiscal >= PrecioMin.Value);
+                query = query.Where(a => a.Precio >= PrecioMin.Value);
             }
 
             if (PrecioMax.HasValue)
             {
-                query = query.Where(a => a.ValorFiscal <= PrecioMax.Value);
+                query = query.Where(a => a.Precio <= PrecioMax.Value);
             }
 
             if (KilometrajeMin.HasValue)
@@ -328,8 +328,8 @@ namespace AutoClick.Pages
             return OrdenarPor switch
             {
                 "antiguos" => query.OrderBy(c => c.FechaCreacion),
-                "precio-asc" => query.OrderBy(a => a.ValorFiscal),
-                "precio-desc" => query.OrderByDescending(a => a.ValorFiscal),
+                "precio-asc" => query.OrderBy(a => a.Precio),
+                "precio-desc" => query.OrderByDescending(a => a.Precio),
                 "kilometraje" => query.OrderBy(c => c.Kilometraje),
                 _ => query.OrderByDescending(c => c.FechaCreacion) // Default: most recent
             };

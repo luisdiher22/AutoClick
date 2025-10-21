@@ -36,8 +36,8 @@ public class RecienVistosModel : PageModel
     {
         return new List<Auto>
         {
-            new Auto { Id = 1, Marca = "Mercedes-Benz", Modelo = "E53 Coupé", Ano = 2022, ValorFiscal = 170000, ImagenPrincipal = "https://placehold.co/392x209", Carroceria = "Coupé", Combustible = "Gasolina", Transmision = "Automática", NumeroPuertas = 2, Provincia = "San José", Canton = "Escazú", PlacaVehiculo = "MER001", Condicion = "Excelente", EmailPropietario = "mercedes@dealer.com" },
-            new Auto { Id = 2, Marca = "BMW", Modelo = "X5 M50i", Ano = 2023, ValorFiscal = 95000, ImagenPrincipal = "https://placehold.co/392x209", Carroceria = "SUV", Combustible = "Gasolina", Transmision = "Automática", NumeroPuertas = 4, Provincia = "San José", Canton = "Santa Ana", PlacaVehiculo = "BMW002", Condicion = "Excelente", EmailPropietario = "bmw@dealer.com" }
+            new Auto { Id = 1, Marca = "Mercedes-Benz", Modelo = "E53 Coupé", Ano = 2022, Precio = 170000, ImagenPrincipal = "https://placehold.co/392x209", Carroceria = "Coupé", Combustible = "Gasolina", Transmision = "Automática", NumeroPuertas = 2, Provincia = "San José", Canton = "Escazú", PlacaVehiculo = "MER001", Condicion = "Excelente", EmailPropietario = "mercedes@dealer.com" },
+            new Auto { Id = 2, Marca = "BMW", Modelo = "X5 M50i", Ano = 2023, Precio = 95000, ImagenPrincipal = "https://placehold.co/392x209", Carroceria = "SUV", Combustible = "Gasolina", Transmision = "Automática", NumeroPuertas = 4, Provincia = "San José", Canton = "Santa Ana", PlacaVehiculo = "BMW002", Condicion = "Excelente", EmailPropietario = "bmw@dealer.com" }
         };
     }
 }

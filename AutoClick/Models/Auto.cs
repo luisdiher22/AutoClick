@@ -31,12 +31,6 @@ public class Auto
     [Required]
     [Column(TypeName = "decimal(18,2)")]
     [Range(0, double.MaxValue)]
-    [Display(Name = "Valor Fiscal")]
-    public decimal ValorFiscal { get; set; }
-    
-    [Required]
-    [Column(TypeName = "decimal(18,2)")]
-    [Range(0, double.MaxValue)]
     [Display(Name = "Precio")]
     public decimal Precio { get; set; }
     
@@ -194,11 +188,6 @@ public class Auto
         !string.IsNullOrEmpty(UbicacionExacta) ? 
         $"{UbicacionExacta}, {Canton}, {Provincia}" : 
         $"{Canton}, {Provincia}";
-    
-    [NotMapped]
-    [Display(Name = "Valor Fiscal Formateado")]
-    public string ValorFiscalFormateado => 
-        Divisa == "USD" ? $"${ValorFiscal:N0}" : $"₡{ValorFiscal:N0}";
     
     [NotMapped]
     [Display(Name = "Precio Formateado")]

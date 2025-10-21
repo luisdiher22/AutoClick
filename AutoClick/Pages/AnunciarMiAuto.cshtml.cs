@@ -78,6 +78,40 @@ namespace AutoClick.Pages
             return Page();
         }
 
+        // Endpoint para verificar si una placa ya existe
+        public IActionResult OnGetVerificarPlaca(string placa, string? editId)
+        {
+            Console.WriteLine($"=== Verificando placa: {placa} ===");
+            
+            if (string.IsNullOrWhiteSpace(placa))
+            {
+                return new JsonResult(new { existe = false });
+            }
+
+            // Normalizar la placa (mayúsculas y sin espacios)
+            var placaNormalizada = placa.Trim().ToUpper();
+
+            // Buscar si existe la placa en la base de datos
+            var placaExiste = _context.Autos
+                .Where(a => a.PlacaVehiculo != null && a.PlacaVehiculo.ToUpper() == placaNormalizada)
+                .Where(a => a.Activo == true) // Solo verificar autos activos
+                .Any();
+
+            // Si estamos editando, excluir el auto actual de la búsqueda
+            if (!string.IsNullOrEmpty(editId) && int.TryParse(editId, out int id))
+            {
+                placaExiste = _context.Autos
+                    .Where(a => a.PlacaVehiculo != null && a.PlacaVehiculo.ToUpper() == placaNormalizada)
+                    .Where(a => a.Activo == true)
+                    .Where(a => a.Id != id) // Excluir el auto que se está editando
+                    .Any();
+            }
+
+            Console.WriteLine($"Placa {placaNormalizada} existe: {placaExiste}");
+
+            return new JsonResult(new { existe = placaExiste });
+        }
+
         public async Task<IActionResult> OnPostFinalizarAsync()
         {
             try
@@ -191,7 +225,6 @@ namespace AutoClick.Pages
                 Modelo = Formulario.Modelo,
                 Ano = Formulario.Ano,
                 PlacaVehiculo = Formulario.PlacaVehiculo,
-                ValorFiscal = Formulario.ValorFiscal,
                 Precio = Formulario.Precio,
                 Divisa = Formulario.Divisa,
                 
@@ -302,7 +335,6 @@ namespace AutoClick.Pages
             auto.Modelo = Formulario.Modelo;
             auto.Ano = Formulario.Ano;
             auto.PlacaVehiculo = Formulario.PlacaVehiculo;
-            auto.ValorFiscal = Formulario.ValorFiscal;
             auto.Precio = Formulario.Precio;
             auto.Divisa = Formulario.Divisa;
             
