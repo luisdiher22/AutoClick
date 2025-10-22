@@ -19,9 +19,8 @@
     <div class="anunciar-main">
         <!-- Background Image -->
         <div class="background-image"></div>
-                                    <input type="checkbox" id="monitor-presion" name="Formulario.ExtrasSeguridad" value="monitor-presion" @(Model.Formulario?.ExtrasSeguridad?.Contains("monitor-presion") == true ? "checked" : "")>
-                            <label for="monitor-presion">Monitor de presión de llantas</label>       <!-- Form C                            <input type="checkbox" id="supercargado" name="Formulario.ExtrasRendimiento" value="supercargado" @(Model.Formulario?.ExtrasRendimiento?.Contains("supercargado") == true ? "checked" : "")>
-                            <label for="supercargado">Motor supercargado</label>tainer -->
+        
+        <!-- Form Container -->
         <div class="form-container">
             <!-- Form Header -->
             <div class="form-header">
@@ -285,7 +284,7 @@
                         </div>
                         
                         <!-- Descripción -->
-                        <div data-estado="Default" style="width: 1140px; height: 140px; left: 32px; top: 550px; position: absolute">
+                        <div data-estado="Default" style="width: 1140px; height: 160px; left: 32px; top: 550px; position: absolute">
                             <textarea asp-for="Formulario.Descripcion" id="descripcion" placeholder="Escribe descripción" required style="width: 1140px; height: 116px; padding-top: 16px; padding-bottom: 8px; padding-left: 16px; padding-right: 16px; left: 0px; top: 18px; position: absolute; background: #02081C; border-radius: 4px; outline: 0.50px rgba(255, 255, 255, 0.50) solid; outline-offset: -0.50px; justify-content: flex-start; align-items: flex-start; gap: 8px; display: inline-flex; color: rgba(255, 255, 255, 0.50); font-size: 14px; font-family: Montserrat; font-weight: 500; border: none; resize: none;"></textarea>
                             <div style="left: 0px; top: 1px; position: absolute; justify-content: flex-start; align-items: center; gap: 4px; display: inline-flex">
                                 <div style="text-box-trim: trim-both; text-box-edge: cap alphabetic; color: white; font-size: 14px; font-family: Montserrat; font-weight: 500; word-wrap: break-word">Descripción detallada del vehículo</div>
@@ -584,13 +583,6 @@
                             <label for="ubicacion-exacta">Ubicación exacta del vehículo <span class="optional">(Opcional)</span></label>
                             <textarea id="ubicacion-exacta" name="Formulario.UbicacionExacta" placeholder="Escribe dirección exacta" rows="6"></textarea>
                         </div>
-                        <div class="form-group full-width">
-                            <label for="guardar-direccion">Guardar esta dirección para futuras publicaciones? <span class="required">*</span></label>
-                            <select id="guardar-direccion" name="guardar-direccion" required>
-                                <option value="no">NO</option>
-                                <option value="si">SÍ</option>
-                            </select>
-                        </div>
                     </div>
                 </div>
 
@@ -603,7 +595,7 @@
                     
                     <div class="plan-options">
                         <div class="plan-option">
-                            <input type="radio" id="plan-instantaneo" name="plan-visibilidad" value="instantaneo">
+                            <input type="radio" id="plan-instantaneo" name="PlanVisibilidad" value="instantaneo" data-price="2500" data-plan-name="Posteo instantáneo">
                             <label for="plan-instantaneo" class="plan-card">
                                 <div class="plan-content">
                                     <h3>Posteo instantáneo</h3>
@@ -617,7 +609,7 @@
                         </div>
 
                         <div class="plan-option">
-                            <input type="radio" id="plan-super" name="plan-visibilidad" value="super">
+                            <input type="radio" id="plan-super" name="PlanVisibilidad" value="super" data-price="9500" data-plan-name="Súper visible">
                             <label for="plan-super" class="plan-card">
                                 <div class="plan-content">
                                     <h3>Súper visible <span class="plan-addon">+ posteo instantáneo</span></h3>
@@ -634,7 +626,7 @@
                         </div>
 
                         <div class="plan-option">
-                            <input type="radio" id="plan-ultra" name="plan-visibilidad" value="ultra">
+                            <input type="radio" id="plan-ultra" name="PlanVisibilidad" value="ultra" data-price="12900" data-plan-name="Ultra visible">
                             <label for="plan-ultra" class="plan-card">
                                 <div class="plan-content">
                                     <h3>Ultra visible <span class="plan-addon">+ posteo instantáneo</span></h3>
@@ -653,7 +645,7 @@
                         </div>
 
                         <div class="plan-option">
-                            <input type="radio" id="plan-profesional" name="plan-visibilidad" value="profesional">
+                            <input type="radio" id="plan-profesional" name="PlanVisibilidad" value="profesional" data-price="47500" data-plan-name="Fotografía profesional">
                             <label for="plan-profesional" class="plan-card">
                                 <div class="plan-content">
                                     <h3>Fotografía profesional</h3>
@@ -714,7 +706,7 @@
                         @foreach(var tag in tags)
                         {
                             <div class="tag-option">
-                                <input type="checkbox" id="tag-@tag.id" name="Formulario.Tags" value="@tag.id">
+                                <input type="radio" id="tag-@tag.id" name="Formulario.BanderinAdquirido" value="@tag.id" data-price="5000" data-tag-name="@tag.name">
                                 <label for="tag-@tag.id" class="tag-card">
                                     <span class="tag-price">@tag.price</span>
                                     <div class="tag-image">
@@ -763,40 +755,40 @@
                             
                             <div class="payment-options">
                                 <div class="payment-option">
-                                    <input type="checkbox" id="guardar-metodo" name="guardar-metodo">
-                                    <label for="guardar-metodo">Guardar método de pago</label>
-                                </div>
-                                <div class="payment-option">
                                     <input type="checkbox" id="acepto-terminos" name="acepto-terminos" required>
-                                    <label for="acepto-terminos">Acepto <a href="/TerminosCondiciones" target="_blank" class="terms-link">términos y condiciones</a></label>
+                                    <label for="acepto-terminos">Acepto <a href="/TerminosCondiciones" target="_blank" class="terms-link">términos y condiciones</a> <span class="required">*</span></label>
                                 </div>
                             </div>
                         </div>
 
                         <div class="payment-summary">
                             <div class="summary-header">
-                                <img src="~/images/autoclick-logo-payment.png" alt="AutoClick.cr" />
+                                <img data-logofile="LOGOS AUTOCLICK-04.png" alt="AutoClick.cr" style="max-width: 100%; height: auto;" />
                             </div>
                             <h3>Desglose de pago</h3>
-                            <div class="summary-line">
-                                <span>Plan: Posteo instantáneo</span>
-                                <span>₡2,500.00</span>
+                            <div class="summary-line" id="summary-plan">
+                                <span>Plan seleccionado</span>
+                                <span>₡0</span>
                             </div>
-                            <div class="summary-line">
-                                <span>Tag: Versión americana</span>
-                                <span>₡5,000.00</span>
+                            <div class="summary-line" id="summary-tag">
+                                <span>Banderín seleccionado</span>
+                                <span>₡0</span>
                             </div>
-                            <div class="summary-line">
-                                <span>IVA</span>
-                                <span>₡1,475.00</span>
+                            <div class="summary-line" id="summary-subtotal">
+                                <span>Subtotal</span>
+                                <span>₡0</span>
                             </div>
-                            <div class="summary-line">
+                            <div class="summary-line" id="summary-iva">
+                                <span>IVA (13%)</span>
+                                <span>₡0</span>
+                            </div>
+                            <div class="summary-line" id="summary-service">
                                 <span>Tarifa por servicio</span>
-                                <span>₡180.00</span>
+                                <span>₡180</span>
                             </div>
                             <div class="summary-total">
                                 <span>Total</span>
-                                <span class="total-amount">₡9,155.00</span>
+                                <span class="total-amount">₡180</span>
                             </div>
                         </div>
                     </div>
@@ -837,19 +829,11 @@
                         </div>
                     </div>
                     
-                    <div class="photo-order-section">
-                        <h3>Ordenar fotos</h3>
-                        <div class="photo-grid">
-                            @for(int i = 1; i <= 10; i++)
-                            {
-                                <div class="photo-slot">
-                                    <div class="photo-number">@i</div>
-                                    <div class="photo-placeholder"></div>
-                                </div>
-                            }
-                            <div class="video-slot">
-                                <div class="video-placeholder"></div>
-                            </div>
+                    <div class="photo-order-section" style="display: none;">
+                        <h3>Seleccionar imagen principal</h3>
+                        <p style="color: rgba(255, 255, 255, 0.7); font-size: 14px; margin-bottom: 20px;">Haga clic en la imagen que desea que aparezca como principal en su anuncio</p>
+                        <div class="uploaded-photos-grid">
+                            <!-- Las imágenes se agregarán dinámicamente aquí -->
                         </div>
                     </div>
                 </div>

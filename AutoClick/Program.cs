@@ -57,12 +57,12 @@ builder.Services.AddDbContext<ApplicationDbContext>(options =>
     {
         // Enable connection resiliency for Azure SQL Database
         sqlOptions.EnableRetryOnFailure(
-            maxRetryCount: 3,
-            maxRetryDelay: TimeSpan.FromSeconds(10),
+            maxRetryCount: 5,
+            maxRetryDelay: TimeSpan.FromSeconds(30),
             errorNumbersToAdd: null);
         
-        // Set command timeout for long-running operations
-        sqlOptions.CommandTimeout(15);
+        // Set command timeout for long-running operations (60 seconds)
+        sqlOptions.CommandTimeout(60);
     });
     
     // Enable sensitive data logging in development for debugging

@@ -4,6 +4,7 @@ namespace AutoClick.Services
     {
         Task<List<string>> GetAllBanderinesUrlsAsync();
         Task<string> GetBanderinUrlAsync(string banderineName);
+        Task<string> GetLogoUrlAsync(string logoName);
         Task<bool> MigrateBanderinesToBlobAsync();
         Task<bool> UploadBanderinAsync(string fileName, Stream fileStream);
     }
@@ -89,6 +90,33 @@ namespace AutoClick.Services
             {
                 _logger.LogError(ex, "Error getting banderin URL for {BanderinName}", banderineName);
                 return $"/images/Banderines/{banderineName}"; // Fallback
+            }
+        }
+
+        public async Task<string> GetLogoUrlAsync(string logoName)
+        {
+            try
+            {
+                string logosContainer = "logos";
+                
+                // Verificar si existe en blob storage (contenedor de logos)
+                var exists = await _storageService.FileExistsAsync(logosContainer, logoName);
+                if (exists)
+                {
+                    var sasUrl = await _storageService.GenerateSasUrlAsync(logosContainer, logoName, TimeSpan.FromHours(1));
+                    if (!string.IsNullOrEmpty(sasUrl))
+                    {
+                        return sasUrl;
+                    }
+                }
+                
+                _logger.LogWarning("Logo not found in blob storage: {LogoName}", logoName);
+                return string.Empty;
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error getting logo URL for {LogoName}", logoName);
+                return string.Empty;
             }
         }
 

@@ -1220,6 +1220,117 @@
     margin: 0 0 10px 0;
 }
 
+/* Grid de fotos subidas */
+.uploaded-photos-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 16px;
+    margin-top: 16px;
+}
+
+.uploaded-photo-card {
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: 8px;
+    overflow: hidden;
+    border: 2px solid transparent;
+    transition: all 0.3s;
+    cursor: pointer;
+}
+
+.uploaded-photo-card:hover {
+    border-color: rgba(0, 204, 0, 0.5);
+    transform: translateY(-2px);
+}
+
+.uploaded-photo-card.principal {
+    border-color: #00CC00;
+    box-shadow: 0 0 20px rgba(0, 204, 0, 0.3);
+}
+
+.photo-preview {
+    position: relative;
+    width: 100%;
+    height: 150px;
+    overflow: hidden;
+}
+
+.photo-preview img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.photo-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.7);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    transition: opacity 0.3s;
+}
+
+.uploaded-photo-card:hover .photo-overlay {
+    opacity: 1;
+}
+
+.uploaded-photo-card.principal .photo-overlay {
+    opacity: 0;
+}
+
+.set-principal-btn {
+    padding: 8px 16px;
+    background: #00CC00;
+    border: none;
+    border-radius: 4px;
+    color: white;
+    font-size: 13px;
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s;
+}
+
+.set-principal-btn:hover {
+    background: #00DD00;
+    transform: scale(1.05);
+}
+
+.uploaded-photo-card.principal .set-principal-btn {
+    background: rgba(255, 255, 255, 0.2);
+    cursor: default;
+}
+
+.photo-info {
+    padding: 12px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.photo-number {
+    color: rgba(255, 255, 255, 0.7);
+    font-size: 13px;
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 500;
+}
+
+.principal-badge {
+    background: #00CC00;
+    color: white;
+    padding: 4px 12px;
+    border-radius: 12px;
+    font-size: 11px;
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
 /* Image view modes */
 .image-view-toggle {
     display: flex;

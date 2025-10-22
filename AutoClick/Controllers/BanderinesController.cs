@@ -60,6 +60,31 @@ namespace AutoClick.Controllers
         }
 
         /// <summary>
+        /// Obtiene la URL de un logo específico desde el contenedor de logos
+        /// </summary>
+        [HttpGet("logo/{logoName}")]
+        public async Task<ActionResult<string>> GetLogo(string logoName)
+        {
+            try
+            {
+                if (string.IsNullOrWhiteSpace(logoName))
+                    return BadRequest("Nombre del logo requerido");
+
+                var url = await _banderinesService.GetLogoUrlAsync(logoName);
+                
+                if (string.IsNullOrEmpty(url))
+                    return NotFound($"Logo '{logoName}' no encontrado");
+
+                return Ok(url);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error getting logo {LogoName}", logoName);
+                return StatusCode(500, "Error interno del servidor");
+            }
+        }
+
+        /// <summary>
         /// Migra todos los banderines locales a Azure Blob Storage
         /// </summary>
         [HttpPost("migrate")]

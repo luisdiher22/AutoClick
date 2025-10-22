@@ -165,14 +165,14 @@ namespace AutoClick.Pages
                     Console.WriteLine($"Updating auto with ID: {editId}");
                     var auto = await ActualizarAutoAsync(editId, userEmail);
                     Console.WriteLine($"Auto updated successfully: {auto.Id}");
-                    return RedirectToPage("/");
+                    return RedirectToPage("/Index");
                 }
                 else
                 {
                     Console.WriteLine("Creating new auto");
                     var auto = await CrearAutoAsync(userEmail);
                     Console.WriteLine($"Auto created successfully: {auto.Id}");
-                    return RedirectToPage("/");
+                    return RedirectToPage("/Index");
                 }
             }
             catch (Exception ex)
@@ -211,6 +211,7 @@ namespace AutoClick.Pages
                 catch (Exception ex)
                 {
                     Console.WriteLine($"Error uploading images: {ex.Message}");
+                    throw new Exception("Error al subir las imágenes. Por favor, intenta de nuevo.", ex);
                 }
             }
             else
@@ -218,6 +219,8 @@ namespace AutoClick.Pages
                 Console.WriteLine("No files found to upload");
             }
 
+            Console.WriteLine("=== Creating auto record in database ===");
+            
             var auto = new Auto
             {
                 // Información básica del vehículo
@@ -277,10 +280,24 @@ namespace AutoClick.Pages
                 Activo = true
             };
 
-            _context.Autos.Add(auto);
-            await _context.SaveChangesAsync();
+            try
+            {
+                _context.Autos.Add(auto);
+                Console.WriteLine("Saving auto to database...");
+                await _context.SaveChangesAsync();
+                Console.WriteLine($"Auto created successfully with ID: {auto.Id}");
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Database error: {ex.Message}");
+                Console.WriteLine($"Stack trace: {ex.StackTrace}");
+                if (ex.InnerException != null)
+                {
+                    Console.WriteLine($"Inner exception: {ex.InnerException.Message}");
+                }
+                throw new Exception("Error al guardar en la base de datos. Por favor, intenta de nuevo.", ex);
+            }
             
-            Console.WriteLine($"Auto created with ID: {auto.Id}");
             Console.WriteLine($"Images URLs: {auto.ImagenesUrls}");
             Console.WriteLine($"Main image: {auto.ImagenPrincipal}");
             

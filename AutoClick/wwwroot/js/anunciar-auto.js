@@ -113,15 +113,15 @@ document.addEventListener('DOMContentLoaded', function() {
         });
         
         // Visibility plan selection
-        const planRadios = document.querySelectorAll('input[name="plan-visibilidad"]');
+        const planRadios = document.querySelectorAll('input[name="PlanVisibilidad"]');
         planRadios.forEach(radio => {
             radio.addEventListener('change', updatePlanSelection);
         });
         
-        // Tag checkboxes
-        const tagCheckboxes = document.querySelectorAll('.tag-option input[type="checkbox"]');
-        tagCheckboxes.forEach(checkbox => {
-            checkbox.addEventListener('change', updateTagSelection);
+        // Tag radio buttons (solo uno puede ser seleccionado)
+        const tagRadios = document.querySelectorAll('.tag-option input[type="radio"]');
+        tagRadios.forEach(radio => {
+            radio.addEventListener('change', updateTagSelection);
         });
 
         // Initialize tag videos
@@ -621,9 +621,23 @@ document.addEventListener('DOMContentLoaded', function() {
     function validatePaymentData() {
         console.log('Validating payment data...');
         
-        // Por ahora, permitir continuar sin validación estricta de pago
-        // ya que no todos los campos de pago están implementados aún
+        const aceptoTerminos = document.querySelector('#acepto-terminos');
         let isValid = true;
+        
+        // Verificar que se aceptaron los términos y condiciones
+        if (!aceptoTerminos || !aceptoTerminos.checked) {
+            console.log('Términos y condiciones no aceptados');
+            if (aceptoTerminos) {
+                showFieldError(aceptoTerminos, 'Debe aceptar los términos y condiciones para continuar');
+            }
+            showGlobalError('⚠️ Debe aceptar los términos y condiciones para continuar.');
+            isValid = false;
+        } else {
+            if (aceptoTerminos) {
+                clearFieldError(aceptoTerminos);
+            }
+            clearGlobalError();
+        }
         
         console.log('Payment validation result:', isValid);
         return isValid;
@@ -684,9 +698,9 @@ document.addEventListener('DOMContentLoaded', function() {
         const currentLength = textarea.value.length;
         const minLength = 10;
         
-        // Remove existing counter
-        const existingCounter = textarea.parentNode.querySelector('.character-counter');
-        if (existingCounter) {
+        // Remove existing counter (buscar después del textarea)
+        let existingCounter = textarea.nextElementSibling;
+        if (existingCounter && existingCounter.classList.contains('character-counter')) {
             existingCounter.remove();
         }
         
@@ -695,12 +709,16 @@ document.addEventListener('DOMContentLoaded', function() {
         counter.className = 'character-counter';
         counter.style.cssText = `
             font-size: 12px;
-            margin-top: 4px;
+            margin-top: 8px;
             color: ${currentLength >= minLength ? '#4CAF50' : '#FF9800'};
+            position: absolute;
+            left: 0px;
+            bottom: -24px;
         `;
         counter.textContent = `${currentLength}/${minLength} caracteres mínimos`;
         
-        textarea.parentNode.appendChild(counter);
+        // Insertar después del textarea
+        textarea.parentNode.insertBefore(counter, textarea.nextSibling);
     }
     
     function updateEquipmentSelection() {
@@ -708,42 +726,68 @@ document.addEventListener('DOMContentLoaded', function() {
         console.log('Equipment selection updated');
     }
     
-    function updatePlanSelection() {
-        const selectedPlan = document.querySelector('input[name="PlanVisibilidad"]:checked');
-        if (selectedPlan) {
-            updatePaymentSummary();
-        }
-    }
-    
-    function updateTagSelection() {
-        updatePaymentSummary();
-    }
-    
     function updatePaymentSummary() {
         const selectedPlan = document.querySelector('input[name="PlanVisibilidad"]:checked');
-        const selectedTags = document.querySelectorAll('.tag-option input[type="checkbox"]:checked');
+        const selectedTag = document.querySelector('.tag-option input[type="radio"]:checked');
         
+        const serviceFee = 180; // Tarifa de servicio fija
         let planPrice = 0;
-        let tagsPrice = 0;
+        let planName = "Ninguno";
+        let tagPrice = 0;
+        let tagName = "Ninguno";
         
         if (selectedPlan) {
             planPrice = parseFloat(selectedPlan.dataset.price || 0);
+            planName = selectedPlan.dataset.planName || "Plan seleccionado";
         }
         
-        selectedTags.forEach(tag => {
-            tagsPrice += parseFloat(tag.dataset.price || 0);
-        });
+        // Solo un tag puede ser seleccionado con radio buttons
+        if (selectedTag) {
+            tagPrice = parseFloat(selectedTag.dataset.price || 0);
+            tagName = selectedTag.dataset.tagName || "Banderín seleccionado";
+        }
         
-        const subtotal = planPrice + tagsPrice;
-        const tax = subtotal * 0.13; // 13% IVA
-        const total = subtotal + tax;
+        const subtotal = planPrice + tagPrice;
+        const iva = subtotal * 0.13; // 13% IVA
+        const total = subtotal + iva + serviceFee;
         
-        // Update summary display
-        updateSummaryLine('Plan seleccionado', `₡${planPrice.toLocaleString()}`);
-        updateSummaryLine('Tags adicionales', `₡${tagsPrice.toLocaleString()}`);
-        updateSummaryLine('Subtotal', `₡${subtotal.toLocaleString()}`);
-        updateSummaryLine('IVA (13%)', `₡${tax.toLocaleString()}`);
-        updateSummaryTotal(`₡${total.toLocaleString()}`);
+        // Función helper para formatear números
+        const formatCurrency = (value) => {
+            return `₡${Math.round(value).toLocaleString('es-CR')}`;
+        };
+        
+        // Update summary display con IDs específicos
+        const summaryPlan = document.querySelector('#summary-plan');
+        if (summaryPlan) {
+            summaryPlan.querySelector('span:first-child').textContent = planName;
+            summaryPlan.querySelector('span:last-child').textContent = formatCurrency(planPrice);
+        }
+        
+        const summaryTag = document.querySelector('#summary-tag');
+        if (summaryTag) {
+            summaryTag.querySelector('span:first-child').textContent = tagName;
+            summaryTag.querySelector('span:last-child').textContent = formatCurrency(tagPrice);
+        }
+        
+        const summarySubtotal = document.querySelector('#summary-subtotal');
+        if (summarySubtotal) {
+            summarySubtotal.querySelector('span:last-child').textContent = formatCurrency(subtotal);
+        }
+        
+        const summaryIva = document.querySelector('#summary-iva');
+        if (summaryIva) {
+            summaryIva.querySelector('span:last-child').textContent = formatCurrency(iva);
+        }
+        
+        const summaryService = document.querySelector('#summary-service');
+        if (summaryService) {
+            summaryService.querySelector('span:last-child').textContent = formatCurrency(serviceFee);
+        }
+        
+        const totalElement = document.querySelector('.total-amount');
+        if (totalElement) {
+            totalElement.textContent = formatCurrency(total);
+        }
     }
     
     function updateSummaryLine(label, value) {
@@ -1008,51 +1052,62 @@ document.addEventListener('DOMContentLoaded', function() {
             
             updatePhotoOrderSection();
         });
-        
-        // Drag and drop para reordenar
-        imagePreview.addEventListener('dragstart', function(e) {
-            e.dataTransfer.setData('text/plain', '');
-            imagePreview.classList.add('dragging');
-        });
-        
-        imagePreview.addEventListener('dragend', function() {
-            imagePreview.classList.remove('dragging');
-        });
-        
-        container.addEventListener('dragover', function(e) {
-            e.preventDefault();
-            const afterElement = getDragAfterElement(container, e.clientX);
-            const dragging = document.querySelector('.dragging');
-            if (afterElement == null) {
-                container.appendChild(dragging);
-            } else {
-                container.insertBefore(dragging, afterElement);
-            }
-        });
-    }
-    
-    function getDragAfterElement(container, x) {
-        const draggableElements = [...container.querySelectorAll('.image-preview:not(.dragging)')];
-        
-        return draggableElements.reduce((closest, child) => {
-            const box = child.getBoundingClientRect();
-            const offset = x - box.left - box.width / 2;
-            
-            if (offset < 0 && offset > closest.offset) {
-                return { offset: offset, element: child };
-            } else {
-                return closest;
-            }
-        }, { offset: Number.NEGATIVE_INFINITY }).element;
     }
     
     function updatePhotoOrderSection() {
         const orderSection = document.querySelector('.photo-order-section');
+        const uploadedGrid = document.querySelector('.uploaded-photos-grid');
         const imagesPreviews = document.querySelectorAll('.image-preview');
         
-        if (orderSection && imagesPreviews.length > 0) {
+        if (orderSection && uploadedGrid && imagesPreviews.length > 0) {
             orderSection.style.display = 'block';
-            // Aquí podrías agregar lógica adicional para actualizar la sección de orden
+            
+            // Limpiar el grid
+            uploadedGrid.innerHTML = '';
+            
+            // Agregar cada imagen con opción de seleccionar como principal
+            imagesPreviews.forEach((preview, index) => {
+                const img = preview.querySelector('img');
+                if (!img) return;
+                
+                const photoCard = document.createElement('div');
+                photoCard.className = 'uploaded-photo-card';
+                if (index === 0) {
+                    photoCard.classList.add('principal');
+                }
+                
+                photoCard.innerHTML = `
+                    <div class="photo-preview">
+                        <img src="${img.src}" alt="Foto ${index + 1}">
+                        <div class="photo-overlay">
+                            <button type="button" class="set-principal-btn" data-index="${index}">
+                                ${index === 0 ? '⭐ Principal' : 'Establecer como principal'}
+                            </button>
+                        </div>
+                    </div>
+                    <div class="photo-info">
+                        <span class="photo-number">Foto ${index + 1}</span>
+                        ${index === 0 ? '<span class="principal-badge">Principal</span>' : ''}
+                    </div>
+                `;
+                
+                // Evento para establecer como principal
+                const setPrincipalBtn = photoCard.querySelector('.set-principal-btn');
+                setPrincipalBtn.addEventListener('click', function() {
+                    // Reordenar las imágenes en el preview
+                    const imagesContainer = preview.parentElement;
+                    const allPreviews = Array.from(imagesContainer.querySelectorAll('.image-preview'));
+                    
+                    // Mover la imagen seleccionada al inicio
+                    const selectedPreview = allPreviews[index];
+                    imagesContainer.insertBefore(selectedPreview, imagesContainer.firstChild);
+                    
+                    // Actualizar la visualización
+                    updatePhotoOrderSection();
+                });
+                
+                uploadedGrid.appendChild(photoCard);
+            });
         } else if (orderSection) {
             orderSection.style.display = 'none';
         }
@@ -1407,17 +1462,28 @@ document.addEventListener('DOMContentLoaded', function() {
         if (selectedPlan) {
             selectedPlan.classList.add('selected');
         }
+        
+        // Actualizar el resumen de pago cuando cambia el plan
+        updatePaymentSummary();
     }
 
     function updateTagSelection(event) {
-        const checkbox = event.target;
-        const tagOption = checkbox.closest('.tag-option');
-
-        if (checkbox.checked) {
-            tagOption.classList.add('selected');
-        } else {
-            tagOption.classList.remove('selected');
+        const radio = event.target;
+        const tagOptions = document.querySelectorAll('.tag-option');
+        
+        // Remover la clase 'selected' de todas las opciones
+        tagOptions.forEach(option => {
+            option.classList.remove('selected');
+        });
+        
+        // Agregar la clase 'selected' solo a la opción seleccionada
+        const selectedTagOption = radio.closest('.tag-option');
+        if (selectedTagOption && radio.checked) {
+            selectedTagOption.classList.add('selected');
         }
+        
+        // Actualizar el resumen de pago cuando cambia el banderín
+        updatePaymentSummary();
     }
 
     function initializeTagVideos() {
@@ -1550,6 +1616,30 @@ async function loadBanderinesFromBlobStorage() {
                     }
                 } catch (error) {
                     console.warn(`⚠ Error loading banderin ${fileName}:`, error);
+                }
+            }
+        }
+        
+        // Get all logos with data-logofile attribute (different container)
+        const logoImages = document.querySelectorAll('img[data-logofile]');
+        
+        for (const img of logoImages) {
+            const fileName = img.getAttribute('data-logofile');
+            if (fileName) {
+                try {
+                    // Use the logos container instead of banderines
+                    const response = await fetch(`/api/banderines/logo/${encodeURIComponent(fileName)}`);
+                    if (response.ok) {
+                        const url = await response.text();
+                        if (url && url.startsWith('http')) {
+                            img.src = url.replace(/"/g, '');
+                            console.log(`✅ Loaded logo: ${fileName}`);
+                        }
+                    } else {
+                        console.warn(`⚠ Failed to load logo ${fileName}: ${response.status}`);
+                    }
+                } catch (error) {
+                    console.warn(`⚠ Error loading logo ${fileName}:`, error);
                 }
             }
         }
