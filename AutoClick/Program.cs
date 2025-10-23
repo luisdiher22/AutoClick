@@ -123,6 +123,9 @@ builder.Services.AddSingleton<ITasaCambioService, TasaCambioService>();
 // Add Ventas Externas Service
 builder.Services.AddScoped<IVentasExternasService, VentasExternasService>();
 
+// Add Email Service para notificaciones
+builder.Services.AddScoped<IEmailService, EmailService>();
+
 // Add HttpClient Factory para TasaCambioService
 builder.Services.AddHttpClient();
 

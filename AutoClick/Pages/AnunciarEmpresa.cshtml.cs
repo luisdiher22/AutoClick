@@ -1,12 +1,29 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.Mvc.Filters;
+using Microsoft.EntityFrameworkCore;
 using System.ComponentModel.DataAnnotations;
+using AutoClick.Data;
+using AutoClick.Models;
+using AutoClick.Services;
 
 namespace AutoClick.Pages
 {
     public class AnunciarEmpresaModel : PageModel
     {
+        private readonly ApplicationDbContext _context;
+        private readonly IEmailService _emailService;
+        private readonly ILogger<AnunciarEmpresaModel> _logger;
+
+        public AnunciarEmpresaModel(
+            ApplicationDbContext context, 
+            IEmailService emailService,
+            ILogger<AnunciarEmpresaModel> logger)
+        {
+            _context = context;
+            _emailService = emailService;
+            _logger = logger;
+        }
         [BindProperty]
         [Required(ErrorMessage = "El nombre de la empresa es requerido")]
         [StringLength(100, ErrorMessage = "El nombre de la empresa no puede exceder 100 caracteres")]
@@ -168,37 +185,59 @@ namespace AutoClick.Pages
         {
             try
             {
-                // TODO: Implement actual business logic here
-                // This could include:
-                // - Saving to database
-                // - Sending notification emails
-                // - Creating a lead in CRM system
-                // - Integrating with external services
+                _logger.LogInformation("Procesando nueva solicitud de empresa");
 
-                // Simulate async processing
-                await Task.Delay(1000);
-                
-                // Log the inquiry for now
-                System.Diagnostics.Debug.WriteLine($"New business inquiry received:");
-                System.Diagnostics.Debug.WriteLine($"Company: {NombreEmpresa}");
-                System.Diagnostics.Debug.WriteLine($"Contact: {RepresentanteLegal}");
-                System.Diagnostics.Debug.WriteLine($"Industry: {Industria}");
-                System.Diagnostics.Debug.WriteLine($"Email: {CorreoElectronico}");
-                System.Diagnostics.Debug.WriteLine($"Phone: {Telefono}");
-                System.Diagnostics.Debug.WriteLine($"Description: {DescripcionEmpresa}");
-                
-                // In a real application, you would:
-                // 1. Save to database
-                // 2. Send confirmation email to the business
-                // 3. Send notification email to AutoClick.cr team
-                // 4. Create a follow-up task/reminder
-                // 5. Log the activity for analytics
+                // 1. Crear y guardar la solicitud en la base de datos
+                var solicitud = new SolicitudEmpresa
+                {
+                    NombreEmpresa = NombreEmpresa,
+                    RepresentanteLegal = RepresentanteLegal,
+                    Industria = Industria,
+                    CorreoElectronico = CorreoElectronico,
+                    Telefono = Telefono,
+                    DescripcionEmpresa = DescripcionEmpresa,
+                    FechaCreacion = DateTime.UtcNow,
+                    Estado = "Pendiente"
+                };
 
-                return true; // Simulate successful processing
+                _context.SolicitudesEmpresa.Add(solicitud);
+                await _context.SaveChangesAsync();
+
+                _logger.LogInformation($"Solicitud guardada en BD con ID: {solicitud.Id}");
+
+                // 2. Obtener correos de todos los administradores
+                var correosAdmins = await _context.Usuarios
+                    .Where(u => u.EsAdministrador == true)
+                    .Select(u => u.Email)
+                    .ToListAsync();
+
+                if (!correosAdmins.Any())
+                {
+                    _logger.LogWarning("No se encontraron administradores en el sistema");
+                    // Usar un correo por defecto si no hay admins
+                    correosAdmins.Add("admin@autoclick.cr");
+                }
+
+                _logger.LogInformation($"Se encontraron {correosAdmins.Count} administrador(es)");
+
+                // 3. Enviar email a los administradores
+                bool emailEnviado = await _emailService.EnviarNotificacionSolicitudEmpresaAsync(solicitud, correosAdmins);
+
+                if (emailEnviado)
+                {
+                    _logger.LogInformation("Email de notificación enviado exitosamente");
+                }
+                else
+                {
+                    _logger.LogWarning("No se pudo enviar el email de notificación");
+                }
+
+                return true; // La solicitud se guardó correctamente
             }
             catch (Exception ex)
             {
-                System.Diagnostics.Debug.WriteLine($"Error processing business inquiry: {ex.Message}");
+                _logger.LogError($"Error al procesar solicitud de empresa: {ex.Message}");
+                _logger.LogError($"Stack trace: {ex.StackTrace}");
                 return false;
             }
         }

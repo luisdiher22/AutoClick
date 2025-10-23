@@ -103,12 +103,13 @@
         
         .hero-title {
             color: white;
-            font-size: 48px;
+            font-size: 36px;
             font-family: 'Montserrat', sans-serif;
             font-weight: 700;
             text-shadow: 0px 4px 5px rgba(0, 0, 0, 0.50);
-            margin-bottom: 20px;
+            margin-bottom: 24px;
             line-height: 1.2;
+            text-align: center;
         }
         
         .text-orange {
@@ -120,15 +121,19 @@
             font-size: 32px;
             font-family: 'Montserrat', sans-serif;
             font-weight: 700;
-            margin-bottom: 40px;
+            margin-bottom: 85px;
+            text-align: center;
         }
         
         .benefits-list {
             display: flex;
             flex-direction: column;
-            gap: 32px;
+            gap: 16px;
             margin-bottom: 60px;
-            align-items: center;
+            align-items: flex-start;
+            max-width: 700px;
+            margin-left: auto;
+            margin-right: auto;
         }
         
         .benefit-item {
@@ -136,8 +141,7 @@
             align-items: center;
             gap: 12px;
             padding: 8px;
-            max-width: 700px;
-            justify-content: flex-start;
+            width: 100%;
         }
         
         .benefit-icon {
@@ -147,17 +151,17 @@
             border-radius: 50%;
             position: relative;
             flex-shrink: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
         }
         
         .benefit-icon::before {
             content: '✓';
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
             color: white;
             font-weight: bold;
-            font-size: 20px;
+            font-size: 24px;
+            line-height: 1;
         }
         
         .benefit-text {
@@ -166,6 +170,7 @@
             font-family: 'Montserrat', sans-serif;
             font-weight: 700;
             text-align: left;
+            flex: 1;
         }
         
         .cta-button {
@@ -629,7 +634,7 @@
     <div class="breadcrumb-section">
         <nav class="breadcrumb-nav">
             <a asp-page="/Index" class="breadcrumb-item">Inicio</a>
-            <span class="breadcrumb-separator">/</span>
+            <span class="breadcrumb-separator"> / </span>
             <span class="breadcrumb-current">Anuncie su empresa</span>
         </nav>
     </div>
@@ -677,39 +682,35 @@
             <div class="service-item">
                 <h3 class="service-title">Exposición Comercial Premium</h3>
                 <div class="service-description">
-                    <p>Espacios publicitarios estratégicos en el sitio (home, listado, blog).</p>
-                    <p>Perfil público personalizado con logo, descripción y contacto.</p>
-                    <p>Vitrina de productos o servicios asociados al mundo automotriz.</p>
+                    <p>• Espacios publicitarios estratégicos en el sitio (home, listado, blog).</p>
+                    <p>• Perfil público personalizado con logo, descripción y contacto.</p>
+                    <p>• Vitrina de productos o servicios asociados al mundo automotriz.</p>
                 </div>
             </div>
             <div class="service-item">
                 <h3 class="service-title">Visibilidad Multimedia</h3>
                 <div class="service-description">
-                    <p>Integración de imágenes, videos y enlaces directos.</p>
-                    <p>Posibilidad de incluir promociones o campañas visuales.</p>
+                    <p>• Integración de imágenes, videos y enlaces directos.</p>
+                    <p>• Posibilidad de incluir promociones o campañas visuales.</p>
                 </div>
             </div>
         </div>
         
         <div class="service-column">
             <div class="service-item">
-                <div class="service-description">
-                    <p>Aparecer como proveedor recomendado en publicaciones de vehículos.</p>
-                    <p>Participar en paquetes promocionales conjuntos (seguro + detailing, por ejemplo).</p>
-                    <p>Networking con otras marcas de lujo.</p>
-                </div>
-            </div>
-            <div class="service-item">
                 <h3 class="service-title">Alianzas Estratégicas</h3>
-            </div>
-            <div class="service-item">
                 <div class="service-description">
-                    <p>Planes mensuales o anuales adaptados al tamaño del negocio.</p>
-                    <p>Posibilidad de promociones por temporada o eventos.</p>
+                    <p>• Aparecer como proveedor recomendado en publicaciones de vehículos.</p>
+                    <p>• Participar en paquetes promocionales conjuntos (seguro + detailing, por ejemplo).</p>
+                    <p>• Networking con otras marcas de lujo.</p>
                 </div>
             </div>
             <div class="service-item">
                 <h3 class="service-title">Flexibilidad de Planes</h3>
+                <div class="service-description">
+                    <p>• Planes mensuales o anuales adaptados al tamaño del negocio.</p>
+                    <p>• Posibilidad de promociones por temporada o eventos.</p>
+                </div>
             </div>
         </div>
     </div>

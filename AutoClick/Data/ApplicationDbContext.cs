@@ -16,6 +16,7 @@ public class ApplicationDbContext : DbContext
     public DbSet<Reclamo> Reclamos { get; set; }
     public DbSet<Mensaje> Mensajes { get; set; }
     public DbSet<VentaExterna> VentasExternas { get; set; }
+    public DbSet<SolicitudEmpresa> SolicitudesEmpresa { get; set; }
     // Car model eliminado
     
     protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -225,6 +226,56 @@ public class ApplicationDbContext : DbContext
                   .HasForeignKey(m => m.EmailAdminRespuesta)
                   .IsRequired(false)
                   .OnDelete(DeleteBehavior.NoAction);
+        });
+        
+        // Configure SolicitudEmpresa entity
+        modelBuilder.Entity<SolicitudEmpresa>(entity =>
+        {
+            // Primary key
+            entity.HasKey(s => s.Id);
+            
+            // Índices para mejorar performance
+            entity.HasIndex(s => s.CorreoElectronico);
+            entity.HasIndex(s => s.FechaCreacion);
+            entity.HasIndex(s => s.Estado);
+            entity.HasIndex(s => s.NombreEmpresa);
+            
+            // Configuraciones de propiedades
+            entity.Property(s => s.NombreEmpresa)
+                  .IsRequired()
+                  .HasMaxLength(100);
+                  
+            entity.Property(s => s.RepresentanteLegal)
+                  .IsRequired()
+                  .HasMaxLength(100);
+                  
+            entity.Property(s => s.Industria)
+                  .IsRequired()
+                  .HasMaxLength(50);
+                  
+            entity.Property(s => s.CorreoElectronico)
+                  .IsRequired()
+                  .HasMaxLength(150);
+                  
+            entity.Property(s => s.Telefono)
+                  .IsRequired()
+                  .HasMaxLength(20);
+                  
+            entity.Property(s => s.DescripcionEmpresa)
+                  .IsRequired()
+                  .HasMaxLength(1000);
+                  
+            entity.Property(s => s.Estado)
+                  .IsRequired()
+                  .HasMaxLength(20)
+                  .HasDefaultValue("Pendiente");
+                  
+            entity.Property(s => s.NotasInternas)
+                  .HasMaxLength(500);
+                  
+            entity.Property(s => s.FechaCreacion)
+                  .IsRequired()
+                  .HasDefaultValueSql("GETUTCDATE()");
         });
         
         // Configure your other entity relationships here
