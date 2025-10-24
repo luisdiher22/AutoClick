@@ -15,6 +15,20 @@
                 <h1 class="panel-title">Contáctenos</h1>
             </div>
 
+            @if (!string.IsNullOrEmpty(Model.SuccessMessage))
+            {
+                <div class="success-message">
+                    @Model.SuccessMessage
+                </div>
+            }
+
+            @if (!string.IsNullOrEmpty(Model.ErrorMessage))
+            {
+                <div class="error-message">
+                    @Model.ErrorMessage
+                </div>
+            }
+
             <form method="post" class="reportar-form">
                 <div class="section-header">
                     <h2>Datos de contacto</h2>
@@ -114,20 +128,6 @@
                     </button>
                 </div>
             </form>
-
-            @if (!string.IsNullOrEmpty(Model.SuccessMessage))
-            {
-                <div class="success-message">
-                    @Model.SuccessMessage
-                </div>
-            }
-
-            @if (!string.IsNullOrEmpty(Model.ErrorMessage))
-            {
-                <div class="error-message">
-                    @Model.ErrorMessage
-                </div>
-            }
         </div>
     </div>
 </div>

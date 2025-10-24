@@ -67,6 +67,12 @@ namespace AutoClick.Pages
         public async Task OnGetAsync()
         {
             TiposProblemaDisponibles = await _soporteService.GetTiposProblemaAsync();
+            
+            // Leer mensaje de éxito de TempData
+            if (TempData.ContainsKey("SuccessMessage"))
+            {
+                SuccessMessage = TempData["SuccessMessage"]?.ToString() ?? string.Empty;
+            }
         }
 
         public async Task<IActionResult> OnPostAsync()
@@ -87,12 +93,10 @@ namespace AutoClick.Pages
             {
                 await ProcessProblemReportAsync();
 
-                SuccessMessage = "Su reporte ha sido enviado exitosamente. Nos pondremos en contacto con usted pronto.";
+                TempData["SuccessMessage"] = "Su reporte ha sido enviado exitosamente. Nos pondremos en contacto con usted pronto.";
                 
-                // Clear form data after successful submission
-                ClearFormData();
-                
-                return Page();
+                // Usar patrón Post-Redirect-Get para limpiar el formulario
+                return RedirectToPage();
             }
             catch (Exception ex)
             {

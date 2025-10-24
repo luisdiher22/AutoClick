@@ -18,8 +18,6 @@ public class SoporteService : ISoporteService
     public async Task<List<Reclamo>> GetReclamosAsync()
     {
         return await _context.Reclamos
-            .Include(r => r.Cliente)
-            .Include(r => r.AdminRespuesta)
             .OrderByDescending(r => r.FechaCreacion)
             .ToListAsync();
     }
@@ -27,8 +25,6 @@ public class SoporteService : ISoporteService
     public async Task<List<Reclamo>> GetReclamosPorEstadoAsync(EstadoReclamo estado)
     {
         return await _context.Reclamos
-            .Include(r => r.Cliente)
-            .Include(r => r.AdminRespuesta)
             .Where(r => r.Estado == estado)
             .OrderByDescending(r => r.FechaCreacion)
             .ToListAsync();
@@ -37,8 +33,6 @@ public class SoporteService : ISoporteService
     public async Task<List<Reclamo>> GetReclamosPorFiltroAsync(string? tipoProblema = null, EstadoReclamo? estado = null, string? prioridad = null)
     {
         var query = _context.Reclamos
-            .Include(r => r.Cliente)
-            .Include(r => r.AdminRespuesta)
             .AsQueryable();
 
         if (!string.IsNullOrEmpty(tipoProblema))
@@ -58,8 +52,6 @@ public class SoporteService : ISoporteService
     public async Task<Reclamo?> GetReclamoByIdAsync(int id)
     {
         return await _context.Reclamos
-            .Include(r => r.Cliente)
-            .Include(r => r.AdminRespuesta)
             .FirstOrDefaultAsync(r => r.Id == id);
     }
 
@@ -161,8 +153,6 @@ public class SoporteService : ISoporteService
     public async Task<List<Mensaje>> GetMensajesAsync()
     {
         return await _context.Mensajes
-            .Include(m => m.Cliente)
-            .Include(m => m.AdminRespuesta)
             .OrderByDescending(m => m.FechaCreacion)
             .ToListAsync();
     }
@@ -170,8 +160,6 @@ public class SoporteService : ISoporteService
     public async Task<List<Mensaje>> GetMensajesPorEstadoAsync(EstadoMensaje estado)
     {
         return await _context.Mensajes
-            .Include(m => m.Cliente)
-            .Include(m => m.AdminRespuesta)
             .Where(m => m.Estado == estado)
             .OrderByDescending(m => m.FechaCreacion)
             .ToListAsync();
@@ -180,8 +168,6 @@ public class SoporteService : ISoporteService
     public async Task<List<Mensaje>> GetMensajesPorFiltroAsync(string? tipoConsulta = null, EstadoMensaje? estado = null, string? prioridad = null)
     {
         var query = _context.Mensajes
-            .Include(m => m.Cliente)
-            .Include(m => m.AdminRespuesta)
             .AsQueryable();
 
         if (!string.IsNullOrEmpty(tipoConsulta))
@@ -201,8 +187,6 @@ public class SoporteService : ISoporteService
     public async Task<Mensaje?> GetMensajeByIdAsync(int id)
     {
         return await _context.Mensajes
-            .Include(m => m.Cliente)
-            .Include(m => m.AdminRespuesta)
             .FirstOrDefaultAsync(m => m.Id == id);
     }
 

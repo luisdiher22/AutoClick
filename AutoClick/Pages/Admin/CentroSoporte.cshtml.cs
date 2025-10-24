@@ -23,6 +23,18 @@ namespace AutoClick.Pages.Admin
         public List<Reclamo> Reclamos { get; set; } = new();
         public List<Mensaje> Mensajes { get; set; } = new();
         
+        // Paginación
+        [BindProperty(SupportsGet = true)]
+        public int PaginaActualReclamos { get; set; } = 1;
+        
+        [BindProperty(SupportsGet = true)]
+        public int PaginaActualMensajes { get; set; } = 1;
+        
+        public int TotalPaginasReclamos { get; set; }
+        public int TotalPaginasMensajes { get; set; }
+        
+        private const int TamañoPagina = 15;
+        
         // Filtros
         [BindProperty(SupportsGet = true)]
         public string? FiltroTipoReclamo { get; set; }
@@ -194,30 +206,60 @@ namespace AutoClick.Pages.Admin
                 PrioridadesDisponibles = _soporteService.GetPrioridades();
 
                 // Cargar reclamos con filtros
+                List<Reclamo> todosLosReclamos;
                 if (!string.IsNullOrEmpty(FiltroTipoReclamo) || FiltroEstadoReclamo.HasValue || !string.IsNullOrEmpty(FiltroPrioridad))
                 {
-                    Reclamos = await _soporteService.GetReclamosPorFiltroAsync(
+                    todosLosReclamos = await _soporteService.GetReclamosPorFiltroAsync(
                         FiltroTipoReclamo, 
                         FiltroEstadoReclamo, 
                         FiltroPrioridad);
                 }
                 else
                 {
-                    Reclamos = await _soporteService.GetReclamosAsync();
+                    todosLosReclamos = await _soporteService.GetReclamosAsync();
                 }
+                
+                // Ordenar por fecha descendente (más reciente primero)
+                todosLosReclamos = todosLosReclamos.OrderByDescending(r => r.FechaCreacion).ToList();
+                
+                // Calcular paginación para reclamos
+                var totalReclamos = todosLosReclamos.Count;
+                TotalPaginasReclamos = (int)Math.Ceiling(totalReclamos / (double)TamañoPagina);
+                PaginaActualReclamos = Math.Max(1, Math.Min(PaginaActualReclamos, TotalPaginasReclamos == 0 ? 1 : TotalPaginasReclamos));
+                
+                // Aplicar paginación
+                Reclamos = todosLosReclamos
+                    .Skip((PaginaActualReclamos - 1) * TamañoPagina)
+                    .Take(TamañoPagina)
+                    .ToList();
 
                 // Cargar mensajes con filtros
+                List<Mensaje> todosLosMensajes;
                 if (!string.IsNullOrEmpty(FiltroTipoMensaje) || FiltroEstadoMensaje.HasValue || !string.IsNullOrEmpty(FiltroPrioridad))
                 {
-                    Mensajes = await _soporteService.GetMensajesPorFiltroAsync(
+                    todosLosMensajes = await _soporteService.GetMensajesPorFiltroAsync(
                         FiltroTipoMensaje, 
                         FiltroEstadoMensaje, 
                         FiltroPrioridad);
                 }
                 else
                 {
-                    Mensajes = await _soporteService.GetMensajesAsync();
+                    todosLosMensajes = await _soporteService.GetMensajesAsync();
                 }
+                
+                // Ordenar por fecha descendente (más reciente primero)
+                todosLosMensajes = todosLosMensajes.OrderByDescending(m => m.FechaCreacion).ToList();
+                
+                // Calcular paginación para mensajes
+                var totalMensajes = todosLosMensajes.Count;
+                TotalPaginasMensajes = (int)Math.Ceiling(totalMensajes / (double)TamañoPagina);
+                PaginaActualMensajes = Math.Max(1, Math.Min(PaginaActualMensajes, TotalPaginasMensajes == 0 ? 1 : TotalPaginasMensajes));
+                
+                // Aplicar paginación
+                Mensajes = todosLosMensajes
+                    .Skip((PaginaActualMensajes - 1) * TamañoPagina)
+                    .Take(TamañoPagina)
+                    .ToList();
 
                 // Cargar estadísticas
                 EstadisticasReclamos = await _soporteService.GetEstadisticasReclamosAsync();
@@ -233,6 +275,8 @@ namespace AutoClick.Pages.Admin
                 Mensajes = new List<Mensaje>();
                 EstadisticasReclamos = new Dictionary<string, int>();
                 EstadisticasMensajes = new Dictionary<string, int>();
+                TotalPaginasReclamos = 1;
+                TotalPaginasMensajes = 1;
                 
                 Console.WriteLine($"Error al cargar datos: {ex.Message}");
             }

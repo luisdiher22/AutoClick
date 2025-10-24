@@ -149,18 +149,9 @@ public class ApplicationDbContext : DbContext
             entity.Property(r => r.EmailAdminRespuesta)
                   .HasMaxLength(150);
             
-            // Relaciones con Usuario (opcional)
-            entity.HasOne(r => r.Cliente)
-                  .WithMany()
-                  .HasForeignKey(r => r.EmailCliente)
-                  .IsRequired(false)
-                  .OnDelete(DeleteBehavior.NoAction);
-                  
-            entity.HasOne(r => r.AdminRespuesta)
-                  .WithMany()
-                  .HasForeignKey(r => r.EmailAdminRespuesta)
-                  .IsRequired(false)
-                  .OnDelete(DeleteBehavior.NoAction);
+            // Ignorar relaciones con Usuario para evitar problemas de FK
+            entity.Ignore(r => r.Cliente);
+            entity.Ignore(r => r.AdminRespuesta);
         });
         
         // Configure Mensaje entity
@@ -214,18 +205,9 @@ public class ApplicationDbContext : DbContext
             entity.Property(m => m.EmailAdminRespuesta)
                   .HasMaxLength(150);
             
-            // Relaciones con Usuario (opcional) - Sin restricciones de clave foránea
-            entity.HasOne(m => m.Cliente)
-                  .WithMany()
-                  .HasForeignKey(m => m.EmailCliente)
-                  .IsRequired(false)
-                  .OnDelete(DeleteBehavior.NoAction);
-                  
-            entity.HasOne(m => m.AdminRespuesta)
-                  .WithMany()
-                  .HasForeignKey(m => m.EmailAdminRespuesta)
-                  .IsRequired(false)
-                  .OnDelete(DeleteBehavior.NoAction);
+            // Ignorar relaciones con Usuario para evitar problemas de FK
+            entity.Ignore(m => m.Cliente);
+            entity.Ignore(m => m.AdminRespuesta);
         });
         
         // Configure SolicitudEmpresa entity
