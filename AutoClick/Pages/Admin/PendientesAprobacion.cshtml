@@ -146,108 +146,6 @@
         opacity: 0.8;
     }
 
-    /* Footer */
-    .admin-footer {
-        width: 100vw;
-        height: 304px;
-        background: #030D2B;
-        border-top: 0.5px solid rgba(255, 255, 255, 0.45);
-        position: relative;
-        margin-top: 80px;
-        margin-left: -376px;
-        margin-right: -40px;
-    }
-
-    .footer-content {
-        display: flex;
-        justify-content: center;
-        align-items: flex-start;
-        gap: 62px;
-        padding: 45px 0;
-    }
-
-    .footer-section {
-        display: flex;
-        flex-direction: column;
-        gap: 40px;
-    }
-
-    .footer-title {
-        color: rgba(255, 255, 255, 0.5);
-        font-size: 24px;
-        font-family: 'Plus Jakarta Sans', sans-serif;
-        font-weight: 700;
-    }
-
-    .footer-links {
-        display: flex;
-        flex-direction: column;
-        gap: 32px;
-    }
-
-    .footer-link {
-        color: white;
-        font-size: 16px;
-        font-family: 'Montserrat', sans-serif;
-        font-weight: 400;
-        text-decoration: none;
-    }
-
-    .footer-link:hover {
-        color: rgba(255, 255, 255, 0.8);
-        text-decoration: none;
-    }
-
-    .footer-logo {
-        width: 289px;
-        height: 143px;
-        position: absolute;
-        left: 40px;
-        top: 40px;
-        display: flex;
-        flex-direction: column;
-        justify-content: center;
-        align-items: flex-start;
-        gap: 32px;
-    }
-
-    .footer-social {
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        gap: 48px;
-    }
-
-    .footer-social a {
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        transition: opacity 0.2s ease;
-    }
-
-    .footer-social a:hover {
-        opacity: 0.8;
-    }
-
-    .footer-copyright {
-        position: absolute;
-        bottom: 36px;
-        left: 50%;
-        transform: translateX(-50%);
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        gap: 10px;
-    }
-
-    .copyright-text {
-        color: white;
-        font-size: 16px;
-        font-family: 'Montserrat', sans-serif;
-        font-weight: 300;
-        text-align: center;
-    }
-
     /* Responsive */
     @@media (max-width: 1200px) {
         .admin-sidebar {
@@ -256,10 +154,6 @@
         }
 
         .admin-main-content {
-            margin-left: 0;
-        }
-
-        .admin-footer {
             margin-left: 0;
         }
     }
@@ -471,71 +365,6 @@
                     }
                 </tbody>
             </table>
-        </div>
-    </div>
-
-    <!-- Footer -->
-    <div class="admin-footer">
-        <div class="footer-logo">
-            <img style="height: 45.86px" src="~/images/logos/autoclick-logo-hd.png" alt="AutoClick.cr" />
-            <div class="footer-social">
-                <!-- Facebook Icon -->
-                <a href="#" style="text-decoration: none;">
-                    <svg width="32" height="32" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
-                        <path d="M32 16C32 7.1625 24.8375 0 16 0C7.1625 0 0 7.1625 0 16C0 23.9875 5.85 30.6062 13.5 31.8062V20.625H9.4375V16H13.5V12.475C13.5 8.46563 15.8875 6.25 19.5438 6.25C21.2938 6.25 23.125 6.5625 23.125 6.5625V10.5H21.1063C19.1188 10.5 18.5 11.7344 18.5 13V16H22.9375L22.2281 20.625H18.5V31.8062C26.15 30.6062 32 23.9875 32 16Z" fill="white"/>
-                    </svg>
-                </a>
-                <!-- Instagram Icon -->
-                <a href="#" style="text-decoration: none;">
-                    <svg width="32" height="32" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
-                        <path d="M16 10.6667C13.0545 10.6667 10.6667 13.0545 10.6667 16C10.6667 18.9455 13.0545 21.3333 16 21.3333C18.9455 21.3333 21.3333 18.9455 21.3333 16C21.3333 13.0545 18.9455 10.6667 16 10.6667ZM31.9636 16C31.9636 13.8424 31.9818 11.7030 31.8606 9.54909C31.7394 7.03636 31.1697 4.79273 29.3091 2.93212C27.4455 1.06848 25.2048 0.501818 22.6921 0.380606C20.5352 0.259394 18.3958 0.277576 16.2424 0.277576C14.0859 0.277576 11.9467 0.259394 9.79273 0.380606C7.28 0.501818 5.03636 1.07152 3.17576 2.93212C1.31212 4.79576 0.745454 7.03636 0.624242 9.54909C0.503031 11.7061 0.521212 13.8455 0.521212 16C0.521212 18.1545 0.503031 20.297 0.624242 22.4509C0.745454 24.9636 1.31515 27.2073 3.17576 29.0679C5.03939 30.9315 7.28 31.4982 9.79273 31.6194C11.9497 31.7406 14.0891 31.7224 16.2424 31.7224C18.3988 31.7224 20.5382 31.7406 22.6921 31.6194C25.2048 31.4982 27.4485 30.9285 29.3091 29.0679C31.1727 27.2042 31.7394 24.9636 31.8606 22.4509C31.9848 20.297 31.9636 18.1576 31.9636 16ZM16 24.2061C11.4667 24.2061 7.79394 20.5333 7.79394 16C7.79394 11.4667 11.4667 7.79394 16 7.79394C20.5333 7.79394 24.2061 11.4667 24.2061 16C24.2061 20.5333 20.5333 24.2061 16 24.2061ZM24.5394 9.52727C23.497 9.52727 22.6545 8.68485 22.6545 7.64242C22.6545 6.6 23.497 5.75758 24.5394 5.75758C25.5818 5.75758 26.4242 6.6 26.4242 7.64242C26.4245 7.89523 26.3748 8.14563 26.2779 8.37925C26.181 8.61287 26.0387 8.82524 25.8588 9.00515C25.6789 9.18506 25.4665 9.32734 25.2329 9.42425C24.9993 9.52116 24.7489 9.57084 24.4961 9.57061L24.5394 9.52727Z" fill="white"/>
-                    </svg>
-                </a>
-                <!-- WhatsApp Icon -->
-                <a href="#" style="text-decoration: none;">
-                    <svg width="32" height="32" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
-                        <path d="M27.281 4.65C24.318 1.686 20.371 0.0410004 16.181 0.0380004C7.465 0.0380004 0.375 7.126 0.372 15.845C0.371 18.584 1.103 21.262 2.485 23.619L0.25 31.962L8.789 29.766C11.05 31.028 13.589 31.693 16.175 31.694H16.181C24.896 31.694 31.987 24.606 31.99 15.887C31.992 11.7 30.346 7.756 27.381 4.791L27.281 4.65ZM16.181 29.019H16.176C13.855 29.018 11.58 28.386 9.604 27.193L9.124 26.906L3.947 28.229L5.289 23.174L4.975 22.679C3.667 20.628 2.976 18.271 2.977 15.845C2.979 8.565 8.903 2.643 16.186 2.643C19.722 2.644 23.058 4.021 25.561 6.526C28.064 9.031 29.438 12.369 29.437 15.903C29.435 23.183 23.511 29.105 16.231 29.105L16.181 29.019Z" fill="white"/>
-                        <path d="M12.049 9.216C11.763 8.575 11.462 8.562 11.191 8.551C10.968 8.541 10.717 8.542 10.466 8.542C10.215 8.542 9.807 8.626 9.456 9.019C9.105 9.412 8.124 10.336 8.124 12.212C8.124 14.088 9.484 15.907 9.666 16.158C9.848 16.409 12.275 20.311 16.044 21.912C19.214 23.263 19.814 23.039 20.45 22.981C21.086 22.923 22.629 22.055 22.952 21.159C23.275 20.263 23.275 19.507 23.191 19.339C23.107 19.171 22.856 19.087 22.477 18.919C22.098 18.751 20.226 17.827 19.875 17.715C19.524 17.603 19.273 17.547 19.022 17.912C18.771 18.277 18.028 19.087 17.805 19.339C17.582 19.591 17.359 19.619 16.98 19.451C16.601 19.283 15.361 18.883 13.886 17.576C12.728 16.548 11.945 15.279 11.722 14.914C11.499 14.549 11.695 14.353 11.863 14.185C12.013 14.035 12.242 13.788 12.411 13.566C12.58 13.344 12.635 13.178 12.747 12.927C12.859 12.676 12.803 12.454 12.719 12.286C12.635 12.118 11.863 10.235 11.541 9.522L12.049 9.216Z" fill="white"/>
-                    </svg>
-                </a>
-            </div>
-        </div>
-
-        <div class="footer-content">
-            <div class="footer-section" style="width: 193px;">
-                <div class="footer-title">AutoClick.cr</div>
-                <div class="footer-links">
-                    <a href="#" class="footer-link">Contáctenos</a>
-                    <a href="#" class="footer-link">Sobre Nosotros</a>
-                    <a href="#" class="footer-link">Reportar un problema</a>
-                </div>
-            </div>
-
-            <div class="footer-section">
-                <div style="padding-top: 56px;">
-                    <div class="footer-links">
-                        <a href="#" class="footer-link">Términos y condiciones</a>
-                        <a href="#" class="footer-link">Política de privacidad</a>
-                    </div>
-                </div>
-            </div>
-
-            <div class="footer-section" style="width: 285px;">
-                <div class="footer-title">Suscríbete</div>
-                <div style="margin-bottom: 16px;">
-                    <input type="email" placeholder="Introducir correo" style="width: 175px; padding: 8px 16px; background: #02081C; border: 0.5px solid rgba(255, 255, 255, 0.5); border-radius: 4px; color: rgba(255, 255, 255, 0.5); font-family: 'Montserrat', sans-serif; font-size: 14px;" />
-                </div>
-                <div style="color: white; font-size: 14px; font-family: 'Montserrat', sans-serif; font-weight: 500; margin-bottom: 16px;">
-                    Suscríbase para recibir las últimas noticias y promociones
-                </div>
-                <button style="padding: 16px; background: #0A2680; border: 0.5px solid white; border-radius: 4px; color: white; font-size: 16px; font-family: 'Montserrat', sans-serif; font-weight: 700; cursor: pointer;">
-                    Suscribirse
-                </button>
-            </div>
-        </div>
-
-        <div class="footer-copyright">
-            <div class="copyright-text">2025. Todos los derechos reservados - AutoClick.cr</div>
         </div>
     </div>
 </div>

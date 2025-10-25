@@ -177,7 +177,7 @@ namespace AutoClick.Pages
                 TempData["SuccessMessage"] = "Tu correo electrónico ha sido actualizado exitosamente";
                 return RedirectToPage();
             }
-            catch (Exception _)
+            catch (Exception)
             {
                 ModelState.AddModelError("", "Ha ocurrido un error al cambiar el correo electrónico. Intenta de nuevo.");
                 OnGet();
@@ -209,7 +209,7 @@ namespace AutoClick.Pages
                 TempData["SuccessMessage"] = "Tu contraseña ha sido actualizada exitosamente";
                 return RedirectToPage();
             }
-            catch (Exception _)
+            catch (Exception)
             {
                 ModelState.AddModelError("", "Ha ocurrido un error al cambiar la contraseña. Intenta de nuevo.");
                 OnGet();
@@ -234,7 +234,7 @@ namespace AutoClick.Pages
                 TempData["SuccessMessage"] = "Se ha enviado un enlace de recuperación a tu correo electrónico";
                 return RedirectToPage();
             }
-            catch (Exception _)
+            catch (Exception)
             {
                 ModelState.AddModelError("ForgotPasswordEmail", "Ha ocurrido un error al enviar el enlace de recuperación. Intenta de nuevo.");
                 OnGet();
@@ -267,7 +267,7 @@ namespace AutoClick.Pages
                 TempData["AccountDeleted"] = "Tu cuenta ha sido eliminada exitosamente";
                 return RedirectToPage("/Index");
             }
-            catch (Exception _)
+            catch (Exception)
             {
                 ModelState.AddModelError("", "Ha ocurrido un error al eliminar la cuenta. Intenta de nuevo.");
                 OnGet();
@@ -291,7 +291,7 @@ namespace AutoClick.Pages
                 TempData["NewsletterSuccess"] = "¡Te has suscrito exitosamente al newsletter!";
                 return RedirectToPage();
             }
-            catch (Exception _)
+            catch (Exception)
             {
                 OnGet();
                 return Page();
@@ -307,7 +307,7 @@ namespace AutoClick.Pages
                 TempData["SuccessMessage"] = "La información de tu cuenta ha sido actualizada";
                 return RedirectToPage();
             }
-            catch (Exception _)
+            catch (Exception)
             {
                 ModelState.AddModelError("", "Ha ocurrido un error al actualizar la información. Intenta de nuevo.");
                 OnGet();

@@ -6,7 +6,7 @@ namespace AutoClick.Pages.Admin
 {
     public class PendientesAprobacionModel : PageModel
     {
-        public List<PendingApprovalItem> PendingApprovals { get; set; }
+        public List<PendingApprovalItem> PendingApprovals { get; set; } = new();
 
         public void OnGet()
         {
@@ -43,8 +43,8 @@ namespace AutoClick.Pages.Admin
 
     public class PendingApprovalItem
     {
-        public string Code { get; set; }
-        public string Title { get; set; }
-        public string Date { get; set; }
+        public string Code { get; set; } = string.Empty;
+        public string Title { get; set; } = string.Empty;
+        public string Date { get; set; } = string.Empty;
     }
 }

@@ -113,7 +113,7 @@ document.addEventListener('DOMContentLoaded', function() {
         });
         
         // Visibility plan selection
-        const planRadios = document.querySelectorAll('input[name="PlanVisibilidad"]');
+        const planRadios = document.querySelectorAll('input[name="Formulario.PlanVisibilidad"]');
         planRadios.forEach(radio => {
             radio.addEventListener('change', updatePlanSelection);
         });
@@ -727,7 +727,7 @@ document.addEventListener('DOMContentLoaded', function() {
     }
     
     function updatePaymentSummary() {
-        const selectedPlan = document.querySelector('input[name="PlanVisibilidad"]:checked');
+        const selectedPlan = document.querySelector('input[name="Formulario.PlanVisibilidad"]:checked');
         const selectedTag = document.querySelector('.tag-option input[type="radio"]:checked');
         
         const serviceFee = 180; // Tarifa de servicio fija

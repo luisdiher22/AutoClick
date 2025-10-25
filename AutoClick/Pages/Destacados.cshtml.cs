@@ -3,143 +3,386 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 using AutoClick.Models;
 using AutoClick.Data;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Caching.Memory;
 
 namespace AutoClick.Pages
 {
     public class DestacadosModel : PageModel
     {
         private readonly ApplicationDbContext _context;
+        private readonly IMemoryCache _cache;
 
-        public DestacadosModel(ApplicationDbContext context)
+        public DestacadosModel(ApplicationDbContext context, IMemoryCache cache)
         {
             _context = context;
+            _cache = cache;
         }
 
         public IList<Auto> Autos { get; set; } = new List<Auto>();
         
+        // Filter Parameters
         [BindProperty(SupportsGet = true)]
-        public string SortBy { get; set; } = "recent";
+        public string? Province { get; set; }
+        
+        [BindProperty(SupportsGet = true)]
+        public string? Canton { get; set; }
+        
+        [BindProperty(SupportsGet = true)]
+        public string? Brand { get; set; }
+        
+        [BindProperty(SupportsGet = true)]
+        public string? Model { get; set; }
+        
+        [BindProperty(SupportsGet = true)]
+        public int? MinPrice { get; set; }
+        
+        [BindProperty(SupportsGet = true)]
+        public int? MaxPrice { get; set; }
+        
+        [BindProperty(SupportsGet = true)]
+        public int? MinKm { get; set; }
+        
+        [BindProperty(SupportsGet = true)]
+        public int? MaxKm { get; set; }
+        
+        [BindProperty(SupportsGet = true)]
+        public int? MinYear { get; set; }
+        
+        [BindProperty(SupportsGet = true)]
+        public int? MaxYear { get; set; }
+        
+        [BindProperty(SupportsGet = true)]
+        public string? Search { get; set; }
+        
+        [BindProperty(SupportsGet = true)]
+        public string? BodyType { get; set; }
+        
+        [BindProperty(SupportsGet = true)]
+        public string? FuelType { get; set; }
+        
+        [BindProperty(SupportsGet = true)]
+        public string? Transmission { get; set; }
+        
+        [BindProperty(SupportsGet = true)]
+        public string? Condition { get; set; }
+        
+        [BindProperty(SupportsGet = true)]
+        public string? SortBy { get; set; } = "recent";
         
         [BindProperty(SupportsGet = true)]
         public new int Page { get; set; } = 1;
         
-        public int PageSize { get; set; } = 12; // 3x4 grid for featured cars
+        public int PageSize { get; set; } = 8; // 2 columns x 4 rows
         public int TotalPages { get; set; }
         public int CurrentPage => Page;
         public int TotalCars { get; set; }
 
+        // Applied Filters for Display
+        public List<string> AppliedFilters { get; set; } = new List<string>();
+
+        // Dropdown Options
+        public List<string> AvailableProvinces { get; set; } = new List<string>();
+        public List<string> AvailableCantons { get; set; } = new List<string>();
+        public List<string> AvailableBrands { get; set; } = new List<string>();
+        public List<string> AvailableModels { get; set; } = new List<string>();
+        public List<string> AvailableBodyTypes { get; set; } = new List<string>();
+        public List<string> AvailableFuelTypes { get; set; } = new List<string>();
+        public List<string> AvailableTransmissions { get; set; } = new List<string>();
+        public List<string> AvailableConditions { get; set; } = new List<string>();
+        public List<int> AvailableYears { get; set; } = new List<int>();
+
         public async Task OnGetAsync()
         {
-            try
+            // Load dropdown options (con caché optimizado)
+            await LoadDropdownOptions();
+
+            // Crear consulta base optimizada con AsNoTracking desde el inicio
+            // SOLO MOSTRAR AUTOS CON PLAN DE VISIBILIDAD MAYOR A 1
+            var query = _context.Autos
+                .AsNoTracking()
+                .Where(a => a.Activo && a.PlanVisibilidad > 1); // Filtro principal para destacados
+
+            // Build applied filters list for UI
+            BuildAppliedFiltersList();
+
+            // Apply filters de forma optimizada
+            if (!string.IsNullOrEmpty(Search))
+                query = query.Where(a => a.Marca.Contains(Search) || a.Modelo.Contains(Search));
+                
+            if (!string.IsNullOrEmpty(Province))
+                query = query.Where(a => a.Provincia == Province);
+                
+            if (!string.IsNullOrEmpty(Canton))
+                query = query.Where(a => a.Canton == Canton);
+                
+            if (!string.IsNullOrEmpty(Brand))
+                query = query.Where(a => a.Marca == Brand);
+                
+            if (!string.IsNullOrEmpty(Model))
+                query = query.Where(a => a.Modelo == Model);
+                
+            if (MinPrice.HasValue)
+                query = query.Where(a => a.Precio >= MinPrice.Value);
+                
+            if (MaxPrice.HasValue)
+                query = query.Where(a => a.Precio <= MaxPrice.Value);
+                
+            if (MinYear.HasValue)
+                query = query.Where(a => a.Ano >= MinYear.Value);
+                
+            if (MaxYear.HasValue)
+                query = query.Where(a => a.Ano <= MaxYear.Value);
+                
+            if (!string.IsNullOrEmpty(BodyType))
+                query = query.Where(a => a.Carroceria == BodyType);
+                
+            if (!string.IsNullOrEmpty(FuelType))
+                query = query.Where(a => a.Combustible == FuelType);
+                
+            if (!string.IsNullOrEmpty(Transmission))
+                query = query.Where(a => a.Transmision == Transmission);
+                
+            if (!string.IsNullOrEmpty(Condition))
+                query = query.Where(a => a.Condicion == Condition);
+                
+            if (MinKm.HasValue)
+                query = query.Where(a => a.Kilometraje >= MinKm.Value);
+                
+            if (MaxKm.HasValue)
+                query = query.Where(a => a.Kilometraje <= MaxKm.Value);
+
+            // Apply sorting
+            query = SortBy switch
             {
-                // Solo mostrar autos destacados (con plan de visibilidad > 1) y activos
-                var query = _context.Autos
-                    .Where(a => a.Activo && a.PlanVisibilidad > 1);
+                "price-asc" => query.OrderBy(a => a.Precio),
+                "price-desc" => query.OrderByDescending(a => a.Precio),
+                "year" => query.OrderByDescending(a => a.Ano),
+                "brand" => query.OrderBy(a => a.Marca).ThenBy(a => a.Modelo),
+                _ => query.OrderByDescending(a => a.Id) // Default: most recent
+            };
 
-                // Apply sorting
-                query = SortBy switch
-                {
-                    "price-asc" => query.OrderBy(a => a.Precio),
-                    "price-desc" => query.OrderByDescending(a => a.Precio),
-                    "year" => query.OrderByDescending(a => a.Ano),
-                    "brand" => query.OrderBy(a => a.Marca).ThenBy(a => a.Modelo),
-                    _ => query.OrderByDescending(a => a.PlanVisibilidad).ThenByDescending(a => a.FechaCreacion) // Featured first, then recent
-                };
+            // Count total cars for pagination
+            TotalCars = await query.AsNoTracking().CountAsync();
+            TotalPages = (int)Math.Ceiling((double)TotalCars / PageSize);
 
-                // Count total cars for pagination
-                TotalCars = await query.CountAsync();
-                TotalPages = (int)Math.Ceiling((double)TotalCars / PageSize);
+            // Apply pagination
+            Autos = await query
+                .AsNoTracking()
+                .Skip((Page - 1) * PageSize)
+                .Take(PageSize)
+                .ToListAsync();
+        }
 
-                // Apply pagination
-                Autos = await query
-                    .Skip((Page - 1) * PageSize)
-                    .Take(PageSize)
-                    .ToListAsync();
-
-                // If no featured autos in database, use sample data
-                if (!Autos.Any())
-                {
-                    var sampleData = GetSampleFeaturedAutos();
-                    Autos = sampleData
-                        .Skip((Page - 1) * PageSize)
-                        .Take(PageSize)
-                        .ToList();
-                        
-                    TotalCars = sampleData.Count;
-                    TotalPages = (int)Math.Ceiling((double)TotalCars / PageSize);
-                }
+        private void BuildAppliedFiltersList()
+        {
+            AppliedFilters.Clear();
+            
+            if (!string.IsNullOrEmpty(Province))
+                AppliedFilters.Add(Province);
+                
+            if (!string.IsNullOrEmpty(Canton))
+                AppliedFilters.Add(Canton);
+                
+            if (!string.IsNullOrEmpty(Brand))
+                AppliedFilters.Add(Brand);
+                
+            if (!string.IsNullOrEmpty(Model))
+                AppliedFilters.Add(Model);
+                
+            if (!string.IsNullOrEmpty(BodyType))
+                AppliedFilters.Add(BodyType);
+                
+            if (!string.IsNullOrEmpty(FuelType))
+                AppliedFilters.Add(FuelType);
+                
+            if (!string.IsNullOrEmpty(Transmission))
+                AppliedFilters.Add(Transmission);
+                
+            if (!string.IsNullOrEmpty(Condition))
+                AppliedFilters.Add(Condition);
+                
+            if (MinPrice.HasValue || MaxPrice.HasValue)
+            {
+                var priceRange = "";
+                if (MinPrice.HasValue) priceRange += $"₡{MinPrice:N0}";
+                if (MinPrice.HasValue && MaxPrice.HasValue) priceRange += " - ";
+                if (MaxPrice.HasValue) priceRange += $"₡{MaxPrice:N0}";
+                if (!string.IsNullOrEmpty(priceRange))
+                    AppliedFilters.Add(priceRange);
             }
-            catch (Exception)
+            
+            if (MinKm.HasValue || MaxKm.HasValue)
             {
-                // Fallback to sample data on any error
-                var sampleData = GetSampleFeaturedAutos();
-                Autos = sampleData
-                    .Skip((Page - 1) * PageSize)
-                    .Take(PageSize)
-                    .ToList();
-                    
-                TotalCars = sampleData.Count;
-                TotalPages = (int)Math.Ceiling((double)TotalCars / PageSize);
+                var kmRange = "";
+                if (MinKm.HasValue) kmRange += $"{MinKm:N0} km";
+                if (MinKm.HasValue && MaxKm.HasValue) kmRange += " - ";
+                if (MaxKm.HasValue) kmRange += $"{MaxKm:N0} km";
+                if (!string.IsNullOrEmpty(kmRange))
+                    AppliedFilters.Add(kmRange);
+            }
+            
+            if (MinYear.HasValue || MaxYear.HasValue)
+            {
+                var yearRange = "";
+                if (MinYear.HasValue) yearRange += $"{MinYear}";
+                if (MinYear.HasValue && MaxYear.HasValue) yearRange += " - ";
+                if (MaxYear.HasValue) yearRange += $"{MaxYear}";
+                if (!string.IsNullOrEmpty(yearRange))
+                    AppliedFilters.Add(yearRange);
             }
         }
 
-        private List<Auto> GetSampleFeaturedAutos()
+        private async Task LoadDropdownOptions()
         {
-            var sampleAutos = new List<Auto>
+            // Intentar obtener desde caché primero
+            var cacheKey = "busqueda-dropdown-options";
+            if (!_cache.TryGetValue(cacheKey, out DropdownOptions? cachedOptions))
             {
-                new Auto
+                try
                 {
-                    Id = 1,
-                    Marca = "Mercedes-Benz",
-                    Modelo = "Clase S",
-                    Ano = 2024,
-                    Precio = 85000,
-                    ImagenPrincipal = "https://placehold.co/400x300/0066CC/FFFFFF?text=Mercedes+S-Class",
-                    Carroceria = "Sedán",
-                    Combustible = "Gasolina",
-                    Transmision = "Automática",
-                    NumeroPuertas = 4,
-                    Provincia = "San José",
-                    Canton = "Escazú",
-                    PlacaVehiculo = "MER001",
-                    Condicion = "Excelente",
-                    EmailPropietario = "mercedes@dealer.com",
-                    PlanVisibilidad = 3, // Destacado premium
-                    FechaCreacion = DateTime.Now.AddDays(-1),
-                    Activo = true
-                },
-                new Auto
-                {
-                    Id = 2,
-                    Marca = "BMW",
-                    Modelo = "X7",
-                    Ano = 2023,
-                    Precio = 92000,
-                    ImagenPrincipal = "https://placehold.co/400x300/333333/FFFFFF?text=BMW+X7",
-                    Carroceria = "SUV",
-                    Combustible = "Gasolina",
-                    Transmision = "Automática",
-                    NumeroPuertas = 4,
-                    Provincia = "San José",
-                    Canton = "Santa Ana",
-                    PlacaVehiculo = "BMW002",
-                    Condicion = "Excelente",
-                    EmailPropietario = "bmw@dealer.com",
-                    PlanVisibilidad = 2, // Destacado estándar
-                    FechaCreacion = DateTime.Now.AddDays(-2),
-                    Activo = true
-                }
-            };
+                    // Load from database if available
+                    var hasData = await _context.Autos.AsNoTracking().AnyAsync();
+                    
+                    if (hasData)
+                    {
+                        // Hacer UNA sola consulta optimizada para obtener todos los datos necesarios
+                        // SOLO DE AUTOS CON PLAN DE VISIBILIDAD > 1
+                        var autosData = await _context.Autos
+                            .AsNoTracking()
+                            .Where(a => a.Activo && a.PlanVisibilidad > 1) // Solo destacados
+                            .Select(a => new {
+                                a.Provincia,
+                                a.Canton,
+                                a.Marca,
+                                a.Modelo,
+                                a.Carroceria,
+                                a.Combustible,
+                                a.Transmision,
+                                a.Condicion,
+                                a.Ano
+                            })
+                            .ToListAsync();
 
-            // Apply sorting to sample data
-            return SortBy switch
+                        // Procesar en memoria para evitar múltiples consultas a BD
+                        cachedOptions = new DropdownOptions
+                        {
+                            Provincias = autosData
+                                .Where(a => !string.IsNullOrEmpty(a.Provincia))
+                                .Select(a => a.Provincia)
+                                .Distinct()
+                                .OrderBy(p => p)
+                                .ToList(),
+                            Cantones = autosData
+                                .Where(a => !string.IsNullOrEmpty(a.Canton))
+                                .Select(a => a.Canton)
+                                .Distinct()
+                                .OrderBy(c => c)
+                                .ToList(),
+                            Marcas = autosData
+                                .Where(a => !string.IsNullOrEmpty(a.Marca))
+                                .Select(a => a.Marca)
+                                .Distinct()
+                                .OrderBy(b => b)
+                                .ToList(),
+                            Modelos = autosData
+                                .Where(a => !string.IsNullOrEmpty(a.Modelo))
+                                .Select(a => a.Modelo)
+                                .Distinct()
+                                .OrderBy(m => m)
+                                .ToList(),
+                            TiposCarroceria = autosData
+                                .Where(a => !string.IsNullOrEmpty(a.Carroceria))
+                                .Select(a => a.Carroceria)
+                                .Distinct()
+                                .OrderBy(bt => bt)
+                                .ToList(),
+                            TiposCombustible = autosData
+                                .Where(a => !string.IsNullOrEmpty(a.Combustible))
+                                .Select(a => a.Combustible)
+                                .Distinct()
+                                .OrderBy(ft => ft)
+                                .ToList(),
+                            Transmisiones = autosData
+                                .Where(a => !string.IsNullOrEmpty(a.Transmision))
+                                .Select(a => a.Transmision)
+                                .Distinct()
+                                .OrderBy(t => t)
+                                .ToList(),
+                            Condiciones = autosData
+                                .Where(a => !string.IsNullOrEmpty(a.Condicion))
+                                .Select(a => a.Condicion)
+                                .Distinct()
+                                .OrderBy(c => c)
+                                .ToList(),
+                            Anos = autosData
+                                .Where(a => a.Ano > 0)
+                                .Select(a => a.Ano)
+                                .Distinct()
+                                .OrderByDescending(y => y)
+                                .ToList()
+                        };
+
+                        // Guardar en caché por 15 minutos
+                        _cache.Set(cacheKey, cachedOptions, TimeSpan.FromMinutes(15));
+                    }
+                    else
+                    {
+                        // No data in database, return empty lists
+                        cachedOptions = new DropdownOptions
+                        {
+                            Provincias = new List<string>(),
+                            Cantones = new List<string>(),
+                            Marcas = new List<string>(),
+                            Modelos = new List<string>(),
+                            TiposCarroceria = new List<string>(),
+                            TiposCombustible = new List<string>(),
+                            Transmisiones = new List<string>(),
+                            Condiciones = new List<string>(),
+                            Anos = new List<int>()
+                        };
+                        return;
+                    }
+                }
+                catch
+                {
+                    // Fallback to empty lists
+                    cachedOptions = new DropdownOptions
+                    {
+                        Provincias = new List<string>(),
+                        Cantones = new List<string>(),
+                        Marcas = new List<string>(),
+                        Modelos = new List<string>(),
+                        TiposCarroceria = new List<string>(),
+                        TiposCombustible = new List<string>(),
+                        Transmisiones = new List<string>(),
+                        Condiciones = new List<string>(),
+                        Anos = new List<int>()
+                    };
+                    return;
+                }
+            }
+
+            // Usar datos del caché si están disponibles
+            if (cachedOptions != null)
             {
-                "price-asc" => sampleAutos.OrderBy(a => a.Precio).ToList(),
-                "price-desc" => sampleAutos.OrderByDescending(a => a.Precio).ToList(),
-                "year" => sampleAutos.OrderByDescending(a => a.Ano).ToList(),
-                "brand" => sampleAutos.OrderBy(a => a.Marca).ThenBy(a => a.Modelo).ToList(),
-                _ => sampleAutos.OrderByDescending(a => a.PlanVisibilidad).ThenByDescending(a => a.FechaCreacion).ToList()
-            };
+                AvailableProvinces = cachedOptions.Provincias;
+                AvailableBrands = cachedOptions.Marcas;
+                AvailableBodyTypes = cachedOptions.TiposCarroceria;
+                AvailableFuelTypes = cachedOptions.TiposCombustible;
+                AvailableTransmissions = cachedOptions.Transmisiones;
+                AvailableConditions = cachedOptions.Condiciones;
+                AvailableYears = cachedOptions.Anos;
+
+                // Filtrar cantones basados en provincia seleccionada
+                AvailableCantons = string.IsNullOrEmpty(Province) 
+                    ? cachedOptions.Cantones 
+                    : cachedOptions.Cantones;
+
+                // Filtrar modelos basados en marca seleccionada  
+                AvailableModels = string.IsNullOrEmpty(Brand) 
+                    ? cachedOptions.Modelos 
+                    : cachedOptions.Modelos;
+            }
         }
     }
 }

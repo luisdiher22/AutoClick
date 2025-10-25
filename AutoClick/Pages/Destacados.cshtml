@@ -1,248 +1,448 @@
 @page "/destacados"
 @model DestacadosModel
 @{
-    ViewData["Title"] = "Autos Destacados - AutoClick.cr";
+    ViewData["Title"] = "Destacados - AutoClick.cr";
 }
 
-<!-- Header -->
-<!-- Header removed - Using universal header -->
-    <div class="logo-container">
-        <a asp-page="/Index">
-            <img src="~/images/logo.png" alt="AutoClick.cr" style="height: 23px;" />
-        </a>
-    </div>
-    
-    <nav class="nav-menu">
-        <div>
-            <img src="~/images/costa-rica-flag.png" alt="Costa Rica" style="width: 67px; height: 31px;" />
-        </div>
-        <div class="nav-dropdown-container">
-            <a href="#" class="nav-item nav-dropdown">Anúnciese</a>
-            <div class="dropdown-menu">
-                <a asp-page="/RegistroAgencia" class="dropdown-item">Registrarse como agencia</a>
-                <a asp-page="/AnunciarEmpresa" class="dropdown-item">Anuncie su empresa</a>
-            </div>
-        </div>
-        <div class="nav-dropdown-container">
-            <a href="#" class="nav-item nav-dropdown">Productos & Servicios</a>
-            <div class="dropdown-menu">
-                <a asp-page="/PpfCeramico" class="dropdown-item">PPF y Cerámico</a>
-                <a asp-page="/RaloyDetailing" class="dropdown-item">Raloy - Detailing</a>
-            </div>
-        </div>
-        <div class="nav-dropdown-container">
-            <a href="#" class="nav-item nav-dropdown">Financiamiento</a>
-            <div class="dropdown-menu">
-                <a asp-page="/Gumout" class="dropdown-item">Gumout</a>
-            </div>
-        </div>
-    </nav>
-    
-    <div class="header-actions">
-        <div style="border-radius: 4px; padding: 12px; border: 2px solid white;">
-            <div style="width: 20px; height: 17px; border: 2px solid white;"></div>
-        </div>
-        <a href="#" class="login-btn">
-            <div style="width: 5px; height: 5px; background: white; margin-right: 5px;"></div>
-            <div style="width: 10px; height: 6px; background: white; margin-right: 8px;"></div>
-            Nombre A.
-        </a>
-    </div>
-</header>
+<!-- Dark Theme Page Container -->
+<div class="busqueda-avanzada-page">
+    <div class="busqueda-container">
+        <!-- Breadcrumb Navigation -->
+        <nav class="busqueda-breadcrumb">
+            <a asp-page="/Index" class="breadcrumb-link">Inicio</a>
+            <span class="breadcrumb-separator">/</span>
+            <span class="breadcrumb-current">Destacados</span>
+        </nav>
 
-<!-- Page Content -->
-<div class="destacados-container">
-    <!-- Breadcrumb Navigation -->
-    <nav class="destacados-breadcrumb">
-        <a asp-page="/Index" class="breadcrumb-link">Inicio</a>
-        <span class="breadcrumb-separator">/</span>
-        <span class="breadcrumb-current">Autos Destacados</span>
-    </nav>
-
-    <!-- Page Header -->
-    <div class="destacados-header">
-        <div class="destacados-title-section">
-            <h1 class="destacados-main-title">Autos Destacados</h1>
-            <p class="destacados-subtitle">Descubre nuestra selección premium de vehículos destacados</p>
-            <div class="destacados-count">
-                <span class="count-number">@Model.TotalCars</span> autos destacados disponibles
-            </div>
-        </div>
-        
-        <!-- Sort Dropdown -->
-        <div class="destacados-sort-section">
-            <select class="destacados-sort-select" onchange="changeDestacadosSorting(this.value)">
-                <option value="recent" selected="@(Model.SortBy == "recent")">Ordenar por: Más recientes</option>
-                <option value="price-desc" selected="@(Model.SortBy == "price-desc")">Ordenar por: Precio mayor a menor</option>
-                <option value="price-asc" selected="@(Model.SortBy == "price-asc")">Ordenar por: Precio menor a mayor</option>
-                <option value="year" selected="@(Model.SortBy == "year")">Ordenar por: Año más nuevo</option>
-                <option value="brand" selected="@(Model.SortBy == "brand")">Ordenar por: Marca A-Z</option>
-            </select>
-        </div>
-    </div>
-
-    <!-- Featured Badge Section -->
-    <div class="destacados-badge-section">
-        <div class="premium-badge">
-            <div class="premium-icon">⭐</div>
-            <div class="premium-text">
-                <h3>Selección Premium</h3>
-                <p>Vehículos cuidadosamente seleccionados por nuestros expertos</p>
-            </div>
-        </div>
-    </div>
-
-    <!-- Cars Grid - 3x4 Layout -->
-    <div class="destacados-cars-grid">
-        @foreach (var auto in Model.Autos)
-        {
-            <a asp-page="/Producto" asp-route-id="@auto.Id" style="text-decoration: none; color: inherit;">
-                <div class="destacados-car-card">
-                    <!-- Premium Overlay -->
-                    <div class="premium-overlay">
-                        <div class="premium-star">★</div>
-                    </div>
-                    
-                    <div class="destacados-car-image-container">
-                        <img src="@auto.ImagenPrincipal" alt="@auto.NombreCompleto" class="destacados-car-image" />
-
-
-                        <!-- Featured Badge -->
-                        <div class="featured-premium-badge">Destacado Premium</div>
+        <div class="busqueda-content">
+            <!-- Sidebar Filters -->
+            <aside class="busqueda-sidebar">
+                <!-- Filter Container -->
+                <div class="busqueda-filters-container">
+                    <div class="busqueda-filters-section">
+                        <!-- Filters Header -->
+                        <h3 class="busqueda-filters-title">Filtros de búsqueda</h3>
                         
-                        <!-- Favorite Button -->
-                        <div class="destacados-car-favorite">
-                            <button class="destacados-favorite-btn" title="Agregar a favoritos" onclick="event.stopPropagation(); event.preventDefault();">
-                                <svg width="20" height="17" viewBox="0 0 24 24" fill="none">
-                                    <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z" fill="none" stroke="currentColor" stroke-width="2"/>
-                                </svg>
-                            </button>
-                        </div>
-
-                        <!-- Premium Features -->
-                        <div class="premium-features">
-                            <span class="feature-tag">Garantía Premium</span>
-                            <span class="feature-tag">Revisión Completa</span>
-                        </div>
-                    </div>
-                    
-                    <div class="destacados-car-info">
-                        <h3 class="destacados-car-title">@auto.NombreCompleto</h3>
-                        <div class="destacados-car-year-brand">@auto.Ano • @System.Globalization.CultureInfo.CurrentCulture.TextInfo.ToTitleCase((auto.Marca ?? "").ToLower())</div>
-                        <p class="destacados-car-price">@auto.PrecioEnCRC</p>
-                        
-                        <!-- Premium Deal Badge -->
-                        <div class="premium-deal-badge">
-                            <img src="https://placehold.co/22x11" alt="Icono oferta premium" />
-                            <span>Oferta Premium</span>
-                        </div>
-                        
-                        <!-- Car Features -->
-                        <div class="car-features">
-                            <div class="feature-item">
-                                <span class="feature-icon">🛡️</span>
-                                <span>Garantía extendida</span>
+                        <!-- Applied Filters Tags -->
+                        @if (Model.AppliedFilters.Any())
+                        {
+                            <div class="applied-filters-tags">
+                                @foreach (var filter in Model.AppliedFilters)
+                                {
+                                    <div class="filter-tag">
+                                        <span>@filter</span>
+                                        <button class="remove-filter-btn" onclick="removeFilter('@filter')" title="Eliminar filtro">×</button>
+                                    </div>
+                                }
                             </div>
-                            <div class="feature-item">
-                                <span class="feature-icon">🔧</span>
-                                <span>Mantenimiento incluido</span>
+                        }
+
+                        <!-- Filter Form -->
+                        <form method="get" class="busqueda-filters-form">
+                            <input type="hidden" name="page" value="1" />
+                            <input type="hidden" name="sortBy" value="@Model.SortBy" />
+
+                            <!-- Provincia -->
+                            <div class="busqueda-filter-group">
+                                <label class="busqueda-filter-label">Provincia</label>
+                                <div class="busqueda-select-wrapper">
+                                    <select name="province" class="busqueda-filter-select" id="province-select" onchange="onProvinceChange()">
+                                        <option value="">Todas las provincias</option>
+                                        @foreach (var province in Model.AvailableProvinces)
+                                        {
+                                            <option value="@province" selected="@(Model.Province == province)">@province</option>
+                                        }
+                                    </select>
+                                </div>
                             </div>
-                        </div>
-                        
-                        <!-- Contact Buttons -->
-                        <div class="contact-buttons">
-                            <button class="premium-contact-btn" onclick="event.stopPropagation(); event.preventDefault();">Contactar Especialista</button>
-                            <button class="schedule-visit-btn" onclick="event.stopPropagation(); event.preventDefault();">Agendar Visita</button>
-                        </div>
-                        
-                        <!-- Additional Premium Info -->
-                        <div class="car-additional-premium-info">
-                            <div class="car-km">@((new Random().Next(1000, 25000)).ToString("N0")) km</div>
-                            <div class="premium-financing">Financiamiento especial</div>
-                        </div>
+
+                            <!-- Cantón -->
+                            <div class="busqueda-filter-group">
+                                <label class="busqueda-filter-label">Cantón</label>
+                                <div class="busqueda-select-wrapper">
+                                    <select name="canton" class="busqueda-filter-select" id="canton-select">
+                                        <option value="">Todos los cantones</option>
+                                        @foreach (var canton in Model.AvailableCantons)
+                                        {
+                                            <option value="@canton" selected="@(Model.Canton == canton)">@canton</option>
+                                        }
+                                    </select>
+                                </div>
+                            </div>
+
+                            <!-- Marca -->
+                            <div class="busqueda-filter-group">
+                                <label class="busqueda-filter-label">Marca</label>
+                                <div class="busqueda-select-wrapper">
+                                    <select name="brand" class="busqueda-filter-select" id="brand-select" onchange="onBrandChange()">
+                                        <option value="">Todas las marcas</option>
+                                        @foreach (var brand in Model.AvailableBrands)
+                                        {
+                                            <option value="@brand" selected="@(Model.Brand == brand)">@brand</option>
+                                        }
+                                    </select>
+                                </div>
+                            </div>
+
+                            <!-- Modelo -->
+                            <div class="busqueda-filter-group">
+                                <label class="busqueda-filter-label">Modelo</label>
+                                <div class="busqueda-select-wrapper">
+                                    <select name="model" class="busqueda-filter-select" id="model-select">
+                                        <option value="">Todos los modelos</option>
+                                        @foreach (var modelName in Model.AvailableModels)
+                                        {
+                                            <option value="@modelName" selected="@(Model.Model == modelName)">@modelName</option>
+                                        }
+                                    </select>
+                                </div>
+                            </div>
+
+                            <!-- Rango de precio -->
+                            <div class="busqueda-filter-group">
+                                <label class="busqueda-filter-label">Rango de precio</label>
+                                <div class="busqueda-price-range">
+                                    <div class="price-input-group">
+                                        <label class="price-input-label">Min</label>
+                                        <input type="number" name="minPrice" placeholder="$" class="busqueda-price-field" value="@Model.MinPrice" />
+                                    </div>
+                                    <span class="price-separator">hasta</span>
+                                    <div class="price-input-group">
+                                        <label class="price-input-label">Max</label>
+                                        <input type="number" name="maxPrice" placeholder="$" class="busqueda-price-field" value="@Model.MaxPrice" />
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Kilometraje -->
+                            <div class="busqueda-filter-group">
+                                <label class="busqueda-filter-label">Kilometraje</label>
+                                <div class="busqueda-price-range">
+                                    <div class="price-input-group">
+                                        <label class="price-input-label">Min</label>
+                                        <input type="number" name="minKm" class="busqueda-price-field" value="@Model.MinKm" />
+                                    </div>
+                                    <span class="price-separator">hasta</span>
+                                    <div class="price-input-group">
+                                        <label class="price-input-label">Max</label>
+                                        <input type="number" name="maxKm" class="busqueda-price-field" value="@Model.MaxKm" />
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Año -->
+                            <div class="busqueda-filter-group">
+                                <label class="busqueda-filter-label">Año</label>
+                                <div class="busqueda-price-range">
+                                    <div class="price-input-group">
+                                        <label class="price-input-label">Min</label>
+                                        <div class="busqueda-select-wrapper">
+                                            <select name="minYear" class="busqueda-filter-select small">
+                                                <option value="">Cualquiera</option>
+                                                @foreach (var year in Model.AvailableYears)
+                                                {
+                                                    <option value="@year" selected="@(Model.MinYear == year)">@year</option>
+                                                }
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <span class="price-separator">hasta</span>
+                                    <div class="price-input-group">
+                                        <label class="price-input-label">Max</label>
+                                        <div class="busqueda-select-wrapper">
+                                            <select name="maxYear" class="busqueda-filter-select small">
+                                                <option value="">Cualquiera</option>
+                                                @foreach (var year in Model.AvailableYears)
+                                                {
+                                                    <option value="@year" selected="@(Model.MaxYear == year)">@year</option>
+                                                }
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Additional Filters -->
+                            <!-- Carrocería -->
+                            <div class="busqueda-filter-group">
+                                <label class="busqueda-filter-label">Carrocería</label>
+                                <div class="busqueda-select-wrapper">
+                                    <select name="bodyType" class="busqueda-filter-select">
+                                        <option value="">Todas las carrocerías</option>
+                                        @foreach (var bodyType in Model.AvailableBodyTypes)
+                                        {
+                                            <option value="@bodyType" selected="@(Model.BodyType == bodyType)">@bodyType</option>
+                                        }
+                                    </select>
+                                </div>
+                            </div>
+                            
+                            <!-- Combustible -->
+                            <div class="busqueda-filter-group">
+                                <label class="busqueda-filter-label">Combustible/Propulsión</label>
+                                <div class="busqueda-select-wrapper">
+                                    <select name="fuelType" class="busqueda-filter-select">
+                                        <option value="">Todos los combustibles</option>
+                                        @foreach (var fuelType in Model.AvailableFuelTypes)
+                                        {
+                                            <option value="@fuelType" selected="@(Model.FuelType == fuelType)">@fuelType</option>
+                                        }
+                                    </select>
+                                </div>
+                            </div>
+                            
+                            <!-- Transmisión -->
+                            <div class="busqueda-filter-group">
+                                <label class="busqueda-filter-label">Transmisión</label>
+                                <div class="busqueda-select-wrapper">
+                                    <select name="transmission" class="busqueda-filter-select">
+                                        <option value="">Todas las transmisiones</option>
+                                        @foreach (var transmission in Model.AvailableTransmissions)
+                                        {
+                                            <option value="@transmission" selected="@(Model.Transmission == transmission)">@transmission</option>
+                                        }
+                                    </select>
+                                </div>
+                            </div>
+                            
+                            <!-- Condición -->
+                            <div class="busqueda-filter-group">
+                                <label class="busqueda-filter-label">Condición</label>
+                                <div class="busqueda-select-wrapper">
+                                    <select name="condition" class="busqueda-filter-select">
+                                        <option value="">Todas las condiciones</option>
+                                        @foreach (var condition in Model.AvailableConditions)
+                                        {
+                                            <option value="@condition" selected="@(Model.Condition == condition)">@condition</option>
+                                        }
+                                    </select>
+                                </div>
+                            </div>
+                        </form>
                     </div>
                 </div>
-            </a>
-        }
+
+                <!-- Sidebar Advertisement -->
+                <div class="busqueda-sidebar-ad">
+                    <img src="https://placehold.co/138x22" alt="Logo publicitario" />
+                    <h3>SU ANUNCIO AQUÍ</h3>
+                    <p>¡Haga click en este recuadro para empezar!</p>
+                </div>
+            </aside>
+
+            <!-- Main Content -->
+            <main class="busqueda-main">
+                <!-- Sort Dropdown -->
+                <div class="busqueda-sort-header">
+                    <div class="busqueda-sort-wrapper">
+                        <select class="busqueda-sort-select" onchange="changeBusquedaSorting(this.value)">
+                            <option value="recent" selected="@(Model.SortBy == "recent")">Ordenar por: Más recientes</option>
+                            <option value="price-asc" selected="@(Model.SortBy == "price-asc")">Ordenar por: Precio menor a mayor</option>
+                            <option value="price-desc" selected="@(Model.SortBy == "price-desc")">Ordenar por: Precio mayor a menor</option>
+                            <option value="year" selected="@(Model.SortBy == "year")">Ordenar por: Año más nuevo</option>
+                        </select>
+                    </div>
+                </div>
+
+                <!-- Cars Grid - 2 Columns -->
+                <div class="busqueda-cars-grid">
+                    @foreach (var auto in Model.Autos)
+                    {
+                        <a asp-page="/Producto" asp-route-id="@auto.Id" class="simple-auto-tile">
+                            <!-- Car Image -->
+                            <div class="simple-auto-tile-image">
+                                <img src="@auto.ImagenPrincipal" alt="@auto.NombreCompleto" />
+
+                            </div>
+
+                            <!-- Car Info -->
+                            <div class="simple-auto-tile-info">
+                                <div class="simple-auto-tile-title">@auto.NombreCompleto</div>
+                                <div class="simple-auto-tile-price">@auto.PrecioEnCRC</div>
+                            </div>
+                        </a>
+                    }
+                </div>
+
+                <!-- Advertisement Banners -->
+                <div class="busqueda-ad-banner">
+                    <img src="https://placehold.co/143x23" alt="Logo publicitario" />
+                    <h2>SU ANUNCIO AQUÍ</h2>
+                    <p>¡Haga click en este recuadro para empezar!</p>
+                </div>
+
+                <div class="busqueda-ad-banner">
+                    <img src="https://placehold.co/143x23" alt="Logo publicitario" />
+                    <h2>SU ANUNCIO AQUÍ</h2>
+                    <p>¡Haga click en este recuadro para empezar!</p>
+                </div>
+
+                <!-- Pagination -->
+                <nav class="busqueda-pagination" aria-label="Paginación de búsqueda">
+                    <div class="pagination-container">
+                        <!-- Previous Button -->
+                        <a href="@Url.Page("/Destacados", new { page = Model.CurrentPage - 1, sortBy = Model.SortBy })" 
+                           class="busqueda-pagination-arrow @(Model.CurrentPage <= 1 ? "disabled" : "")">
+                            <div class="pagination-arrow-icon left"></div>
+                        </a>
+
+                        <!-- Page Numbers -->
+                        @for (int i = 1; i <= Math.Min(5, Model.TotalPages); i++)
+                        {
+                            <a href="@Url.Page("/Destacados", new { page = i, sortBy = Model.SortBy })" 
+                               class="busqueda-pagination-number @(Model.CurrentPage == i ? "active" : "")">
+                                @i
+                            </a>
+                        }
+
+                        @if (Model.TotalPages > 5)
+                        {
+                            <span class="busqueda-pagination-ellipsis">…</span>
+                            
+                            <a href="@Url.Page("/Destacados", new { page = Model.TotalPages, sortBy = Model.SortBy })" 
+                               class="busqueda-pagination-number @(Model.CurrentPage == Model.TotalPages ? "active" : "")">
+                                @Model.TotalPages
+                            </a>
+                        }
+
+                        <!-- Next Button -->
+                        <a href="@Url.Page("/Destacados", new { page = Model.CurrentPage + 1, sortBy = Model.SortBy })" 
+                           class="busqueda-pagination-arrow @(Model.CurrentPage >= Model.TotalPages ? "disabled" : "")">
+                            <div class="pagination-arrow-icon right"></div>
+                        </a>
+                    </div>
+                </nav>
+            </main>
+        </div>
     </div>
 
-    <!-- Premium Services Section -->
-    <div class="premium-services-section">
-        <div class="service-card">
-            <div class="service-icon">🏆</div>
-            <h3>Certificación Premium</h3>
-            <p>Todos nuestros autos destacados pasan por una rigurosa inspección de 150 puntos</p>
-        </div>
-        <div class="service-card">
-            <div class="service-icon">🛡️</div>
-            <h3>Garantía Extendida</h3>
-            <p>Protección completa hasta por 3 años en todos los vehículos destacados</p>
-        </div>
-        <div class="service-card">
-            <div class="service-icon">💼</div>
-            <h3>Asesoría Especializada</h3>
-            <p>Nuestros expertos te acompañan en todo el proceso de compra</p>
-        </div>
-    </div>
-
-    <!-- Advertisement Banner -->
-    <div class="destacados-ad-banner">
-        <img src="https://placehold.co/143x23" alt="Logo publicitario" />
-        <h2>SU ANUNCIO PREMIUM AQUÍ</h2>
-        <p>Espacio publicitario exclusivo para marcas premium</p>
-    </div>
-
-    <!-- Pagination -->
-    <nav class="destacados-pagination" aria-label="Paginación de autos destacados">
-        <div class="pagination-container">
-            <!-- Previous Button -->
-            <a href="@Url.Page("/Destacados", new { page = Model.CurrentPage - 1, sortBy = Model.SortBy })" 
-               class="pagination-arrow @(Model.CurrentPage <= 1 ? "disabled" : "")">
-                <svg width="17" height="14" viewBox="0 0 24 24" fill="none">
-                    <path d="M15.41 7.41L14 6l-6 6 6 6 1.41-1.41L10.83 12z" fill="currentColor"/>
-                </svg>
-            </a>
-
-            <!-- Page Numbers -->
-            @for (int i = Math.Max(1, Model.CurrentPage - 2); i <= Math.Min(Model.TotalPages, Model.CurrentPage + 2); i++)
-            {
-                <a href="@Url.Page("/Destacados", new { page = i, sortBy = Model.SortBy })" 
-                   class="pagination-number @(Model.CurrentPage == i ? "active" : "")">
-                    @i
-                </a>
-            }
-
-            @if (Model.CurrentPage + 2 < Model.TotalPages)
-            {
-                <span class="pagination-ellipsis">…</span>
-                
-                <a href="@Url.Page("/Destacados", new { page = Model.TotalPages, sortBy = Model.SortBy })" 
-                   class="pagination-number @(Model.CurrentPage == Model.TotalPages ? "active" : "")">
-                    @Model.TotalPages
-                </a>
-            }
-
-            <!-- Next Button -->
-            <a href="@Url.Page("/Destacados", new { page = Model.CurrentPage + 1, sortBy = Model.SortBy })" 
-               class="pagination-arrow @(Model.CurrentPage >= Model.TotalPages ? "disabled" : "")">
-                <svg width="17" height="14" viewBox="0 0 24 24" fill="none">
-                    <path d="M8.59 16.59L10 18l6-6-6-6-1.41 1.41L13.17 12z" fill="currentColor"/>
-                </svg>
-            </a>
-        </div>
-    </nav>
+    <!-- Footer -->
+    <partial name="_Footer" />
 </div>
 
-<!-- Footer -->
-<partial name="_Footer" />
-
 <script>
-function changeDestacadosSorting(sortBy) {
+function changeBusquedaSorting(sortBy) {
     const url = new URL(window.location);
     url.searchParams.set('sortBy', sortBy);
     url.searchParams.set('page', '1');
     window.location.href = url.toString();
 }
+
+function onProvinceChange() {
+    const provinceSelect = document.getElementById('province-select');
+    const cantonSelect = document.getElementById('canton-select');
+    
+    // Clear canton selection when province changes
+    cantonSelect.selectedIndex = 0;
+    
+    // You could implement AJAX calls here to load cantons dynamically
+    // For now, we'll submit the form to reload with new canton options
+    if (provinceSelect.value) {
+        // Auto-submit to get updated canton list
+        setTimeout(() => {
+            const form = document.querySelector('.busqueda-filters-form');
+            form.submit();
+        }, 100);
+    }
+}
+
+function onBrandChange() {
+    const brandSelect = document.getElementById('brand-select');
+    const modelSelect = document.getElementById('model-select');
+    
+    // Clear model selection when brand changes
+    modelSelect.selectedIndex = 0;
+    
+    // Auto-submit to get updated model list
+    if (brandSelect.value) {
+        setTimeout(() => {
+            const form = document.querySelector('.busqueda-filters-form');
+            form.submit();
+        }, 100);
+    }
+}
+
+function removeFilter(filterValue) {
+    const url = new URL(window.location);
+    
+    // Check which parameter to remove based on the filter value
+    const currentBrand = '@Model.Brand';
+    const currentModel = '@Model.Model';
+    const currentProvince = '@Model.Province';
+    const currentCanton = '@Model.Canton';
+    const currentBodyType = '@Model.BodyType';
+    const currentFuelType = '@Model.FuelType';
+    const currentTransmission = '@Model.Transmission';
+    const currentCondition = '@Model.Condition';
+    
+    if (filterValue === currentBrand) {
+        url.searchParams.delete('brand');
+        url.searchParams.delete('model'); // Also clear model when removing brand
+    } else if (filterValue === currentModel) {
+        url.searchParams.delete('model');
+    } else if (filterValue === currentProvince) {
+        url.searchParams.delete('province');
+        url.searchParams.delete('canton'); // Also clear canton when removing province
+    } else if (filterValue === currentCanton) {
+        url.searchParams.delete('canton');
+    } else if (filterValue === currentBodyType) {
+        url.searchParams.delete('bodyType');
+    } else if (filterValue === currentFuelType) {
+        url.searchParams.delete('fuelType');
+    } else if (filterValue === currentTransmission) {
+        url.searchParams.delete('transmission');
+    } else if (filterValue === currentCondition) {
+        url.searchParams.delete('condition');
+    } else if (filterValue.includes('₡')) {
+        // Price range filter
+        url.searchParams.delete('minPrice');
+        url.searchParams.delete('maxPrice');
+    } else if (filterValue.includes('km')) {
+        // Kilometrage filter
+        url.searchParams.delete('minKm');
+        url.searchParams.delete('maxKm');
+    } else if (/^\d{4}/.test(filterValue)) {
+        // Year filter (starts with 4 digits)
+        url.searchParams.delete('minYear'); 
+        url.searchParams.delete('maxYear');
+    }
+    
+    url.searchParams.set('page', '1');
+    window.location.href = url.toString();
+}
+
+function clearAllFilters() {
+    const url = new URL(window.location.origin + window.location.pathname);
+    url.searchParams.set('page', '1');
+    url.searchParams.set('sortBy', '@Model.SortBy');
+    window.location.href = url.toString();
+}
+
+// Auto-submit form when any filter changes (optional - for better UX)
+document.addEventListener('DOMContentLoaded', function() {
+    const selects = document.querySelectorAll('.busqueda-filter-select:not(#province-select):not(#brand-select)');
+    const inputs = document.querySelectorAll('.busqueda-price-field');
+    
+    selects.forEach(select => {
+        select.addEventListener('change', function() {
+            // Small delay to allow multiple rapid changes
+            clearTimeout(this.changeTimeout);
+            this.changeTimeout = setTimeout(() => {
+                document.querySelector('.busqueda-filters-form').submit();
+            }, 500);
+        });
+    });
+    
+    inputs.forEach(input => {
+        input.addEventListener('input', function() {
+            // Longer delay for text inputs
+            clearTimeout(this.inputTimeout);
+            this.inputTimeout = setTimeout(() => {
+                document.querySelector('.busqueda-filters-form').submit();
+            }, 1000);
+        });
+    });
+});
 </script>
 
 

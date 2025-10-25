@@ -34,28 +34,35 @@ public class IndexModel : PageModel
 
     private async Task LoadBanderinUrlsAsync(List<Auto> autos)
     {
+        _logger.LogInformation("=== LoadBanderinUrlsAsync START ===");
+        _logger.LogInformation($"Processing {autos.Count} autos");
+        
         foreach (var auto in autos)
         {
+            _logger.LogInformation($"Auto {auto.Id}: BanderinAdquirido={auto.BanderinAdquirido}, BanderinVideoUrl={auto.BanderinVideoUrl}");
+            
             if (!string.IsNullOrEmpty(auto.BanderinVideoUrl) && !BanderinUrls.ContainsKey(auto.Id))
             {
+                _logger.LogInformation($"Attempting to load banderin URL for auto {auto.Id}: {auto.BanderinVideoUrl}");
                 var url = await _banderinesService.GetBanderinUrlAsync(auto.BanderinVideoUrl);
+                _logger.LogInformation($"Result URL for auto {auto.Id}: {url}");
                 BanderinUrls[auto.Id] = url;
             }
+            else
+            {
+                _logger.LogWarning($"Skipping auto {auto.Id}: BanderinVideoUrl is null or already loaded");
+            }
         }
+        
+        _logger.LogInformation($"=== LoadBanderinUrlsAsync END: Loaded {BanderinUrls.Count} URLs ===");
     }
 
     public async Task OnGetAsync()
     {
         try
         {
-            // Obtener autos destacados usando el servicio
+            // Obtener autos destacados usando el servicio (solo con PlanVisibilidad > 1)
             AutosDestacados = await _autoService.GetAutosDestacadosAsync(3);
-            
-            // Si no hay autos destacados, usar los más recientes como destacados
-            if (!AutosDestacados.Any())
-            {
-                AutosDestacados = await _autoService.GetAutosRecientesAsync(3);
-            }
 
             // Obtener autos más recientes
             AutosRecientes = await _autoService.GetAutosRecientesAsync(3);
@@ -66,12 +73,6 @@ public class IndexModel : PageModel
 
             // Para exploración general
             AutosExploracion = await _autoService.GetAutosAleatoriosAsync(3);
-
-            // Si no hay datos, usar valores por defecto
-            if (!AutosDestacados.Any()) AutosDestacados = GetSampleAutos().Take(3).ToList();
-            if (!AutosRecientes.Any()) AutosRecientes = GetSampleAutos().Take(3).ToList();
-            if (!AutosGuardados.Any()) AutosGuardados = GetSampleAutos().Take(3).ToList();
-            if (!AutosExploracion.Any()) AutosExploracion = GetSampleAutos().Take(3).ToList();
 
             // Cargar URLs de banderines para todos los autos
             var allAutos = new List<Auto>();
@@ -86,85 +87,11 @@ public class IndexModel : PageModel
         {
             _logger.LogError(ex, "Error al cargar autos en la página principal");
             
-            // Fallback a datos de muestra
-            var sampleAutos = GetSampleAutos();
-            AutosDestacados = sampleAutos.Take(3).ToList();
-            AutosRecientes = sampleAutos.Skip(3).Take(3).ToList();
-            AutosGuardados = sampleAutos.Take(3).ToList();
-            AutosExploracion = sampleAutos.Skip(6).Take(3).ToList();
-            
-            // Cargar URLs de banderines para datos de muestra
-            await LoadBanderinUrlsAsync(sampleAutos);
+            // En caso de error, mantener las listas vacías
+            AutosDestacados = new List<Auto>();
+            AutosRecientes = new List<Auto>();
+            AutosGuardados = new List<Auto>();
+            AutosExploracion = new List<Auto>();
         }
-    }
-
-    private List<Auto> GetSampleAutos()
-    {
-        return new List<Auto>
-        {
-            new Auto
-            {
-                Id = 1,
-                Marca = "Toyota",
-                Modelo = "Corolla",
-                Ano = 2023,
-                Precio = 25000,
-                ImagenPrincipal = "/uploads/autos-images/sample-corolla.jpg",
-                Carroceria = "Sedan",
-                Combustible = "Gasolina",
-                Transmision = "Automática",
-                NumeroPuertas = 4,
-                Provincia = "San José",
-                Canton = "Escazú",
-                PlacaVehiculo = "TOY001",
-                Condicion = "Nuevo",
-                EmailPropietario = "admin@gmail.com",
-                FechaCreacion = DateTime.Now.AddDays(-1),
-                PlanVisibilidad = 2,
-                BanderinAdquirido = 1 // Versión Americana
-            },
-            new Auto
-            {
-                Id = 2,
-                Marca = "Mercedes-Benz",
-                Modelo = "E53 AMG",
-                Ano = 2022,
-                Precio = 170000,
-                ImagenPrincipal = "/uploads/autos-images/sample-mercedes.jpg",
-                Carroceria = "Coupé",
-                Combustible = "Gasolina",
-                Transmision = "Automática",
-                NumeroPuertas = 2,
-                Provincia = "San José",
-                Canton = "Santa Ana",
-                PlacaVehiculo = "MER002",
-                Condicion = "Excelente",
-                EmailPropietario = "admin@gmail.com",
-                FechaCreacion = DateTime.Now.AddDays(-2),
-                PlanVisibilidad = 3,
-                BanderinAdquirido = 5 // Perfecto Estado
-            },
-            new Auto
-            {
-                Id = 3,
-                Marca = "Audi",
-                Modelo = "Q5 Sportback",
-                Ano = 2022,
-                Precio = 75000,
-                ImagenPrincipal = "/uploads/autos-images/sample-audi.jpg",
-                Carroceria = "SUV",
-                Combustible = "Gasolina",
-                Transmision = "Automática",
-                NumeroPuertas = 4,
-                Provincia = "Alajuela",
-                Canton = "Alajuela",
-                PlacaVehiculo = null,
-                Condicion = "Nuevo",
-                EmailPropietario = "admin@gmail.com",
-                FechaCreacion = DateTime.Now.AddDays(-3),
-                PlanVisibilidad = 1,
-                BanderinAdquirido = 9 // Financiamiento Disponible
-            }
-        };
     }
 }

@@ -8,6 +8,14 @@ var builder = WebApplication.CreateBuilder(args);
 // Configure encoding to support UTF-8 characters
 System.Text.Encoding.RegisterProvider(System.Text.CodePagesEncodingProvider.Instance);
 
+// Add Application Insights telemetry
+builder.Services.AddApplicationInsightsTelemetry(options =>
+{
+    options.ConnectionString = builder.Configuration["ApplicationInsights:ConnectionString"];
+    options.EnableAdaptiveSampling = false; // Disable sampling for accurate counts
+    options.EnableQuickPulseMetricStream = true;
+});
+
 // Add services to the container.
 builder.Services.AddRazorPages();
 
@@ -125,6 +133,9 @@ builder.Services.AddScoped<IVentasExternasService, VentasExternasService>();
 
 // Add Email Service para notificaciones
 builder.Services.AddScoped<IEmailService, EmailService>();
+
+// Add Application Insights Service
+builder.Services.AddScoped<IApplicationInsightsService, ApplicationInsightsService>();
 
 // Add HttpClient Factory para TasaCambioService
 builder.Services.AddHttpClient();

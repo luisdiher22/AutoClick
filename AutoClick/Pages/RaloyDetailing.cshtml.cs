@@ -89,7 +89,7 @@ namespace AutoClick.Pages
 
                 return Page();
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 // En un entorno de producción, loggear la excepción
                 ErrorMessage = "Ocurrió un error al procesar su solicitud. Por favor intente nuevamente o contáctenos directamente.";
