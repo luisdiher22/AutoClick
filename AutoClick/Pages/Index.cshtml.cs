@@ -2,6 +2,8 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using AutoClick.Models;
 using AutoClick.Services;
+using AutoClick.Data;
+using Microsoft.EntityFrameworkCore;
 
 namespace AutoClick.Pages;
 
@@ -10,12 +12,14 @@ public class IndexModel : PageModel
     private readonly ILogger<IndexModel> _logger;
     private readonly IAutoService _autoService;
     private readonly IBanderinesService _banderinesService;
+    private readonly ApplicationDbContext _context;
 
-    public IndexModel(ILogger<IndexModel> logger, IAutoService autoService, IBanderinesService banderinesService)
+    public IndexModel(ILogger<IndexModel> logger, IAutoService autoService, IBanderinesService banderinesService, ApplicationDbContext context)
     {
         _logger = logger;
         _autoService = autoService;
         _banderinesService = banderinesService;
+        _context = context;
     }
 
     public List<Auto> AutosDestacados { get; set; } = new();
@@ -67,9 +71,37 @@ public class IndexModel : PageModel
             // Obtener autos más recientes
             AutosRecientes = await _autoService.GetAutosRecientesAsync(3);
 
-            // Para autos guardados, usar todos los autos disponibles
-            // (en el futuro se implementará un sistema de favoritos por usuario)
-            AutosGuardados = await _autoService.GetAutosRecientesAsync(3);
+            // Obtener autos guardados (favoritos) del usuario autenticado
+            var emailUsuario = User.Identity?.IsAuthenticated == true 
+                ? User.FindFirst(System.Security.Claims.ClaimTypes.Email)?.Value ?? User.FindFirst("Email")?.Value 
+                : null;
+
+            if (!string.IsNullOrEmpty(emailUsuario))
+            {
+                // Obtener los IDs de los autos favoritos del usuario
+                var favoritosIds = await _context.Favoritos
+                    .Where(f => f.EmailUsuario == emailUsuario)
+                    .Select(f => f.AutoId)
+                    .ToListAsync();
+
+                if (favoritosIds.Any())
+                {
+                    // Cargar los autos favoritos
+                    AutosGuardados = await _context.Autos
+                        .Where(a => favoritosIds.Contains(a.Id) && a.Activo)
+                        .OrderByDescending(a => a.FechaCreacion)
+                        .Take(3)
+                        .ToListAsync();
+                }
+                else
+                {
+                    AutosGuardados = new List<Auto>();
+                }
+            }
+            else
+            {
+                AutosGuardados = new List<Auto>();
+            }
 
             // Para exploración general
             AutosExploracion = await _autoService.GetAutosAleatoriosAsync(3);

@@ -5,7 +5,7 @@
     Layout = "~/Pages/Shared/_LayoutMinimal.cshtml";
 }
 
-<div style="width: 100%; min-height: 2790px; position: relative; background: #02081C; overflow: hidden">
+<div style="width: 100%; min-height: 3250px; position: relative; background: #02081C; overflow: hidden">
     <!-- Hero Image Section -->
     <div data-property-1="1" style="width: calc(100% - 64px); height: 736px; left: 32px; top: 0px; position: absolute; overflow: hidden; border-radius: 12px">
         <img style="width: 100%; height: 736px; left: 0px; top: 0px; position: absolute; object-fit: cover; object-position: center top; background: rgba(0, 0, 0, 0.3);" src="~/images/e032f5d0f2fa0108a989af4988eba3f7de835a51.jpg" />
@@ -71,6 +71,16 @@
                 }
             </div>
 
+            <!-- Botón de Favoritos -->
+            <button class="favorite-btn" 
+                    data-auto-id="@auto.Id" 
+                    data-email-usuario="@(User.Identity?.IsAuthenticated == true ? User.FindFirst(System.Security.Claims.ClaimTypes.Email)?.Value ?? User.FindFirst("Email")?.Value : "")"
+                    title="Agregar a favoritos"
+                    type="button">
+                <img src="https://autoclickstorage.blob.core.windows.net/uploads/Component%20183.png" 
+                     alt="Favorito" />
+            </button>
+
             <div style="width: 100%; height: 88px; padding: 12px 0 2px 0; flex-direction: column; justify-content: space-between; align-items: flex-start; display: flex;">
                 <div style="width: 100%; text-box-trim: trim-both; text-box-edge: cap alphabetic; color: white; font-size: 18px; font-family: Montserrat; font-weight: 700; word-wrap: break-word; line-height: 1.2;">@auto.NombreCompleto</div>
                 <div style="text-box-trim: trim-both; text-box-edge: cap alphabetic; color: white; font-size: 20px; font-family: Montserrat; font-weight: 600; word-wrap: break-word;">@auto.PrecioEnCRC</div>
@@ -80,7 +90,7 @@
     }
 
     <!-- Sección Recién vistos -->
-    <div style="width: 100%; left: 0px; top: 1249px; position: absolute; justify-content: flex-start; align-items: center; gap: 10px; display: inline-flex">
+    <div style="width: 100%; left: 0px; top: 1337px; position: absolute; justify-content: flex-start; align-items: center; gap: 10px; display: inline-flex">
         <div style="width: 22px; height: 6px; position: relative; background: white; border-top-right-radius: 100px; border-bottom-right-radius: 100px"></div>
         <div style="width: calc(100% - 64px); padding-left: 32px; padding-right: 32px; justify-content: space-between; align-items: center; display: flex">
             <div style="text-box-trim: trim-both; text-box-edge: cap alphabetic; color: white; font-size: 24px; font-family: Montserrat; font-weight: 700; word-wrap: break-word">Recién vistos</div>
@@ -95,7 +105,7 @@
     @{int recientesIndex = 0;}
     @foreach (var auto in Model.AutosRecientes.Take(3))
     {
-        <div data-estado="Default" style="width: calc((100% - 160px) / 4); height: 360px; padding: 8px; left: calc(32px + @recientesIndex * (100% - 160px) / 4 + @recientesIndex * 32px); top: 1305px; position: absolute; border-radius: 8px; overflow: visible; background: rgba(255, 255, 255, 0.05); flex-direction: column; justify-content: flex-start; align-items: flex-start; display: flex; cursor: pointer;" onclick="window.location.href='@Url.Page("/Producto", new { id = auto.Id })'">
+        <div data-estado="Default" style="width: calc((100% - 160px) / 4); height: 360px; padding: 8px; left: calc(32px + @recientesIndex * (100% - 160px) / 4 + @recientesIndex * 32px); top: 1393px; position: absolute; border-radius: 8px; overflow: visible; background: rgba(255, 255, 255, 0.05); flex-direction: column; justify-content: flex-start; align-items: flex-start; display: flex; cursor: pointer;" onclick="window.location.href='@Url.Page("/Producto", new { id = auto.Id })'">
             <div style="width: 100%; height: 260px; position: relative; overflow: hidden; border-radius: 4px;">
                 <img style="width: 100%; height: 100%; object-fit: cover;" src="@(string.IsNullOrEmpty(auto.ImagenPrincipal) ? "https://placehold.co/392x200" : auto.ImagenPrincipal)" alt="@auto.NombreCompleto" />
 
@@ -116,6 +126,16 @@
                 }
             </div>
 
+            <!-- Botón de Favoritos -->
+            <button class="favorite-btn" 
+                    data-auto-id="@auto.Id" 
+                    data-email-usuario="@(User.Identity?.IsAuthenticated == true ? User.FindFirst(System.Security.Claims.ClaimTypes.Email)?.Value ?? User.FindFirst("Email")?.Value : "")"
+                    title="Agregar a favoritos"
+                    type="button">
+                <img src="https://autoclickstorage.blob.core.windows.net/uploads/Component%20183.png" 
+                     alt="Favorito" />
+            </button>
+
             <div style="width: 100%; height: 88px; padding: 12px 0 2px 0; flex-direction: column; justify-content: space-between; align-items: flex-start; display: flex;">
                 <div style="width: 100%; text-box-trim: trim-both; text-box-edge: cap alphabetic; color: white; font-size: 18px; font-family: Montserrat; font-weight: 700; word-wrap: break-word; line-height: 1.2;">@auto.NombreCompleto</div>
                 <div style="text-box-trim: trim-both; text-box-edge: cap alphabetic; color: white; font-size: 20px; font-family: Montserrat; font-weight: 600; word-wrap: break-word;">@auto.PrecioEnCRC</div>
@@ -125,7 +145,7 @@
     }
 
     <!-- Sección Autos guardados -->
-    <div style="width: 100%; left: 0px; top: 1657px; position: absolute; justify-content: flex-start; align-items: center; gap: 10px; display: inline-flex">
+    <div style="width: 100%; left: 0px; top: 1833px; position: absolute; justify-content: flex-start; align-items: center; gap: 10px; display: inline-flex">
         <div style="width: 22px; height: 6px; position: relative; background: white; border-top-right-radius: 100px; border-bottom-right-radius: 100px"></div>
         <div style="width: calc(100% - 64px); padding-left: 32px; padding-right: 32px; justify-content: space-between; align-items: center; display: flex">
             <div style="text-box-trim: trim-both; text-box-edge: cap alphabetic; color: white; font-size: 24px; font-family: Montserrat; font-weight: 700; word-wrap: break-word">Autos guardados</div>
@@ -140,7 +160,7 @@
     @{int guardadosIndex = 0;}
     @foreach (var auto in Model.AutosGuardados.Take(3))
     {
-        <div data-estado="Default" style="width: calc((100% - 160px) / 4); height: 360px; padding: 8px; left: calc(32px + @guardadosIndex * (100% - 160px) / 4 + @guardadosIndex * 32px); top: 1713px; position: absolute; border-radius: 8px; overflow: visible; background: rgba(255, 255, 255, 0.05); flex-direction: column; justify-content: flex-start; align-items: flex-start; display: flex; cursor: pointer;" onclick="window.location.href='@Url.Page("/Producto", new { id = auto.Id })'">
+        <div data-estado="Default" style="width: calc((100% - 160px) / 4); height: 360px; padding: 8px; left: calc(32px + @guardadosIndex * (100% - 160px) / 4 + @guardadosIndex * 32px); top: 1889px; position: absolute; border-radius: 8px; overflow: visible; background: rgba(255, 255, 255, 0.05); flex-direction: column; justify-content: flex-start; align-items: flex-start; display: flex; cursor: pointer;" onclick="window.location.href='@Url.Page("/Producto", new { id = auto.Id })'">
             <div style="width: 100%; height: 260px; position: relative; overflow: hidden; border-radius: 4px;">
                 <img style="width: 100%; height: 100%; object-fit: cover;" src="@(string.IsNullOrEmpty(auto.ImagenPrincipal) ? "https://placehold.co/395x200" : auto.ImagenPrincipal)" alt="@auto.NombreCompleto" />
 
@@ -161,6 +181,16 @@
                 }
             </div>
 
+            <!-- Botón de Favoritos -->
+            <button class="favorite-btn" 
+                    data-auto-id="@auto.Id" 
+                    data-email-usuario="@(User.Identity?.IsAuthenticated == true ? User.FindFirst(System.Security.Claims.ClaimTypes.Email)?.Value ?? User.FindFirst("Email")?.Value : "")"
+                    title="Agregar a favoritos"
+                    type="button">
+                <img src="https://autoclickstorage.blob.core.windows.net/uploads/Component%20183.png" 
+                     alt="Favorito" />
+            </button>
+
             <div style="width: 100%; height: 88px; padding: 12px 0 2px 0; flex-direction: column; justify-content: space-between; align-items: flex-start; display: flex;">
                 <div style="width: 100%; text-box-trim: trim-both; text-box-edge: cap alphabetic; color: white; font-size: 18px; font-family: Montserrat; font-weight: 700; word-wrap: break-word; line-height: 1.2;">@auto.NombreCompleto</div>
                 <div style="text-box-trim: trim-both; text-box-edge: cap alphabetic; color: white; font-size: 20px; font-family: Montserrat; font-weight: 600; word-wrap: break-word;">@auto.PrecioEnCRC</div>
@@ -170,7 +200,7 @@
     }
 
     <!-- Sección Explorar todos los autos -->
-    <div style="width: 100%; left: 0px; top: 2065px; position: absolute; justify-content: flex-start; align-items: center; gap: 10px; display: inline-flex">
+    <div style="width: 100%; left: 0px; top: 2329px; position: absolute; justify-content: flex-start; align-items: center; gap: 10px; display: inline-flex">
         <div style="width: 22px; height: 6px; position: relative; background: white; border-top-right-radius: 100px; border-bottom-right-radius: 100px"></div>
         <div style="width: calc(100% - 64px); padding-left: 32px; padding-right: 32px; justify-content: space-between; align-items: center; display: flex">
             <div style="text-box-trim: trim-both; text-box-edge: cap alphabetic; color: white; font-size: 24px; font-family: Montserrat; font-weight: 700; word-wrap: break-word">Explorar todos los autos</div>
@@ -185,7 +215,7 @@
     @{int exploracionIndex = 0;}
     @foreach (var auto in Model.AutosExploracion.Take(3))
     {
-        <div data-estado="Default" style="width: calc((100% - 160px) / 4); height: 360px; padding: 8px; left: calc(32px + @exploracionIndex * (100% - 160px) / 4 + @exploracionIndex * 32px); top: 2121px; position: absolute; border-radius: 8px; overflow: visible; background: rgba(255, 255, 255, 0.05); flex-direction: column; justify-content: flex-start; align-items: flex-start; display: flex; cursor: pointer;" onclick="window.location.href='@Url.Page("/Producto", new { id = auto.Id })'">
+        <div data-estado="Default" style="width: calc((100% - 160px) / 4); height: 360px; padding: 8px; left: calc(32px + @exploracionIndex * (100% - 160px) / 4 + @exploracionIndex * 32px); top: 2385px; position: absolute; border-radius: 8px; overflow: visible; background: rgba(255, 255, 255, 0.05); flex-direction: column; justify-content: flex-start; align-items: flex-start; display: flex; cursor: pointer;" onclick="window.location.href='@Url.Page("/Producto", new { id = auto.Id })'">
             <div style="width: 100%; height: 260px; position: relative; overflow: hidden; border-radius: 4px;">
                 <img style="width: 100%; height: 100%; object-fit: cover;" src="@(string.IsNullOrEmpty(auto.ImagenPrincipal) ? "https://placehold.co/395x200" : auto.ImagenPrincipal)" alt="@auto.NombreCompleto" />
 
@@ -206,6 +236,16 @@
                 }
             </div>
 
+            <!-- Botón de Favoritos -->
+            <button class="favorite-btn" 
+                    data-auto-id="@auto.Id" 
+                    data-email-usuario="@(User.Identity?.IsAuthenticated == true ? User.FindFirst(System.Security.Claims.ClaimTypes.Email)?.Value ?? User.FindFirst("Email")?.Value : "")"
+                    title="Agregar a favoritos"
+                    type="button">
+                <img src="https://autoclickstorage.blob.core.windows.net/uploads/Component%20183.png" 
+                     alt="Favorito" />
+            </button>
+
             <div style="width: 100%; height: 88px; padding: 12px 0 2px 0; flex-direction: column; justify-content: space-between; align-items: flex-start; display: flex;">
                 <div style="width: 100%; height: 88px; padding: 12px 0 2px 0; flex-direction: column; justify-content: space-between; align-items: flex-start; display: flex;">
                 <div style="width: 100%; text-box-trim: trim-both; text-box-edge: cap alphabetic; color: white; font-size: 18px; font-family: Montserrat; font-weight: 700; word-wrap: break-word; line-height: 1.2;">@auto.NombreCompleto</div>
@@ -217,7 +257,7 @@
     }
 
     <!-- Footer -->
-    <div style="left: 0px; top: 2490px; position: absolute; width: 100%;">
+    <div style="left: 0px; top: 2845px; position: absolute; width: 100%;">
         <partial name="_Footer" />
     </div>
 </div>

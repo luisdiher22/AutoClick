@@ -28,6 +28,7 @@
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/css/autoclick.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/css/universal-header.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/css/favoritos.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/AutoClick.styles.css" asp-append-version="true" />
     
     @await RenderSectionAsync("Styles", required: false)
@@ -36,7 +37,7 @@
     <meta name="description" content="AutoClick.cr - Plataforma líder en Costa Rica para comprar y vender autos usados y nuevos. Encuentra tu auto ideal o anuncia el tuyo sin costo.">
     <meta name="keywords" content="autos, carros, Costa Rica, comprar auto, vender auto, autos usados">
 </head>
-<body>
+<body data-user-email="@(User.Identity?.IsAuthenticated == true ? User.FindFirst(System.Security.Claims.ClaimTypes.Email)?.Value ?? User.FindFirst("Email")?.Value : "")">
     <!-- Universal Header (exclude from auth pages) -->
     @{
         string currentPage = ViewContext.RouteData.Values["page"]?.ToString() ?? "";
@@ -58,6 +59,7 @@
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     <script src="~/js/site.js" asp-append-version="true"></script>
+    <script src="~/js/favoritos.js" asp-append-version="true"></script>
 
     @await RenderSectionAsync("Scripts", required: false)
 </body>

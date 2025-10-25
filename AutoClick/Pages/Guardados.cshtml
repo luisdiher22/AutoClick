@@ -4,51 +4,6 @@
     ViewData["Title"] = "Autos Guardados - AutoClick.cr";
 }
 
-<!-- Header -->
-<!-- Header removed - Using universal header -->
-    <div class="logo-container">
-        <a asp-page="/Index">
-            <img src="~/images/logos/autoclick-logo-hd.png" alt="AutoClick.cr" style="height: 23px;" />
-        </a>
-    </div>
-    
-    <nav class="nav-menu">
-        <div>
-            <img src="~/images/costa-rica-flag.png" alt="Costa Rica" style="width: 67px; height: 31px;" />
-        </div>
-        <div class="nav-dropdown-container">
-            <a href="#" class="nav-item nav-dropdown">Anúnciese</a>
-            <div class="dropdown-menu">
-                <a asp-page="/AnunciarEmpresa" class="dropdown-item">Anuncie su empresa</a>
-            </div>
-        </div>
-        <div class="nav-dropdown-container">
-            <a href="#" class="nav-item nav-dropdown">Productos & Servicios</a>
-            <div class="dropdown-menu">
-                <a asp-page="/PpfCeramico" class="dropdown-item">PPF y Cerámico</a>
-                <a asp-page="/RaloyDetailing" class="dropdown-item">Raloy - Detailing</a>
-            </div>
-        </div>
-        <div class="nav-dropdown-container">
-            <a href="#" class="nav-item nav-dropdown">Financiamiento</a>
-            <div class="dropdown-menu">
-                <a asp-page="/Gumout" class="dropdown-item">Gumout</a>
-            </div>
-        </div>
-    </nav>
-    
-    <div class="header-actions">
-        <div style="border-radius: 4px; padding: 12px; border: 2px solid white;">
-            <div style="width: 20px; height: 17px; border: 2px solid white;"></div>
-        </div>
-        <a href="#" class="login-btn">
-            <div style="width: 5px; height: 5px; background: white; margin-right: 5px;"></div>
-            <div style="width: 10px; height: 6px; background: white; margin-right: 8px;"></div>
-            Nombre A.
-        </a>
-    </div>
-</header>
-
 <!-- Page Content -->
 <div class="content-width">
     <!-- Breadcrumb Navigation -->
@@ -80,6 +35,15 @@
                 <div class="simple-auto-tile-image">
                     <img src="@auto.ImagenPrincipal" alt="@auto.NombreCompleto" />
 
+                    <!-- Botón de Favoritos -->
+                    <button class="favorite-btn" 
+                            data-auto-id="@auto.Id" 
+                            data-email-usuario="@(User.Identity?.IsAuthenticated == true ? User.FindFirst(System.Security.Claims.ClaimTypes.Email)?.Value ?? User.FindFirst("Email")?.Value : "")"
+                            title="Agregar a favoritos"
+                            type="button">
+                        <img src="https://autoclickstorage.blob.core.windows.net/uploads/Component%20183.png" 
+                             alt="Favorito" />
+                    </button>
                 </div>
 
                 <!-- Car Info -->

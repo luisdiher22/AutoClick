@@ -713,7 +713,7 @@ document.addEventListener('DOMContentLoaded', function() {
             color: ${currentLength >= minLength ? '#4CAF50' : '#FF9800'};
             position: absolute;
             left: 0px;
-            bottom: -24px;
+            bottom: -8px;
         `;
         counter.textContent = `${currentLength}/${minLength} caracteres mínimos`;
         

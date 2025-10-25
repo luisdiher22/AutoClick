@@ -26,10 +26,38 @@ namespace AutoClick.Pages
             CurrentPage = page ?? 1;
             SortBy = sortBy ?? "recent";
 
-            // Try to get saved cars from database
+            // Obtener el email del usuario autenticado
+            var emailUsuario = User.Identity?.IsAuthenticated == true 
+                ? User.FindFirst(System.Security.Claims.ClaimTypes.Email)?.Value ?? User.FindFirst("Email")?.Value 
+                : null;
+
+            // Si el usuario no está autenticado, no mostrar ningún auto
+            if (string.IsNullOrEmpty(emailUsuario))
+            {
+                SavedAutos = new List<Auto>();
+                TotalPages = 0;
+                return;
+            }
+
             try
             {
-                var query = _context.Autos.AsQueryable(); // Auto model doesn't have IsFavorite, using all for now
+                // Obtener los IDs de los autos marcados como favoritos por este usuario
+                var favoritosIds = await _context.Favoritos
+                    .Where(f => f.EmailUsuario == emailUsuario)
+                    .Select(f => f.AutoId)
+                    .ToListAsync();
+
+                // Si no tiene favoritos, retornar lista vacía
+                if (!favoritosIds.Any())
+                {
+                    SavedAutos = new List<Auto>();
+                    TotalPages = 0;
+                    return;
+                }
+
+                // Obtener los autos favoritos
+                var query = _context.Autos
+                    .Where(a => favoritosIds.Contains(a.Id) && a.Activo);
                 
                 // Apply sorting
                 query = SortBy switch
@@ -50,61 +78,10 @@ namespace AutoClick.Pages
             }
             catch
             {
-                // Fallback to sample data if database fails
-                SavedAutos = GetSampleSavedAutos()
-                    .Skip((CurrentPage - 1) * PageSize)
-                    .Take(PageSize)
-                    .ToList();
-                
-                TotalPages = (int)Math.Ceiling((double)GetSampleSavedAutos().Count / PageSize);
+                // Fallback to empty list if database fails
+                SavedAutos = new List<Auto>();
+                TotalPages = 0;
             }
-        }
-
-        private List<Auto> GetSampleSavedAutos()
-        {
-            return new List<Auto>
-            {
-                new Auto
-                {
-                    Id = 1,
-                    Marca = "BMW",
-                    Modelo = "X5M",
-                    Ano = 2025,
-                    Precio = 170000,
-                    UbicacionExacta = "SUV deportivo de lujo con motor V8 biturbo",
-                    ImagenPrincipal = "https://placehold.co/392x209",
-                    Carroceria = "SUV",
-                    Combustible = "Gasolina",
-                    Transmision = "Automática",
-                    NumeroPuertas = 4,
-                    Provincia = "San José",
-                    Canton = "Escazú",
-                    PlacaVehiculo = "BMW001",
-                    Condicion = "Excelente",
-                    EmailPropietario = "bmw@dealer.com",
-                    FechaCreacion = DateTime.Now.AddDays(-1)
-                },
-                new Auto
-                {
-                    Id = 2,
-                    Marca = "Audi",
-                    Modelo = "Q5 Sportback",
-                    Ano = 2022,
-                    Precio = 75000,
-                    UbicacionExacta = "SUV compacto deportivo con líneas dinámicas",
-                    ImagenPrincipal = "https://placehold.co/392x209",
-                    Carroceria = "SUV",
-                    Combustible = "Gasolina",
-                    Transmision = "Automática",
-                    NumeroPuertas = 4,
-                    Provincia = "Alajuela",
-                    Canton = "Alajuela",
-                    PlacaVehiculo = "AUD002",
-                    Condicion = "Muy Buena",
-                    EmailPropietario = "audi@dealer.com",
-                    FechaCreacion = DateTime.Now.AddDays(-3)
-                }
-            };
         }
     }
 }

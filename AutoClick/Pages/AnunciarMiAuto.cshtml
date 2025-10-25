@@ -111,8 +111,9 @@
                         <!-- Placa -->
                         <div data-estado="Default" data-label2="true" style="width: 260px; height: 60px; left: 910px; top: 50px; position: absolute">
                             <input asp-for="Formulario.PlacaVehiculo" type="text" id="placa" placeholder="Introducir placa (opcional para autos nuevos)" style="width: 260px; height: 42px; padding-top: 8px; padding-bottom: 8px; padding-left: 16px; padding-right: 16px; left: 0px; top: 18px; position: absolute; background: #02081C; border-radius: 4px; outline: 0.50px rgba(255, 255, 255, 0.50) solid; outline-offset: -0.50px; justify-content: flex-start; align-items: center; gap: 8px; display: inline-flex; color: rgba(255, 255, 255, 0.50); font-size: 14px; font-family: Montserrat; font-weight: 500; border: none;" />
-                            <div style="width: 68.64px; height: 9px; left: 0px; top: 0px; position: absolute; justify-content: flex-start; align-items: center; gap: 4px; display: inline-flex">
-                                <div style="text-box-trim: trim-both; text-box-edge: cap alphabetic; color: white; font-size: 14px; font-family: Montserrat; font-weight: 500; word-wrap: break-word">Placa del vehículo <span style="color: rgba(255, 255, 255, 0.6); font-weight: 400;">(opcional)</span></div>
+                            <div style="left: 0px; top: 0px; position: absolute; justify-content: flex-start; align-items: center; gap: 4px; display: inline-flex">
+                                <div style="text-box-trim: trim-both; text-box-edge: cap alphabetic; color: white; font-size: 14px; font-family: Montserrat; font-weight: 500; word-wrap: break-word">Placa del vehículo</div>
+                                <div style="text-box-trim: trim-both; text-box-edge: cap alphabetic; color: rgba(255, 255, 255, 0.6); font-size: 14px; font-family: Montserrat; font-weight: 400; word-wrap: break-word">(opcional)</div>
                             </div>
                         </div>
                         
@@ -127,16 +128,20 @@
                         </div>
                         
                         <!-- Divisa -->
-                        <div data-asterizco="true" data-property-1="Default" style="width: 44px; height: 44px; left: 242px; top: 158px; position: absolute">
-                            <select asp-for="Formulario.Divisa" id="divisa" required style="width: 44px; height: 44px; padding-left: 8px; padding-right: 8px; padding-top: 10px; padding-bottom: 10px; left: 0px; top: 0px; position: absolute; background: #02081C; border-radius: 4px; outline: 0.50px rgba(255, 255, 255, 0.50) solid; outline-offset: -0.50px; justify-content: space-between; align-items: center; display: inline-flex; color: white; font-size: 12px; font-family: Montserrat; font-weight: 500; border: none;">
+                        <div data-asterizco="true" data-property-1="Default" style="width: 80px; height: 60px; left: 242px; top: 140px; position: absolute">
+                            <select asp-for="Formulario.Divisa" id="divisa" required style="width: 80px; height: 42px; padding-left: 8px; padding-right: 8px; padding-top: 10px; padding-bottom: 10px; left: 0px; top: 18px; position: absolute; background: #02081C; border-radius: 4px; outline: 0.50px rgba(255, 255, 255, 0.50) solid; outline-offset: -0.50px; justify-content: space-between; align-items: center; display: inline-flex; color: white; font-size: 12px; font-family: Montserrat; font-weight: 500; border: none;">
                                 <option value="CRC" selected="@(Model.Formulario?.Divisa == "CRC" ? "selected" : null)">CRC</option>
                                 <option value="USD" selected="@(Model.Formulario?.Divisa == "USD" ? "selected" : null)">USD</option>
                             </select>
+                            <div style="left: 0px; top: 0px; position: absolute; justify-content: flex-start; align-items: center; gap: 4px; display: inline-flex">
+                                <div style="text-box-trim: trim-both; text-box-edge: cap alphabetic; color: white; font-size: 14px; font-family: Montserrat; font-weight: 500; word-wrap: break-word">Divisa</div>
+                                <div style="text-box-trim: trim-both; text-box-edge: cap alphabetic; color: #FF0000; font-size: 14px; font-family: Montserrat; font-weight: 500; word-wrap: break-word">*</div>
+                            </div>
                         </div>
                         
                         <!-- Tercera fila: Carrocería, Combustible, Cilindrada -->
                         <!-- Carrocería -->
-                        <div data-asterizco="true" data-property-1="Default" style="width: 260px; height: 60px; left: 32px; top: 280px; position: absolute">
+                        <div data-asterizco="true" data-property-1="Default" style="width: 260px; height: 60px; left: 32px; top: 230px; position: absolute">
                             <select asp-for="Formulario.Carroceria" id="carroceria" required style="width: 260px; height: 42px; padding-left: 16px; padding-right: 16px; padding-top: 8px; padding-bottom: 8px; left: 0px; top: 18px; position: absolute; background: #02081C; border-radius: 4px; outline: 0.50px rgba(255, 255, 255, 0.50) solid; outline-offset: -0.50px; justify-content: space-between; align-items: center; display: inline-flex; color: rgba(255, 255, 255, 0.50); font-size: 14px; font-family: Montserrat; font-weight: 500; border: none;">
                                 <option value="">Elija un tipo de carrocería</option>
                                 <option value="sedan">Sedán</option>
@@ -153,7 +158,7 @@
                         </div>
                         
                         <!-- Combustible -->
-                        <div data-asterizco="true" data-property-1="Default" style="width: 260px; height: 60px; left: 325px; top: 280px; position: absolute">
+                        <div data-asterizco="true" data-property-1="Default" style="width: 260px; height: 60px; left: 325px; top: 230px; position: absolute">
                             <select asp-for="Formulario.Combustible" id="combustible" required style="width: 260px; height: 42px; padding-left: 16px; padding-right: 16px; padding-top: 8px; padding-bottom: 8px; left: 0px; top: 18px; position: absolute; background: #02081C; border-radius: 4px; outline: 0.50px rgba(255, 255, 255, 0.50) solid; outline-offset: -0.50px; justify-content: space-between; align-items: center; display: inline-flex; color: rgba(255, 255, 255, 0.50); font-size: 14px; font-family: Montserrat; font-weight: 500; border: none;">
                                 <option value="">Elija combustible</option>
                                 <option value="gasolina">Gasolina</option>
@@ -168,7 +173,7 @@
                         </div>
                         
                         <!-- Cilindrada -->
-                        <div data-estado="Default" data-label2="true" style="width: 260px; height: 60px; left: 618px; top: 280px; position: absolute">
+                        <div data-estado="Default" data-label2="true" style="width: 260px; height: 60px; left: 618px; top: 230px; position: absolute">
                             <input asp-for="Formulario.Cilindrada" type="number" id="cilindrada" placeholder="Introducir cilindrada (cc)" required min="1" max="10000" step="1" style="width: 260px; height: 42px; padding-top: 8px; padding-bottom: 8px; padding-left: 16px; padding-right: 16px; left: 0px; top: 18px; position: absolute; background: #02081C; border-radius: 4px; outline: 0.50px rgba(255, 255, 255, 0.50) solid; outline-offset: -0.50px; justify-content: flex-start; align-items: center; gap: 8px; display: inline-flex; color: rgba(255, 255, 255, 0.50); font-size: 14px; font-family: Montserrat; font-weight: 500; border: none;">
                             <div style="width: 68.39px; height: 9px; left: 0px; top: 0px; position: absolute; justify-content: flex-start; align-items: center; gap: 4px; display: inline-flex">
                                 <div style="text-box-trim: trim-both; text-box-edge: cap alphabetic; color: white; font-size: 14px; font-family: Montserrat; font-weight: 500; word-wrap: break-word">Cilindrada</div>
@@ -178,25 +183,25 @@
                         
                         <!-- Cuarta fila: Color Exterior, Color Interior, Puertas, Pasajeros -->
                         <!-- Color Exterior -->
-                        <div data-estado="Default" data-label2="true" style="width: 260px; height: 60px; left: 32px; top: 370px; position: absolute">
+                        <div data-estado="Default" data-label2="true" style="width: 260px; height: 60px; left: 32px; top: 320px; position: absolute">
                             <input asp-for="Formulario.ColorExterior" type="text" id="color-exterior" placeholder="Introducir color exterior" required style="width: 260px; height: 42px; padding-top: 8px; padding-bottom: 8px; padding-left: 16px; padding-right: 16px; left: 0px; top: 18px; position: absolute; background: #02081C; border-radius: 4px; outline: 0.50px rgba(255, 255, 255, 0.50) solid; outline-offset: -0.50px; justify-content: flex-start; align-items: center; gap: 8px; display: inline-flex; color: rgba(255, 255, 255, 0.50); font-size: 14px; font-family: Montserrat; font-weight: 500; border: none;">
-                            <div style="width: 68.64px; height: 9px; left: 0px; top: 0px; position: absolute; justify-content: flex-start; align-items: center; gap: 4px; display: inline-flex">
+                            <div style="left: 0px; top: 0px; position: absolute; justify-content: flex-start; align-items: center; gap: 4px; display: inline-flex">
                                 <div style="text-box-trim: trim-both; text-box-edge: cap alphabetic; color: white; font-size: 14px; font-family: Montserrat; font-weight: 500; word-wrap: break-word">Color exterior</div>
                                 <div style="text-box-trim: trim-both; text-box-edge: cap alphabetic; color: #FF0000; font-size: 14px; font-family: Montserrat; font-weight: 500; word-wrap: break-word">*</div>
                             </div>
                         </div>
                         
                         <!-- Color Interior -->
-                        <div data-estado="Default" data-label2="true" style="width: 260px; height: 60px; left: 325px; top: 370px; position: absolute">
+                        <div data-estado="Default" data-label2="true" style="width: 260px; height: 60px; left: 325px; top: 320px; position: absolute">
                             <input asp-for="Formulario.ColorInterior" type="text" id="color-interior" placeholder="Introducir color interior" required style="width: 260px; height: 42px; padding-top: 8px; padding-bottom: 8px; padding-left: 16px; padding-right: 16px; left: 0px; top: 18px; position: absolute; background: #02081C; border-radius: 4px; outline: 0.50px rgba(255, 255, 255, 0.50) solid; outline-offset: -0.50px; justify-content: flex-start; align-items: center; gap: 8px; display: inline-flex; color: rgba(255, 255, 255, 0.50); font-size: 14px; font-family: Montserrat; font-weight: 500; border: none;">
-                            <div style="width: 68.64px; height: 9px; left: 0px; top: 0px; position: absolute; justify-content: flex-start; align-items: center; gap: 4px; display: inline-flex">
+                            <div style="left: 0px; top: 0px; position: absolute; justify-content: flex-start; align-items: center; gap: 4px; display: inline-flex">
                                 <div style="text-box-trim: trim-both; text-box-edge: cap alphabetic; color: white; font-size: 14px; font-family: Montserrat; font-weight: 500; word-wrap: break-word">Color interior</div>
                                 <div style="text-box-trim: trim-both; text-box-edge: cap alphabetic; color: #FF0000; font-size: 14px; font-family: Montserrat; font-weight: 500; word-wrap: break-word">*</div>
                             </div>
                         </div>
                         
                         <!-- Puertas -->
-                        <div data-asterizco="true" data-property-1="Default" style="width: 260px; height: 60px; left: 618px; top: 370px; position: absolute">
+                        <div data-asterizco="true" data-property-1="Default" style="width: 260px; height: 60px; left: 618px; top: 320px; position: absolute">
                             <select asp-for="Formulario.NumeroPuertas" id="puertas" required style="width: 260px; height: 42px; padding-left: 16px; padding-right: 16px; padding-top: 8px; padding-bottom: 8px; left: 0px; top: 18px; position: absolute; background: #02081C; border-radius: 4px; outline: 0.50px rgba(255, 255, 255, 0.50) solid; outline-offset: -0.50px; justify-content: space-between; align-items: center; display: inline-flex; color: rgba(255, 255, 255, 0.50); font-size: 14px; font-family: Montserrat; font-weight: 500; border: none;">
                                 <option value="">Elija # de puertas</option>
                                 <option value="2">2 puertas</option>
@@ -211,7 +216,7 @@
                         </div>
                         
                         <!-- Pasajeros -->
-                        <div data-asterizco="true" data-property-1="Default" style="width: 260px; height: 60px; left: 910px; top: 370px; position: absolute">
+                        <div data-asterizco="true" data-property-1="Default" style="width: 260px; height: 60px; left: 910px; top: 320px; position: absolute">
                             <select asp-for="Formulario.NumeroPasajeros" id="pasajeros" required style="width: 260px; height: 42px; padding-left: 16px; padding-right: 16px; padding-top: 8px; padding-bottom: 8px; left: 0px; top: 18px; position: absolute; background: #02081C; border-radius: 4px; outline: 0.50px rgba(255, 255, 255, 0.50) solid; outline-offset: -0.50px; justify-content: space-between; align-items: center; display: inline-flex; color: rgba(255, 255, 255, 0.50); font-size: 14px; font-family: Montserrat; font-weight: 500; border: none;">
                                 <option value="">Elija # de pasajeros</option>
                                 <option value="2">2 pasajeros</option>
@@ -228,7 +233,7 @@
                         
                         <!-- Quinta fila: Transmisión, Tracción, Kilometraje, Condición -->
                         <!-- Transmisión -->
-                        <div data-asterizco="true" data-property-1="Default" style="width: 260px; height: 60px; left: 32px; top: 460px; position: absolute">
+                        <div data-asterizco="true" data-property-1="Default" style="width: 260px; height: 60px; left: 32px; top: 410px; position: absolute">
                             <select asp-for="Formulario.Transmision" id="transmision" required style="width: 260px; height: 42px; padding-left: 16px; padding-right: 16px; padding-top: 8px; padding-bottom: 8px; left: 0px; top: 18px; position: absolute; background: #02081C; border-radius: 4px; outline: 0.50px rgba(255, 255, 255, 0.50) solid; outline-offset: -0.50px; justify-content: space-between; align-items: center; display: inline-flex; color: rgba(255, 255, 255, 0.50); font-size: 14px; font-family: Montserrat; font-weight: 500; border: none;">
                                 <option value="">Elija transmisión</option>
                                 <option value="manual">Manual</option>
@@ -242,7 +247,7 @@
                         </div>
                         
                         <!-- Tracción -->
-                        <div data-asterizco="true" data-property-1="Default" style="width: 260px; height: 60px; left: 325px; top: 460px; position: absolute">
+                        <div data-asterizco="true" data-property-1="Default" style="width: 260px; height: 60px; left: 325px; top: 410px; position: absolute">
                             <select asp-for="Formulario.Traccion" id="traccion" required style="width: 260px; height: 42px; padding-left: 16px; padding-right: 16px; padding-top: 8px; padding-bottom: 8px; left: 0px; top: 18px; position: absolute; background: #02081C; border-radius: 4px; outline: 0.50px rgba(255, 255, 255, 0.50) solid; outline-offset: -0.50px; justify-content: space-between; align-items: center; display: inline-flex; color: rgba(255, 255, 255, 0.50); font-size: 14px; font-family: Montserrat; font-weight: 500; border: none;">
                                 <option value="">Elija tracción</option>
                                 <option value="delantera">Delantera</option>
@@ -257,7 +262,7 @@
                         </div>
                         
                         <!-- Kilometraje -->
-                        <div data-estado="Default" data-label2="true" style="width: 210px; height: 60px; left: 618px; top: 460px; position: absolute">
+                        <div data-estado="Default" data-label2="true" style="width: 210px; height: 60px; left: 618px; top: 410px; position: absolute">
                             <input asp-for="Formulario.Kilometraje" type="number" id="kilometraje" placeholder="Introducir kilometraje" required min="0" max="999999999" step="1" style="width: 210px; height: 42px; padding-top: 8px; padding-bottom: 8px; padding-left: 16px; padding-right: 16px; left: 0px; top: 18px; position: absolute; background: #02081C; border-radius: 4px; outline: 0.50px rgba(255, 255, 255, 0.50) solid; outline-offset: -0.50px; justify-content: flex-start; align-items: center; gap: 8px; display: inline-flex; color: rgba(255, 255, 255, 0.50); font-size: 14px; font-family: Montserrat; font-weight: 500; border: none;">
                             <div style="width: 51.04px; height: 9px; left: 0px; top: 0px; position: absolute; justify-content: flex-start; align-items: center; gap: 4px; display: inline-flex">
                                 <div style="text-box-trim: trim-both; text-box-edge: cap alphabetic; color: white; font-size: 14px; font-family: Montserrat; font-weight: 500; word-wrap: break-word">Kilometraje</div>
@@ -266,12 +271,12 @@
                         </div>
                         
                         <!-- Km Unit -->
-                        <div style="height: 42px; padding-left: 8px; padding-right: 8px; padding-top: 8px; padding-bottom: 8px; left: 840px; top: 478px; position: absolute; background: #02081C; overflow: hidden; border-radius: 4px; outline: 0.50px rgba(255, 255, 255, 0.50) solid; outline-offset: -0.50px; justify-content: flex-start; align-items: center; gap: 8px; display: inline-flex">
+                        <div style="height: 42px; padding-left: 8px; padding-right: 8px; padding-top: 8px; padding-bottom: 8px; left: 840px; top: 428px; position: absolute; background: #02081C; overflow: hidden; border-radius: 4px; outline: 0.50px rgba(255, 255, 255, 0.50) solid; outline-offset: -0.50px; justify-content: flex-start; align-items: center; gap: 8px; display: inline-flex">
                             <div style="text-box-trim: trim-both; text-box-edge: cap alphabetic; text-align: center; color: white; font-size: 12px; font-family: Montserrat; font-weight: 500; word-wrap: break-word">Km</div>
                         </div>
                         
                         <!-- Condición -->
-                        <div data-asterizco="true" data-property-1="Default" style="width: 260px; height: 60px; left: 910px; top: 460px; position: absolute">
+                        <div data-asterizco="true" data-property-1="Default" style="width: 260px; height: 60px; left: 910px; top: 410px; position: absolute">
                             <select asp-for="Formulario.Condicion" id="condicion" required style="width: 260px; height: 42px; padding-left: 16px; padding-right: 16px; padding-top: 8px; padding-bottom: 8px; left: 0px; top: 18px; position: absolute; background: #02081C; border-radius: 4px; outline: 0.50px rgba(255, 255, 255, 0.50) solid; outline-offset: -0.50px; justify-content: space-between; align-items: center; display: inline-flex; color: rgba(255, 255, 255, 0.50); font-size: 14px; font-family: Montserrat; font-weight: 500; border: none;">
                                 <option value="">Elija una condición</option>
                                 <option value="nuevo">Nuevo</option>
@@ -284,7 +289,7 @@
                         </div>
                         
                         <!-- Descripción -->
-                        <div data-estado="Default" style="width: 1140px; height: 160px; left: 32px; top: 550px; position: absolute">
+                        <div data-estado="Default" style="width: 1140px; height: 160px; left: 32px; top: 500px; position: absolute">
                             <textarea asp-for="Formulario.Descripcion" id="descripcion" placeholder="Escribe descripción" required style="width: 1140px; height: 116px; padding-top: 16px; padding-bottom: 8px; padding-left: 16px; padding-right: 16px; left: 0px; top: 18px; position: absolute; background: #02081C; border-radius: 4px; outline: 0.50px rgba(255, 255, 255, 0.50) solid; outline-offset: -0.50px; justify-content: flex-start; align-items: flex-start; gap: 8px; display: inline-flex; color: rgba(255, 255, 255, 0.50); font-size: 14px; font-family: Montserrat; font-weight: 500; border: none; resize: none;"></textarea>
                             <div style="left: 0px; top: 1px; position: absolute; justify-content: flex-start; align-items: center; gap: 4px; display: inline-flex">
                                 <div style="text-box-trim: trim-both; text-box-edge: cap alphabetic; color: white; font-size: 14px; font-family: Montserrat; font-weight: 500; word-wrap: break-word">Descripción detallada del vehículo</div>

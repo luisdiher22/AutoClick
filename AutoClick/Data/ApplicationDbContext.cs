@@ -17,6 +17,7 @@ public class ApplicationDbContext : DbContext
     public DbSet<Mensaje> Mensajes { get; set; }
     public DbSet<VentaExterna> VentasExternas { get; set; }
     public DbSet<SolicitudEmpresa> SolicitudesEmpresa { get; set; }
+    public DbSet<Favorito> Favoritos { get; set; }
     // Car model eliminado
     
     protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -258,6 +259,46 @@ public class ApplicationDbContext : DbContext
             entity.Property(s => s.FechaCreacion)
                   .IsRequired()
                   .HasDefaultValueSql("GETUTCDATE()");
+        });
+        
+        // Configure Favorito entity
+        modelBuilder.Entity<Favorito>(entity =>
+        {
+            // Primary key
+            entity.HasKey(f => f.Id);
+            
+            // Índice único compuesto para evitar duplicados
+            entity.HasIndex(f => new { f.EmailUsuario, f.AutoId })
+                  .IsUnique()
+                  .HasDatabaseName("IX_Favoritos_EmailUsuario_AutoId");
+            
+            // Índices para mejorar performance
+            entity.HasIndex(f => f.EmailUsuario);
+            entity.HasIndex(f => f.AutoId);
+            entity.HasIndex(f => f.FechaCreacion);
+            
+            // Configuraciones de propiedades
+            entity.Property(f => f.EmailUsuario)
+                  .IsRequired()
+                  .HasMaxLength(150);
+                  
+            entity.Property(f => f.AutoId)
+                  .IsRequired();
+                  
+            entity.Property(f => f.FechaCreacion)
+                  .IsRequired()
+                  .HasDefaultValueSql("GETUTCDATE()");
+            
+            // Relaciones
+            entity.HasOne(f => f.Usuario)
+                  .WithMany()
+                  .HasForeignKey(f => f.EmailUsuario)
+                  .OnDelete(DeleteBehavior.Cascade);
+                  
+            entity.HasOne(f => f.Auto)
+                  .WithMany()
+                  .HasForeignKey(f => f.AutoId)
+                  .OnDelete(DeleteBehavior.Cascade);
         });
         
         // Configure your other entity relationships here

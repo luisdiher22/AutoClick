@@ -59,6 +59,11 @@
                 string userName = User.Identity?.Name ?? User.FindFirst(System.Security.Claims.ClaimTypes.Name)?.Value ?? User.FindFirst("FullName")?.Value ?? "Usuario";
             }
             
+            <!-- Favorites Button -->
+            <a asp-page="/Guardados" class="favorites-btn" title="Mis Favoritos">
+                <img src="https://autoclickstorage.blob.core.windows.net/uploads/Component%20183.png" alt="Favoritos" class="favorites-icon" />
+            </a>
+            
             @if (isUserLoggedIn)
             {
                 var isAdmin = User.FindFirst("IsAdmin")?.Value == "true";

@@ -10,6 +10,9 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;700&family=Plus+Jakarta+Sans:wght@700&display=swap" rel="stylesheet">
     
+    <!-- Favoritos CSS -->
+    <link href="~/css/favoritos.css" rel="stylesheet" />
+    
     <!-- Minimal styles for Index page -->
     <style>
         * {
@@ -279,7 +282,7 @@
     <meta name="description" content="AutoClick.cr - Plataforma líder en Costa Rica para comprar y vender autos usados y nuevos. Encuentra tu auto ideal o anuncia el tuyo sin costo.">
     <meta name="keywords" content="autos, carros, Costa Rica, comprar auto, vender auto, autos usados">
 </head>
-<body>
+<body data-user-email="@(User.Identity?.IsAuthenticated == true ? User.FindFirst(System.Security.Claims.ClaimTypes.Email)?.Value ?? User.FindFirst("Email")?.Value : "")">
     <!-- Universal Header -->
     @await Html.PartialAsync("_Header")
     
@@ -289,6 +292,7 @@
 
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/js/site.js" asp-append-version="true"></script>
+    <script src="~/js/favoritos.js" asp-append-version="true"></script>
 
     @await RenderSectionAsync("Scripts", required: false)
 </body>
