@@ -113,6 +113,9 @@ builder.Services.AddScoped<IStorageService>(provider =>
 // Add File Upload Service
 builder.Services.AddScoped<IFileUploadService, FileUploadService>();
 
+// Add Publicidad Storage Service (para imágenes de anuncios)
+builder.Services.AddScoped<IPublicidadStorageService, PublicidadStorageService>();
+
 // Add Auto Service
 builder.Services.AddScoped<IAutoService, AutoService>();
 

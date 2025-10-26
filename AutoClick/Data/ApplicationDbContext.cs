@@ -18,6 +18,8 @@ public class ApplicationDbContext : DbContext
     public DbSet<VentaExterna> VentasExternas { get; set; }
     public DbSet<SolicitudEmpresa> SolicitudesEmpresa { get; set; }
     public DbSet<Favorito> Favoritos { get; set; }
+    public DbSet<EmpresaPublicidad> EmpresasPublicidad { get; set; }
+    public DbSet<AnuncioPublicidad> AnunciosPublicidad { get; set; }
     // Car model eliminado
     
     protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -298,6 +300,65 @@ public class ApplicationDbContext : DbContext
             entity.HasOne(f => f.Auto)
                   .WithMany()
                   .HasForeignKey(f => f.AutoId)
+                  .OnDelete(DeleteBehavior.Cascade);
+        });
+        
+        // Configure EmpresaPublicidad entity
+        modelBuilder.Entity<EmpresaPublicidad>(entity =>
+        {
+            entity.HasKey(e => e.Id);
+            
+            entity.HasIndex(e => e.NombreEmpresa);
+            entity.HasIndex(e => e.Activa);
+            entity.HasIndex(e => e.FechaInicio);
+            
+            entity.Property(e => e.NombreEmpresa)
+                  .IsRequired()
+                  .HasMaxLength(200);
+                  
+            entity.Property(e => e.FechaInicio)
+                  .IsRequired();
+                  
+            entity.Property(e => e.EstadoCobros)
+                  .IsRequired()
+                  .HasMaxLength(20)
+                  .HasDefaultValue("Al día");
+                  
+            entity.Property(e => e.Activa)
+                  .IsRequired()
+                  .HasDefaultValue(true);
+        });
+        
+        // Configure AnuncioPublicidad entity
+        modelBuilder.Entity<AnuncioPublicidad>(entity =>
+        {
+            entity.HasKey(a => a.Id);
+            
+            entity.HasIndex(a => a.EmpresaPublicidadId);
+            entity.HasIndex(a => a.Activo);
+            entity.HasIndex(a => a.FechaPublicacion);
+            
+            entity.Property(a => a.UrlImagen)
+                  .IsRequired()
+                  .HasMaxLength(500);
+                  
+            entity.Property(a => a.FechaPublicacion)
+                  .IsRequired();
+                  
+            entity.Property(a => a.NumeroVistas)
+                  .HasDefaultValue(0);
+                  
+            entity.Property(a => a.NumeroClics)
+                  .HasDefaultValue(0);
+                  
+            entity.Property(a => a.Activo)
+                  .IsRequired()
+                  .HasDefaultValue(true);
+            
+            // Relación con EmpresaPublicidad
+            entity.HasOne(a => a.EmpresaPublicidad)
+                  .WithMany(e => e.Anuncios)
+                  .HasForeignKey(a => a.EmpresaPublicidadId)
                   .OnDelete(DeleteBehavior.Cascade);
         });
         

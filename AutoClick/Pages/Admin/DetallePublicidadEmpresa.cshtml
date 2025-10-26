@@ -1,0 +1,1034 @@
+@page
+@model AutoClick.Pages.Admin.DetallePublicidadEmpresaModel
+@{
+    ViewData["Title"] = $"Gestión de Publicidad - {Model.Empresa.NombreEmpresa}";
+}
+
+<style>
+    body {
+        background-color: #02081c;
+        color: white;
+        font-family: 'Montserrat', sans-serif;
+    }
+
+    .admin-container {
+        display: flex;
+        min-height: 100vh;
+    }
+
+    .main-content {
+        margin-left: 376px;
+        padding: 16px 32px;
+        flex: 1;
+    }
+
+    .back-button {
+        display: flex;
+        align-items: center;
+        gap: 16px;
+        padding: 16px 0;
+        background: none;
+        border: none;
+        color: white;
+        font-size: 16px;
+        font-weight: 700;
+        cursor: pointer;
+        text-decoration: none;
+        transition: opacity 0.2s;
+    }
+
+    .back-button:hover {
+        opacity: 0.8;
+    }
+
+    .page-title {
+        font-size: 20px;
+        font-weight: 700;
+        color: white;
+        margin: 24px 0 32px 0;
+    }
+
+    .page-title .subtitle {
+        color: rgba(255, 255, 255, 0.5);
+    }
+
+    .section-divider {
+        height: 1px;
+        background: rgba(255, 255, 255, 0.25);
+        margin: 32px 0;
+    }
+
+    .cards-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+        gap: 24px;
+        margin-bottom: 40px;
+    }
+
+    .header-section {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 24px;
+    }
+
+    .add-button {
+        background-color: transparent;
+        border: none;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        padding: 8px;
+        border-radius: 4px;
+        cursor: pointer;
+        transition: all 0.2s;
+    }
+
+    .add-button:hover {
+        background-color: rgba(255, 255, 255, 0.1);
+        transform: scale(1.05);
+    }
+
+    .add-button svg {
+        transition: transform 0.2s;
+    }
+
+    .add-button:hover svg {
+        transform: rotate(90deg);
+    }
+
+    .anuncio-card {
+        background: transparent;
+        border-radius: 8px;
+        padding: 10px;
+        height: 430px;
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+    }
+
+    .card-image-container {
+        position: relative;
+        width: 100%;
+        height: 262px;
+        border-radius: 4px;
+        overflow: hidden;
+        flex-shrink: 0;
+    }
+
+    .card-image-container::after {
+        content: '';
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        height: 100%;
+        background: linear-gradient(180deg, rgba(0,0,0,0) 45.673%, rgba(0,0,0,0.9) 93.75%);
+        pointer-events: none;
+        z-index: 1;
+    }
+
+    .card-image {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        position: absolute;
+        top: 0;
+        left: 0;
+    }
+
+    .card-overlay-content {
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        z-index: 2;
+        display: flex;
+        flex-direction: column;
+        justify-content: flex-end;
+        padding: 16px;
+        pointer-events: none;
+    }
+
+    .card-stats-row {
+        display: flex;
+        flex-direction: column;
+        align-items: flex-end;
+        gap: 8px;
+        align-self: flex-end;
+    }
+
+    .card-stats {
+        display: flex;
+        align-items: center;
+        gap: 6px;
+        font-family: 'Montserrat', sans-serif;
+        font-weight: 500;
+        font-size: 14px;
+        color: white;
+    }
+
+        .card-stats svg {
+            flex-shrink: 0;
+        }
+
+    .card-info {
+        display: flex;
+        flex-direction: column;
+        gap: 4px;
+        flex-shrink: 0;
+    }
+
+    .card-subtitle {
+        font-family: 'Montserrat', sans-serif;
+        font-weight: 700;
+        font-size: 16px;
+        color: white;
+        line-height: 1.2;
+    }
+
+    .card-title {
+        font-family: 'Montserrat', sans-serif;
+        font-weight: 700;
+        font-size: 24px;
+        color: white;
+        line-height: 1.2;
+    }
+
+    .card-date {
+        font-family: 'Montserrat', sans-serif;
+        font-weight: 500;
+        font-size: 16px;
+        color: white;
+        line-height: 1.2;
+    }
+
+    .card-actions {
+        display: flex;
+        gap: 16px;
+        margin-top: auto;
+        flex-shrink: 0;
+        justify-content: space-between;
+        align-items: center;
+    }
+
+    .card-action-btn {
+        width: 40px;
+        height: 40px;
+        border-radius: 3.333px;
+        border: none;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        transition: background-color 0.2s;
+    }
+
+    .download-btn {
+        background-color: rgba(255, 255, 255, 0.1);
+    }
+
+    .download-btn:hover {
+        background-color: rgba(255, 255, 255, 0.2);
+    }
+
+    .edit-btn {
+        background-color: rgba(255, 255, 255, 0.1);
+    }
+
+    .edit-btn:hover {
+        background-color: rgba(255, 255, 255, 0.2);
+    }
+
+    .status-toggle {
+        background: white;
+        width: 104px;
+        height: 44px;
+        border-radius: 71px;
+        border: none;
+        cursor: pointer;
+        position: relative;
+        box-shadow: -3.548px 3.548px 3.548px 0px rgba(0,0,0,0.25);
+        transition: all 0.3s;
+    }
+
+    .status-toggle.active {
+        background: white;
+    }
+
+    .status-toggle.active .status-bg {
+        background: #006600;
+    }
+
+    .status-toggle.inactive {
+        background: white;
+    }
+
+    .status-toggle.inactive .status-bg {
+        background: #b20000;
+    }
+
+    .status-bg {
+        position: absolute;
+        top: 2px;
+        left: 2.13px;
+        width: 99px;
+        height: 40px;
+        border-radius: 71px;
+        transition: background 0.3s;
+    }
+
+    .status-text {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-100%, -50%);
+        font-size: 10px;
+        font-weight: 800;
+        color: #f7f7f7;
+        z-index: 2;
+    }
+
+    .status-toggle.inactive .status-text {
+        left: calc(50% + 40px);
+    }
+
+    .status-toggle.active .status-text {
+        left: calc(50% + 0.371px);
+    }
+
+    .status-circle {
+        position: absolute;
+        width: 39.742px;
+        height: 39.742px;
+        border-radius: 50%;
+        background: white;
+        top: 2.13px;
+        transition: all 0.3s;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        z-index: 3;
+    }
+
+    .status-toggle.active .status-circle {
+        left: 62px;
+    }
+
+    .status-toggle.inactive .status-circle {
+        left: 2.13px;
+    }
+
+    .disable-all-btn {
+        background-color: red;
+        border: none;
+        color: white;
+        padding: 12px 16px;
+        border-radius: 4px;
+        font-size: 16px;
+        font-weight: 700;
+        cursor: pointer;
+        transition: background-color 0.2s;
+        margin: 32px 0;
+        float: right;
+    }
+
+    .disable-all-btn:hover {
+        background-color: #cc0000;
+    }
+
+    /* Modal de detalles - ESTILO CENTRO DE SOPORTE */
+    .modal-detalles-overlay {
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: rgba(2, 8, 28, 0.9);
+        backdrop-filter: blur(8px);
+        display: none;
+        align-items: center;
+        justify-content: center;
+        z-index: 9999;
+        padding: 20px;
+        opacity: 0;
+        transition: opacity 0.3s ease;
+    }
+
+    .modal-detalles-overlay.active {
+        display: flex;
+        opacity: 1;
+    }
+
+    .modal-detalles-content {
+        background: linear-gradient(135deg, #0a1428 0%, #02081C 100%);
+        border: 1px solid rgba(255, 255, 255, 0.25);
+        border-radius: 16px;
+        max-width: 600px;
+        width: 100%;
+        max-height: 90vh;
+        overflow-y: auto;
+        box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+        transform: scale(0.9);
+        transition: transform 0.3s ease;
+    }
+
+    .modal-detalles-overlay.active .modal-detalles-content {
+        transform: scale(1);
+    }
+
+    .modal-detalles-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 30px 40px;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.25);
+    }
+
+    .modal-detalles-title {
+        font-size: 24px;
+        font-weight: 700;
+        color: #F7F7F7;
+        margin: 0;
+    }
+
+    .modal-detalles-close {
+        background: transparent;
+        border: none;
+        width: 40px;
+        height: 40px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+        border-radius: 8px;
+        transition: all 0.3s ease;
+    }
+
+    .modal-detalles-close:hover {
+        background: rgba(255, 255, 255, 0.15);
+        transform: rotate(90deg);
+    }
+
+    .modal-detalles-body {
+        padding: 30px 40px;
+    }
+
+    .modal-field {
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+        margin-bottom: 20px;
+    }
+
+    .modal-field-label {
+        font-size: 12px;
+        font-weight: 600;
+        color: rgba(247, 247, 247, 0.7);
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+    }
+
+    .modal-field-input {
+        font-size: 16px;
+        font-weight: 500;
+        color: #F7F7F7;
+        padding: 12px 16px;
+        background: #02081C;
+        border: 1px solid rgba(255, 255, 255, 0.5);
+        border-radius: 8px;
+        font-family: 'Montserrat', sans-serif;
+    }
+
+    .modal-field-input::placeholder {
+        color: rgba(255, 255, 255, 0.5);
+    }
+
+    .modal-field-input:focus {
+        outline: none;
+        border-color: rgba(255, 255, 255, 0.8);
+    }
+
+    .modal-field-input[type="file"] {
+        padding: 8px;
+        cursor: pointer;
+    }
+
+    .modal-field-input[type="file"]::-webkit-file-upload-button {
+        background-color: rgba(255, 255, 255, 0.1);
+        border: 1px solid rgba(255, 255, 255, 0.3);
+        border-radius: 4px;
+        color: white;
+        padding: 6px 12px;
+        cursor: pointer;
+        font-family: 'Montserrat', sans-serif;
+        font-size: 12px;
+        font-weight: 500;
+        margin-right: 8px;
+    }
+
+    .modal-field-input[type="file"]::-webkit-file-upload-button:hover {
+        background-color: rgba(255, 255, 255, 0.2);
+    }
+
+    .modal-detalles-footer {
+        display: flex;
+        justify-content: flex-end;
+        gap: 16px;
+        padding: 20px 40px;
+        border-top: 1px solid rgba(255, 255, 255, 0.25);
+    }
+
+    .btn-modal-cerrar {
+        padding: 12px 32px;
+        background: transparent;
+        border: 1px solid white;
+        border-radius: 8px;
+        color: white;
+        font-family: 'Montserrat', sans-serif;
+        font-size: 16px;
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.3s ease;
+    }
+
+    .btn-modal-cerrar:hover {
+        background: rgba(255, 255, 255, 0.1);
+    }
+
+    .btn-modal-submit {
+        padding: 12px 32px;
+        background: #FF931E;
+        border: none;
+        border-radius: 8px;
+        color: white;
+        font-family: 'Montserrat', sans-serif;
+        font-size: 16px;
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.3s ease;
+    }
+
+    .btn-modal-submit:hover {
+        background: #e67e0a;
+        transform: translateY(-2px);
+        box-shadow: 0 4px 12px rgba(255, 147, 30, 0.4);
+    }
+
+    .modal-divider {
+        text-align: center;
+        margin: 16px 0;
+        color: rgba(255, 255, 255, 0.5);
+        font-size: 14px;
+    }
+
+    .modal-field-hint {
+        color: rgba(255, 255, 255, 0.6);
+        font-size: 12px;
+        margin-top: 4px;
+    }
+
+    .required {
+        color: #ff453a;
+    }
+
+    .form-control::placeholder {
+        color: rgba(255, 255, 255, 0.5);
+    }
+
+    .form-control:focus {
+        outline: none;
+        border-color: rgba(255, 255, 255, 0.8);
+    }
+
+    .form-control:disabled {
+        opacity: 0.5;
+        cursor: not-allowed;
+    }
+
+    .modal-footer {
+        display: flex;
+        justify-content: flex-end;
+        gap: 16px;
+        margin-top: 32px;
+    }
+
+    .btn {
+        padding: 10px 24px;
+        border-radius: 4px;
+        font-size: 16px;
+        font-weight: 700;
+        cursor: pointer;
+        transition: all 0.2s;
+        border: none;
+    }
+
+    .btn-secondary {
+        background-color: transparent;
+        border: 0.5px solid white;
+        color: white;
+    }
+
+    .btn-secondary:hover {
+        background-color: rgba(255, 255, 255, 0.1);
+    }
+
+    .btn-primary {
+        background-color: #0a2680;
+        border: 0.5px solid white;
+        color: white;
+    }
+
+    .btn-primary:hover {
+        background-color: #0d2f9e;
+    }
+
+    .btn-danger {
+        padding: 12px 16px;
+        background-color: #ff0000;
+        border: 0.5px solid #ff0000;
+        border-radius: 4px;
+        color: white;
+        font-size: 16px;
+        font-weight: 700;
+        cursor: pointer;
+        transition: all 0.2s;
+        font-family: 'Montserrat', sans-serif;
+    }
+
+    .btn-danger:hover {
+        background-color: #cc0000;
+        border-color: #cc0000;
+    }
+
+    .alert {
+        padding: 12px 16px;
+        border-radius: 4px;
+        margin-bottom: 16px;
+        font-size: 14px;
+        font-weight: 500;
+    }
+
+    .alert-success {
+        background-color: rgba(52, 199, 89, 0.2);
+        border: 1px solid rgba(52, 199, 89, 0.5);
+        color: #34c759;
+    }
+
+    .alert-danger {
+        background-color: rgba(255, 69, 58, 0.2);
+        border: 1px solid rgba(255, 69, 58, 0.5);
+        color: #ff453a;
+    }
+</style>
+
+<div class="admin-container">
+    @await Html.PartialAsync("_AdminSidebar")
+
+    <!-- Main Content -->
+    <div class="main-content">
+        @if (TempData["SuccessMessage"] != null)
+        {
+            <div class="alert alert-success">
+                @TempData["SuccessMessage"]
+            </div>
+        }
+
+        @if (TempData["ErrorMessage"] != null)
+        {
+            <div class="alert alert-danger">
+                @TempData["ErrorMessage"]
+            </div>
+        }
+
+        <a href="/Admin/Publicidad" class="back-button">
+            <span>&lt;</span>
+            <span>Volver a publicidad</span>
+        </a>
+
+        <div class="header-section">
+            <h1 class="page-title">
+                @Model.Empresa.NombreEmpresa | <span class="subtitle">Activos</span>
+            </h1>
+            <button type="button" class="add-button" onclick="openModal()">
+                <svg width="32" height="32" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <rect width="32" height="32" rx="4" fill="rgba(255, 255, 255, 0.1)"/>
+                    <path d="M16 10V22M10 16H22" stroke="white" stroke-width="2" stroke-linecap="round"/>
+                </svg>
+            </button>
+        </div>
+
+        <!-- Anuncios Activos -->
+        <div class="cards-grid">
+
+            @foreach (var anuncio in Model.AnunciosActivos)
+            {
+                <div class="anuncio-card">
+                    <div class="card-image-container">
+                        <img src="@anuncio.UrlImagen" alt="Anuncio" class="card-image" onerror="this.src='/images/placeholder.png'" />
+                        <!-- Contenido sobre la imagen -->
+                        <div class="card-overlay-content">
+                            <div class="card-stats-row">
+                                <div class="card-stats">
+                                    <svg width="20" height="14" viewBox="0 0 20 14" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                        <path d="M10 0C5.86364 0 2.27909 2.85714 1 7C2.27909 11.1429 5.86364 14 10 14C14.1364 14 17.7209 11.1429 19 7C17.7209 2.85714 14.1364 0 10 0ZM10 11.6667C7.79091 11.6667 6 9.875 6 7.66667C6 5.45833 7.79091 3.66667 10 3.66667C12.2091 3.66667 14 5.45833 14 7.66667C14 9.875 12.2091 11.6667 10 11.6667ZM10 5.66667C8.90909 5.66667 8 6.57576 8 7.66667C8 8.75758 8.90909 9.66667 10 9.66667C11.0909 9.66667 12 8.75758 12 7.66667C12 6.57576 11.0909 5.66667 10 5.66667Z" fill="white"/>
+                                    </svg>
+                                    <span>@(anuncio.NumeroVistas.ToString("N0", new System.Globalization.CultureInfo("en-US")))</span>
+                                </div>
+                                <div class="card-stats">
+                                    <svg width="19" height="19" viewBox="0 0 19 19" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                        <path d="M6.50078 1.82749V0.55249M3.15234 3.15405L2.25078 2.25249M3.15234 9.90249L2.25078 10.8041M9.90078 3.15405L10.8024 2.25249M1.82578 6.50249H0.550781M6.07578 6.07749L9.57022 16.9386L12.0258 14.4831L15.0952 17.5525L17.5508 15.0969L14.4813 12.0275L16.9369 9.57193L6.07578 6.07749Z" stroke="white" stroke-width="1.105" stroke-linecap="round" stroke-linejoin="round"/>
+                                    </svg>
+                                    <span>@(anuncio.NumeroClics.ToString("N0", new System.Globalization.CultureInfo("en-US")))</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Información debajo de la imagen -->
+                    <div class="card-info">
+                        <div class="card-subtitle">Transacciones seguras</div>
+                        <div class="card-title">@Model.Empresa.NombreEmpresa.ToUpper()</div>
+                        <div class="card-date">Publicado el @anuncio.FechaPublicacion.ToString("dd/MM/yy")</div>
+                    </div>
+                    <!-- Botones de acción -->
+                    <div class="card-actions">
+                        <div style="display: flex; gap: 16px;">
+                            <a href="@anuncio.UrlImagen" download class="card-action-btn download-btn" title="Descargar imagen">
+                                <svg width="27" height="27" viewBox="0 0 27 27" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                    <path d="M13.3333 6.66667V18M13.3333 18L8 12.6667M13.3333 18L18.6667 12.6667" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                    <path d="M22 20V22.6667H4.66667V20" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                </svg>
+                            </a>
+                            <button class="card-action-btn edit-btn" onclick="openEditModal(@anuncio.Id, '@anuncio.UrlImagen')" title="Editar anuncio">
+                                <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                    <path d="M14.166 2.5C14.3849 2.28113 14.6447 2.10752 14.9307 1.98893C15.2167 1.87035 15.5232 1.80908 15.8327 1.80908C16.1422 1.80908 16.4487 1.87035 16.7347 1.98893C17.0206 2.10752 17.2805 2.28113 17.4993 2.5C17.7182 2.71887 17.8918 2.97871 18.0104 3.26468C18.129 3.55064 18.1903 3.85714 18.1903 4.16667C18.1903 4.47619 18.129 4.78269 18.0104 5.06866C17.8918 5.35462 17.7182 5.61446 17.4993 5.83333L6.24935 17.0833L1.66602 18.3333L2.91602 13.75L14.166 2.5Z" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                </svg>
+                            </button>
+                        </div>
+                        <form method="post" asp-page-handler="CambiarEstadoAnuncio" style="margin: 0;">
+                            @Html.AntiForgeryToken()
+                            <input type="hidden" name="anuncioId" value="@anuncio.Id" />
+                            <input type="hidden" name="empresaId" value="@Model.Empresa.Id" />
+                            <button type="submit" class="status-toggle active" title="Cambiar estado">
+                                <div class="status-bg"></div>
+                                <span class="status-text">Activo</span>
+                                <div class="status-circle">
+                                    <svg width="16" height="12" viewBox="0 0 16 12" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                        <path d="M1 6L6 11L15 1" stroke="#006600" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                    </svg>
+                                </div>
+                            </button>
+                        </form>
+                    </div>
+                </div>
+            }
+        </div>
+
+        @if (Model.AnunciosInactivos.Any())
+        {
+            <div class="section-divider"></div>
+
+            <h1 class="page-title">
+                @Model.Empresa.NombreEmpresa | <span class="subtitle">Inactivos</span>
+            </h1>
+
+            <!-- Anuncios Inactivos -->
+            <div class="cards-grid">
+                @foreach (var anuncio in Model.AnunciosInactivos)
+                {
+                    <div class="anuncio-card">
+                        <div class="card-image-container">
+                            <img src="@anuncio.UrlImagen" alt="Anuncio" class="card-image" onerror="this.src='/images/placeholder.png'" />
+                            <!-- Contenido sobre la imagen -->
+                            <div class="card-overlay-content">
+                                <div class="card-stats-row">
+                                    <div class="card-stats">
+                                        <svg width="20" height="14" viewBox="0 0 20 14" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                            <path d="M10 0C5.86364 0 2.27909 2.85714 1 7C2.27909 11.1429 5.86364 14 10 14C14.1364 14 17.7209 11.1429 19 7C17.7209 2.85714 14.1364 0 10 0ZM10 11.6667C7.79091 11.6667 6 9.875 6 7.66667C6 5.45833 7.79091 3.66667 10 3.66667C12.2091 3.66667 14 5.45833 14 7.66667C14 9.875 12.2091 11.6667 10 11.6667ZM10 5.66667C8.90909 5.66667 8 6.57576 8 7.66667C8 8.75758 8.90909 9.66667 10 9.66667C11.0909 9.66667 12 8.75758 12 7.66667C12 6.57576 11.0909 5.66667 10 5.66667Z" fill="white"/>
+                                        </svg>
+                                        <span>@(anuncio.NumeroVistas.ToString("N0", new System.Globalization.CultureInfo("en-US")))</span>
+                                    </div>
+                                    <div class="card-stats">
+                                        <svg width="19" height="19" viewBox="0 0 19 19" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                            <path d="M6.50078 1.82749V0.55249M3.15234 3.15405L2.25078 2.25249M3.15234 9.90249L2.25078 10.8041M9.90078 3.15405L10.8024 2.25249M1.82578 6.50249H0.550781M6.07578 6.07749L9.57022 16.9386L12.0258 14.4831L15.0952 17.5525L17.5508 15.0969L14.4813 12.0275L16.9369 9.57193L6.07578 6.07749Z" stroke="white" stroke-width="1.105" stroke-linecap="round" stroke-linejoin="round"/>
+                                        </svg>
+                                        <span>@(anuncio.NumeroClics.ToString("N0", new System.Globalization.CultureInfo("en-US")))</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- Información debajo de la imagen -->
+                        <div class="card-info">
+                            <div class="card-subtitle">Transacciones seguras</div>
+                            <div class="card-title">@Model.Empresa.NombreEmpresa.ToUpper()</div>
+                            <div class="card-date">Publicado el @anuncio.FechaPublicacion.ToString("dd/MM/yy")</div>
+                        </div>
+                        <!-- Botones de acción -->
+                        <div class="card-actions">
+                            <div style="display: flex; gap: 16px;">
+                                <a href="@anuncio.UrlImagen" download class="card-action-btn download-btn" title="Descargar imagen">
+                                    <svg width="27" height="27" viewBox="0 0 27 27" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                        <path d="M13.3333 6.66667V18M13.3333 18L8 12.6667M13.3333 18L18.6667 12.6667" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                        <path d="M22 20V22.6667H4.66667V20" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                    </svg>
+                                </a>
+                                <button class="card-action-btn edit-btn" onclick="openEditModal(@anuncio.Id, '@anuncio.UrlImagen')" title="Editar anuncio">
+                                    <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                        <path d="M14.166 2.5C14.3849 2.28113 14.6447 2.10752 14.9307 1.98893C15.2167 1.87035 15.5232 1.80908 15.8327 1.80908C16.1422 1.80908 16.4487 1.87035 16.7347 1.98893C17.0206 2.10752 17.2805 2.28113 17.4993 2.5C17.7182 2.71887 17.8918 2.97871 18.0104 3.26468C18.129 3.55064 18.1903 3.85714 18.1903 4.16667C18.1903 4.47619 18.129 4.78269 18.0104 5.06866C17.8918 5.35462 17.7182 5.61446 17.4993 5.83333L6.24935 17.0833L1.66602 18.3333L2.91602 13.75L14.166 2.5Z" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                    </svg>
+                                </button>
+                            </div>
+                            <form method="post" asp-page-handler="CambiarEstadoAnuncio" style="margin: 0;">
+                                @Html.AntiForgeryToken()
+                                <input type="hidden" name="anuncioId" value="@anuncio.Id" />
+                                <input type="hidden" name="empresaId" value="@Model.Empresa.Id" />
+                                <button type="submit" class="status-toggle inactive" title="Cambiar estado">
+                                    <div class="status-bg"></div>
+                                    <span class="status-text">Inactivo</span>
+                                    <div class="status-circle">
+                                        <svg width="12" height="12" viewBox="0 0 12 12" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                            <path d="M1 1L11 11M1 11L11 1" stroke="#b20000" stroke-width="2" stroke-linecap="round"/>
+                                        </svg>
+                                    </div>
+                                </button>
+                            </form>
+                        </div>
+                    </div>
+                }
+            </div>
+        }
+
+        <!-- Botón deshabilitar todos -->
+        @if (Model.AnunciosActivos.Any())
+        {
+            <button type="button" class="disable-all-btn" onclick="openConfirmModal()">
+                Inhabilitar todos los anuncios de esta empresa
+            </button>
+        }
+    </div>
+</div>
+
+<!-- Modal Añadir Anuncio - ESTILO CENTRO DE SOPORTE -->
+<div id="modalAgregarAnuncio" class="modal-detalles-overlay" onclick="cerrarModalSiClickFuera(event, 'modalAgregarAnuncio')">
+    <div class="modal-detalles-content" onclick="event.stopPropagation()">
+        <div class="modal-detalles-header">
+            <h2 class="modal-detalles-title">Añadir nuevo anuncio</h2>
+            <button type="button" class="modal-detalles-close" onclick="closeModal()">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+                    <path d="M18 6L6 18M6 6L18 18" stroke="white" stroke-width="2" stroke-linecap="round"/>
+                </svg>
+            </button>
+        </div>
+
+        <form method="post" asp-page-handler="AgregarAnuncio" enctype="multipart/form-data">
+            @Html.AntiForgeryToken()
+            <input type="hidden" asp-for="EmpresaId" value="@Model.Empresa.Id" />
+            
+            <div class="modal-detalles-body">
+                <div class="modal-field">
+                    <span class="modal-field-label">Subir imagen desde tu computadora</span>
+                    <input type="file" asp-for="ImagenAnuncio" class="modal-field-input" accept="image/jpeg,image/jpg,image/png,image/gif,image/webp" onchange="onFileSelected('add')" />
+                    <small class="modal-field-hint">
+                        Formatos permitidos: JPG, PNG, GIF, WEBP. Tamaño máximo: 5 MB
+                    </small>
+                </div>
+
+                <div class="modal-divider">
+                    — O —
+                </div>
+
+                <div class="modal-field">
+                    <span class="modal-field-label">URL de la imagen</span>
+                    <input type="url" asp-for="UrlImagen" id="addUrlImagen" class="modal-field-input" placeholder="https://ejemplo.com/imagen.jpg" />
+                    <small class="modal-field-hint">
+                        Solo si no subes un archivo
+                    </small>
+                </div>
+            </div>
+
+            <div class="modal-detalles-footer">
+                <button type="button" class="btn-modal-cerrar" onclick="closeModal()">Cancelar</button>
+                <button type="submit" class="btn-modal-submit">Agregar anuncio</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<!-- Modal Editar Anuncio - ESTILO CENTRO DE SOPORTE -->
+<div id="modalEditarAnuncio" class="modal-detalles-overlay" onclick="cerrarModalSiClickFuera(event, 'modalEditarAnuncio')">
+    <div class="modal-detalles-content" onclick="event.stopPropagation()">
+        <div class="modal-detalles-header">
+            <h2 class="modal-detalles-title">Editar anuncio</h2>
+            <button type="button" class="modal-detalles-close" onclick="closeEditModal()">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+                    <path d="M18 6L6 18M6 6L18 18" stroke="white" stroke-width="2" stroke-linecap="round"/>
+                </svg>
+            </button>
+        </div>
+
+        <form method="post" asp-page-handler="EditarAnuncio" enctype="multipart/form-data">
+            @Html.AntiForgeryToken()
+            <input type="hidden" asp-for="EmpresaId" value="@Model.Empresa.Id" />
+            <input type="hidden" asp-for="AnuncioId" id="editAnuncioId" />
+            
+            <div class="modal-detalles-body">
+                <div class="modal-field">
+                    <span class="modal-field-label">Subir nueva imagen desde tu computadora</span>
+                    <input type="file" asp-for="ImagenAnuncio" class="modal-field-input" accept="image/jpeg,image/jpg,image/png,image/gif,image/webp" onchange="onFileSelected('edit')" />
+                    <small class="modal-field-hint">
+                        Formatos permitidos: JPG, PNG, GIF, WEBP. Tamaño máximo: 5 MB
+                    </small>
+                </div>
+
+                <div class="modal-divider">
+                    — O —
+                </div>
+
+                <div class="modal-field">
+                    <span class="modal-field-label">URL de la imagen</span>
+                    <input type="url" asp-for="UrlImagen" id="editUrlImagen" class="modal-field-input" placeholder="https://ejemplo.com/imagen.jpg" />
+                    <small class="modal-field-hint">
+                        Solo si no subes un archivo nuevo
+                    </small>
+                </div>
+            </div>
+
+            <div class="modal-detalles-footer">
+                <button type="button" class="btn-modal-cerrar" onclick="closeEditModal()">Cancelar</button>
+                <button type="submit" class="btn-modal-submit">Guardar cambios</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<!-- Modal de Confirmación para Inhabilitar Todos - ESTILO CENTRO DE SOPORTE -->
+<div id="modalConfirmInhabilitar" class="modal-detalles-overlay" onclick="cerrarModalSiClickFuera(event, 'modalConfirmInhabilitar')">
+    <div class="modal-detalles-content" onclick="event.stopPropagation()" style="max-width: 500px;">
+        <div class="modal-detalles-header">
+            <h2 class="modal-detalles-title">⚠️ Confirmar acción</h2>
+            <button type="button" class="modal-detalles-close" onclick="closeConfirmModal()">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+                    <path d="M18 6L6 18M6 6L18 18" stroke="white" stroke-width="2" stroke-linecap="round"/>
+                </svg>
+            </button>
+        </div>
+
+        <form method="post" asp-page-handler="DeshabilitarTodos" id="formInhabilitarTodos">
+            @Html.AntiForgeryToken()
+            <input type="hidden" name="empresaId" value="@Model.Empresa.Id" />
+            
+            <div class="modal-detalles-body">
+                <p style="color: white; font-size: 16px; line-height: 1.5; margin: 0 0 16px 0;">
+                    ¿Está seguro de que desea <strong style="color: #ff453a;">inhabilitar TODOS los anuncios activos</strong> de esta empresa?
+                </p>
+                <p style="color: rgba(255, 255, 255, 0.7); font-size: 14px; line-height: 1.5; margin: 0;">
+                    Esta acción desactivará <strong>@Model.AnunciosActivos.Count anuncio(s)</strong> y establecerá la fecha de salida de la empresa. Los anuncios podrán ser reactivados posteriormente de forma individual.
+                </p>
+            </div>
+
+            <div class="modal-detalles-footer">
+                <button type="button" class="btn-modal-cerrar" onclick="closeConfirmModal()">
+                    Cancelar
+                </button>
+                <button type="submit" class="btn-modal-submit" style="background: #ff453a;">
+                    Sí, inhabilitar todos
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<script>
+    function openModal() {
+        document.getElementById('modalAgregarAnuncio').classList.add('active');
+        document.body.style.overflow = 'hidden';
+    }
+
+    function closeModal() {
+        document.getElementById('modalAgregarAnuncio').classList.remove('active');
+        document.body.style.overflow = '';
+        // Limpiar campos del formulario
+        document.querySelector('#modalAgregarAnuncio form').reset();
+    }
+
+    function openEditModal(anuncioId, urlImagen) {
+        document.getElementById('editAnuncioId').value = anuncioId;
+        document.getElementById('editUrlImagen').value = urlImagen;
+        document.getElementById('modalEditarAnuncio').classList.add('active');
+        document.body.style.overflow = 'hidden';
+    }
+
+    function closeEditModal() {
+        document.getElementById('modalEditarAnuncio').classList.remove('active');
+        document.body.style.overflow = '';
+        // Limpiar campos del formulario
+        document.querySelector('#modalEditarAnuncio form').reset();
+    }
+
+    function openConfirmModal() {
+        document.getElementById('modalConfirmInhabilitar').classList.add('active');
+        document.body.style.overflow = 'hidden';
+    }
+
+    function closeConfirmModal() {
+        document.getElementById('modalConfirmInhabilitar').classList.remove('active');
+        document.body.style.overflow = '';
+    }
+
+    function cerrarModalSiClickFuera(event, modalId) {
+        if (event.target.id === modalId) {
+            if (modalId === 'modalAgregarAnuncio') {
+                closeModal();
+            } else if (modalId === 'modalEditarAnuncio') {
+                closeEditModal();
+            } else if (modalId === 'modalConfirmInhabilitar') {
+                closeConfirmModal();
+            }
+        }
+    }
+
+    // Cerrar modal con tecla ESC
+    document.addEventListener('keydown', function(event) {
+        if (event.key === 'Escape') {
+            const modalAgregar = document.getElementById('modalAgregarAnuncio');
+            const modalEditar = document.getElementById('modalEditarAnuncio');
+            const modalConfirm = document.getElementById('modalConfirmInhabilitar');
+            
+            if (modalAgregar.classList.contains('active')) {
+                closeModal();
+            } else if (modalEditar.classList.contains('active')) {
+                closeEditModal();
+            } else if (modalConfirm.classList.contains('active')) {
+                closeConfirmModal();
+            }
+        }
+    });
+
+    function onFileSelected(modalType) {
+        // Cuando se selecciona un archivo, limpiar el campo de URL
+        if (modalType === 'add') {
+            const fileInput = document.querySelector('#modalAgregarAnuncio input[type="file"]');
+            const urlInput = document.getElementById('addUrlImagen');
+            if (fileInput.files && fileInput.files.length > 0) {
+                urlInput.value = '';
+                urlInput.disabled = true;
+                urlInput.placeholder = 'Se usará el archivo seleccionado';
+            } else {
+                urlInput.disabled = false;
+                urlInput.placeholder = 'https://ejemplo.com/imagen.jpg';
+            }
+        } else if (modalType === 'edit') {
+            const fileInput = document.querySelector('#modalEditarAnuncio input[type="file"]');
+            const urlInput = document.getElementById('editUrlImagen');
+            if (fileInput.files && fileInput.files.length > 0) {
+                urlInput.value = '';
+                urlInput.disabled = true;
+                urlInput.placeholder = 'Se usará el archivo seleccionado';
+            } else {
+                urlInput.disabled = false;
+                urlInput.placeholder = 'https://ejemplo.com/imagen.jpg';
+            }
+        }
+    }
+</script>
