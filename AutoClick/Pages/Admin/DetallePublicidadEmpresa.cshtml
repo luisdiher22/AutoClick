@@ -642,10 +642,41 @@
             </div>
         }
 
-        <a href="/Admin/Publicidad" class="back-button">
-            <span>&lt;</span>
-            <span>Volver a publicidad</span>
-        </a>
+        <!-- Header con botón Volver y Estado de Cobros -->
+        <div style="display: flex; justify-content: space-between; align-items: center; padding: 16px 0;">
+            <a href="/Admin/Publicidad" class="back-button" style="padding: 0;">
+                <span>&lt;</span>
+                <span>Volver a publicidad</span>
+            </a>
+            
+            <!-- Estado de Cobro -->
+            <div style="display: flex; align-items: center; gap: 12px;">
+                <span style="color: rgba(255, 255, 255, 0.7); font-size: 14px; font-weight: 500;">Estado de Cobro:</span>
+                <form method="post" asp-page-handler="CambiarEstadoCobros" style="margin: 0;">
+                    @Html.AntiForgeryToken()
+                    <input type="hidden" name="empresaId" value="@Model.Empresa.Id" />
+                    <button type="submit" class="status-toggle @(Model.Empresa.EstadoCobros == "Al día" ? "active" : "inactive")" 
+                            title="Cambiar estado de cobros">
+                        <div class="status-bg"></div>
+                        <span class="status-text">@Model.Empresa.EstadoCobros</span>
+                        <div class="status-circle">
+                            @if (Model.Empresa.EstadoCobros == "Al día")
+                            {
+                                <svg width="16" height="12" viewBox="0 0 16 12" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                    <path d="M1 6L6 11L15 1" stroke="#006600" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                </svg>
+                            }
+                            else
+                            {
+                                <svg width="12" height="12" viewBox="0 0 12 12" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                    <path d="M1 1L11 11M11 1L1 11" stroke="#CC0000" stroke-width="2" stroke-linecap="round"/>
+                                </svg>
+                            }
+                        </div>
+                    </button>
+                </form>
+            </div>
+        </div>
 
         <div class="header-section">
             <h1 class="page-title">
@@ -660,6 +691,7 @@
         </div>
 
         <!-- Anuncios Activos -->
+
         <div class="cards-grid">
 
             @foreach (var anuncio in Model.AnunciosActivos)
@@ -700,7 +732,7 @@
                                     <path d="M22 20V22.6667H4.66667V20" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
                                 </svg>
                             </a>
-                            <button class="card-action-btn edit-btn" onclick="openEditModal(@anuncio.Id, '@anuncio.UrlImagen')" title="Editar anuncio">
+                            <button class="card-action-btn edit-btn" onclick="openEditModal(@anuncio.Id, '@anuncio.UrlImagen', '@anuncio.UrlDestino')" title="Editar anuncio">
                                 <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
                                     <path d="M14.166 2.5C14.3849 2.28113 14.6447 2.10752 14.9307 1.98893C15.2167 1.87035 15.5232 1.80908 15.8327 1.80908C16.1422 1.80908 16.4487 1.87035 16.7347 1.98893C17.0206 2.10752 17.2805 2.28113 17.4993 2.5C17.7182 2.71887 17.8918 2.97871 18.0104 3.26468C18.129 3.55064 18.1903 3.85714 18.1903 4.16667C18.1903 4.47619 18.129 4.78269 18.0104 5.06866C17.8918 5.35462 17.7182 5.61446 17.4993 5.83333L6.24935 17.0833L1.66602 18.3333L2.91602 13.75L14.166 2.5Z" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
                                 </svg>
@@ -773,7 +805,7 @@
                                         <path d="M22 20V22.6667H4.66667V20" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
                                     </svg>
                                 </a>
-                                <button class="card-action-btn edit-btn" onclick="openEditModal(@anuncio.Id, '@anuncio.UrlImagen')" title="Editar anuncio">
+                                <button class="card-action-btn edit-btn" onclick="openEditModal(@anuncio.Id, '@anuncio.UrlImagen', '@anuncio.UrlDestino')" title="Editar anuncio">
                                     <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
                                         <path d="M14.166 2.5C14.3849 2.28113 14.6447 2.10752 14.9307 1.98893C15.2167 1.87035 15.5232 1.80908 15.8327 1.80908C16.1422 1.80908 16.4487 1.87035 16.7347 1.98893C17.0206 2.10752 17.2805 2.28113 17.4993 2.5C17.7182 2.71887 17.8918 2.97871 18.0104 3.26468C18.129 3.55064 18.1903 3.85714 18.1903 4.16667C18.1903 4.47619 18.129 4.78269 18.0104 5.06866C17.8918 5.35462 17.7182 5.61446 17.4993 5.83333L6.24935 17.0833L1.66602 18.3333L2.91602 13.75L14.166 2.5Z" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
                                     </svg>
@@ -845,6 +877,14 @@
                         Solo si no subes un archivo
                     </small>
                 </div>
+
+                <div class="modal-field">
+                    <span class="modal-field-label">URL de destino</span>
+                    <input type="url" asp-for="UrlDestino" class="modal-field-input" placeholder="https://ejemplo.com/landing-page" />
+                    <small class="modal-field-hint">
+                        URL a la que redirigirá el anuncio al hacer clic
+                    </small>
+                </div>
             </div>
 
             <div class="modal-detalles-footer">
@@ -890,6 +930,14 @@
                     <input type="url" asp-for="UrlImagen" id="editUrlImagen" class="modal-field-input" placeholder="https://ejemplo.com/imagen.jpg" />
                     <small class="modal-field-hint">
                         Solo si no subes un archivo nuevo
+                    </small>
+                </div>
+
+                <div class="modal-field">
+                    <span class="modal-field-label">URL de destino</span>
+                    <input type="url" asp-for="UrlDestino" id="editUrlDestino" class="modal-field-input" placeholder="https://ejemplo.com/landing-page" />
+                    <small class="modal-field-hint">
+                        URL a la que redirigirá el anuncio al hacer clic
                     </small>
                 </div>
             </div>
@@ -952,9 +1000,10 @@
         document.querySelector('#modalAgregarAnuncio form').reset();
     }
 
-    function openEditModal(anuncioId, urlImagen) {
+    function openEditModal(anuncioId, urlImagen, urlDestino) {
         document.getElementById('editAnuncioId').value = anuncioId;
         document.getElementById('editUrlImagen').value = urlImagen;
+        document.getElementById('editUrlDestino').value = urlDestino || '';
         document.getElementById('modalEditarAnuncio').classList.add('active');
         document.body.style.overflow = 'hidden';
     }

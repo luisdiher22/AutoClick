@@ -47,6 +47,10 @@ namespace AutoClick.Pages.Admin
         [StringLength(500, ErrorMessage = "La URL no puede exceder 500 caracteres")]
         public string UrlImagen { get; set; } = string.Empty;
 
+        [BindProperty]
+        [StringLength(500, ErrorMessage = "La URL de destino no puede exceder 500 caracteres")]
+        public string? UrlDestino { get; set; }
+
         [TempData]
         public string? MensajeExito { get; set; }
 
@@ -151,6 +155,7 @@ namespace AutoClick.Pages.Admin
                 {
                     EmpresaPublicidadId = EmpresaId,
                     UrlImagen = urlImagen,
+                    UrlDestino = string.IsNullOrWhiteSpace(UrlDestino) ? null : UrlDestino,
                     FechaPublicacion = DateTime.Now,
                     NumeroVistas = 0,
                     NumeroClics = 0,
@@ -191,7 +196,7 @@ namespace AutoClick.Pages.Admin
                     return RedirectToPage(new { id = EmpresaId });
                 }
 
-                string nuevaUrlImagen;
+                string nuevaUrlImagen = anuncio.UrlImagen; // Mantener la imagen actual por defecto
 
                 // Si se subió un archivo nuevo, reemplazar la imagen
                 if (ImagenAnuncio != null && ImagenAnuncio.Length > 0)
@@ -213,18 +218,16 @@ namespace AutoClick.Pages.Admin
                         return RedirectToPage(new { id = EmpresaId });
                     }
                 }
-                // Si no se subió archivo pero hay una URL nueva, usarla
+                // Si no se subió archivo pero hay una URL nueva diferente, usarla
                 else if (!string.IsNullOrWhiteSpace(UrlImagen) && UrlImagen != anuncio.UrlImagen)
                 {
                     nuevaUrlImagen = UrlImagen;
                 }
-                else
-                {
-                    MensajeError = "Debe proporcionar una nueva imagen o URL";
-                    return RedirectToPage(new { id = EmpresaId });
-                }
+                // Si no hay imagen nueva, mantener la actual (permitir editar solo UrlDestino)
 
                 anuncio.UrlImagen = nuevaUrlImagen;
+                // Asignar UrlDestino, incluso si es null o vacío
+                anuncio.UrlDestino = string.IsNullOrWhiteSpace(UrlDestino) ? null : UrlDestino;
                 
                 // Marcar explícitamente la entidad como modificada
                 _context.Entry(anuncio).State = EntityState.Modified;
@@ -270,6 +273,36 @@ namespace AutoClick.Pages.Admin
             catch (Exception ex)
             {
                 MensajeError = $"Error al cambiar el estado del anuncio: {ex.Message}";
+                return RedirectToPage(new { id = empresaId });
+            }
+        }
+
+        public async Task<IActionResult> OnPostCambiarEstadoCobrosAsync(int empresaId)
+        {
+            try
+            {
+                var empresa = await _context.EmpresasPublicidad
+                    .AsTracking()
+                    .FirstOrDefaultAsync(e => e.Id == empresaId);
+                    
+                if (empresa == null)
+                {
+                    MensajeError = "Empresa no encontrada";
+                    return RedirectToPage("/Admin/Publicidad");
+                }
+
+                // Alternar entre "Al día" y "Pendiente"
+                empresa.EstadoCobros = empresa.EstadoCobros == "Al día" ? "Pendiente" : "Al día";
+                
+                _context.Entry(empresa).State = EntityState.Modified;
+                await _context.SaveChangesAsync();
+
+                MensajeExito = $"Estado de cobros actualizado a: {empresa.EstadoCobros}";
+                return RedirectToPage(new { id = empresaId });
+            }
+            catch (Exception ex)
+            {
+                MensajeError = $"Error al cambiar el estado de cobros: {ex.Message}";
                 return RedirectToPage(new { id = empresaId });
             }
         }

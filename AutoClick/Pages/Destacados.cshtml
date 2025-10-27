@@ -223,11 +223,7 @@
                 </div>
 
                 <!-- Sidebar Advertisement -->
-                <div class="busqueda-sidebar-ad">
-                    <img src="https://placehold.co/138x22" alt="Logo publicitario" />
-                    <h3>SU ANUNCIO AQUÍ</h3>
-                    <p>¡Haga click en este recuadro para empezar!</p>
-                </div>
+                @await Component.InvokeAsync("CarruselPublicidad", new { formato = "cuadrado", seccion = "destacados-sidebar" })
             </aside>
 
             <!-- Main Content -->
@@ -274,17 +270,11 @@
                 </div>
 
                 <!-- Advertisement Banners -->
-                <div class="busqueda-ad-banner">
-                    <img src="https://placehold.co/143x23" alt="Logo publicitario" />
-                    <h2>SU ANUNCIO AQUÍ</h2>
-                    <p>¡Haga click en este recuadro para empezar!</p>
+                <div style="margin-bottom: 24px;">
+                    @await Component.InvokeAsync("CarruselPublicidad", new { formato = "horizontal", seccion = "destacados-banner-1" })
                 </div>
 
-                <div class="busqueda-ad-banner">
-                    <img src="https://placehold.co/143x23" alt="Logo publicitario" />
-                    <h2>SU ANUNCIO AQUÍ</h2>
-                    <p>¡Haga click en este recuadro para empezar!</p>
-                </div>
+                @await Component.InvokeAsync("CarruselPublicidad", new { formato = "horizontal", seccion = "destacados-banner-2" })
 
                 <!-- Pagination -->
                 <nav class="busqueda-pagination" aria-label="Paginación de búsqueda">

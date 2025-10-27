@@ -56,6 +56,517 @@
 
     <!-- Footer will be included in the page content -->
 
+    <!-- Modal de Solicitud de Anuncio Publicitario -->
+    <div id="modalSolicitudAnuncio" class="modal-solicitud-anuncio" style="display: none;">
+        <div class="modal-content-anuncio">
+            <button type="button" class="close-modal-anuncio" onclick="cerrarModalSolicitudAnuncio()">&times;</button>
+            <div class="modal-body-anuncio">
+                <h3 class="modal-main-title">¡Queremos saber acerca de su empresa!</h3>
+                <div class="modal-divider"></div>
+                <form id="formSolicitudAnuncio" onsubmit="enviarSolicitudAnuncio(event)">
+                    <h4 class="modal-section-title">Datos de contacto</h4>
+                    
+                    <div class="form-group-modal">
+                        <label for="nombreEmpresaAnuncio">Nombre de la empresa <span class="required">*</span></label>
+                        <input type="text" id="nombreEmpresaAnuncio" name="nombreEmpresa" required maxlength="100" placeholder="Introducir nombre">
+                    </div>
+                    <div class="form-group-modal">
+                        <label for="representanteLegalAnuncio">Representante legal (o solicitante) <span class="required">*</span></label>
+                        <input type="text" id="representanteLegalAnuncio" name="representanteLegal" required maxlength="100" placeholder="Nombre de representante o solicitante">
+                    </div>
+                    <div class="form-group-modal">
+                        <label for="industriaAnuncio">Industria <span class="required">*</span></label>
+                        <select id="industriaAnuncio" name="industria" required>
+                            <option value="">Selecciona la industria</option>
+                            <option value="Automotriz">Automotriz</option>
+                            <option value="Seguros">Seguros</option>
+                            <option value="Financiero">Financiero</option>
+                            <option value="Detailing">Detailing y Mantenimiento</option>
+                            <option value="Repuestos">Repuestos y Accesorios</option>
+                            <option value="Concesionarios">Concesionarios</option>
+                            <option value="Talleres">Talleres Mecánicos</option>
+                            <option value="Otros">Otros</option>
+                        </select>
+                    </div>
+                    <div class="form-group-modal">
+                        <label for="correoElectronicoAnuncio">Correo electrónico <span class="required">*</span></label>
+                        <input type="email" id="correoElectronicoAnuncio" name="correoElectronico" required maxlength="150" placeholder="Introduce correo electrónico">
+                    </div>
+                    <div class="form-group-modal">
+                        <label for="telefonoAnuncio">Teléfono <span class="required">*</span></label>
+                        <input type="tel" id="telefonoAnuncio" name="telefono" required placeholder="Introduce número de teléfono">
+                    </div>
+                    <div class="form-group-modal">
+                        <label for="descripcionEmpresaAnuncio">Cuéntenos sobre su empresa <span class="required">*</span></label>
+                        <textarea id="descripcionEmpresaAnuncio" name="descripcionEmpresa" required rows="3" minlength="10" maxlength="1000" placeholder="Introducir texto"></textarea>
+                    </div>
+                    <div id="mensajeResultadoAnuncio" class="mensaje-resultado-modal" style="display: none;"></div>
+                    <button type="submit" class="btn-enviar-modal" id="btnEnviarAnuncio">Enviar</button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <style>
+        .modal-solicitud-anuncio {
+            position: fixed;
+            z-index: 9999;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.7);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            animation: fadeIn 0.3s ease;
+        }
+
+        @@keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        .modal-content-anuncio {
+            background: #030D2B;
+            border: 1px solid rgba(255, 255, 255, 0.25);
+            border-radius: 4px;
+            max-width: 600px;
+            width: 90%;
+            max-height: 90vh;
+            overflow-y: auto;
+            animation: slideIn 0.3s ease;
+            position: relative;
+        }
+
+        @@keyframes slideIn {
+            from { transform: translateY(-50px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+        }
+
+        .close-modal-anuncio {
+            position: absolute;
+            right: 20px;
+            top: 20px;
+            background: none;
+            border: none;
+            font-size: 32px;
+            color: white;
+            cursor: pointer;
+            transition: color 0.3s ease;
+            line-height: 1;
+            z-index: 1;
+        }
+
+        .close-modal-anuncio:hover {
+            color: #FF931E;
+        }
+
+        .modal-body-anuncio {
+            padding: 24px;
+        }
+
+        .modal-main-title {
+            color: white;
+            font-size: 20px;
+            font-family: 'Montserrat', sans-serif;
+            font-weight: 700;
+            margin: 0 0 16px 0;
+            text-align: left;
+        }
+
+        .modal-divider {
+            width: 100%;
+            height: 0;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.25);
+            margin-bottom: 24px;
+        }
+
+        .modal-section-title {
+            color: white;
+            font-size: 20px;
+            font-family: 'Montserrat', sans-serif;
+            font-weight: 700;
+            margin: 0 0 24px 0;
+        }
+
+        .form-group-modal {
+            margin-bottom: 24px;
+        }
+
+        .form-group-modal label {
+            display: flex;
+            align-items: center;
+            gap: 4px;
+            color: white;
+            font-size: 14px;
+            font-family: 'Montserrat', sans-serif;
+            font-weight: 500;
+            margin-bottom: 8px;
+        }
+
+        .form-group-modal .required {
+            color: #FF0000;
+        }
+
+        .form-group-modal input,
+        .form-group-modal select,
+        .form-group-modal textarea {
+            width: 100%;
+            height: 44px;
+            padding: 8px 16px;
+            background: #02081C;
+            border: 0.5px solid rgba(255, 255, 255, 0.5);
+            border-radius: 4px;
+            color: white;
+            font-size: 14px;
+            font-family: 'Montserrat', sans-serif;
+            font-weight: 500;
+            transition: border-color 0.3s ease;
+            box-sizing: border-box;
+        }
+
+        .form-group-modal input:focus,
+        .form-group-modal select:focus,
+        .form-group-modal textarea:focus {
+            outline: none;
+            border-color: #FF931E;
+        }
+
+        .form-group-modal input::placeholder,
+        .form-group-modal select::placeholder,
+        .form-group-modal textarea::placeholder {
+            color: rgba(255, 255, 255, 0.5);
+        }
+
+        .form-group-modal textarea {
+            height: auto;
+            min-height: 88px;
+            resize: vertical;
+        }
+
+        .form-group-modal select {
+            appearance: none;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='6' fill='white'%3E%3Cpath d='M0 0l6 6 6-6z'/%3E%3C/svg%3E");
+            background-repeat: no-repeat;
+            background-position: right 16px center;
+            padding-right: 40px;
+        }
+
+        .mensaje-resultado-modal {
+            padding: 12px;
+            border-radius: 4px;
+            margin-bottom: 16px;
+            font-family: 'Montserrat', sans-serif;
+            font-size: 14px;
+        }
+
+        .mensaje-resultado-modal.exito {
+            background: rgba(0, 255, 0, 0.1);
+            border: 1px solid #00ff00;
+            color: #00ff00;
+        }
+
+        .mensaje-resultado-modal.error {
+            background: rgba(255, 0, 0, 0.1);
+            border: 1px solid #ff0000;
+            color: #ff0000;
+        }
+
+        .btn-enviar-modal {
+            width: 100%;
+            height: 44px;
+            padding: 16px;
+            background: white;
+            border: none;
+            border-radius: 4px;
+            color: #06174D;
+            font-size: 16px;
+            font-family: 'Montserrat', sans-serif;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .btn-enviar-modal:hover {
+            background: #f0f0f0;
+            transform: translateY(-2px);
+        }
+
+        .btn-enviar-modal:disabled {
+            background: #ccc;
+            cursor: not-allowed;
+        }
+    </style>
+
+    <script>
+        function abrirModalSolicitudAnuncio() {
+            document.getElementById('modalSolicitudAnuncio').style.display = 'flex';
+            document.body.style.overflow = 'hidden';
+            
+            // Inicializar validación y formato en todos los campos
+            const form = document.getElementById('formSolicitudAnuncio');
+            const inputs = form.querySelectorAll('input, select, textarea');
+            
+            inputs.forEach(input => {
+                if (!input.dataset.initialized) {
+                    // Validación en tiempo real al escribir
+                    input.addEventListener('input', function() {
+                        limpiarErrorCampo(this);
+                        validarCampoModal(this);
+                    });
+                    
+                    // Validación al salir del campo
+                    input.addEventListener('blur', function() {
+                        validarCampoModal(this);
+                    });
+                    
+                    input.dataset.initialized = 'true';
+                }
+            });
+            
+            // Formato especial para teléfono
+            const telefonoInput = document.getElementById('telefonoAnuncio');
+            if (telefonoInput && !telefonoInput.dataset.formatInitialized) {
+                telefonoInput.addEventListener('input', formatearTelefono);
+                telefonoInput.dataset.formatInitialized = 'true';
+            }
+        }
+
+        function cerrarModalSolicitudAnuncio() {
+            document.getElementById('modalSolicitudAnuncio').style.display = 'none';
+            document.body.style.overflow = 'auto';
+            const form = document.getElementById('formSolicitudAnuncio');
+            form.reset();
+            
+            // Limpiar todos los estados de validación
+            const inputs = form.querySelectorAll('input, select, textarea');
+            inputs.forEach(input => limpiarErrorCampo(input));
+            
+            document.getElementById('mensajeResultadoAnuncio').style.display = 'none';
+        }
+
+        function formatearTelefono(e) {
+            let value = e.target.value.replace(/\D/g, ''); // Eliminar todo excepto números
+            
+            if (value.length > 8) {
+                value = value.substring(0, 8);
+            }
+            
+            if (value.length > 4) {
+                value = value.substring(0, 4) + '-' + value.substring(4);
+            }
+            
+            e.target.value = value;
+        }
+
+        function validarCampoModal(campo) {
+            const valor = campo.value.trim();
+            const nombre = campo.name;
+            let esValido = true;
+            
+            // Limpiar errores previos
+            limpiarErrorCampo(campo);
+            
+            // Validaciones por campo
+            switch(nombre) {
+                case 'nombreEmpresa':
+                    if (!valor) {
+                        esValido = false;
+                    } else if (valor.length < 2 || valor.length > 100) {
+                        esValido = false;
+                    }
+                    break;
+                    
+                case 'representanteLegal':
+                    if (!valor) {
+                        esValido = false;
+                    } else if (valor.length < 2 || valor.length > 100) {
+                        esValido = false;
+                    }
+                    break;
+                    
+                case 'industria':
+                    if (!valor || valor === '') {
+                        esValido = false;
+                    }
+                    break;
+                    
+                case 'correoElectronico':
+                    const emailRegex = /^[^\s@@]+@@[^\s@@]+\.[^\s@@]+$/;
+                    if (!valor) {
+                        esValido = false;
+                    } else if (!emailRegex.test(valor)) {
+                        esValido = false;
+                    } else if (valor.length > 150) {
+                        esValido = false;
+                    }
+                    break;
+                    
+                case 'telefono':
+                    const telefonoLimpio = valor.replace(/\D/g, '');
+                    if (!valor) {
+                        esValido = false;
+                    } else if (telefonoLimpio.length !== 8) {
+                        esValido = false;
+                    }
+                    break;
+                    
+                case 'descripcionEmpresa':
+                    if (!valor) {
+                        esValido = false;
+                    } else if (valor.length < 10 || valor.length > 1000) {
+                        esValido = false;
+                    }
+                    break;
+            }
+            
+            // Aplicar estilo según validación
+            if (valor) {
+                if (esValido) {
+                    campo.style.borderColor = 'rgba(0, 255, 0, 0.5)';
+                } else {
+                    campo.style.borderColor = '#ff0000';
+                }
+            }
+            
+            return esValido;
+        }
+
+        function limpiarErrorCampo(campo) {
+            campo.style.borderColor = 'rgba(255, 255, 255, 0.5)';
+        }
+
+        function validarFormularioAnuncio(formData) {
+            const errores = [];
+            
+            // Validar nombre empresa
+            const nombreEmpresa = formData.get('nombreEmpresa');
+            if (!nombreEmpresa || nombreEmpresa.trim().length === 0) {
+                errores.push('El nombre de la empresa es requerido');
+            } else if (nombreEmpresa.length > 100) {
+                errores.push('El nombre de la empresa no puede exceder 100 caracteres');
+            }
+            
+            // Validar representante legal
+            const representante = formData.get('representanteLegal');
+            if (!representante || representante.trim().length === 0) {
+                errores.push('El nombre del representante legal es requerido');
+            } else if (representante.length > 100) {
+                errores.push('El nombre del representante no puede exceder 100 caracteres');
+            }
+            
+            // Validar industria
+            const industria = formData.get('industria');
+            if (!industria || industria === '') {
+                errores.push('Debe seleccionar una industria');
+            }
+            
+            // Validar correo electrónico
+            const email = formData.get('correoElectronico');
+            const emailRegex = /^[^\s@@]+@@[^\s@@]+\.[^\s@@]+$/;
+            if (!email || email.trim().length === 0) {
+                errores.push('El correo electrónico es requerido');
+            } else if (!emailRegex.test(email)) {
+                errores.push('Ingrese un correo electrónico válido');
+            } else if (email.length > 150) {
+                errores.push('El correo electrónico no puede exceder 150 caracteres');
+            }
+            
+            // Validar teléfono (formato XXXX-XXXX)
+            const telefono = formData.get('telefono');
+            const telefonoLimpio = telefono.replace(/\D/g, '');
+            if (!telefono || telefono.trim().length === 0) {
+                errores.push('El teléfono es requerido');
+            } else if (telefonoLimpio.length !== 8) {
+                errores.push('El teléfono debe tener 8 dígitos (formato: XXXX-XXXX)');
+            }
+            
+            // Validar descripción
+            const descripcion = formData.get('descripcionEmpresa');
+            if (!descripcion || descripcion.trim().length === 0) {
+                errores.push('La descripción de la empresa es requerida');
+            } else if (descripcion.trim().length < 10) {
+                errores.push('La descripción debe tener al menos 10 caracteres');
+            } else if (descripcion.length > 1000) {
+                errores.push('La descripción no puede exceder 1000 caracteres');
+            }
+            
+            return errores;
+        }
+
+        async function enviarSolicitudAnuncio(event) {
+            event.preventDefault();
+            
+            const btn = document.getElementById('btnEnviarAnuncio');
+            const mensajeDiv = document.getElementById('mensajeResultadoAnuncio');
+            const formData = new FormData(event.target);
+            
+            // Validar formulario
+            const errores = validarFormularioAnuncio(formData);
+            if (errores.length > 0) {
+                mensajeDiv.className = 'mensaje-resultado-modal error';
+                mensajeDiv.textContent = errores.join('. ');
+                mensajeDiv.style.display = 'block';
+                return;
+            }
+            
+            btn.disabled = true;
+            btn.textContent = 'Enviando...';
+            mensajeDiv.style.display = 'none';
+            
+            const data = {
+                nombreEmpresa: formData.get('nombreEmpresa'),
+                representanteLegal: formData.get('representanteLegal'),
+                industria: formData.get('industria'),
+                correoElectronico: formData.get('correoElectronico'),
+                telefono: formData.get('telefono'),
+                descripcionEmpresa: formData.get('descripcionEmpresa')
+            };
+
+            try {
+                const response = await fetch('/api/publicidad/solicitar-anuncio', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(data)
+                });
+
+                const result = await response.json();
+
+                if (response.ok) {
+                    mensajeDiv.className = 'mensaje-resultado-modal exito';
+                    mensajeDiv.textContent = '¡Gracias por su interés! Hemos recibido su solicitud y nos pondremos en contacto con usted pronto para discutir las oportunidades publicitarias en AutoClick.cr.';
+                    mensajeDiv.style.display = 'block';
+                    
+                    event.target.reset();
+                    
+                    setTimeout(() => {
+                        cerrarModalSolicitudAnuncio();
+                    }, 3000);
+                } else {
+                    throw new Error(result.mensaje || 'Error al procesar la solicitud');
+                }
+            } catch (error) {
+                mensajeDiv.className = 'mensaje-resultado-modal error';
+                mensajeDiv.textContent = 'Ocurrió un error al enviar la solicitud. Por favor, intente nuevamente o contáctenos directamente.';
+                mensajeDiv.style.display = 'block';
+            } finally {
+                btn.disabled = false;
+                btn.textContent = 'Enviar';
+            }
+        }
+
+        // Cerrar modal al hacer click fuera de él
+        document.addEventListener('click', function(event) {
+            const modal = document.getElementById('modalSolicitudAnuncio');
+            if (event.target === modal) {
+                cerrarModalSolicitudAnuncio();
+            }
+        });
+    </script>
+
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     <script src="~/js/site.js" asp-append-version="true"></script>

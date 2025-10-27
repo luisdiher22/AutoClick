@@ -12,7 +12,7 @@ namespace AutoClick.Services
         /// <summary>
         /// Envía una notificación por email a los administradores cuando se recibe una solicitud de empresa
         /// </summary>
-        Task<bool> EnviarNotificacionSolicitudEmpresaAsync(SolicitudEmpresa solicitud, List<string> correosAdmins);
+        Task<bool> EnviarNotificacionSolicitudEmpresaAsync(SolicitudEmpresa solicitud, List<string> correosAdmins, bool esEspacioPublicitario = false);
     }
 
     /// <summary>
@@ -29,7 +29,7 @@ namespace AutoClick.Services
             _logger = logger;
         }
 
-        public async Task<bool> EnviarNotificacionSolicitudEmpresaAsync(SolicitudEmpresa solicitud, List<string> correosAdmins)
+        public async Task<bool> EnviarNotificacionSolicitudEmpresaAsync(SolicitudEmpresa solicitud, List<string> correosAdmins, bool esEspacioPublicitario = false)
         {
             try
             {
@@ -61,11 +61,15 @@ namespace AutoClick.Services
                     client.EnableSsl = true;
                     client.Credentials = new NetworkCredential(smtpUser, smtpPass);
 
+                    var subject = esEspacioPublicitario 
+                        ? $"Solicitud de Espacio Publicitario - {solicitud.NombreEmpresa}"
+                        : $"Nueva Solicitud de Empresa - {solicitud.NombreEmpresa}";
+
                     var mailMessage = new MailMessage
                     {
                         From = new MailAddress(fromEmail!, fromName),
-                        Subject = $"Nueva Solicitud de Empresa - {solicitud.NombreEmpresa}",
-                        Body = GenerarCuerpoEmail(solicitud),
+                        Subject = subject,
+                        Body = GenerarCuerpoEmail(solicitud, esEspacioPublicitario),
                         IsBodyHtml = true
                     };
 
@@ -98,8 +102,16 @@ namespace AutoClick.Services
             }
         }
 
-        private string GenerarCuerpoEmail(SolicitudEmpresa solicitud)
+        private string GenerarCuerpoEmail(SolicitudEmpresa solicitud, bool esEspacioPublicitario = false)
         {
+            var tituloEncabezado = esEspacioPublicitario 
+                ? "🎯 Solicitud de Espacio Publicitario"
+                : "🚗 Nueva Solicitud de Empresa";
+
+            var mensajeIntro = esEspacioPublicitario
+                ? "Se ha recibido una nueva solicitud de espacio publicitario en AutoClick.cr:"
+                : "Se ha recibido una nueva solicitud de empresa interesada en anunciarse en AutoClick.cr:";
+
             return $@"
 <!DOCTYPE html>
 <html>
@@ -120,11 +132,11 @@ namespace AutoClick.Services
 <body>
     <div class='container'>
         <div class='header'>
-            <h1>🚗 Nueva Solicitud de Empresa</h1>
+            <h1>{tituloEncabezado}</h1>
             <p style='color: white; margin: 10px 0 0 0;'>AutoClick.cr</p>
         </div>
         <div class='content'>
-            <p style='font-size: 16px; color: #02081C;'>Se ha recibido una nueva solicitud de empresa interesada en anunciarse en AutoClick.cr:</p>
+            <p style='font-size: 16px; color: #02081C;'>{mensajeIntro}</p>
             
             <div class='field'>
                 <div class='field-label'>🏢 Nombre de la Empresa:</div>

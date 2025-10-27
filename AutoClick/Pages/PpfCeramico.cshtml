@@ -308,11 +308,7 @@
         </div>
         
         <!-- Advertisement Banner -->
-        <div class="ad-banner">
-            <img src="https://placehold.co/143x23" alt="Logo" class="ad-logo" />
-            <h3 class="ad-title">SU ANUNCIO AQUÍ</h3>
-            <p class="ad-subtitle">¡Haga click en este recuadro para empezar!</p>
-        </div>
+        @await Component.InvokeAsync("CarruselPublicidad", new { formato = "cuadrado", seccion = "ppf-ceramico-footer" })
     </div>
 </section>
 

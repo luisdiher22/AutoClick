@@ -57,11 +57,7 @@
         <!-- Advertisement Slot (as shown in Figma) -->
         @if (Model.SavedAutos.Count >= 7)
         {
-            <div class="guardados-ad-slot">
-                <img src="https://placehold.co/135x21" alt="Logo publicitario" class="ad-logo" />
-                <h3 class="ad-title">SU ANUNCIO AQUÍ</h3>
-                <p class="ad-subtitle">¡Haga click en este recuadro para empezar!</p>
-            </div>
+            @await Component.InvokeAsync("CarruselPublicidad", new { formato = "cuadrado", seccion = "guardados-grid" })
         }
     </div>
 
@@ -109,11 +105,7 @@
     </nav>
 
     <!-- Large Advertisement Banner -->
-    <div class="guardados-large-ad">
-        <img src="https://placehold.co/168x27" alt="Logo publicitario" class="large-ad-logo" />
-        <h2 class="large-ad-title">SU ANUNCIO AQUÍ</h2>
-        <p class="large-ad-subtitle">¡Haga click en este recuadro para empezar!</p>
-    </div>
+    @await Component.InvokeAsync("CarruselPublicidad", new { formato = "horizontal", seccion = "guardados-footer" })
 </div>
 
 <!-- Footer -->

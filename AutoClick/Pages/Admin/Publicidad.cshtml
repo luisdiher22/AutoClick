@@ -468,14 +468,12 @@ body {
                                         </a>
                                     </td>
                                     <td>
-                                        <form method="post" asp-page-handler="EliminarEmpresa" asp-route-id="@empresa.Id" style="display: inline;" onsubmit="return confirm('¿Está seguro de eliminar esta empresa y todos sus anuncios?');">
-                                            <button type="submit" class="delete-icon-btn" title="Eliminar empresa">
-                                                <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                                    <path d="M2 4H14M12.6667 4V13.3333C12.6667 14 12 14.6667 11.3333 14.6667H4.66667C4 14.6667 3.33333 14 3.33333 13.3333V4M5.33333 4V2.66667C5.33333 2 6 1.33333 6.66667 1.33333H9.33333C10 1.33333 10.6667 2 10.6667 2.66667V4" stroke="#ff453a" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-                                                    <path d="M6.66667 7.33333V11.3333M9.33333 7.33333V11.3333" stroke="#ff453a" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-                                                </svg>
-                                            </button>
-                                        </form>
+                                        <button type="button" class="delete-icon-btn" title="Eliminar empresa" onclick="abrirModalEliminar(@empresa.Id)">
+                                            <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                <path d="M2 4H14M12.6667 4V13.3333C12.6667 14 12 14.6667 11.3333 14.6667H4.66667C4 14.6667 3.33333 14 3.33333 13.3333V4M5.33333 4V2.66667C5.33333 2 6 1.33333 6.66667 1.33333H9.33333C10 1.33333 10.6667 2 10.6667 2.66667V4" stroke="#ff453a" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                                                <path d="M6.66667 7.33333V11.3333M9.33333 7.33333V11.3333" stroke="#ff453a" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                                            </svg>
+                                        </button>
                                     </td>
                                 </tr>
                             }
@@ -624,8 +622,65 @@ body {
     </div>
 </div>
 
+<!-- Modal de Confirmación para Eliminar Empresa -->
+<div id="modalConfirmarEliminar" class="modal-detalles-overlay" onclick="cerrarModalEliminar(event)">
+    <div class="modal-detalles-content" onclick="event.stopPropagation()" style="max-width: 500px;">
+        <div class="modal-detalles-header">
+            <h2 class="modal-detalles-title">⚠️ Confirmar eliminación</h2>
+            <button type="button" class="modal-detalles-close" onclick="cerrarModalEliminar()">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+                    <path d="M18 6L6 18M6 6L18 18" stroke="white" stroke-width="2" stroke-linecap="round"/>
+                </svg>
+            </button>
+        </div>
+
+        <form method="post" asp-page-handler="EliminarEmpresa" id="formEliminarEmpresa">
+            @Html.AntiForgeryToken()
+            <input type="hidden" id="empresaIdEliminar" name="id" value="" />
+            
+            <div class="modal-detalles-body">
+                <p style="color: white; font-size: 16px; line-height: 1.5; margin: 0 0 16px 0;">
+                    ¿Está seguro de que desea <strong style="color: #ff453a;">eliminar esta empresa y TODOS sus anuncios</strong>?
+                </p>
+                <p style="color: rgba(255, 255, 255, 0.7); font-size: 14px; line-height: 1.5; margin: 0;">
+                    <strong>Esta acción es permanente y no se puede deshacer.</strong> Se eliminarán todos los anuncios asociados (activos e inactivos) y toda la información de la empresa.
+                </p>
+            </div>
+
+            <div class="modal-detalles-footer">
+                <button type="button" class="btn-modal-cerrar" onclick="cerrarModalEliminar()">
+                    Cancelar
+                </button>
+                <button type="submit" class="btn-modal-submit" style="background: #ff453a;">
+                    Sí, eliminar empresa
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
+
 @section Scripts {
 <script>
+let empresaIdAEliminar = null;
+
+function abrirModalEliminar(empresaId) {
+    empresaIdAEliminar = empresaId;
+    document.getElementById('empresaIdEliminar').value = empresaId;
+    document.getElementById('modalConfirmarEliminar').classList.add('active');
+    document.body.style.overflow = 'hidden';
+}
+
+function cerrarModalEliminar(event) {
+    // Si se pasó un event y el click no fue en el overlay, no hacer nada
+    if (event && event.target.id !== 'modalConfirmarEliminar') {
+        return;
+    }
+    
+    document.getElementById('modalConfirmarEliminar').classList.remove('active');
+    document.body.style.overflow = '';
+    empresaIdAEliminar = null;
+}
+
 function openModal() {
     const modal = document.getElementById('modalAgregarEmpresa');
     modal.classList.add('active');
@@ -645,9 +700,17 @@ function cerrarModalSiClickFuera(event) {
 }
 
 document.addEventListener('keydown', function(event) {
-    const modal = document.getElementById('modalAgregarEmpresa');
-    if (event.key === 'Escape' && modal.classList.contains('active')) {
-        closeModal();
+    if (event.key === 'Escape') {
+        const modalAgregar = document.getElementById('modalAgregarEmpresa');
+        const modalEliminar = document.getElementById('modalConfirmarEliminar');
+        
+        if (modalAgregar && modalAgregar.classList.contains('active')) {
+            closeModal();
+        }
+        
+        if (modalEliminar && modalEliminar.classList.contains('active')) {
+            cerrarModalEliminar();
+        }
     }
 });
 </script>

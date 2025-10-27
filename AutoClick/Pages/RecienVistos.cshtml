@@ -99,21 +99,17 @@
         <!-- Advertisement Slots -->
         @if (totalCars >= 3)
         {
-            <!-- First Advertisement (after 3rd car, in position where 4th car would be) -->
-            <div data-property-1="Default" style="width: 393px; height: 281.27px; padding: 33.84px; left: 444.50px; top: 488px; position: absolute; background: rgba(255, 255, 255, 0.05); overflow: hidden; border-radius: 4.37px; flex-direction: column; justify-content: center; align-items: center; gap: 55.40px; display: inline-flex; cursor: pointer;" onclick="window.location.href='@Url.Page("/AnunciarEmpresa")'">
-                <img style="width: 135.25px; height: 21.46px" src="https://placehold.co/135x21" />
-                <div style="text-box-trim: trim-both; text-box-edge: cap alphabetic; text-align: center; color: white; font-size: 24px; font-family: Montserrat; font-weight: 700; word-wrap: break-word; text-shadow: 0px 2px 2px rgba(0, 0, 0, 0.50)">SU ANUNCIO AQUÃ</div>
-                <div style="width: 269.51px; text-box-trim: trim-both; text-box-edge: cap alphabetic; text-align: center; color: white; font-size: 24px; font-family: Montserrat; font-weight: 500; word-wrap: break-word; text-shadow: 0px 2px 2px rgba(0, 0, 0, 0.50)">Â¡Haga click en este recuadro para empezar!</div>
+            <!-- First Advertisement (after 3rd car, in position where 4th car would be) - Carousel Cuadrado -->
+            <div style="width: 393px; height: 281.27px; left: 444.50px; top: 488px; position: absolute;">
+                @await Component.InvokeAsync("CarruselPublicidad", new { formato = "cuadrado", seccion = "recien-vistos-primero" })
             </div>
         }
 
         @if (totalCars >= 12)
         {
-            <!-- Second Advertisement (after 12 cars) -->
-            <div data-property-1="Default" style="width: 1010px; height: 196px; padding: 34.53px; left: 135px; top: @(169 + ((totalCars / 3 + 1) * 312))px; position: absolute; background: rgba(255, 255, 255, 0.05); overflow: hidden; border-radius: 4.46px; flex-direction: column; justify-content: center; align-items: center; gap: 24.53px; display: inline-flex; cursor: pointer;" onclick="window.location.href='@Url.Page("/AnunciarEmpresa")'">
-                <img style="width: 168.35px; height: 26.72px" src="https://placehold.co/168x27" />
-                <div style="align-self: stretch; text-box-trim: trim-both; text-box-edge: cap alphabetic; text-align: center; color: white; font-size: 34.53px; font-family: Montserrat; font-weight: 700; word-wrap: break-word; text-shadow: 0px 4px 4px rgba(0, 0, 0, 0.50)">SU ANUNCIO AQUÃ</div>
-                <div style="align-self: stretch; text-box-trim: trim-both; text-box-edge: cap alphabetic; text-align: center; color: white; font-size: 23.02px; font-family: Montserrat; font-weight: 500; word-wrap: break-word; text-shadow: 0px 4px 4px rgba(0, 0, 0, 0.50)">Â¡Haga click en este recuadro para empezar!</div>
+            <!-- Second Advertisement (after 12 cars) - Carousel Horizontal -->
+            <div style="width: 1010px; height: 196px; left: 135px; top: @(169 + ((totalCars / 3 + 1) * 312))px; position: absolute;">
+                @await Component.InvokeAsync("CarruselPublicidad", new { formato = "horizontal", seccion = "recien-vistos-segundo" })
             </div>
         }
 
@@ -172,6 +168,7 @@
     <!-- Footer -->
     <partial name="_Footer" />
 </div>
+
 
 
 

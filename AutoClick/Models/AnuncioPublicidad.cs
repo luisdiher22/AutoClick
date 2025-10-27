@@ -16,6 +16,9 @@ namespace AutoClick.Models
         [StringLength(500)]
         public string UrlImagen { get; set; } = string.Empty;
 
+        [StringLength(500)]
+        public string? UrlDestino { get; set; }
+
         [Required]
         public DateTime FechaPublicacion { get; set; }
 
