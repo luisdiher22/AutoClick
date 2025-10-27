@@ -100,11 +100,11 @@
                             <div class="spec-column">
                                 <div class="spec-item">
                                     <h3>Marca</h3>
-                                    <p>@Model.Vehicle.Marca</p>
+                                    <p>@(string.IsNullOrEmpty(Model.Vehicle.Marca) ? "" : char.ToUpper(Model.Vehicle.Marca[0]) + Model.Vehicle.Marca.Substring(1).ToLower())</p>
                                 </div>
                                 <div class="spec-item">
                                     <h3>Modelo</h3>
-                                    <p>@Model.Vehicle.Modelo</p>
+                                    <p>@(string.IsNullOrEmpty(Model.Vehicle.Modelo) ? "" : char.ToUpper(Model.Vehicle.Modelo[0]) + Model.Vehicle.Modelo.Substring(1).ToLower())</p>
                                 </div>
                                 <div class="spec-item">
                                     <h3>Año</h3>
@@ -120,7 +120,7 @@
                                 </div>
                                 <div class="spec-item">
                                     <h3>Carrocería</h3>
-                                    <p>@Model.Vehicle.Carroceria</p>
+                                    <p>@(string.IsNullOrEmpty(Model.Vehicle.Carroceria) ? "" : char.ToUpper(Model.Vehicle.Carroceria[0]) + Model.Vehicle.Carroceria.Substring(1).ToLower())</p>
                                 </div>
                                 <div class="spec-item">
                                     <h3>Número de puertas</h3>
@@ -136,11 +136,11 @@
                                 </div>
                                 <div class="spec-item">
                                     <h3>Propulsión</h3>
-                                    <p>@Model.Vehicle.Combustible</p>
+                                    <p>@(string.IsNullOrEmpty(Model.Vehicle.Combustible) ? "" : char.ToUpper(Model.Vehicle.Combustible[0]) + Model.Vehicle.Combustible.Substring(1).ToLower())</p>
                                 </div>
                                 <div class="spec-item">
                                     <h3>Transmisión</h3>
-                                    <p>@Model.Vehicle.Transmision</p>
+                                    <p>@(string.IsNullOrEmpty(Model.Vehicle.Transmision) ? "" : char.ToUpper(Model.Vehicle.Transmision[0]) + Model.Vehicle.Transmision.Substring(1).ToLower())</p>
                                 </div>
                             </div>
                         </div>
