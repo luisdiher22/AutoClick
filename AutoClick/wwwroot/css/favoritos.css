@@ -4,8 +4,8 @@
     position: absolute;
     bottom: 16px;  /* 16px desde el bottom del tile */
     right: 12px;   /* 12px desde el derecho del tile */
-    width: 20px;
-    height: 17px;
+    width: 40px;   /* Doble del tamaño original (20px * 2) */
+    height: 34px;  /* Doble del tamaño original (17px * 2) */
     background: transparent;
     border: none;
     display: flex;
@@ -13,7 +13,7 @@
     justify-content: center;
     cursor: pointer;
     transition: all 0.2s ease;
-    z-index: 10;
+    z-index: 1000; /* Z-index muy alto para estar por encima del contenido */
     padding: 0;
     pointer-events: auto; /* Asegurar que el botón capture los clicks */
 }
@@ -28,13 +28,20 @@
 }
 
 .favorite-btn img {
-    width: 20px;
-    height: 17px;
+    width: 40px;   /* Doble del tamaño original (20px * 2) */
+    height: 34px;  /* Doble del tamaño original (17px * 2) */
     display: block;
     transition: transform 0.2s ease;
 }
 
+.favorite-btn.is-favorite {
+    width: 20px;   /* Tamaño original cuando está activo */
+    height: 17px;
+}
+
 .favorite-btn.is-favorite img {
+    width: 20px;   /* Tamaño original cuando está activo */
+    height: 17px;
     animation: heartBeat 0.3s ease-in-out;
 }
 
@@ -55,14 +62,24 @@
 /* Responsive para móviles */
 @media (max-width: 768px) {
     .favorite-btn {
-        width: 18px;
-        height: 15px;
+        width: 36px;   /* Doble del tamaño original (18px * 2) */
+        height: 30px;  /* Doble del tamaño original (15px * 2) */
         bottom: 32px;
         right: 1px;
     }
     
     .favorite-btn img {
-        width: 18px;
+        width: 36px;   /* Doble del tamaño original (18px * 2) */
+        height: 30px;  /* Doble del tamaño original (15px * 2) */
+    }
+    
+    .favorite-btn.is-favorite {
+        width: 18px;   /* Tamaño original cuando está activo */
+        height: 15px;
+    }
+    
+    .favorite-btn.is-favorite img {
+        width: 18px;   /* Tamaño original cuando está activo */
         height: 15px;
     }
 }

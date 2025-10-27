@@ -76,7 +76,8 @@
                     data-auto-id="@auto.Id" 
                     data-email-usuario="@(User.Identity?.IsAuthenticated == true ? User.FindFirst(System.Security.Claims.ClaimTypes.Email)?.Value ?? User.FindFirst("Email")?.Value : "")"
                     title="Agregar a favoritos"
-                    type="button">
+                    type="button"
+                    onclick="event.stopPropagation(); event.preventDefault(); return false;">
                 <img src="https://autoclickstorage.blob.core.windows.net/uploads/Component%20183.png" 
                      alt="Favorito" />
             </button>
@@ -131,7 +132,8 @@
                     data-auto-id="@auto.Id" 
                     data-email-usuario="@(User.Identity?.IsAuthenticated == true ? User.FindFirst(System.Security.Claims.ClaimTypes.Email)?.Value ?? User.FindFirst("Email")?.Value : "")"
                     title="Agregar a favoritos"
-                    type="button">
+                    type="button"
+                    onclick="event.stopPropagation(); event.preventDefault(); return false;">
                 <img src="https://autoclickstorage.blob.core.windows.net/uploads/Component%20183.png" 
                      alt="Favorito" />
             </button>
@@ -186,7 +188,8 @@
                     data-auto-id="@auto.Id" 
                     data-email-usuario="@(User.Identity?.IsAuthenticated == true ? User.FindFirst(System.Security.Claims.ClaimTypes.Email)?.Value ?? User.FindFirst("Email")?.Value : "")"
                     title="Agregar a favoritos"
-                    type="button">
+                    type="button"
+                    onclick="event.stopPropagation(); event.preventDefault(); return false;">
                 <img src="https://autoclickstorage.blob.core.windows.net/uploads/Component%20183.png" 
                      alt="Favorito" />
             </button>
@@ -241,7 +244,8 @@
                     data-auto-id="@auto.Id" 
                     data-email-usuario="@(User.Identity?.IsAuthenticated == true ? User.FindFirst(System.Security.Claims.ClaimTypes.Email)?.Value ?? User.FindFirst("Email")?.Value : "")"
                     title="Agregar a favoritos"
-                    type="button">
+                    type="button"
+                    onclick="event.stopPropagation(); event.preventDefault(); return false;">
                 <img src="https://autoclickstorage.blob.core.windows.net/uploads/Component%20183.png" 
                      alt="Favorito" />
             </button>

@@ -43,13 +43,12 @@ namespace AutoClick.Services
                 
                 foreach (var blob in blobs)
                 {
-                    var sasUrl = await _storageService.GenerateSasUrlAsync(_containerName, blob, TimeSpan.FromHours(1));
-                    if (!string.IsNullOrEmpty(sasUrl))
-                    {
-                        urls.Add(sasUrl);
-                    }
+                    // Usar URL pública directa (sin SAS) para contenedores públicos
+                    var publicUrl = $"{_baseUrl}/{blob}";
+                    urls.Add(publicUrl);
                 }
                 
+                _logger.LogInformation("Retrieved {Count} banderin URLs", urls.Count);
                 return urls;
             }
             catch (Exception ex)
@@ -69,11 +68,10 @@ namespace AutoClick.Services
                 var exists = await _storageService.FileExistsAsync(_containerName, banderineName);
                 if (exists)
                 {
-                    var sasUrl = await _storageService.GenerateSasUrlAsync(_containerName, banderineName, TimeSpan.FromHours(1));
-                    if (!string.IsNullOrEmpty(sasUrl))
-                    {
-                        return sasUrl;
-                    }
+                    // Usar URL pública directa (sin SAS) para contenedores públicos
+                    var publicUrl = $"{_baseUrl}/{banderineName}";
+                    _logger.LogInformation("Using public URL for banderin {BanderinName}: {Url}", banderineName, publicUrl);
+                    return publicUrl;
                 }
                 
                 // Fallback a archivo local
@@ -98,16 +96,17 @@ namespace AutoClick.Services
             try
             {
                 string logosContainer = "logos";
+                var storageAccount = _configuration["AzureStorage:AccountName"];
+                var logosBaseUrl = $"https://{storageAccount}.blob.core.windows.net/{logosContainer}";
                 
                 // Verificar si existe en blob storage (contenedor de logos)
                 var exists = await _storageService.FileExistsAsync(logosContainer, logoName);
                 if (exists)
                 {
-                    var sasUrl = await _storageService.GenerateSasUrlAsync(logosContainer, logoName, TimeSpan.FromHours(1));
-                    if (!string.IsNullOrEmpty(sasUrl))
-                    {
-                        return sasUrl;
-                    }
+                    // Usar URL pública directa (sin SAS) para contenedores públicos
+                    var publicUrl = $"{logosBaseUrl}/{logoName}";
+                    _logger.LogInformation("Using public URL for logo {LogoName}: {Url}", logoName, publicUrl);
+                    return publicUrl;
                 }
                 
                 _logger.LogWarning("Logo not found in blob storage: {LogoName}", logoName);

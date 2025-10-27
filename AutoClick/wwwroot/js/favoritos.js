@@ -104,15 +104,20 @@ function showFavoriteNotification(isFavorite) {
 document.addEventListener('click', async function(e) {
     const favoriteBtn = e.target.closest('.favorite-btn');
     if (favoriteBtn) {
+        // Prevenir cualquier comportamiento por defecto y propagación
         e.preventDefault();
-        e.stopPropagation(); // Evitar que se active el click del tile
+        e.stopPropagation();
+        e.stopImmediatePropagation();
         
         const autoId = parseInt(favoriteBtn.getAttribute('data-auto-id'));
         const emailUsuario = favoriteBtn.getAttribute('data-email-usuario') || null;
         
         await toggleFavorito(autoId, emailUsuario);
+        
+        // Retornar false para mayor compatibilidad
+        return false;
     }
-});
+}, true); // Usar captura en lugar de bubbling
 
 // Inicializar cuando el DOM esté listo
 document.addEventListener('DOMContentLoaded', function() {
