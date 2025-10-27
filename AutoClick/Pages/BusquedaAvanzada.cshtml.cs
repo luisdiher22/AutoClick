@@ -112,7 +112,7 @@ namespace AutoClick.Pages
             // Crear consulta base optimizada con AsNoTracking desde el inicio
             var query = _context.Autos
                 .AsNoTracking()
-                .Where(a => a.Activo); // Solo autos activos
+                .Where(a => a.Activo && a.PlanVisibilidad > 0); // Solo autos activos y aprobados
 
             // Build applied filters list for UI
             BuildAppliedFiltersList();
@@ -328,7 +328,7 @@ namespace AutoClick.Pages
                         // Hacer UNA sola consulta optimizada para obtener todos los datos necesarios
                         var autosData = await _context.Autos
                             .AsNoTracking()
-                            .Where(a => a.Activo) // Solo autos activos
+                            .Where(a => a.Activo && a.PlanVisibilidad > 0) // Solo autos activos y aprobados
                             .Select(a => new {
                                 a.Provincia,
                                 a.Canton,

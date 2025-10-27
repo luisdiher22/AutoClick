@@ -86,9 +86,9 @@ public class IndexModel : PageModel
 
                 if (favoritosIds.Any())
                 {
-                    // Cargar los autos favoritos
+                    // Cargar los autos favoritos (excluir pendientes de aprobación)
                     AutosGuardados = await _context.Autos
-                        .Where(a => favoritosIds.Contains(a.Id) && a.Activo)
+                        .Where(a => favoritosIds.Contains(a.Id) && a.Activo && a.PlanVisibilidad > 0)
                         .OrderByDescending(a => a.FechaCreacion)
                         .Take(3)
                         .ToListAsync();

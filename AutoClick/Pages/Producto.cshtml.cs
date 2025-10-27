@@ -58,10 +58,14 @@ namespace AutoClick.Pages
                 return NotFound();
             }
 
+            // Verificar si el usuario es admin
+            var isAdmin = User.IsInRole("Admin") || User.HasClaim("Role", "Admin");
+
             // Intentar cargar el auto real desde la base de datos
+            // Si es admin, permitir ver anuncios pendientes de aprobación
             Vehicle = await _context.Autos
                 .Include(a => a.Propietario)
-                .FirstOrDefaultAsync(a => a.Id == Id && a.Activo);
+                .FirstOrDefaultAsync(a => a.Id == Id && a.Activo && (isAdmin || a.PlanVisibilidad > 0));
             
             // Si no se encuentra, usar datos de muestra como fallback
             if (Vehicle == null)
@@ -84,7 +88,7 @@ namespace AutoClick.Pages
             CalculateMonthlyPayment();
             await LoadSimilarAutos();
             
-            // Cargar an�lisis de valor de mercado
+            // Cargar análisis de valor de mercado
             if (Vehicle != null)
             {
                 ValorMercado = await _ventasExternasService.AnalizarValorMercado(Vehicle);
@@ -145,10 +149,10 @@ namespace AutoClick.Pages
                 return;
             }
 
-            // Buscar autos similares en la base de datos
+            // Buscar autos similares en la base de datos (solo aprobados)
             // Primero obtenemos los candidatos sin ordenamiento complejo
             var candidates = await _context.Autos
-                .Where(a => a.Id != Id && a.Activo)
+                .Where(a => a.Id != Id && a.Activo && a.PlanVisibilidad > 0) // Excluir pendientes
                 .Where(a => a.Marca == Vehicle.Marca || a.Carroceria == Vehicle.Carroceria)
                 .ToListAsync();
 

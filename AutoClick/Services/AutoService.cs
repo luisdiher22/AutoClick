@@ -36,7 +36,7 @@ public class AutoService : IAutoService
     public async Task<List<Auto>> GetAutosRecientesAsync(int cantidad = 3)
     {
         return await _context.Autos
-            .Where(a => a.Activo)
+            .Where(a => a.Activo && a.PlanVisibilidad > 0) // Excluir anuncios pendientes de aprobación
             .OrderByDescending(a => a.FechaCreacion)
             .Take(cantidad)
             .ToListAsync();
@@ -45,14 +45,14 @@ public class AutoService : IAutoService
     public async Task<List<Auto>> GetAutosAleatoriosAsync(int cantidad = 3)
     {
         // SQLite doesn't support Guid.NewGuid() in queries, so we'll use a different approach
-        var totalAutos = await _context.Autos.CountAsync(a => a.Activo);
+        var totalAutos = await _context.Autos.CountAsync(a => a.Activo && a.PlanVisibilidad > 0); // Excluir pendientes
         if (totalAutos == 0) return new List<Auto>();
         
         var random = new Random();
         var skipCount = random.Next(0, Math.Max(1, totalAutos - cantidad));
         
         return await _context.Autos
-            .Where(a => a.Activo)
+            .Where(a => a.Activo && a.PlanVisibilidad > 0) // Excluir anuncios pendientes de aprobación
             .Skip(skipCount)
             .Take(cantidad)
             .ToListAsync();
@@ -60,7 +60,7 @@ public class AutoService : IAutoService
 
     public async Task<List<Auto>> GetAutosPorFiltrosAsync(AutoFiltros filtros)
     {
-        var query = _context.Autos.Where(a => a.Activo);
+        var query = _context.Autos.Where(a => a.Activo && a.PlanVisibilidad > 0); // Excluir anuncios pendientes
 
         if (!string.IsNullOrEmpty(filtros.Marca))
             query = query.Where(a => a.Marca.ToLower().Contains(filtros.Marca.ToLower()));
@@ -114,12 +114,12 @@ public class AutoService : IAutoService
     {
         return await _context.Autos
             .Include(a => a.Propietario)
-            .FirstOrDefaultAsync(a => a.Id == id && a.Activo);
+            .FirstOrDefaultAsync(a => a.Id == id && a.Activo && a.PlanVisibilidad > 0); // Excluir pendientes
     }
 
     public async Task<PaginatedResult<Auto>> GetAutosPaginadosAsync(int page, int pageSize, string sortBy = "recent", AutoFiltros? filtros = null)
     {
-        var query = _context.Autos.Where(a => a.Activo);
+        var query = _context.Autos.Where(a => a.Activo && a.PlanVisibilidad > 0); // Excluir anuncios pendientes
 
         // Apply filters if provided
         if (filtros != null)

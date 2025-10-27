@@ -1184,7 +1184,7 @@ document.addEventListener('DOMContentLoaded', function() {
             console.log('Response received:', response.status);
             if (response.ok) {
                 console.log('Form submitted successfully');
-                window.location.href = '/Index'; // Redirect on success
+                window.location.href = '/'; // Redirect on success
             } else {
                 console.error('Form submission failed:', response.status);
                 alert('Error al enviar el formulario');

@@ -136,9 +136,9 @@ public class Auto
     
     // Configuración del anuncio
     [Required]
-    [Range(1, 5)]
+    [Range(0, 5)]
     [Display(Name = "Plan de Visibilidad")]
-    public int PlanVisibilidad { get; set; } = 1;
+    public int PlanVisibilidad { get; set; } = 0; // 0 = Pendiente de aprobación, 1+ = Aprobado/Pagado
     
     [Range(0, 10)]
     [Display(Name = "Banderín Adquirido")]

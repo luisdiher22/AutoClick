@@ -334,26 +334,26 @@
                         <th></th>
                     </tr>
                 </thead>
-                <tbody>
+                <tbody id="pending-table-body">
                     @foreach(var item in Model.PendingApprovals)
                     {
-                        <tr>
+                        <tr data-auto-id="@item.Id">
                             <td>@item.Code</td>
                             <td>@item.Title</td>
                             <td>@item.Date</td>
                             <td>
                                 <div class="action-buttons">
-                                    <button class="btn-action btn-approve" title="Aprobar" onclick="approveItem('@item.Code')">
+                                    <button class="btn-action btn-approve" title="Aprobar" onclick="approveItem(@item.Id, '@item.Title')">
                                         <svg width="18" height="14" viewBox="0 0 18 14" fill="none" xmlns="http://www.w3.org/2000/svg">
                                             <path d="M6 11.17L1.83 7L0.410004 8.41L6 14L18 2L16.59 0.589996L6 11.17Z" fill="white"/>
                                         </svg>
                                     </button>
-                                    <button class="btn-action btn-reject" title="Rechazar" onclick="rejectItem('@item.Code')">
+                                    <button class="btn-action btn-reject" title="Rechazar" onclick="rejectItem(@item.Id, '@item.Title')">
                                         <svg width="14" height="14" viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg">
                                             <path d="M14 1.41L12.59 0L7 5.59L1.41 0L0 1.41L5.59 7L0 12.59L1.41 14L7 8.41L12.59 14L14 12.59L8.41 7L14 1.41Z" fill="white"/>
                                         </svg>
                                     </button>
-                                    <button class="btn-review" onclick="reviewItem('@item.Code')">
+                                    <button class="btn-review" onclick="reviewItem(@item.Id)">
                                         Revisar
                                         <svg width="9" height="5" viewBox="0 0 9 5" fill="none" xmlns="http://www.w3.org/2000/svg" style="transform: rotate(90deg);">
                                             <path d="M0 0L4.5 4.5L9 0H0Z" fill="white"/>
@@ -365,6 +365,17 @@
                     }
                 </tbody>
             </table>
+        </div>
+    </div>
+</div>
+
+<!-- Modal de confirmación -->
+<div id="confirmationModal" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.7); z-index: 9999; justify-content: center; align-items: center;">
+    <div style="background: #030D2B; border-radius: 8px; padding: 32px; max-width: 500px; width: 90%; border: 1px solid rgba(255, 255, 255, 0.25);">
+        <h2 id="modalTitle" style="color: white; font-size: 20px; font-family: 'Montserrat', sans-serif; font-weight: 700; margin-bottom: 16px; text-align: center;">¡Anuncio Aprobado!</h2>
+        <p id="modalMessage" style="color: #F7F7F7; font-size: 16px; font-family: 'Montserrat', sans-serif; font-weight: 500; margin-bottom: 24px; text-align: center;"></p>
+        <div style="display: flex; justify-content: center;">
+            <button onclick="closeModal()" style="background: #00CC00; color: white; border: none; border-radius: 4px; padding: 12px 32px; font-size: 14px; font-family: 'Montserrat', sans-serif; font-weight: 600; cursor: pointer;">Cerrar</button>
         </div>
     </div>
 </div>
@@ -383,24 +394,81 @@ function toggleDropdown(dropdownId) {
     }
 }
 
-function approveItem(code) {
-    if(confirm(`¿Está seguro que desea aprobar el anuncio ${code}?`)) {
-        // TODO: Implement approve logic
-        console.log('Aprobar:', code);
+function showModal(title, message) {
+    document.getElementById('modalTitle').textContent = title;
+    document.getElementById('modalMessage').textContent = message;
+    document.getElementById('confirmationModal').style.display = 'flex';
+}
+
+function closeModal() {
+    document.getElementById('confirmationModal').style.display = 'none';
+}
+
+async function approveItem(id, title) {
+    try {
+        const response = await fetch(`/api/admin/AdminApproval/approve/${id}`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        });
+
+        const data = await response.json();
+
+        if (data.success) {
+            // Remover la fila de la tabla
+            const row = document.querySelector(`tr[data-auto-id="${id}"]`);
+            if (row) {
+                row.style.opacity = '0';
+                setTimeout(() => row.remove(), 300);
+            }
+
+            // Mostrar modal de confirmación
+            showModal('¡Anuncio Aprobado!', `El anuncio "${data.title}" fue aprobado exitosamente.`);
+        } else {
+            alert(data.message || 'Error al aprobar el anuncio');
+        }
+    } catch (error) {
+        console.error('Error:', error);
+        alert('Error al aprobar el anuncio. Por favor, intente nuevamente.');
     }
 }
 
-function rejectItem(code) {
-    if(confirm(`¿Está seguro que desea rechazar el anuncio ${code}?`)) {
-        // TODO: Implement reject logic
-        console.log('Rechazar:', code);
+async function rejectItem(id, title) {
+    if (!confirm(`¿Está seguro que desea rechazar el anuncio "${title}"?`)) {
+        return;
+    }
+
+    try {
+        const response = await fetch(`/api/admin/AdminApproval/reject/${id}`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        });
+
+        const data = await response.json();
+
+        if (data.success) {
+            // Remover la fila de la tabla
+            const row = document.querySelector(`tr[data-auto-id="${id}"]`);
+            if (row) {
+                row.style.opacity = '0';
+                setTimeout(() => row.remove(), 300);
+            }
+
+            showModal('Anuncio Rechazado', `El anuncio "${data.title}" fue rechazado.`);
+        } else {
+            alert(data.message || 'Error al rechazar el anuncio');
+        }
+    } catch (error) {
+        console.error('Error:', error);
+        alert('Error al rechazar el anuncio. Por favor, intente nuevamente.');
     }
 }
 
-function reviewItem(code) {
-    // TODO: Implement review logic - redirect to detail page
-    console.log('Revisar:', code);
-    window.location.href = `/Admin/ReviewAd/${code}`;
+function reviewItem(id) {
+    window.location.href = `/producto/${id}`;
 }
 
 // Agregar efectos hover
@@ -457,5 +525,11 @@ document.addEventListener('DOMContentLoaded', function() {
             this.style.background = 'rgba(255, 255, 255, 0.15)';
         });
     }
+
+    // Agregar transición de opacidad a las filas
+    const rows = document.querySelectorAll('tbody tr');
+    rows.forEach(row => {
+        row.style.transition = 'opacity 0.3s ease';
+    });
 });
 </script>

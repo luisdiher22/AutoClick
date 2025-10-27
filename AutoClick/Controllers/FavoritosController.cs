@@ -140,7 +140,7 @@ public class FavoritosController : ControllerBase
             var autosGuardados = await _context.Favoritos
                 .Where(f => f.EmailUsuario == email)
                 .Include(f => f.Auto)
-                .Where(f => f.Auto != null && f.Auto.Activo)
+                .Where(f => f.Auto != null && f.Auto.Activo && f.Auto.PlanVisibilidad > 0) // Excluir pendientes
                 .Select(f => f.Auto)
                 .ToListAsync();
 
