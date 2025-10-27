@@ -3783,6 +3783,62 @@ body {
     width: 100%;
 }
 
+/* Nuevo botón de favoritos con texto */
+.producto-favorite-btn {
+    width: 100%;
+    padding: 12px 16px;
+    background: transparent;
+    border: 2px solid white;
+    border-radius: 4px;
+    color: white;
+    font-family: 'Montserrat', sans-serif;
+    font-size: 16px;
+    font-weight: 500;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+    transition: all 0.3s ease;
+}
+
+.producto-favorite-btn:hover {
+    background: rgba(255, 255, 255, 0.1);
+}
+
+.producto-favorite-btn.active {
+    background: white;
+    color: #06174D;
+}
+
+.producto-favorite-btn.active svg path {
+    stroke: #06174D;
+    fill: #06174D;
+}
+
+/* Botón de compartir con el mismo estilo que favoritos */
+.producto-share-btn {
+    width: 100%;
+    padding: 12px 16px;
+    background: transparent;
+    border: 2px solid white;
+    border-radius: 4px;
+    color: white;
+    font-family: 'Montserrat', sans-serif;
+    font-size: 16px;
+    font-weight: 500;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+    transition: all 0.3s ease;
+}
+
+.producto-share-btn:hover {
+    background: rgba(255, 255, 255, 0.1);
+}
+
 .producto-icons {
     display: flex;
     gap: 16px;
@@ -4189,7 +4245,7 @@ body {
 }
 
 .producto-similar-cars {
-    margin: 80px 0 40px 0; /* Añadido para la clase producto-similar-cars también */
+    margin: 80px 0 0 0; /* Sin margen inferior para que el footer quede pegado */
 }
 
 .similar-cars-header {

@@ -18,7 +18,7 @@
         <nav class="producto-breadcrumb">
             <a asp-page="/Index" class="breadcrumb-link">Inicio</a>
             <span class="breadcrumb-separator">/</span>
-            <a asp-page="/Explorar" class="breadcrumb-link">Explorar todos los autos</a>
+            <a asp-page="/BusquedaAvanzada" class="breadcrumb-link">Explorar todos los autos</a>
             <span class="breadcrumb-separator">/</span>
             <span class="breadcrumb-current">@Model.Vehicle?.NombreCompleto</span>
         </nav>
@@ -196,21 +196,24 @@
                     </div>
 
                     <div class="producto-actions">
-                        <div class="producto-icons">
-                            <button class="icon-btn favorite-btn" onclick="toggleFavorite(@Model.Vehicle?.Id)">
-                                <svg width="22" height="19" viewBox="0 0 22 19" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                    <path d="M19.5558 2.43875C17.6428 0.520415 14.5216 0.520415 12.596 2.43875L10.9976 4.04157L9.39927 2.43875C7.47368 0.520415 4.36505 0.520415 2.43947 2.43875C0.513888 4.35708 0.526474 7.487 2.43947 9.41794L4.03783 11.0208L10.9976 18L17.9575 11.0208L19.5558 9.41794C21.4814 7.487 21.4814 4.3697 19.5558 2.43875Z" stroke="white" stroke-width="2" stroke-miterlimit="10" stroke-linejoin="round"/>
-                                </svg>
-                            </button>
-                            <button class="icon-btn share-btn" onclick="shareProduct()">
-                                <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
-                                    <path d="M18 8C19.6569 8 21 6.65685 21 5C21 3.34315 19.6569 2 18 2C16.3431 2 15 3.34315 15 5C15 6.65685 16.3431 8 18 8Z" stroke="white" stroke-width="2"/>
-                                    <path d="M6 15C7.65685 15 9 13.6569 9 12C9 10.3431 7.65685 9 6 9C4.34315 9 3 10.3431 3 12C3 13.6569 4.34315 15 6 15Z" stroke="white" stroke-width="2"/>
-                                    <path d="M18 22C19.6569 22 21 20.6569 21 19C21 17.3431 19.6569 16 18 16C16.3431 16 15 17.3431 15 19C15 20.6569 16.3431 22 18 22Z" stroke="white" stroke-width="2"/>
-                                    <path d="M8.5 13.5L15.5 17.5M15.5 6.5L8.5 10.5" stroke="white" stroke-width="2"/>
-                                </svg>
-                            </button>
-                        </div>
+                        <!-- Botón de favoritos -->
+                        <button class="producto-favorite-btn" onclick="toggleFavorite(@Model.Vehicle?.Id)">
+                            <svg width="22" height="19" viewBox="0 0 22 19" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M19.5558 2.43875C17.6428 0.520415 14.5216 0.520415 12.596 2.43875L10.9976 4.04157L9.39927 2.43875C7.47368 0.520415 4.36505 0.520415 2.43947 2.43875C0.513888 4.35708 0.526474 7.487 2.43947 9.41794L4.03783 11.0208L10.9976 18L17.9575 11.0208L19.5558 9.41794C21.4814 7.487 21.4814 4.3697 19.5558 2.43875Z" stroke="white" stroke-width="2" stroke-miterlimit="10" stroke-linejoin="round"/>
+                            </svg>
+                            <span>Agregar a favoritos</span>
+                        </button>
+
+                        <!-- Botón de compartir -->
+                        <button class="producto-share-btn" onclick="shareProduct()">
+                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none">
+                                <path d="M18 8C19.6569 8 21 6.65685 21 5C21 3.34315 19.6569 2 18 2C16.3431 2 15 3.34315 15 5C15 6.65685 16.3431 8 18 8Z" stroke="white" stroke-width="2"/>
+                                <path d="M6 15C7.65685 15 9 13.6569 9 12C9 10.3431 7.65685 9 6 9C4.34315 9 3 10.3431 3 12C3 13.6569 4.34315 15 6 15Z" stroke="white" stroke-width="2"/>
+                                <path d="M18 22C19.6569 22 21 20.6569 21 19C21 17.3431 19.6569 16 18 16C16.3431 16 15 17.3431 15 19C15 20.6569 16.3431 22 18 22Z" stroke="white" stroke-width="2"/>
+                                <path d="M8.5 13.5L15.5 17.5M15.5 6.5L8.5 10.5" stroke="white" stroke-width="2"/>
+                            </svg>
+                            <span>Compartir</span>
+                        </button>
 
                         <button class="producto-preapproval-btn btn-primario" onclick="solicitarPreAprobacion()">
                             Solicitar pre-aprobación
@@ -594,9 +597,24 @@ function shareProduct() {
 
 // Toggle favorite function
 function toggleFavorite(vehicleId) {
-    // Implement favorite toggle logic
-    console.log('Toggle favorite for vehicle:', vehicleId);
-    // Add your API call here
+    const favoriteBtn = document.querySelector('.producto-favorite-btn');
+    
+    if (favoriteBtn) {
+        // Toggle active class
+        favoriteBtn.classList.toggle('active');
+        
+        // Cambiar texto según el estado
+        const isActive = favoriteBtn.classList.contains('active');
+        const textSpan = favoriteBtn.querySelector('span');
+        
+        if (textSpan) {
+            textSpan.textContent = isActive ? 'Agregado a favoritos' : 'Agregar a favoritos';
+        }
+        
+        // Aquí puedes agregar la lógica para guardar en la base de datos
+        console.log('Toggle favorite for vehicle:', vehicleId, 'Active:', isActive);
+        // Add your API call here
+    }
 }
 </script>
 
