@@ -2,9 +2,16 @@
 @model ProductoModel
 @{
     ViewData["Title"] = $"{Model.Vehicle?.NombreCompleto} - AutoClick.cr";
+    
+    // Prepare image URLs for gallery
+    var imageUrlsList = Model.Vehicle?.ImagenesUrlsList ?? new List<string>();
+    if (imageUrlsList.Count == 0 && !string.IsNullOrEmpty(Model.Vehicle?.ImagenPrincipal))
+    {
+        imageUrlsList = new List<string> { Model.Vehicle.ImagenPrincipal };
+    }
 }
 
-<!-- Dark Theme Product Page -->
+<!-- Product Page - Figma Design -->
 <div class="producto-page">
     <div class="producto-container">
         <!-- Breadcrumb Navigation -->
@@ -17,85 +24,195 @@
         </nav>
 
         <div class="producto-content">
-            <!-- Main Image Gallery -->
-            @if (Model.Vehicle != null)
-            {
-                <div class="producto-gallery">
+            <!-- Left Column: Main Content (66.67% width) -->
+            <div class="producto-main-content">
+                <!-- Image Gallery -->
+                @if (Model.Vehicle != null)
+                {
+                    <div class="producto-gallery">
                     <div class="producto-main-image">
                         @if (!string.IsNullOrEmpty(Model.Vehicle.ImagenPrincipal))
                         {
-                            <img src="@Model.Vehicle.ImagenPrincipal" alt="@Model.Vehicle.NombreCompleto" class="main-car-image" style="object-fit: contain;" />
+                            <img src="@Model.Vehicle.ImagenPrincipal" alt="@Model.Vehicle.NombreCompleto" class="main-car-image" />
                         }
 
                         <!-- Navigation Arrows -->
-                        <button class="gallery-nav-btn prev-btn">
-                            <div class="nav-arrow left"></div>
+                        <button class="gallery-nav-btn prev-btn" onclick="navigateGallery(-1)">
+                            <svg width="51" height="51" viewBox="0 0 51 51" fill="none">
+                                <circle cx="25.5" cy="25.5" r="25.5" fill="rgba(0, 0, 0, 0.6)"/>
+                                <path d="M28 18L21 25.5L28 33" stroke="white" stroke-width="2" stroke-linecap="round"/>
+                            </svg>
                         </button>
-                        <button class="gallery-nav-btn next-btn">
-                            <div class="nav-arrow right"></div>
+                        <button class="gallery-nav-btn next-btn" onclick="navigateGallery(1)">
+                            <svg width="51" height="51" viewBox="0 0 51 51" fill="none">
+                                <circle cx="25.5" cy="25.5" r="25.5" fill="rgba(0, 0, 0, 0.6)"/>
+                                <path d="M23 18L30 25.5L23 33" stroke="white" stroke-width="2" stroke-linecap="round"/>
+                            </svg>
                         </button>
                     </div>
 
                     <!-- Thumbnail Gallery -->
-                    @{
-                        var imageUrls = Model.Vehicle.ImagenesUrlsList ?? new List<string>();
-                        if (imageUrls.Count == 0 && !string.IsNullOrEmpty(Model.Vehicle.ImagenPrincipal))
-                        {
-                            imageUrls = new List<string> { Model.Vehicle.ImagenPrincipal };
-                        }
-                    }
-
-                    @if (imageUrls.Count > 0)
+                    @if (imageUrlsList.Count > 0)
                     {
                         <div class="producto-thumbnails">
                             @{
-                                var maxThumbnails = Math.Min(8, imageUrls.Count);
+                                var maxThumbnails = Math.Min(8, imageUrlsList.Count);
                             }
                             @for (int i = 0; i < maxThumbnails; i++)
                             {
-                                <div class="thumbnail-item @(i == 0 ? "active" : "")">
-                                    @if (i == 7 && imageUrls.Count > 8)
+                                <div class="thumbnail-item @(i == 0 ? "active" : "")" data-index="@i" onclick="selectThumbnail(@i)">
+                                    @if (i == 7 && imageUrlsList.Count > 8)
                                     {
-                                        <img src="@imageUrls[i]" alt="Más imágenes" style="object-fit: contain;" />
+                                        <img src="@imageUrlsList[i]" alt="Más imágenes" />
                                         <div class="thumbnail-overlay">
-                                            <div class="plus-icon">+</div>
+                                            <svg width="20" height="20" viewBox="0 0 20 20" fill="white">
+                                                <path d="M10 4V16M4 10H16" stroke="white" stroke-width="2" stroke-linecap="round"/>
+                                            </svg>
                                         </div>
                                     }
                                     else
                                     {
-                                        <img src="@imageUrls[i]" alt="@Model.Vehicle.NombreCompleto vista @(i + 1)" style="object-fit: contain;" />
+                                        <img src="@imageUrlsList[i]" alt="@Model.Vehicle.NombreCompleto vista @(i + 1)" />
                                     }
                                 </div>
                             }
                         </div>
                     }
                 </div>
-            }
+                }
 
-            <!-- Right Sidebar -->
+                <!-- Description Section -->
+                @if (Model.Vehicle != null)
+                {
+                    <section class="producto-description">
+                        <h2>Descripción</h2>
+                        <p>@Model.Vehicle.Descripcion</p>
+                    </section>
+                }
+
+                <!-- Specifications Section -->
+                @if (Model.Vehicle != null)
+                {
+                    <section class="producto-specifications">
+                        <h2>Especificaciones</h2>
+                        <div class="specifications-grid">
+                            <!-- Column 1 -->
+                            <div class="spec-column">
+                                <div class="spec-item">
+                                    <h3>Marca</h3>
+                                    <p>@Model.Vehicle.Marca</p>
+                                </div>
+                                <div class="spec-item">
+                                    <h3>Modelo</h3>
+                                    <p>@Model.Vehicle.Modelo</p>
+                                </div>
+                                <div class="spec-item">
+                                    <h3>Año</h3>
+                                    <p>@Model.Vehicle.Ano</p>
+                                </div>
+                            </div>
+                            
+                            <!-- Column 2 -->
+                            <div class="spec-column">
+                                <div class="spec-item">
+                                    <h3>Kilometraje</h3>
+                                    <p>@Model.FormatKilometrage(Model.Vehicle.Kilometraje)</p>
+                                </div>
+                                <div class="spec-item">
+                                    <h3>Carrocería</h3>
+                                    <p>@Model.Vehicle.Carroceria</p>
+                                </div>
+                                <div class="spec-item">
+                                    <h3>Número de puertas</h3>
+                                    <p>@Model.Vehicle.NumeroPuertas</p>
+                                </div>
+                            </div>
+                            
+                            <!-- Column 3 -->
+                            <div class="spec-column">
+                                <div class="spec-item">
+                                    <h3>Motor</h3>
+                                    <p>@Model.Vehicle.Cilindrada</p>
+                                </div>
+                                <div class="spec-item">
+                                    <h3>Propulsión</h3>
+                                    <p>@Model.Vehicle.Combustible</p>
+                                </div>
+                                <div class="spec-item">
+                                    <h3>Transmisión</h3>
+                                    <p>@Model.Vehicle.Transmision</p>
+                                </div>
+                            </div>
+                        </div>
+                    </section>
+                }
+
+                <!-- Equipment Section -->
+                @if (Model.Vehicle != null)
+                {
+                    var allExtras = new List<string>();
+                    allExtras.AddRange(Model.Vehicle.ExtrasExteriorList ?? new List<string>());
+                    allExtras.AddRange(Model.Vehicle.ExtrasInteriorList ?? new List<string>());
+                    allExtras.AddRange(Model.Vehicle.ExtrasMultimediaList ?? new List<string>());
+                    allExtras.AddRange(Model.Vehicle.ExtrasSeguridadList ?? new List<string>());
+                    allExtras.AddRange(Model.Vehicle.ExtrasRendimientoList ?? new List<string>());
+                    allExtras.AddRange(Model.Vehicle.ExtrasAntiRoboList ?? new List<string>());
+                    allExtras = allExtras.Where(e => !string.IsNullOrEmpty(e)).ToList();
+
+                    if (allExtras.Count > 0)
+                    {
+                        <section class="producto-equipment">
+                            <h2>Equipamiento</h2>
+                            <div class="equipment-list">
+                                @foreach (var item in allExtras)
+                                {
+                                    <div class="equipment-item">
+                                        <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+                                            <circle cx="8" cy="8" r="8" fill="#06174D"/>
+                                            <path d="M5 8L7 10L11 6" stroke="white" stroke-width="2"/>
+                                        </svg>
+                                        <span>@item</span>
+                                    </div>
+                                }
+                            </div>
+                        </section>
+                    }
+                }
+            </div>
+
+            <!-- Right Sidebar (33.33% width) -->
             <div class="producto-sidebar">
                 <!-- Car Information Card -->
                 <div class="producto-info-card">
-                    <h1 class="producto-car-title">@Model.Vehicle?.NombreCompleto</h1>
-                    <p class="producto-car-mileage">@Model.FormatKilometrage(Model.Vehicle?.Kilometraje ?? 0)</p>
-                    <p class="producto-car-price">@Model.Vehicle?.PrecioEnCRC</p>
+                    <div class="info-card-content">
+                        <h1 class="producto-car-title">@Model.Vehicle?.NombreCompleto</h1>
+                        <p class="producto-car-mileage">@Model.FormatKilometrage(Model.Vehicle?.Kilometraje ?? 0)</p>
+                        <p class="producto-car-price">@Model.Vehicle?.PrecioEnCRC</p>
 
-                    <div class="producto-payment-estimate">
-                        <h3>Cuota estimada</h3>
-                        <p>@Model.FormatPrice(Model.MonthlyPayment)/mes</p>
+                        <div class="producto-payment-estimate">
+                            <p class="estimate-label">Cuota estimada</p>
+                            <p class="estimate-value">@Model.FormatPrice(Model.MonthlyPayment)/mes</p>
+                        </div>
                     </div>
 
                     <div class="producto-actions">
                         <div class="producto-icons">
-                            <button class="favorite-btn">
-                                <div class="heart-icon"></div>
+                            <button class="icon-btn favorite-btn" onclick="toggleFavorite(@Model.Vehicle?.Id)">
+                                <svg width="22" height="19" viewBox="0 0 22 19" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                    <path d="M19.5558 2.43875C17.6428 0.520415 14.5216 0.520415 12.596 2.43875L10.9976 4.04157L9.39927 2.43875C7.47368 0.520415 4.36505 0.520415 2.43947 2.43875C0.513888 4.35708 0.526474 7.487 2.43947 9.41794L4.03783 11.0208L10.9976 18L17.9575 11.0208L19.5558 9.41794C21.4814 7.487 21.4814 4.3697 19.5558 2.43875Z" stroke="white" stroke-width="2" stroke-miterlimit="10" stroke-linejoin="round"/>
+                                </svg>
                             </button>
-                            <button class="share-btn">
-                                <div class="share-icon"></div>
+                            <button class="icon-btn share-btn" onclick="shareProduct()">
+                                <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+                                    <path d="M18 8C19.6569 8 21 6.65685 21 5C21 3.34315 19.6569 2 18 2C16.3431 2 15 3.34315 15 5C15 6.65685 16.3431 8 18 8Z" stroke="white" stroke-width="2"/>
+                                    <path d="M6 15C7.65685 15 9 13.6569 9 12C9 10.3431 7.65685 9 6 9C4.34315 9 3 10.3431 3 12C3 13.6569 4.34315 15 6 15Z" stroke="white" stroke-width="2"/>
+                                    <path d="M18 22C19.6569 22 21 20.6569 21 19C21 17.3431 19.6569 16 18 16C16.3431 16 15 17.3431 15 19C15 20.6569 16.3431 22 18 22Z" stroke="white" stroke-width="2"/>
+                                    <path d="M8.5 13.5L15.5 17.5M15.5 6.5L8.5 10.5" stroke="white" stroke-width="2"/>
+                                </svg>
                             </button>
                         </div>
 
-                        <button class="producto-preapproval-btn">
+                        <button class="producto-preapproval-btn btn-primario" onclick="solicitarPreAprobacion()">
                             Solicitar pre-aprobación
                         </button>
                     </div>
@@ -103,17 +220,27 @@
 
                 <!-- Contact Seller Card -->
                 <div class="producto-contact-card">
-                    <h3>Contactar al vendedor</h3>
+                    <h3 class="contact-title">Contactar al vendedor</h3>
                     @if (Model.Vehicle?.Propietario != null)
                     {
                         <p class="seller-name">@Model.Vehicle.Propietario.NombreCompleto</p>
 
-                        <button class="contact-phone-btn">
+                        <button class="contact-phone-btn" onclick="window.location.href='tel:@Model.Vehicle.Propietario.NumeroTelefono'">
                             Llamar @Model.Vehicle.Propietario.NumeroTelefono
                         </button>
 
-                        <button class="contact-whatsapp-btn">
-                            <div class="whatsapp-icon"></div>
+                        <button class="contact-whatsapp-btn" onclick="window.open('https://wa.me/@(Model.Vehicle.Propietario.NumeroTelefono?.Replace("+", "").Replace("-", "").Replace(" ", ""))', '_blank')">
+                            <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <g clip-path="url(#clip0_4338_9793)">
+                                    <path d="M14.5893 11.9223L14.5818 11.9848C12.7493 11.0715 12.5576 10.9498 12.3209 11.3048C12.1568 11.5506 11.6784 12.1081 11.5343 12.2731C11.3884 12.4356 11.2434 12.4481 10.9959 12.3356C10.7459 12.2106 9.94345 11.9481 8.99345 11.0981C8.25345 10.4356 7.75678 9.62315 7.61011 9.37315C7.36595 8.95148 7.87678 8.89148 8.34178 8.01148C8.42511 7.83648 8.38261 7.69898 8.32095 7.57482C8.25845 7.44982 7.76095 6.22482 7.55261 5.73648C7.35261 5.24982 7.14678 5.31148 6.99261 5.31148C6.51261 5.26982 6.16178 5.27648 5.85261 5.59815C4.50761 7.07648 4.84678 8.60148 5.99761 10.2231C8.25928 13.1831 9.46428 13.7281 11.6676 14.4848C12.2626 14.674 12.8051 14.6473 13.2343 14.5856C13.7126 14.5098 14.7068 13.9848 14.9143 13.3973C15.1268 12.8098 15.1268 12.3223 15.0643 12.2098C15.0026 12.0973 14.8393 12.0348 14.5893 11.9223Z" fill="white"/>
+                                    <path d="M17.1 2.87404C10.6925 -3.32013 0.0883333 1.17237 0.0841667 9.91071C0.0841667 11.6574 0.541667 13.3607 1.41333 14.8649L0 19.9999L5.27917 18.6232C11.8667 22.1815 19.9967 17.4565 20 9.91571C20 7.26904 18.9667 4.77821 17.0875 2.90654L17.1 2.87404ZM18.335 9.88821C18.33 16.249 11.3475 20.2215 5.825 16.9749L5.525 16.7965L2.4 17.609L3.2375 14.5715L3.03833 14.259C-0.398333 8.78821 3.55 1.63821 10.06 1.63821C12.2717 1.63821 14.3475 2.50071 15.9108 4.06321C17.4733 5.61237 18.335 7.68821 18.335 9.88821Z" fill="white"/>
+                                </g>
+                                <defs>
+                                    <clipPath id="clip0_4338_9793">
+                                        <rect width="20" height="20" fill="white"/>
+                                    </clipPath>
+                                </defs>
+                            </svg>
                             @Model.Vehicle.Propietario.NumeroTelefono
                         </button>
                     }
@@ -123,28 +250,39 @@
                 @if (Model.Vehicle?.Propietario != null)
                 {
                     <div class="producto-seller-card">
-                        <h3>Información del vendedor</h3>
+                        <h3 class="seller-card-title">Información del vendedor</h3>
                         <p class="seller-business-name">@Model.Vehicle.Propietario.NombreAMostrar</p>
+
+                        <div class="seller-logo-placeholder">
+                            <p>LOGO<br/>(SI TIENE)</p>
+                        </div>
 
                         <div class="seller-contact-info">
                             @if (!string.IsNullOrEmpty(Model.Vehicle.Propietario.NumeroTelefono))
                             {
-                                <div class="seller-phones">
-                                    <div class="phone-icon"></div>
+                                <div class="seller-info-row">
+                                    <svg width="18" height="18" viewBox="0 0 18 18" fill="none">
+                                        <path d="M3 3h2l1.5 4-1.5 1.5c1 2 2.5 3.5 4.5 4.5L11 11.5l4 1.5v2c0 1.1-.9 2-2 2C6.477 17 2 12.523 2 6c0-1.1.9-2 2-2z" stroke="white" stroke-width="1.5"/>
+                                    </svg>
                                     <span>@Model.Vehicle.Propietario.NumeroTelefono</span>
                                 </div>
                             }
 
                             @if (!string.IsNullOrEmpty(Model.Vehicle.UbicacionCompleta))
                             {
-                                <div class="seller-location">
-                                    <div class="location-icon"></div>
+                                <div class="seller-info-row">
+                                    <svg width="14" height="17" viewBox="0 0 14 17" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                        <path d="M6.58801 16.17C9.6369 13.034 12.6858 10.2259 12.6858 6.76199C12.6858 3.29806 9.95573 0.48999 6.58801 0.48999C3.22031 0.48999 0.490234 3.29806 0.490234 6.76199C0.490234 10.2259 3.53912 13.034 6.58801 16.17Z" stroke="white" stroke-width="0.98" stroke-linecap="round" stroke-linejoin="round"/>
+                                        <path d="M6.80668 8.3299C7.7689 8.3299 8.5489 7.54991 8.5489 6.58768C8.5489 5.62548 7.7689 4.84546 6.80668 4.84546C5.84445 4.84546 5.06445 5.62548 5.06445 6.58768C5.06445 7.54991 5.84445 8.3299 6.80668 8.3299Z" stroke="white" stroke-width="0.98" stroke-linecap="round" stroke-linejoin="round"/>
+                                    </svg>
                                     <span>@Model.Vehicle.UbicacionCompleta</span>
                                 </div>
                             }
 
-                            <div class="seller-car-count">
-                                <div class="car-icon"></div>
+                            <div class="seller-info-row">
+                                <svg width="21" height="18" viewBox="0 0 21 18" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                    <path d="M0.980469 4.60054L3.79609 6.94686C3.98199 7.10182 4.21632 7.18665 4.45832 7.18665H16.1226C16.3646 7.18665 16.5989 7.10182 16.7848 6.94686L19.6005 4.60054M4.60102 10.8072H4.61137M15.9799 10.8072H15.9903M6.31887 0.97998H14.2621C15.0045 0.97998 15.6901 1.3778 16.0583 2.02241L19.0553 7.26702C19.4125 7.89224 19.6005 8.5998 19.6005 9.31998V15.4622C19.6005 16.0335 19.1373 16.4966 18.566 16.4966H17.5316C16.9603 16.4966 16.4971 16.0335 16.4971 15.4622V14.4278H4.0838V15.4622C4.0838 16.0335 3.62066 16.4966 3.04936 16.4966H2.01491C1.44361 16.4966 0.980469 16.0335 0.980469 15.4622V9.31998C0.980469 8.5998 1.16839 7.89224 1.52565 7.26702L4.52257 2.02241C4.89092 1.3778 5.57643 0.97998 6.31887 0.97998ZM5.11825 10.8072C5.11825 11.0928 4.88668 11.3244 4.60102 11.3244C4.31537 11.3244 4.0838 11.0928 4.0838 10.8072C4.0838 10.5216 4.31537 10.29 4.60102 10.29C4.88668 10.29 5.11825 10.5216 5.11825 10.8072ZM16.4971 10.8072C16.4971 11.0928 16.2655 11.3244 15.9799 11.3244C15.6943 11.3244 15.4627 11.0928 15.4627 10.8072C15.4627 10.5216 15.6943 10.29 15.9799 10.29C16.2655 10.29 16.4971 10.5216 16.4971 10.8072Z" stroke="white" stroke-width="1.96" stroke-linecap="round" stroke-linejoin="round"/>
+                                </svg>
                                 <span>(@Model.SellerCarCount de autos publicados)</span>
                             </div>
                         </div>
@@ -152,136 +290,6 @@
                 }
             </div>
         </div>
-
-        <!-- Description Section -->
-        @if (Model.Vehicle != null)
-        {
-            <section class="producto-description">
-                <h2>Descripción</h2>
-                <p>
-                    @{
-                        var descripcion = $"Potencia, elegancia y tecnología se fusionan en este impresionante {Model.Vehicle.NombreCompleto}, diseñado para quienes exigen rendimiento sin renunciar al confort. ";
-
-                        if (Model.Vehicle.Kilometraje > 0)
-                        {
-                            descripcion += $"Con {Model.FormatKilometrage(Model.Vehicle.Kilometraje)}. ";
-                        }
-
-                        if (!string.IsNullOrEmpty(Model.Vehicle.Combustible))
-                        {
-                            descripcion += $"Propulsión: {Model.Vehicle.Combustible}. ";
-                        }
-
-                        if (!string.IsNullOrEmpty(Model.Vehicle.Transmision))
-                        {
-                            descripcion += $"Transmisión {Model.Vehicle.Transmision}. ";
-                        }
-
-                        if (!string.IsNullOrEmpty(Model.Vehicle.UbicacionCompleta))
-                        {
-                            descripcion += $"Ubicado en {Model.Vehicle.UbicacionCompleta}.";
-                        }
-                    }
-                    @descripcion
-                </p>
-            </section>
-        }
-
-        <!-- Specifications Section -->
-        @if (Model.Vehicle != null)
-        {
-        <section class="producto-specifications">
-            <h2>Especificaciones</h2>
-            <div class="specs-grid">
-                <div class="spec-column">
-                    <div class="spec-item">
-                        <h3>Marca</h3>
-                        <p>@Model.ToTitleCase(Model.Vehicle?.Marca)</p>
-                    </div>
-                    <div class="spec-item">
-                        <h3>Modelo</h3>
-                        <p>@Model.ToTitleCase(Model.Vehicle?.Modelo)</p>
-                    </div>
-                    <div class="spec-item">
-                        <h3>Año</h3>
-                        <p>@Model.Vehicle?.Ano</p>
-                    </div>
-                </div>
-                
-                <div class="spec-column">
-                    <div class="spec-item">
-                        <h3>Kilometraje</h3>
-                        <p>@Model.FormatKilometrage(Model.Vehicle?.Kilometraje ?? 0)</p>
-                    </div>
-                    <div class="spec-item">
-                        <h3>Carrocería</h3>
-                        <p>@Model.Vehicle?.Carroceria</p>
-                    </div>
-                    <div class="spec-item">
-                        <h3>Número de puertas</h3>
-                        <p>@Model.Vehicle?.NumeroPuertas</p>
-                    </div>
-                </div>
-                
-                <div class="spec-column">
-                    <div class="spec-item">
-                        <h3>Motor</h3>
-                        <p>@Model.Vehicle?.Cilindrada</p>
-                    </div>
-                    <div class="spec-item">
-                        <h3>Propulsión</h3>
-                        <p>@Model.Vehicle?.Combustible</p>
-                    </div>
-                    <div class="spec-item">
-                        <h3>Transmisión</h3>
-                        <p>@Model.Vehicle?.Transmision</p>
-                    </div>
-                </div>
-            </div>
-        </section>
-        }
-
-        <!-- Equipment Section -->
-        @{
-            var allExtras = new List<string>();
-            if (Model.Vehicle != null)
-            {
-                allExtras.AddRange(Model.Vehicle.ExtrasInteriorList ?? new List<string>());
-                allExtras.AddRange(Model.Vehicle.ExtrasExteriorList ?? new List<string>());
-                allExtras.AddRange(Model.Vehicle.ExtrasMultimediaList ?? new List<string>());
-                allExtras.AddRange(Model.Vehicle.ExtrasSeguridadList ?? new List<string>());
-                allExtras.AddRange(Model.Vehicle.ExtrasRendimientoList ?? new List<string>());
-                allExtras.AddRange(Model.Vehicle.ExtrasAntiRoboList ?? new List<string>());
-
-                // Capitalizar primera letra de cada item
-                allExtras = allExtras.Where(e => !string.IsNullOrEmpty(e))
-                    .Select(e => char.ToUpper(e[0]) + e.Substring(1).ToLower())
-                    .ToList();
-            }
-
-            var halfCount = (int)Math.Ceiling(allExtras.Count / 2.0);
-        }
-
-        @if (allExtras.Count > 0)
-        {
-            <section class="producto-equipment">
-                <h2>Equipamiento</h2>
-                <div class="equipment-grid">
-                    <div class="equipment-column">
-                        @for (int i = 0; i < halfCount && i < allExtras.Count; i++)
-                        {
-                            <div class="equipment-item">• @allExtras[i]</div>
-                        }
-                    </div>
-                    <div class="equipment-column">
-                        @for (int i = halfCount; i < allExtras.Count; i++)
-                        {
-                            <div class="equipment-item">• @allExtras[i]</div>
-                        }
-                    </div>
-                </div>
-            </section>
-        }
 
         <!-- Marchamo Calculator Section -->
         @if (Model.Vehicle != null)
@@ -489,14 +497,6 @@
                             <h3 class="similar-car-title">@auto.NombreCompleto</h3>
                             <p class="similar-car-price">@auto.PrecioEnCRC</p>
                         </div>
-                        <div class="similar-car-actions">
-                            <button class="similar-favorite-btn" onclick="event.stopPropagation();">
-                                <div class="heart-outline"></div>
-                            </button>
-                            <button class="similar-share-btn" onclick="event.stopPropagation();">
-                                <div class="share-outline"></div>
-                            </button>
-                        </div>
                     </div>
                 }
             </div>
@@ -511,23 +511,41 @@
 <script>
 // Gallery navigation
 document.addEventListener('DOMContentLoaded', function() {
-    // Thumbnail click functionality
-    const thumbnails = document.querySelectorAll('.thumbnail-item');
-    const mainImage = document.querySelector('.main-car-image');
+    // Get all image URLs from the server
+    const imageUrls = @Html.Raw(Json.Serialize(imageUrlsList));
+    let currentImageIndex = 0;
     
-    thumbnails.forEach((thumb, index) => {
-        thumb.addEventListener('click', function() {
-            // Remove active class from all thumbnails
-            thumbnails.forEach(t => t.classList.remove('active'));
-            // Add active class to clicked thumbnail
-            this.classList.add('active');
+    const mainImage = document.querySelector('.main-car-image');
+    const thumbnails = document.querySelectorAll('.thumbnail-item');
+    
+    // Function to update main image
+    window.updateMainImage = function(index) {
+        if (index >= 0 && index < imageUrls.length) {
+            currentImageIndex = index;
+            mainImage.src = imageUrls[index];
             
-            // Update main image (in a real app, you'd have different images)
-            if (index < 7) { // Not the "more images" thumbnail
-                // Update main image src here
-            }
-        });
-    });
+            // Update active thumbnail
+            thumbnails.forEach((thumb, i) => {
+                thumb.classList.remove('active');
+                if (i === index) {
+                    thumb.classList.add('active');
+                }
+            });
+        }
+    };
+    
+    // Navigate gallery with arrows
+    window.navigateGallery = function(direction) {
+        const newIndex = currentImageIndex + direction;
+        if (newIndex >= 0 && newIndex < imageUrls.length) {
+            updateMainImage(newIndex);
+        }
+    };
+    
+    // Select thumbnail
+    window.selectThumbnail = function(index) {
+        updateMainImage(index);
+    };
     
     // Financing calculator auto-update (excluding readonly fields)
     const financingInputs = document.querySelectorAll('.financing-input:not([readonly]), .financing-select');
@@ -558,9 +576,62 @@ function solicitarPreAprobacion() {
     // Redirect to bank landing page
     window.location.href = '/LandingBanco?' + params.toString();
 }
+
+// Share product function
+function shareProduct() {
+    if (navigator.share) {
+        navigator.share({
+            title: '@Html.Raw((Model.Vehicle?.NombreCompleto ?? "Vehículo").Replace("'", "\\'"))',
+            text: 'Mira este vehículo en AutoClick.cr',
+            url: window.location.href
+        }).catch(err => console.log('Error sharing:', err));
+    } else {
+        // Fallback: copy URL to clipboard
+        navigator.clipboard.writeText(window.location.href);
+        alert('Enlace copiado al portapapeles');
+    }
+}
+
+// Toggle favorite function
+function toggleFavorite(vehicleId) {
+    // Implement favorite toggle logic
+    console.log('Toggle favorite for vehicle:', vehicleId);
+    // Add your API call here
+}
 </script>
 
 <style>
+/* Botón Primario - Figma Style */
+.btn-primario {
+    background: white;
+    color: #06174D;
+    padding: 16px;
+    border-radius: 4px;
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 700;
+    font-size: 16px;
+    border: none;
+    cursor: pointer;
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+}
+
+.btn-primario:hover {
+    background: #f5f5f5;
+}
+
+/* Espaciado entre secciones */
+.producto-specifications {
+    margin-bottom: 48px;
+}
+
+.producto-marchamo {
+    margin-top: 48px;
+}
+
 /* Market Value Analysis Styles */
 .producto-market-analysis {
     background: rgba(3, 13, 43, 0.6);

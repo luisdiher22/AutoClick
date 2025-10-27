@@ -3592,6 +3592,13 @@ body {
     margin-bottom: 0;
 }
 
+/* Main Content Column (Gallery + Description + Specifications + Equipment) */
+.producto-main-content {
+    display: flex;
+    flex-direction: column;
+    gap: 32px;
+}
+
 /* Image Gallery */
 .producto-gallery {
     display: flex;
@@ -3769,18 +3776,30 @@ body {
     gap: 24px;
 }
 
-.produto-icons {
+.producto-actions {
     display: flex;
-    justify-content: space-between;
+    flex-direction: column;
+    gap: 16px;
+    width: 100%;
+}
+
+.producto-icons {
+    display: flex;
+    gap: 16px;
+    justify-content: flex-start;
     align-items: center;
 }
 
+.icon-btn,
 .favorite-btn,
 .share-btn {
     background: none;
     border: none;
     cursor: pointer;
     padding: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
 .heart-icon,
@@ -3971,13 +3990,14 @@ body {
     font-weight: 700;
     color: white;
     margin: 0 0 24px 0;
+    font-family: 'Montserrat', sans-serif;
 }
 
-.specs-grid {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 77px;
-    max-width: 803px;
+/* Specifications Grid - 3 Columns Layout (Figma Design) */
+.specifications-grid {
+    display: flex;
+    gap: 150px;
+    justify-content: flex-start;
 }
 
 .spec-column {
@@ -3997,13 +4017,17 @@ body {
     font-weight: 700;
     color: white;
     margin: 0;
+    font-family: 'Montserrat', sans-serif;
+    line-height: 1;
 }
 
 .spec-item p {
     font-size: 20px;
     font-weight: 500;
-    color: rgba(255, 255, 255, 0.50);
+    color: rgba(255, 255, 255, 0.5);
     margin: 0;
+    font-family: 'Montserrat', sans-serif;
+    line-height: 1;
 }
 
 /* Equipment Section */
@@ -4161,7 +4185,11 @@ body {
 
 /* Similar Cars Section */
 .produto-similar-cars {
-    margin: 60px 0 40px 0;
+    margin: 80px 0 40px 0; /* Aumentado de 60px a 80px para mejor espaciado */
+}
+
+.producto-similar-cars {
+    margin: 80px 0 40px 0; /* Añadido para la clase producto-similar-cars también */
 }
 
 .similar-cars-header {
