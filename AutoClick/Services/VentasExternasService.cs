@@ -128,30 +128,36 @@ namespace AutoClick.Services
                     return (false, "No se pudieron importar registros válidos del archivo Excel", 0);
                 }
 
-                // Iniciar transacción para eliminar todos los registros existentes e insertar los nuevos
-                using (var transaction = await _context.Database.BeginTransactionAsync())
+                // Usar la estrategia de ejecución para manejar transacciones con reintentos
+                var strategy = _context.Database.CreateExecutionStrategy();
+                
+                return await strategy.ExecuteAsync(async () =>
                 {
-                    try
+                    // Iniciar transacción para eliminar todos los registros existentes e insertar los nuevos
+                    using (var transaction = await _context.Database.BeginTransactionAsync())
                     {
-                        // Eliminar todos los registros existentes
-                        await _context.Database.ExecuteSqlRawAsync("DELETE FROM VentasExternas");
-                        
-                        // Insertar los nuevos registros
-                        await _context.VentasExternas.AddRangeAsync(ventasImportadas);
-                        await _context.SaveChangesAsync();
-                        
-                        await transaction.CommitAsync();
-                        
-                        _logger.LogInformation($"Se importaron exitosamente {ventasImportadas.Count} registros de ventas externas");
-                        return (true, $"Se importaron exitosamente {ventasImportadas.Count} registros", ventasImportadas.Count);
+                        try
+                        {
+                            // Eliminar todos los registros existentes
+                            await _context.Database.ExecuteSqlRawAsync("DELETE FROM VentasExternas");
+                            
+                            // Insertar los nuevos registros
+                            await _context.VentasExternas.AddRangeAsync(ventasImportadas);
+                            await _context.SaveChangesAsync();
+                            
+                            await transaction.CommitAsync();
+                            
+                            _logger.LogInformation($"Se importaron exitosamente {ventasImportadas.Count} registros de ventas externas");
+                            return (true, $"Se importaron exitosamente {ventasImportadas.Count} registros", ventasImportadas.Count);
+                        }
+                        catch (Exception ex)
+                        {
+                            await transaction.RollbackAsync();
+                            _logger.LogError(ex, "Error al guardar los datos en la base de datos");
+                            return (false, $"Error al guardar los datos: {ex.Message}", 0);
+                        }
                     }
-                    catch (Exception ex)
-                    {
-                        await transaction.RollbackAsync();
-                        _logger.LogError(ex, "Error al guardar los datos en la base de datos");
-                        return (false, $"Error al guardar los datos: {ex.Message}", 0);
-                    }
-                }
+                });
             }
             catch (Exception ex)
             {
