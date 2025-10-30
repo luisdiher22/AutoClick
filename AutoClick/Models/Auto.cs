@@ -173,6 +173,10 @@ public class Auto
     [Display(Name = "Activo")]
     public bool Activo { get; set; } = true;
     
+    [MaxLength(20)]
+    [Display(Name = "Estado Agenda Fotografía")]
+    public string EstadoAgendaFotografia { get; set; } = "Sin agendar"; // "Sin agendar" o "Agendado"
+    
     // Navigation property
     [ForeignKey("EmailPropietario")]
     public virtual Usuario? Propietario { get; set; }

@@ -1,0 +1,687 @@
+@page
+@model AutoClick.Pages.Admin.SolicitudesFotografiaModel
+@{
+    ViewData["Title"] = "Solicitudes de Fotografía";
+    Layout = "~/Pages/Shared/_Layout.cshtml";
+}
+
+<style>
+    /* Reset body styles for admin dashboard */
+    body {
+        margin: 0;
+        padding: 0;
+        background: #02081C !important;
+        font-family: 'Montserrat', sans-serif !important;
+        overflow-x: hidden;
+    }
+
+    .main-container {
+        background: #02081C !important;
+        min-height: 100vh;
+        position: relative;
+        width: 100%;
+        overflow: hidden;
+    }
+
+    /* Admin Dashboard Container */
+    .admin-dashboard-container {
+        width: 100%;
+        min-height: 100vh;
+        position: relative;
+        background: #02081C;
+        overflow-x: hidden;
+        overflow-y: auto;
+    }
+
+    /* Main Content Area */
+    .admin-main-content {
+        margin-left: 396px;
+        padding: 120px 40px 40px 20px;
+        background: #02081C;
+    }
+
+    /* Page Title */
+    .page-title {
+        color: white;
+        font-size: 24px;
+        font-family: 'Montserrat', sans-serif;
+        font-weight: 700;
+        margin-bottom: 30px;
+        margin-top: 0;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+    }
+
+    /* Table Container */
+    .tabla-figma-wrapper {
+        max-width: 1400px;
+        background: rgba(255, 255, 255, 0.15);
+        border: 0.5px solid rgba(255, 255, 255, 0.25);
+        border-radius: 8px;
+        overflow: hidden;
+        margin-bottom: 40px;
+    }
+
+    /* Table Styles */
+    .tabla-figma {
+        width: 100%;
+        margin: 0;
+        border-collapse: collapse;
+    }
+
+    .tabla-figma thead {
+        background: transparent;
+    }
+
+    .tabla-figma thead th {
+        color: #F7F7F7;
+        font-size: 14px;
+        font-family: 'Montserrat', sans-serif;
+        font-weight: 600;
+        text-align: left;
+        padding: 16px 20px;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.25);
+        white-space: nowrap;
+    }
+
+    .tabla-figma tbody td {
+        color: #F7F7F7;
+        font-size: 14px;
+        font-family: 'Montserrat', sans-serif;
+        font-weight: 400;
+        padding: 16px 20px;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        vertical-align: middle;
+    }
+
+    .tabla-figma tbody tr {
+        transition: background-color 0.2s ease;
+    }
+
+    .tabla-figma tbody tr:hover {
+        background: rgba(255, 255, 255, 0.05);
+    }
+
+    /* Stats Card */
+    .stats-card {
+        background: rgba(255, 255, 255, 0.1);
+        border: 0.5px solid rgba(255, 255, 255, 0.25);
+        border-radius: 8px;
+        padding: 16px 24px;
+        margin-bottom: 24px;
+        max-width: 1400px;
+    }
+
+    .stats-text {
+        color: white;
+        font-size: 14px;
+        font-family: 'Montserrat', sans-serif;
+        font-weight: 400;
+        margin: 0;
+    }
+
+    /* Pagination Styles */
+    .pagination {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        gap: 8px;
+        margin-top: 30px;
+        flex-wrap: wrap;
+    }
+
+    .pagination-btn {
+        background: rgba(255, 255, 255, 0.1);
+        border: 1px solid rgba(255, 255, 255, 0.25);
+        color: white;
+        padding: 8px 16px;
+        border-radius: 6px;
+        cursor: pointer;
+        text-decoration: none;
+        font-family: 'Montserrat', sans-serif;
+        font-size: 14px;
+        transition: all 0.2s ease;
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+    }
+
+    .pagination-btn:hover {
+        background: rgba(255, 255, 255, 0.2);
+        transform: translateY(-2px);
+    }
+
+    .pagination-btn.active {
+        background: #667eea;
+        border-color: #667eea;
+        font-weight: 600;
+    }
+
+    .pagination-dots {
+        color: white;
+        padding: 8px;
+    }
+
+    /* Empty State */
+    .empty-state {
+        text-align: center;
+        padding: 60px 20px;
+        color: #718096;
+        background: rgba(255, 255, 255, 0.05);
+        border-radius: 8px;
+        max-width: 1400px;
+    }
+
+    .empty-state h3 {
+        color: white;
+        margin-bottom: 8px;
+        font-family: 'Montserrat', sans-serif;
+    }
+
+    .empty-state p {
+        font-family: 'Montserrat', sans-serif;
+    }
+
+    /* Estilos del dropdown */
+    .estado-dropdown {
+        padding: 8px 16px;
+        border: 1px solid rgba(255, 255, 255, 0.25);
+        border-radius: 8px;
+        background: rgba(255, 255, 255, 0.1);
+        font-size: 14px;
+        color: white;
+        cursor: pointer;
+        transition: all 0.2s;
+        outline: none;
+        font-family: 'Montserrat', sans-serif;
+    }
+
+    .estado-dropdown:hover {
+        background: rgba(255, 255, 255, 0.15);
+        border-color: #4299e1;
+    }
+
+    .estado-dropdown:focus {
+        border-color: #4299e1;
+        box-shadow: 0 0 0 3px rgba(66, 153, 225, 0.1);
+    }
+
+    .estado-dropdown option {
+        background: #02081C;
+        color: white;
+    }
+
+    /* Botón revisar */
+    .btn-revisar {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        color: white;
+        border: none;
+        padding: 8px 16px;
+        border-radius: 8px;
+        cursor: pointer;
+        font-size: 14px;
+        font-weight: 500;
+        transition: all 0.3s;
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        font-family: 'Montserrat', sans-serif;
+    }
+
+    .btn-revisar:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 4px 12px rgba(102, 126, 234, 0.3);
+    }
+
+    .btn-revisar i {
+        font-size: 14px;
+    }
+
+    /* Modal Overlay */
+    .modal-overlay {
+        display: none;
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: rgba(0, 0, 0, 0.6);
+        backdrop-filter: blur(4px);
+        z-index: 1000;
+        align-items: center;
+        justify-content: center;
+        animation: fadeIn 0.3s ease;
+    }
+
+    .modal-overlay.active {
+        display: flex;
+    }
+
+    /* Modal Content */
+    .modal-content {
+        background: white;
+        border-radius: 16px;
+        width: 90%;
+        max-width: 600px;
+        max-height: 90vh;
+        overflow-y: auto;
+        box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+        animation: slideUp 0.3s ease;
+    }
+
+    /* Modal Header */
+    .modal-header {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        color: white;
+        padding: 24px;
+        border-radius: 16px 16px 0 0;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+
+    .modal-title {
+        margin: 0;
+        font-size: 1.5rem;
+        font-weight: 600;
+        font-family: 'Montserrat', sans-serif;
+    }
+
+    .modal-close {
+        background: rgba(255, 255, 255, 0.2);
+        border: none;
+        color: white;
+        width: 36px;
+        height: 36px;
+        border-radius: 50%;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        transition: all 0.2s;
+    }
+
+    .modal-close:hover {
+        background: rgba(255, 255, 255, 0.3);
+        transform: rotate(90deg);
+    }
+
+    /* Modal Body */
+    .modal-body {
+        padding: 24px;
+    }
+
+    .info-section {
+        margin-bottom: 24px;
+    }
+
+    .info-section:last-child {
+        margin-bottom: 0;
+    }
+
+    .info-section-title {
+        font-size: 1.1rem;
+        font-weight: 600;
+        color: #2d3748;
+        margin-bottom: 16px;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        font-family: 'Montserrat', sans-serif;
+    }
+
+    .info-section-title i {
+        color: #667eea;
+    }
+
+    .info-grid {
+        display: grid;
+        gap: 16px;
+    }
+
+    .info-item {
+        display: flex;
+        flex-direction: column;
+        gap: 4px;
+    }
+
+    .info-label {
+        font-size: 0.875rem;
+        color: #718096;
+        font-weight: 500;
+        font-family: 'Montserrat', sans-serif;
+    }
+
+    .info-value {
+        font-size: 1rem;
+        color: #2d3748;
+        padding: 8px 12px;
+        background: #f7fafc;
+        border-radius: 6px;
+        border-left: 3px solid #667eea;
+        font-family: 'Montserrat', sans-serif;
+    }
+
+    /* Animations */
+    @@keyframes fadeIn {
+        from {
+            opacity: 0;
+        }
+        to {
+            opacity: 1;
+        }
+    }
+
+    @@keyframes slideUp {
+        from {
+            transform: translateY(30px);
+            opacity: 0;
+        }
+        to {
+            transform: translateY(0);
+            opacity: 1;
+        }
+    }
+
+    /* Responsive */
+    @@media (max-width: 768px) {
+        .admin-main-content {
+            margin-left: 0;
+            padding: 100px 20px 40px 20px;
+        }
+
+        .modal-content {
+            width: 95%;
+            max-height: 85vh;
+        }
+
+        .modal-header {
+            padding: 20px;
+        }
+
+        .modal-title {
+            font-size: 1.25rem;
+        }
+
+        .modal-body {
+            padding: 20px;
+        }
+    }
+</style>
+
+<div class="admin-dashboard-container">
+    <!-- Usar el partial del sidebar -->
+    @await Html.PartialAsync("_AdminSidebar")
+
+    <!-- Main Content -->
+    <div class="admin-main-content">
+        <!-- Page Title -->
+        <h1 class="page-title">
+            Solicitudes de Fotografía
+        </h1>
+
+        @if (Model.Solicitudes.Any())
+        {
+            <div class="stats-card">
+                <p class="stats-text">
+                    <strong>Total de solicitudes:</strong> @Model.TotalRegistros | 
+                    <strong>Página:</strong> @Model.PaginaActual de @Model.TotalPaginas
+                </p>
+            </div>
+
+            <div class="tabla-figma-wrapper">
+                <table class="tabla-figma">
+                    <thead>
+                        <tr>
+                            <th>Código</th>
+                            <th>Título</th>
+                            <th>Fecha Publicación</th>
+                            <th>Estado</th>
+                            <th>Acciones</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var solicitud in Model.Solicitudes)
+                        {
+                            <tr>
+                                <td>@solicitud.Code</td>
+                                <td>@solicitud.Title</td>
+                                <td>@solicitud.Date</td>
+                                <td>
+                                    <select 
+                                        class="estado-dropdown" 
+                                        data-id="@solicitud.Id"
+                                        onchange="cambiarEstadoAgenda(@solicitud.Id, this.value)">
+                                        <option value="Sin agendar" selected="@(solicitud.EstadoAgenda == "Sin agendar")">Sin agendar</option>
+                                        <option value="Agendado" selected="@(solicitud.EstadoAgenda == "Agendado")">Agendado</option>
+                                    </select>
+                                </td>
+                                <td>
+                                    <button class="btn-revisar" onclick="abrirModalCliente(@solicitud.Id, '@Html.Raw(solicitud.NombrePropietario)', '@solicitud.EmailPropietario', '@solicitud.TelefonoPropietario', '@Html.Raw(solicitud.Title)', '@Html.Raw(solicitud.UbicacionVehiculo)')">
+                                        <i class="fas fa-eye"></i> Ver Cliente
+                                    </button>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+
+            @if (Model.TotalPaginas > 1)
+            {
+                <div class="pagination">
+                    @if (Model.PaginaActual > 1)
+                    {
+                        <a href="?PaginaActual=@(Model.PaginaActual - 1)" class="pagination-btn">
+                            <i class="fas fa-chevron-left"></i> Anterior
+                        </a>
+                    }
+
+                    @for (int i = 1; i <= Model.TotalPaginas; i++)
+                    {
+                        if (i == Model.PaginaActual)
+                        {
+                            <span class="pagination-btn active">@i</span>
+                        }
+                        else if (i == 1 || i == Model.TotalPaginas || (i >= Model.PaginaActual - 2 && i <= Model.PaginaActual + 2))
+                        {
+                            <a href="?PaginaActual=@i" class="pagination-btn">@i</a>
+                        }
+                        else if (i == Model.PaginaActual - 3 || i == Model.PaginaActual + 3)
+                        {
+                            <span class="pagination-dots">...</span>
+                        }
+                    }
+
+                    @if (Model.PaginaActual < Model.TotalPaginas)
+                    {
+                        <a href="?PaginaActual=@(Model.PaginaActual + 1)" class="pagination-btn">
+                            Siguiente <i class="fas fa-chevron-right"></i>
+                        </a>
+                    }
+                </div>
+            }
+        }
+        else
+        {
+            <div class="empty-state">
+                <i class="fas fa-camera" style="font-size: 4rem; color: #cbd5e0; margin-bottom: 1rem;"></i>
+                <h3>No hay solicitudes de fotografía</h3>
+                <p>No hay publicaciones con plan de nivel 4 actualmente.</p>
+            </div>
+        }
+    </div>
+</div>
+
+<!-- Modal de Información del Cliente -->
+<div id="modalCliente" class="modal-overlay" onclick="cerrarModalCliente(event)">
+    <div class="modal-content" onclick="event.stopPropagation()">
+        <div class="modal-header">
+            <h2 class="modal-title">Información del Cliente</h2>
+            <button onclick="cerrarModalCliente()" class="modal-close">
+                <i class="fas fa-times"></i>
+            </button>
+        </div>
+        
+        <div class="modal-body">
+            <div class="info-section">
+                <h3 class="info-section-title">
+                    <i class="fas fa-user"></i> Datos del Propietario
+                </h3>
+                <div class="info-grid">
+                    <div class="info-item">
+                        <span class="info-label">Nombre:</span>
+                        <span class="info-value" id="clienteNombre">-</span>
+                    </div>
+                    <div class="info-item">
+                        <span class="info-label">Email:</span>
+                        <span class="info-value" id="clienteEmail">-</span>
+                    </div>
+                    <div class="info-item">
+                        <span class="info-label">Teléfono:</span>
+                        <span class="info-value" id="clienteTelefono">-</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="info-section">
+                <h3 class="info-section-title">
+                    <i class="fas fa-car"></i> Información del Vehículo
+                </h3>
+                <div class="info-grid">
+                    <div class="info-item">
+                        <span class="info-label">Vehículo:</span>
+                        <span class="info-value" id="vehiculoNombre">-</span>
+                    </div>
+                    <div class="info-item">
+                        <span class="info-label">Ubicación:</span>
+                        <span class="info-value" id="vehiculoUbicacion">-</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    // Cambiar estado de agenda
+    async function cambiarEstadoAgenda(id, nuevoEstado) {
+        const dropdown = document.querySelector('.estado-dropdown[data-id="' + id + '"]');
+        const originalValue = dropdown.value;
+        
+        try {
+            // Deshabilitar el dropdown mientras se procesa
+            dropdown.disabled = true;
+            dropdown.style.opacity = '0.6';
+
+            const response = await fetch('?handler=CambiarEstado', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded',
+                    'RequestVerificationToken': document.querySelector('input[name="__RequestVerificationToken"]').value
+                },
+                body: 'id=' + id + '&nuevoEstado=' + encodeURIComponent(nuevoEstado)
+            });
+
+            if (response.ok) {
+                // Mostrar notificación de éxito
+                mostrarNotificacion('Estado actualizado correctamente', 'success');
+            } else {
+                throw new Error('Error al actualizar el estado');
+            }
+        } catch (error) {
+            console.error('Error:', error);
+            mostrarNotificacion('Error al actualizar el estado', 'error');
+            // Restaurar valor original en caso de error
+            dropdown.value = originalValue;
+        } finally {
+            // Rehabilitar el dropdown
+            dropdown.disabled = false;
+            dropdown.style.opacity = '1';
+        }
+    }
+
+    // Abrir modal de cliente
+    function abrirModalCliente(id, nombre, email, telefono, vehiculo, ubicacion) {
+        document.getElementById('clienteNombre').textContent = nombre;
+        document.getElementById('clienteEmail').textContent = email;
+        document.getElementById('clienteTelefono').textContent = telefono;
+        document.getElementById('vehiculoNombre').textContent = vehiculo;
+        document.getElementById('vehiculoUbicacion').textContent = ubicacion;
+        
+        const modal = document.getElementById('modalCliente');
+        modal.classList.add('active');
+        document.body.style.overflow = 'hidden';
+    }
+
+    // Cerrar modal de cliente
+    function cerrarModalCliente(event) {
+        if (!event || event.target.id === 'modalCliente') {
+            const modal = document.getElementById('modalCliente');
+            modal.classList.remove('active');
+            document.body.style.overflow = 'auto';
+        }
+    }
+
+    // Cerrar modal con tecla ESC
+    document.addEventListener('keydown', function(event) {
+        if (event.key === 'Escape') {
+            cerrarModalCliente();
+        }
+    });
+
+    // Función auxiliar para mostrar notificaciones
+    function mostrarNotificacion(mensaje, tipo) {
+        // Crear elemento de notificación
+        const notif = document.createElement('div');
+        notif.style.cssText = `
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            padding: 16px 24px;
+            background: ${tipo === 'success' ? '#48bb78' : '#f56565'};
+            color: white;
+            border-radius: 8px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+            z-index: 10000;
+            font-family: 'Montserrat', sans-serif;
+            animation: slideInRight 0.3s ease;
+        `;
+        notif.textContent = mensaje;
+        
+        document.body.appendChild(notif);
+        
+        // Eliminar después de 3 segundos
+        setTimeout(() => {
+            notif.style.animation = 'slideOutRight 0.3s ease';
+            setTimeout(() => notif.remove(), 300);
+        }, 3000);
+    }
+
+    // Añadir estilos de animación para notificaciones
+    const style = document.createElement('style');
+    style.textContent = `
+        @@keyframes slideInRight {
+            from {
+                transform: translateX(400px);
+                opacity: 0;
+            }
+            to {
+                transform: translateX(0);
+                opacity: 1;
+            }
+        }
+        @@keyframes slideOutRight {
+            from {
+                transform: translateX(0);
+                opacity: 1;
+            }
+            to {
+                transform: translateX(400px);
+                opacity: 0;
+            }
+        }
+    `;
+    document.head.appendChild(style);
+</script>
