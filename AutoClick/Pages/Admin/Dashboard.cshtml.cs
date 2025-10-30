@@ -21,7 +21,6 @@ namespace AutoClick.Pages.Admin
         }
 
         // Estadísticas de visitas (Application Insights)
-        public string VisitasMensuales { get; set; } = "0";
         public string VisitasSemanales { get; set; } = "0";
         public string VisitasHoy { get; set; } = "0";
         
@@ -54,12 +53,10 @@ namespace AutoClick.Pages.Admin
 
                 // ===== ESTADÍSTICAS DE VISITAS (APPLICATION INSIGHTS) =====
                 // Obtener métricas reales de Application Insights
-                var visitasMensuales = await _appInsightsService.GetMonthlyPageViewsAsync();
                 var visitasSemanales = await _appInsightsService.GetWeeklyPageViewsAsync();
                 var visitasHoy = await _appInsightsService.GetDailyPageViewsAsync();
                 
                 // Formatear números (K para miles, M para millones)
-                VisitasMensuales = FormatNumber(visitasMensuales);
                 VisitasSemanales = FormatNumber(visitasSemanales);
                 VisitasHoy = FormatNumber(visitasHoy);
 

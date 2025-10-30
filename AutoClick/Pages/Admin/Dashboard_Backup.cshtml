@@ -274,11 +274,6 @@
             </div>
             <div id="estadisticas-dropdown" style="width: 344px; flex-direction: column; justify-content: flex-start; align-items: flex-start; gap: 4px; display: flex; margin-top: 8px;">
                 <div class="dropdown-item" style="width: 344px; height: 40px; padding-top: 8px; padding-bottom: 8px; padding-left: 12px; padding-right: 8px; border-radius: 4px; justify-content: flex-start; align-items: center; display: inline-flex; transition: background-color 0.2s ease;">
-                    <a href="/Admin/VisitasMensuales" style="text-decoration: none; color: white; width: 100%;">
-                        <div style="text-box-trim: trim-both; text-box-edge: cap alphabetic; color: white; font-size: 16px; font-family: Montserrat; font-weight: 500; word-wrap: break-word">Visitas mensuales</div>
-                    </a>
-                </div>
-                <div class="dropdown-item" style="width: 344px; height: 40px; padding-top: 8px; padding-bottom: 8px; padding-left: 12px; padding-right: 8px; border-radius: 4px; justify-content: flex-start; align-items: center; display: inline-flex; transition: background-color 0.2s ease;">
                     <a href="/Admin/IngresosDeLaPlataforma" style="text-decoration: none; color: white; width: 100%;">
                         <div style="text-box-trim: trim-both; text-box-edge: cap alphabetic; color: white; font-size: 16px; font-family: Montserrat; font-weight: 500; word-wrap: break-word">Ingresos de la plataforma</div>
                     </a>
@@ -346,23 +341,6 @@
             </div>
         </div>
         
-        <!-- Reportes del sistema -->
-        <div class="sidebar-item" data-estado="Default" style="width: 344px; height: 56px; position: relative;">
-            <div style="width: 344px; height: 50px; padding-top: 14px; padding-bottom: 14px; padding-left: 16px; padding-right: 22px; left: 0px; top: 3px; position: absolute; overflow: hidden; border-radius: 2px; justify-content: space-between; align-items: center; display: inline-flex; transition: background-color 0.2s ease;">
-                <a href="/Admin/Reportes" style="text-decoration: none; color: white; display: flex; align-items: center; gap: 8px; width: 100%;">
-                    <div style="justify-content: flex-start; align-items: center; gap: 8px; display: flex">
-                        <svg width="22" height="22" viewBox="0 0 22 22" fill="none" xmlns="http://www.w3.org/2000/svg" style="flex-shrink: 0;">
-                            <path d="M2 22C1.45 22 0.979167 21.8042 0.5875 21.4125C0.195833 21.0208 0 20.55 0 20V2C0 1.45 0.195833 0.979167 0.5875 0.5875C0.979167 0.195833 1.45 0 2 0H20C20.55 0 21.0208 0.195833 21.4125 0.5875C21.8042 0.979167 22 1.45 22 2V20C22 20.55 21.8042 21.0208 21.4125 21.4125C21.0208 21.8042 20.55 22 20 22H2ZM2 20H20V2H2V20ZM4 18H11V16H4V18ZM13 18H18V13H13V18ZM4 14H11V12H4V14ZM4 10H11V8H4V10ZM13 11H18V4H13V11Z" fill="white"/>
-                        </svg>
-                        <div style="text-box-trim: trim-both; text-box-edge: cap alphabetic; color: white; font-size: 16px; font-family: Montserrat; font-weight: 500; word-wrap: break-word">Reportes del sistema</div>
-                    </div>
-                </a>
-                <svg width="12" height="6" viewBox="0 0 12 6" fill="none" xmlns="http://www.w3.org/2000/svg" style="flex-shrink: 0;">
-                    <path d="M0 0L6 6L12 0H0Z" fill="white"/>
-                </svg>
-            </div>
-        </div>
-        
         <!-- Centro de soporte -->
         <div class="sidebar-item" data-estado="Default" style="width: 344px; height: 56px; position: relative;">
             <div style="width: 344px; height: 50px; padding-top: 14px; padding-bottom: 14px; padding-left: 16px; padding-right: 22px; left: 0px; top: 3px; position: absolute; overflow: hidden; border-radius: 2px; justify-content: flex-start; align-items: center; display: inline-flex; transition: background-color 0.2s ease;">
@@ -390,23 +368,6 @@
                 </a>
             </div>
         </div>
-        
-        <!-- Control de la plataforma -->
-        <div class="sidebar-item" data-estado="Default" style="width: 344px; height: 56px; position: relative;">
-            <div style="width: 344px; height: 50px; padding-top: 14px; padding-bottom: 14px; padding-left: 16px; padding-right: 22px; left: 0px; top: 3px; position: absolute; overflow: hidden; border-radius: 2px; justify-content: space-between; align-items: center; display: inline-flex; transition: background-color 0.2s ease;">
-                <a href="/Admin/ControlPlataforma" style="text-decoration: none; color: white; display: flex; align-items: center; gap: 8px; width: 100%;">
-                    <div style="justify-content: flex-start; align-items: center; gap: 8px; display: flex">
-                        <svg width="22" height="22" viewBox="0 0 22 22" fill="none" xmlns="http://www.w3.org/2000/svg" style="flex-shrink: 0;">
-                            <path d="M9.02632 21.3158L8.5 19.6316C8.18421 19.5263 7.88421 19.3947 7.6 19.2368C7.31579 19.0789 7.04211 18.9 6.77895 18.7L5.21053 19.4211L3.23684 16.0526L4.57895 15C4.55789 14.8421 4.54737 14.6895 4.54737 14.5421V13.9737C4.54737 13.8263 4.55789 13.6737 4.57895 13.5158L3.23684 12.4632L5.21053 9.09474L6.77895 9.81579C7.04211 9.61579 7.32105 9.43684 7.61579 9.27895C7.91053 9.12105 8.20526 8.98947 8.5 8.88421L9.02632 7.2H12.9737L13.5 8.88421C13.8158 8.98947 14.1158 9.12105 14.4 9.27895C14.6842 9.43684 14.9579 9.61579 15.2211 9.81579L16.7895 9.09474L18.7632 12.4632L17.4211 13.5158C17.4421 13.6737 17.4526 13.8263 17.4526 13.9737V14.5421C17.4526 14.6895 17.4316 14.8421 17.3895 15L18.7316 16.0526L16.7579 19.4211L15.2211 18.7C14.9579 18.9 14.6789 19.0789 14.3842 19.2368C14.0895 19.3947 13.7947 19.5263 13.5 19.6316L12.9737 21.3158H9.02632ZM11 16.5789C11.9579 16.5789 12.7789 16.2421 13.4632 15.5684C14.1474 14.8947 14.4895 14.0842 14.4895 13.1368C14.4895 12.1895 14.1474 11.3789 13.4632 10.7053C12.7789 10.0316 11.9579 9.69474 11 9.69474C10.0316 9.69474 9.20526 10.0316 8.52632 10.7053C7.84737 11.3789 7.50789 12.1895 7.50789 13.1368C7.50789 14.0842 7.84737 14.8947 8.52632 15.5684C9.20526 16.2421 10.0316 16.5789 11 16.5789ZM11 14.9368C10.5053 14.9368 10.0895 14.7632 9.75263 14.4158C9.41579 14.0684 9.24737 13.6421 9.24737 13.1368C9.24737 12.6316 9.41579 12.2053 9.75263 11.8579C10.0895 11.5105 10.5053 11.3368 11 11.3368C11.4947 11.3368 11.9105 11.5105 12.2474 11.8579C12.5842 12.2053 12.7526 12.6316 12.7526 13.1368C12.7526 13.6421 12.5842 14.0684 12.2474 14.4158C11.9105 14.7632 11.4947 14.9368 11 14.9368ZM10.2316 19.6737H11.7684L12.2 17.6632C12.7789 17.5158 13.3211 17.2895 13.8263 16.9842C14.3316 16.6789 14.7789 16.3053 15.1684 15.8632L17.1053 16.6684L17.8737 15.3158L16.1474 14.0211C16.2316 13.7579 16.2947 13.4895 16.3368 13.2158C16.3789 12.9421 16.4 12.6684 16.4 12.3947C16.4 12.1211 16.3789 11.8474 16.3368 11.5737C16.2947 11.3 16.2316 11.0316 16.1474 10.7684L17.8737 9.47368L17.1053 8.12105L15.1684 8.92632C14.7789 8.48421 14.3316 8.11053 13.8263 7.80526C13.3211 7.5 12.7789 7.27368 12.2 7.12632L11.7684 5.11579H10.2316L9.8 7.12632C9.22105 7.27368 8.67895 7.5 8.17368 7.80526C7.66842 8.11053 7.22105 8.48421 6.83158 8.92632L4.89474 8.12105L4.12632 9.47368L5.85263 10.7684C5.76842 11.0316 5.70526 11.3 5.66316 11.5737C5.62105 11.8474 5.6 12.1211 5.6 12.3947C5.6 12.6684 5.62105 12.9421 5.66316 13.2158C5.70526 13.4895 5.76842 13.7579 5.85263 14.0211L4.12632 15.3158L4.89474 16.6684L6.83158 15.8632C7.22105 16.3053 7.66842 16.6789 8.17368 16.9842C8.67895 17.2895 9.22105 17.5158 9.8 17.6632L10.2316 19.6737ZM11 0L14.5579 3.57895H7.44211L11 0ZM0 11L3.57895 7.44211V14.5579L0 11ZM22 11L18.4211 14.5579V7.44211L22 11Z" fill="white"/>
-                        </svg>
-                        <div style="text-box-trim: trim-both; text-box-edge: cap alphabetic; color: white; font-size: 16px; font-family: Montserrat; font-weight: 500; word-wrap: break-word">Control de la plataforma</div>
-                    </div>
-                </a>
-                <svg width="12" height="6" viewBox="0 0 12 6" fill="none" xmlns="http://www.w3.org/2000/svg" style="flex-shrink: 0;">
-                    <path d="M0 0L6 6L12 0H0Z" fill="white"/>
-                </svg>
-            </div>
-        </div>
     </div>
     
     <!-- Main Content -->
@@ -429,11 +390,6 @@
         </div>
         
         <div class="stats-container">
-            <div class="stat-item">
-                <div class="stat-number">@Model.VisitasMensuales</div>
-                <div class="stat-label">Visitas mensuales</div>
-            </div>
-            <div class="stat-divider"></div>
             <div class="stat-item">
                 <div class="stat-number">@Model.VisitasSemanales</div>
                 <div class="stat-label stat-label-short">Visitas semanales</div>
