@@ -1,0 +1,189 @@
+@page
+@model AutoClick.Pages.Admin.HistorialRechazosModel
+@{
+    ViewData["Title"] = "Historial de Rechazos";
+    Layout = "~/Pages/Shared/_Layout.cshtml";
+}
+
+<style>
+    /* Reset body styles for admin dashboard */
+    body {
+        margin: 0;
+        padding: 0;
+        background: #02081C !important;
+        font-family: 'Montserrat', sans-serif !important;
+        overflow-x: hidden;
+    }
+
+    .main-container {
+        background: #02081C !important;
+        min-height: 100vh;
+        position: relative;
+        width: 100%;
+        overflow: hidden;
+    }
+
+    /* Admin Dashboard Container */
+    .admin-dashboard-container {
+        width: 100%;
+        min-height: 100vh;
+        position: relative;
+        background: #02081C;
+        overflow-x: hidden;
+        overflow-y: auto;
+    }
+
+    /* Main Content Area */
+    .admin-main-content {
+        margin-left: 396px;
+        padding: 120px 40px 40px 20px;
+        background: #02081C;
+    }
+
+    /* Page Title */
+    .page-title {
+        color: white;
+        font-size: 24px;
+        font-family: 'Montserrat', sans-serif;
+        font-weight: 700;
+        margin-bottom: 30px;
+        margin-top: 0;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+    }
+
+    /* Table Container */
+    .tabla-figma-wrapper {
+        max-width: 1200px;
+        background: rgba(255, 255, 255, 0.15);
+        border: 0.5px solid rgba(255, 255, 255, 0.25);
+        border-radius: 8px;
+        overflow: hidden;
+        margin-bottom: 40px;
+    }
+
+    /* Table Styles */
+    .tabla-figma {
+        width: 100%;
+        margin: 0;
+        border-collapse: collapse;
+    }
+
+    .tabla-figma thead {
+        background: transparent;
+    }
+
+    .tabla-figma thead th {
+        color: #F7F7F7;
+        font-size: 14px;
+        font-family: 'Montserrat', sans-serif;
+        font-weight: 700;
+        text-align: left;
+        padding: 15px 32px;
+        border-bottom: 0.5px solid rgba(255, 255, 255, 0.25);
+    }
+
+    .tabla-figma tbody tr {
+        transition: background-color 0.2s ease;
+    }
+
+    .tabla-figma tbody tr:nth-child(odd) {
+        background: rgba(255, 255, 255, 0.1);
+    }
+
+    .tabla-figma tbody tr:hover {
+        background: rgba(255, 147, 30, 0.1);
+    }
+
+    .tabla-figma tbody td {
+        color: #F7F7F7;
+        font-size: 14px;
+        font-family: 'Montserrat', sans-serif;
+        font-weight: 500;
+        padding: 15px 32px;
+    }
+
+    /* Status Badge */
+    .status-badge {
+        display: inline-block;
+        padding: 4px 12px;
+        background: rgba(255, 0, 0, 0.2);
+        border: 1px solid rgba(255, 0, 0, 0.4);
+        border-radius: 12px;
+        color: #FF6B6B;
+        font-size: 12px;
+        font-family: 'Montserrat', sans-serif;
+        font-weight: 600;
+        text-transform: uppercase;
+    }
+
+    /* Responsive */
+    @@media (max-width: 1200px) {
+        .admin-sidebar {
+            transform: translateX(-100%);
+            transition: transform 0.3s ease;
+        }
+
+        .admin-main-content {
+            margin-left: 0;
+        }
+    }
+</style>
+
+<div class="admin-dashboard-container">
+    <!-- Usar el partial del sidebar -->
+    @await Html.PartialAsync("_AdminSidebar")
+
+    <!-- Main Content -->
+    <div class="admin-main-content">
+        <!-- Page Title -->
+        <h1 class="page-title">
+            Historial de Rechazos
+        </h1>
+
+        <!-- Table -->
+        <div class="tabla-figma-wrapper">
+            <table class="tabla-figma">
+                <thead>
+                    <tr>
+                        <th>Código</th>
+                        <th>Título</th>
+                        <th>Estado</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @if (Model.RejectedAds.Count == 0)
+                    {
+                        <tr>
+                            <td colspan="3" style="text-align: center; padding: 40px;">
+                                No hay anuncios rechazados
+                            </td>
+                        </tr>
+                    }
+                    else
+                    {
+                        @foreach(var item in Model.RejectedAds)
+                        {
+                            <tr>
+                                <td>@item.Code</td>
+                                <td>@item.Title</td>
+                                <td>
+                                    <span class="status-badge">@item.Status</span>
+                                </td>
+                            </tr>
+                        }
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<script>
+// Funciones auxiliares para el sidebar si es necesario
+document.addEventListener('DOMContentLoaded', function() {
+    // Cualquier inicialización específica de la página puede ir aquí
+    console.log('Historial de Rechazos cargado');
+});
+</script>

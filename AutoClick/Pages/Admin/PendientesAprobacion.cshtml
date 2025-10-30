@@ -165,6 +165,148 @@
             margin-left: 0;
         }
     }
+
+    /* Estilos de modales */
+    .modal-detalles-overlay {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0, 0, 0, 0.7);
+        display: none;
+        justify-content: center;
+        align-items: center;
+        z-index: 10000;
+        backdrop-filter: blur(4px);
+    }
+
+    .modal-detalles-overlay.active {
+        display: flex;
+    }
+
+    .modal-detalles-content {
+        background: #030D2B;
+        border-radius: 12px;
+        border: 1px solid rgba(255, 255, 255, 0.25);
+        max-width: 600px;
+        width: 90%;
+        max-height: 90vh;
+        overflow-y: auto;
+        animation: modalSlideIn 0.3s ease;
+    }
+
+    @@keyframes modalSlideIn {
+        from {
+            transform: translateY(-50px);
+            opacity: 0;
+        }
+        to {
+            transform: translateY(0);
+            opacity: 1;
+        }
+    }
+
+    .modal-detalles-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 30px 40px 20px;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.25);
+    }
+
+    .modal-detalles-title {
+        color: white;
+        font-size: 24px;
+        font-family: 'Montserrat', sans-serif;
+        font-weight: 700;
+        margin: 0;
+    }
+
+    .modal-detalles-close {
+        background: transparent;
+        border: none;
+        width: 40px;
+        height: 40px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+        border-radius: 8px;
+        transition: all 0.3s ease;
+    }
+
+    .modal-detalles-close:hover {
+        background: rgba(255, 255, 255, 0.15);
+        transform: rotate(90deg);
+    }
+
+    .modal-detalles-body {
+        padding: 30px 40px;
+    }
+
+    .modal-detalles-footer {
+        display: flex;
+        justify-content: flex-end;
+        gap: 16px;
+        padding: 20px 40px;
+        border-top: 1px solid rgba(255, 255, 255, 0.25);
+    }
+
+    .btn-modal-cerrar {
+        padding: 12px 32px;
+        background: transparent;
+        border: 1px solid white;
+        border-radius: 8px;
+        color: white;
+        font-family: 'Montserrat', sans-serif;
+        font-size: 16px;
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.3s ease;
+    }
+
+    .btn-modal-cerrar:hover {
+        background: rgba(255, 255, 255, 0.1);
+    }
+
+    .btn-modal-submit {
+        padding: 12px 32px;
+        background: #FF931E;
+        border: none;
+        border-radius: 8px;
+        color: white;
+        font-family: 'Montserrat', sans-serif;
+        font-size: 16px;
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.3s ease;
+    }
+
+    .btn-modal-submit:hover {
+        background: #e67e0a;
+        transform: translateY(-2px);
+        box-shadow: 0 4px 12px rgba(255, 147, 30, 0.4);
+    }
+
+    .btn-modal-reject {
+        padding: 12px 32px;
+        background: #ff453a;
+        border: none;
+        border-radius: 8px;
+        color: white;
+        font-family: 'Montserrat', sans-serif;
+        font-size: 16px;
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.3s ease;
+    }
+
+    .btn-modal-reject:hover {
+        background: #d63027;
+        transform: translateY(-2px);
+        box-shadow: 0 4px 12px rgba(255, 69, 58, 0.4);
+    }
 </style>
 
 <div class="admin-dashboard-container">
@@ -316,12 +458,20 @@
                             <td>@item.Date</td>
                             <td>
                                 <div class="action-buttons">
-                                    <button class="btn-action btn-approve" title="Aprobar" onclick="approveItem(@item.Id, '@item.Title')">
+                                    <button class="btn-action btn-approve" 
+                                            title="Aprobar" 
+                                            data-id="@item.Id" 
+                                            data-title="@item.Title"
+                                            onclick="approveItem(this)">
                                         <svg width="18" height="14" viewBox="0 0 18 14" fill="none" xmlns="http://www.w3.org/2000/svg">
                                             <path d="M6 11.17L1.83 7L0.410004 8.41L6 14L18 2L16.59 0.589996L6 11.17Z" fill="white"/>
                                         </svg>
                                     </button>
-                                    <button class="btn-action btn-reject" title="Rechazar" onclick="rejectItem(@item.Id, '@item.Title')">
+                                    <button class="btn-action btn-reject" 
+                                            title="Rechazar" 
+                                            data-id="@item.Id" 
+                                            data-title="@item.Title"
+                                            onclick="rejectItem(this)">
                                         <svg width="14" height="14" viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg">
                                             <path d="M14 1.41L12.59 0L7 5.59L1.41 0L0 1.41L5.59 7L0 12.59L1.41 14L7 8.41L12.59 14L14 12.59L8.41 7L14 1.41Z" fill="white"/>
                                         </svg>
@@ -342,18 +492,105 @@
     </div>
 </div>
 
-<!-- Modal de confirmación -->
-<div id="confirmationModal" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.7); z-index: 9999; justify-content: center; align-items: center;">
-    <div style="background: #030D2B; border-radius: 8px; padding: 32px; max-width: 500px; width: 90%; border: 1px solid rgba(255, 255, 255, 0.25);">
-        <h2 id="modalTitle" style="color: white; font-size: 20px; font-family: 'Montserrat', sans-serif; font-weight: 700; margin-bottom: 16px; text-align: center;">¡Anuncio Aprobado!</h2>
-        <p id="modalMessage" style="color: #F7F7F7; font-size: 16px; font-family: 'Montserrat', sans-serif; font-weight: 500; margin-bottom: 24px; text-align: center;"></p>
-        <div style="display: flex; justify-content: center;">
-            <button onclick="closeModal()" style="background: #00CC00; color: white; border: none; border-radius: 4px; padding: 12px 32px; font-size: 14px; font-family: 'Montserrat', sans-serif; font-weight: 600; cursor: pointer;">Cerrar</button>
+<!-- Modal de Confirmación para Aprobar -->
+<div id="modalConfirmarAprobar" class="modal-detalles-overlay" onclick="cerrarModalConfirmarAprobar(event)">
+    <div class="modal-detalles-content" onclick="event.stopPropagation()" style="max-width: 500px;">
+        <div class="modal-detalles-header">
+            <h2 class="modal-detalles-title">✅ Confirmar aprobación</h2>
+            <button type="button" class="modal-detalles-close" onclick="cerrarModalConfirmarAprobar()">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+                    <path d="M18 6L6 18M6 6L18 18" stroke="white" stroke-width="2" stroke-linecap="round"/>
+                </svg>
+            </button>
+        </div>
+
+        <div class="modal-detalles-body">
+            <p style="color: white; font-size: 16px; line-height: 1.5; margin: 0 0 16px 0;">
+                ¿Está seguro de que desea <strong style="color: #FF931E;">aprobar este anuncio</strong>?
+            </p>
+            <p id="tituloAnuncioAprobar" style="color: rgba(255, 255, 255, 0.7); font-size: 14px; line-height: 1.5; margin: 0;">
+                <!-- El título se insertará aquí -->
+            </p>
+        </div>
+
+        <div class="modal-detalles-footer">
+            <button type="button" class="btn-modal-cerrar" onclick="cerrarModalConfirmarAprobar()">
+                Cancelar
+            </button>
+            <button type="button" class="btn-modal-submit" onclick="confirmarAprobacion()">
+                Sí, aprobar
+            </button>
+        </div>
+    </div>
+</div>
+
+<!-- Modal de Confirmación para Rechazar -->
+<div id="modalConfirmarRechazar" class="modal-detalles-overlay" onclick="cerrarModalConfirmarRechazar(event)">
+    <div class="modal-detalles-content" onclick="event.stopPropagation()" style="max-width: 500px;">
+        <div class="modal-detalles-header">
+            <h2 class="modal-detalles-title">⚠️ Confirmar rechazo</h2>
+            <button type="button" class="modal-detalles-close" onclick="cerrarModalConfirmarRechazar()">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+                    <path d="M18 6L6 18M6 6L18 18" stroke="white" stroke-width="2" stroke-linecap="round"/>
+                </svg>
+            </button>
+        </div>
+
+        <div class="modal-detalles-body">
+            <p style="color: white; font-size: 16px; line-height: 1.5; margin: 0 0 16px 0;">
+                ¿Está seguro de que desea <strong style="color: #ff453a;">rechazar este anuncio</strong>?
+            </p>
+            <p id="tituloAnuncioRechazar" style="color: rgba(255, 255, 255, 0.7); font-size: 14px; line-height: 1.5; margin: 0 0 16px 0;">
+                <!-- El título se insertará aquí -->
+            </p>
+            <p style="color: rgba(255, 255, 255, 0.7); font-size: 14px; line-height: 1.5; margin: 0;">
+                <strong>El anuncio será marcado como rechazado</strong> y aparecerá en el historial de rechazos.
+            </p>
+        </div>
+
+        <div class="modal-detalles-footer">
+            <button type="button" class="btn-modal-cerrar" onclick="cerrarModalConfirmarRechazar()">
+                Cancelar
+            </button>
+            <button type="button" class="btn-modal-reject" onclick="confirmarRechazo()">
+                Sí, rechazar
+            </button>
+        </div>
+    </div>
+</div>
+
+<!-- Modal de Éxito -->
+<div id="modalExito" class="modal-detalles-overlay" onclick="cerrarModalExito(event)">
+    <div class="modal-detalles-content" onclick="event.stopPropagation()" style="max-width: 500px;">
+        <div class="modal-detalles-header">
+            <h2 id="modalExitoTitle" class="modal-detalles-title">✅ ¡Operación exitosa!</h2>
+            <button type="button" class="modal-detalles-close" onclick="cerrarModalExito()">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+                    <path d="M18 6L6 18M6 6L18 18" stroke="white" stroke-width="2" stroke-linecap="round"/>
+                </svg>
+            </button>
+        </div>
+
+        <div class="modal-detalles-body">
+            <p id="modalExitoMessage" style="color: white; font-size: 16px; line-height: 1.5; margin: 0; text-align: center;">
+                <!-- El mensaje se insertará aquí -->
+            </p>
+        </div>
+
+        <div class="modal-detalles-footer" style="justify-content: center;">
+            <button type="button" class="btn-modal-submit" onclick="cerrarModalExito()">
+                Cerrar
+            </button>
         </div>
     </div>
 </div>
 
 <script>
+// Variables globales para almacenar el ID y título del anuncio a procesar
+let anuncioIdProcesar = null;
+let anuncioTituloProcesar = '';
+let accionTipo = ''; // 'aprobar' o 'rechazar'
+
 function toggleDropdown(dropdownId) {
     const dropdown = document.getElementById(dropdownId + '-dropdown');
     const arrow = document.getElementById(dropdownId + '-arrow');
@@ -367,77 +604,204 @@ function toggleDropdown(dropdownId) {
     }
 }
 
-function showModal(title, message) {
-    document.getElementById('modalTitle').textContent = title;
-    document.getElementById('modalMessage').textContent = message;
-    document.getElementById('confirmationModal').style.display = 'flex';
+// Funciones para modal de confirmación de aprobación
+function abrirModalConfirmarAprobar(id, title) {
+    console.log('abrirModalConfirmarAprobar - Recibido ID:', id, 'Title:', title);
+    anuncioIdProcesar = id;
+    anuncioTituloProcesar = title;
+    accionTipo = 'aprobar';
+    console.log('anuncioIdProcesar establecido a:', anuncioIdProcesar);
+    document.getElementById('tituloAnuncioAprobar').textContent = title;
+    document.getElementById('modalConfirmarAprobar').classList.add('active');
 }
 
-function closeModal() {
-    document.getElementById('confirmationModal').style.display = 'none';
+function cerrarModalConfirmarAprobar(event) {
+    if (event && event.target.id !== 'modalConfirmarAprobar') {
+        return;
+    }
+    document.getElementById('modalConfirmarAprobar').classList.remove('active');
+    anuncioIdProcesar = null;
+    anuncioTituloProcesar = '';
 }
 
-async function approveItem(id, title) {
+// Funciones para modal de confirmación de rechazo
+function abrirModalConfirmarRechazar(id, title) {
+    console.log('abrirModalConfirmarRechazar - Recibido ID:', id, 'Title:', title);
+    anuncioIdProcesar = id;
+    anuncioTituloProcesar = title;
+    accionTipo = 'rechazar';
+    console.log('anuncioIdProcesar establecido a:', anuncioIdProcesar);
+    document.getElementById('tituloAnuncioRechazar').textContent = title;
+    document.getElementById('modalConfirmarRechazar').classList.add('active');
+}
+
+function cerrarModalConfirmarRechazar(event) {
+    if (event && event.target.id !== 'modalConfirmarRechazar') {
+        return;
+    }
+    document.getElementById('modalConfirmarRechazar').classList.remove('active');
+    anuncioIdProcesar = null;
+    anuncioTituloProcesar = '';
+}
+
+// Funciones para modal de éxito
+function mostrarModalExito(title, message) {
+    document.getElementById('modalExitoTitle').textContent = title;
+    document.getElementById('modalExitoMessage').textContent = message;
+    document.getElementById('modalExito').classList.add('active');
+}
+
+function cerrarModalExito(event) {
+    if (event && event.target.id !== 'modalExito') {
+        return;
+    }
+    document.getElementById('modalExito').classList.remove('active');
+}
+
+// Confirmar aprobación
+async function confirmarAprobacion() {
+    console.log('confirmarAprobacion - anuncioIdProcesar:', anuncioIdProcesar);
+    
+    if (!anuncioIdProcesar) {
+        console.error('Error: anuncioIdProcesar es null o undefined');
+        alert('Error: No se pudo identificar el anuncio a aprobar');
+        return;
+    }
+
+    // Guardar el ID antes de cerrar el modal
+    const idAaprobar = anuncioIdProcesar;
+    console.log('ID guardado para aprobar:', idAaprobar);
+    
+    // Cerrar el modal de confirmación
+    document.getElementById('modalConfirmarAprobar').classList.remove('active');
+
     try {
-        const response = await fetch(`/api/admin/AdminApproval/approve/${id}`, {
+        const url = '/api/admin/AdminApproval/approve/' + idAaprobar;
+        console.log('Fetching URL:', url);
+        
+        const response = await fetch(url, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
             }
         });
 
+        console.log('Response status:', response.status);
+        console.log('Response ok:', response.ok);
+
+        if (!response.ok) {
+            const errorText = await response.text();
+            console.error('Error response:', errorText);
+            throw new Error('HTTP error! status: ' + response.status);
+        }
+
         const data = await response.json();
+        console.log('Response data:', data);
 
         if (data.success) {
             // Remover la fila de la tabla
-            const row = document.querySelector(`tr[data-auto-id="${id}"]`);
+            const row = document.querySelector('tr[data-auto-id="' + idAaprobar + '"]');
             if (row) {
                 row.style.opacity = '0';
                 setTimeout(() => row.remove(), 300);
             }
 
-            // Mostrar modal de confirmación
-            showModal('¡Anuncio Aprobado!', `El anuncio "${data.title}" fue aprobado exitosamente.`);
+            // Mostrar modal de éxito
+            mostrarModalExito('✅ ¡Anuncio Aprobado!', 'El anuncio "' + data.title + '" fue aprobado exitosamente.');
+            
+            // Limpiar variables
+            anuncioIdProcesar = null;
+            anuncioTituloProcesar = '';
         } else {
             alert(data.message || 'Error al aprobar el anuncio');
         }
     } catch (error) {
-        console.error('Error:', error);
-        alert('Error al aprobar el anuncio. Por favor, intente nuevamente.');
+        console.error('Error completo:', error);
+        alert('Error al aprobar el anuncio. Por favor, intente nuevamente. Revise la consola para más detalles.');
     }
 }
 
-async function rejectItem(id, title) {
-    if (!confirm(`¿Está seguro que desea rechazar el anuncio "${title}"?`)) {
+// Confirmar rechazo
+async function confirmarRechazo() {
+    console.log('confirmarRechazo - anuncioIdProcesar:', anuncioIdProcesar);
+    
+    if (!anuncioIdProcesar) {
+        console.error('Error: anuncioIdProcesar es null o undefined');
+        alert('Error: No se pudo identificar el anuncio a rechazar');
         return;
     }
 
+    // Guardar el ID antes de cerrar el modal
+    const idArechazar = anuncioIdProcesar;
+    console.log('ID guardado para rechazar:', idArechazar);
+    
+    // Cerrar el modal de confirmación
+    document.getElementById('modalConfirmarRechazar').classList.remove('active');
+
     try {
-        const response = await fetch(`/api/admin/AdminApproval/reject/${id}`, {
+        const url = '/api/admin/AdminApproval/reject/' + idArechazar;
+        console.log('Fetching URL:', url);
+        
+        const response = await fetch(url, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
             }
         });
 
+        console.log('Response status:', response.status);
+        console.log('Response ok:', response.ok);
+
+        if (!response.ok) {
+            const errorText = await response.text();
+            console.error('Error response:', errorText);
+            throw new Error('HTTP error! status: ' + response.status);
+        }
+
         const data = await response.json();
+        console.log('Response data:', data);
 
         if (data.success) {
             // Remover la fila de la tabla
-            const row = document.querySelector(`tr[data-auto-id="${id}"]`);
+            const row = document.querySelector('tr[data-auto-id="' + idArechazar + '"]');
             if (row) {
                 row.style.opacity = '0';
                 setTimeout(() => row.remove(), 300);
             }
 
-            showModal('Anuncio Rechazado', `El anuncio "${data.title}" fue rechazado.`);
+            // Mostrar modal de éxito
+            mostrarModalExito('⚠️ Anuncio Rechazado', 'El anuncio "' + data.title + '" fue rechazado y movido al historial.');
+            
+            // Limpiar variables
+            anuncioIdProcesar = null;
+            anuncioTituloProcesar = '';
         } else {
             alert(data.message || 'Error al rechazar el anuncio');
         }
     } catch (error) {
-        console.error('Error:', error);
-        alert('Error al rechazar el anuncio. Por favor, intente nuevamente.');
+        console.error('Error completo:', error);
+        alert('Error al rechazar el anuncio. Por favor, intente nuevamente. Revise la consola para más detalles.');
     }
+    anuncioTituloProcesar = '';
+}
+
+// Funciones públicas para los botones
+function approveItem(button) {
+    const id = parseInt(button.getAttribute('data-id'));
+    const title = button.getAttribute('data-title');
+    console.log('approveItem - ID:', id, 'Title:', title);
+    console.log('button element:', button);
+    console.log('data-id attribute:', button.getAttribute('data-id'));
+    abrirModalConfirmarAprobar(id, title);
+}
+
+function rejectItem(button) {
+    const id = parseInt(button.getAttribute('data-id'));
+    const title = button.getAttribute('data-title');
+    console.log('rejectItem - ID:', id, 'Title:', title);
+    console.log('button element:', button);
+    console.log('data-id attribute:', button.getAttribute('data-id'));
+    abrirModalConfirmarRechazar(id, title);
 }
 
 function reviewItem(id) {
@@ -503,6 +867,25 @@ document.addEventListener('DOMContentLoaded', function() {
     const rows = document.querySelectorAll('tbody tr');
     rows.forEach(row => {
         row.style.transition = 'opacity 0.3s ease';
+    });
+
+    // Manejar tecla ESC para cerrar modales
+    document.addEventListener('keydown', function(event) {
+        if (event.key === 'Escape') {
+            const modalAprobar = document.getElementById('modalConfirmarAprobar');
+            const modalRechazar = document.getElementById('modalConfirmarRechazar');
+            const modalExito = document.getElementById('modalExito');
+
+            if (modalAprobar && modalAprobar.classList.contains('active')) {
+                cerrarModalConfirmarAprobar();
+            }
+            if (modalRechazar && modalRechazar.classList.contains('active')) {
+                cerrarModalConfirmarRechazar();
+            }
+            if (modalExito && modalExito.classList.contains('active')) {
+                cerrarModalExito();
+            }
+        }
     });
 });
 </script>

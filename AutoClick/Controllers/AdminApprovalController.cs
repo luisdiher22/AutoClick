@@ -86,37 +86,60 @@ public class AdminApprovalController : ControllerBase
     {
         try
         {
-            var auto = await _context.Autos.FindAsync(id);
+            var auto = await _context.Autos
+                .Where(a => a.Id == id)
+                .FirstOrDefaultAsync();
             
             if (auto == null)
             {
+                _logger.LogWarning($"Intento de rechazar anuncio {id} que no existe");
                 return NotFound(new { success = false, message = "Anuncio no encontrado" });
             }
 
+            _logger.LogInformation($"Auto encontrado - ID: {id}, Activo actual: {auto.Activo}, PlanVisibilidad: {auto.PlanVisibilidad}");
+
             if (auto.PlanVisibilidad != 0)
             {
+                _logger.LogWarning($"Intento de rechazar anuncio {id} que no está pendiente (PlanVisibilidad = {auto.PlanVisibilidad})");
                 return BadRequest(new { success = false, message = "Este anuncio no está pendiente de aprobación" });
             }
 
             // Marcar como inactivo en lugar de eliminar
             auto.Activo = false;
             auto.FechaActualizacion = DateTime.UtcNow;
+            
+            _logger.LogInformation($"Rechazando anuncio {id} - Cambiando Activo de true a false");
 
-            await _context.SaveChangesAsync();
+            // Marcar explícitamente la entidad como modificada
+            _context.Entry(auto).State = Microsoft.EntityFrameworkCore.EntityState.Modified;
+            
+            var changes = await _context.SaveChangesAsync();
+            
+            _logger.LogInformation($"Cambios guardados: {changes} registro(s) afectado(s)");
 
-            _logger.LogInformation($"Anuncio {id} ({auto.NombreCompleto}) rechazado por el administrador");
+            // Recargar la entidad desde la base de datos para confirmar
+            await _context.Entry(auto).ReloadAsync();
+            
+            _logger.LogInformation($"Anuncio {id} ({auto.NombreCompleto}) rechazado exitosamente. Activo = {auto.Activo}, PlanVisibilidad = {auto.PlanVisibilidad}");
 
             return Ok(new 
             { 
                 success = true, 
                 message = $"El anuncio '{auto.NombreCompleto}' fue rechazado",
-                title = auto.NombreCompleto
+                title = auto.NombreCompleto,
+                debug = new 
+                {
+                    id = auto.Id,
+                    activo = auto.Activo,
+                    planVisibilidad = auto.PlanVisibilidad,
+                    changesSaved = changes
+                }
             });
         }
         catch (Exception ex)
         {
             _logger.LogError(ex, $"Error al rechazar anuncio {id}");
-            return StatusCode(500, new { success = false, message = "Error al rechazar el anuncio" });
+            return StatusCode(500, new { success = false, message = "Error al rechazar el anuncio", error = ex.Message });
         }
     }
 
