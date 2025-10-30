@@ -154,6 +154,51 @@
         opacity: 0.8;
     }
 
+    /* Estilos de paginación */
+    .paginacion-wrapper {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        margin-top: 24px;
+        gap: 8px;
+    }
+
+    .btn-paginacion {
+        padding: 8px 16px;
+        background: rgba(255, 255, 255, 0.15);
+        border: 0.5px solid rgba(255, 255, 255, 0.25);
+        border-radius: 8px;
+        color: #F7F7F7;
+        font-family: 'Montserrat', sans-serif;
+        font-size: 14px;
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.2s ease;
+        text-decoration: none;
+        display: inline-flex;
+        align-items: center;
+    }
+
+    .btn-paginacion:hover:not(.disabled) {
+        background: rgba(255, 147, 30, 0.2);
+        border-color: #FF931E;
+        transform: translateY(-2px);
+    }
+
+    .btn-paginacion.disabled {
+        opacity: 0.3;
+        cursor: not-allowed;
+        pointer-events: none;
+    }
+
+    .paginacion-info {
+        color: #F7F7F7;
+        font-family: 'Montserrat', sans-serif;
+        font-size: 14px;
+        font-weight: 500;
+        margin: 0 12px;
+    }
+
     /* Responsive */
     @@media (max-width: 1200px) {
         .admin-sidebar {
@@ -489,6 +534,26 @@
                 </tbody>
             </table>
         </div>
+
+        <!-- Paginación -->
+        @if (Model.TotalPaginas > 1)
+        {
+            <div class="paginacion-wrapper">
+                <a href="?PaginaActual=@(Model.PaginaActual - 1)" 
+                   class="btn-paginacion @(Model.PaginaActual <= 1 ? "disabled" : "")">
+                    Anterior
+                </a>
+                
+                <span class="paginacion-info">
+                    Página @Model.PaginaActual de @Model.TotalPaginas
+                </span>
+                
+                <a href="?PaginaActual=@(Model.PaginaActual + 1)" 
+                   class="btn-paginacion @(Model.PaginaActual >= Model.TotalPaginas ? "disabled" : "")">
+                    Siguiente
+                </a>
+            </div>
+        }
     </div>
 </div>
 

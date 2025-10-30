@@ -8,6 +8,7 @@ public interface ISoporteService
     Task<List<Reclamo>> GetReclamosAsync();
     Task<List<Reclamo>> GetReclamosPorEstadoAsync(EstadoReclamo estado);
     Task<List<Reclamo>> GetReclamosPorFiltroAsync(string? tipoProblema = null, EstadoReclamo? estado = null, string? prioridad = null);
+    Task<(List<Reclamo> items, int totalCount)> GetReclamosPaginadosAsync(int pagina, int tamañoPagina, string? tipoProblema = null, EstadoReclamo? estado = null, string? prioridad = null);
     Task<Reclamo?> GetReclamoByIdAsync(int id);
     Task<int> CrearReclamoAsync(Reclamo reclamo);
     Task<bool> ActualizarReclamoAsync(Reclamo reclamo);
@@ -19,6 +20,7 @@ public interface ISoporteService
     Task<List<Mensaje>> GetMensajesAsync();
     Task<List<Mensaje>> GetMensajesPorEstadoAsync(EstadoMensaje estado);
     Task<List<Mensaje>> GetMensajesPorFiltroAsync(string? tipoConsulta = null, EstadoMensaje? estado = null, string? prioridad = null);
+    Task<(List<Mensaje> items, int totalCount)> GetMensajesPaginadosAsync(int pagina, int tamañoPagina, string? tipoConsulta = null, EstadoMensaje? estado = null, string? prioridad = null);
     Task<Mensaje?> GetMensajeByIdAsync(int id);
     Task<int> CrearMensajeAsync(Mensaje mensaje);
     Task<bool> ActualizarMensajeAsync(Mensaje mensaje);

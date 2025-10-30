@@ -49,6 +49,33 @@ public class SoporteService : ISoporteService
             .ToListAsync();
     }
 
+    public async Task<(List<Reclamo> items, int totalCount)> GetReclamosPaginadosAsync(int pagina, int tamañoPagina, string? tipoProblema = null, EstadoReclamo? estado = null, string? prioridad = null)
+    {
+        var query = _context.Reclamos.AsQueryable();
+
+        // Aplicar filtros
+        if (!string.IsNullOrEmpty(tipoProblema))
+            query = query.Where(r => r.TipoProblema == tipoProblema);
+
+        if (estado.HasValue)
+            query = query.Where(r => r.Estado == estado.Value);
+
+        if (!string.IsNullOrEmpty(prioridad))
+            query = query.Where(r => r.Prioridad == prioridad);
+
+        // Contar total de registros
+        var totalCount = await query.CountAsync();
+
+        // Aplicar ordenamiento y paginación
+        var items = await query
+            .OrderByDescending(r => r.FechaCreacion)
+            .Skip((pagina - 1) * tamañoPagina)
+            .Take(tamañoPagina)
+            .ToListAsync();
+
+        return (items, totalCount);
+    }
+
     public async Task<Reclamo?> GetReclamoByIdAsync(int id)
     {
         return await _context.Reclamos
@@ -182,6 +209,33 @@ public class SoporteService : ISoporteService
         return await query
             .OrderByDescending(m => m.FechaCreacion)
             .ToListAsync();
+    }
+
+    public async Task<(List<Mensaje> items, int totalCount)> GetMensajesPaginadosAsync(int pagina, int tamañoPagina, string? tipoConsulta = null, EstadoMensaje? estado = null, string? prioridad = null)
+    {
+        var query = _context.Mensajes.AsQueryable();
+
+        // Aplicar filtros
+        if (!string.IsNullOrEmpty(tipoConsulta))
+            query = query.Where(m => m.TipoConsulta == tipoConsulta);
+
+        if (estado.HasValue)
+            query = query.Where(m => m.Estado == estado.Value);
+
+        if (!string.IsNullOrEmpty(prioridad))
+            query = query.Where(m => m.Prioridad == prioridad);
+
+        // Contar total de registros
+        var totalCount = await query.CountAsync();
+
+        // Aplicar ordenamiento y paginación
+        var items = await query
+            .OrderByDescending(m => m.FechaCreacion)
+            .Skip((pagina - 1) * tamañoPagina)
+            .Take(tamañoPagina)
+            .ToListAsync();
+
+        return (items, totalCount);
     }
 
     public async Task<Mensaje?> GetMensajeByIdAsync(int id)

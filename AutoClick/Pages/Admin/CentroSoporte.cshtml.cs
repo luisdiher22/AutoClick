@@ -205,61 +205,41 @@ namespace AutoClick.Pages.Admin
                 TiposConsultaDisponibles = await _soporteService.GetTiposConsultaAsync();
                 PrioridadesDisponibles = _soporteService.GetPrioridades();
 
-                // Cargar reclamos con filtros
-                List<Reclamo> todosLosReclamos;
-                if (!string.IsNullOrEmpty(FiltroTipoReclamo) || FiltroEstadoReclamo.HasValue || !string.IsNullOrEmpty(FiltroPrioridad))
-                {
-                    todosLosReclamos = await _soporteService.GetReclamosPorFiltroAsync(
-                        FiltroTipoReclamo, 
-                        FiltroEstadoReclamo, 
-                        FiltroPrioridad);
-                }
-                else
-                {
-                    todosLosReclamos = await _soporteService.GetReclamosAsync();
-                }
-                
-                // Ordenar por fecha descendente (más reciente primero)
-                todosLosReclamos = todosLosReclamos.OrderByDescending(r => r.FechaCreacion).ToList();
-                
-                // Calcular paginación para reclamos
-                var totalReclamos = todosLosReclamos.Count;
-                TotalPaginasReclamos = (int)Math.Ceiling(totalReclamos / (double)TamañoPagina);
-                PaginaActualReclamos = Math.Max(1, Math.Min(PaginaActualReclamos, TotalPaginasReclamos == 0 ? 1 : TotalPaginasReclamos));
-                
-                // Aplicar paginación
-                Reclamos = todosLosReclamos
-                    .Skip((PaginaActualReclamos - 1) * TamañoPagina)
-                    .Take(TamañoPagina)
-                    .ToList();
+                // Cargar reclamos con paginación directa en la base de datos
+                var (reclamosItems, totalReclamos) = await _soporteService.GetReclamosPaginadosAsync(
+                    PaginaActualReclamos,
+                    TamañoPagina,
+                    FiltroTipoReclamo,
+                    FiltroEstadoReclamo,
+                    FiltroPrioridad
+                );
 
-                // Cargar mensajes con filtros
-                List<Mensaje> todosLosMensajes;
-                if (!string.IsNullOrEmpty(FiltroTipoMensaje) || FiltroEstadoMensaje.HasValue || !string.IsNullOrEmpty(FiltroPrioridad))
-                {
-                    todosLosMensajes = await _soporteService.GetMensajesPorFiltroAsync(
-                        FiltroTipoMensaje, 
-                        FiltroEstadoMensaje, 
-                        FiltroPrioridad);
-                }
-                else
-                {
-                    todosLosMensajes = await _soporteService.GetMensajesAsync();
-                }
-                
-                // Ordenar por fecha descendente (más reciente primero)
-                todosLosMensajes = todosLosMensajes.OrderByDescending(m => m.FechaCreacion).ToList();
-                
-                // Calcular paginación para mensajes
-                var totalMensajes = todosLosMensajes.Count;
+                Reclamos = reclamosItems;
+
+                // Calcular total de páginas para reclamos
+                TotalPaginasReclamos = (int)Math.Ceiling(totalReclamos / (double)TamañoPagina);
+
+                // Asegurar que la página actual esté en rango válido
+                if (PaginaActualReclamos < 1) PaginaActualReclamos = 1;
+                if (PaginaActualReclamos > TotalPaginasReclamos && TotalPaginasReclamos > 0) PaginaActualReclamos = TotalPaginasReclamos;
+
+                // Cargar mensajes con paginación directa en la base de datos
+                var (mensajesItems, totalMensajes) = await _soporteService.GetMensajesPaginadosAsync(
+                    PaginaActualMensajes,
+                    TamañoPagina,
+                    FiltroTipoMensaje,
+                    FiltroEstadoMensaje,
+                    FiltroPrioridad
+                );
+
+                Mensajes = mensajesItems;
+
+                // Calcular total de páginas para mensajes
                 TotalPaginasMensajes = (int)Math.Ceiling(totalMensajes / (double)TamañoPagina);
-                PaginaActualMensajes = Math.Max(1, Math.Min(PaginaActualMensajes, TotalPaginasMensajes == 0 ? 1 : TotalPaginasMensajes));
-                
-                // Aplicar paginación
-                Mensajes = todosLosMensajes
-                    .Skip((PaginaActualMensajes - 1) * TamañoPagina)
-                    .Take(TamañoPagina)
-                    .ToList();
+
+                // Asegurar que la página actual esté en rango válido
+                if (PaginaActualMensajes < 1) PaginaActualMensajes = 1;
+                if (PaginaActualMensajes > TotalPaginasMensajes && TotalPaginasMensajes > 0) PaginaActualMensajes = TotalPaginasMensajes;
 
                 // Cargar estadísticas
                 EstadisticasReclamos = await _soporteService.GetEstadisticasReclamosAsync();

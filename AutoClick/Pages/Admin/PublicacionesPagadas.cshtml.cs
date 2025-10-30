@@ -2,23 +2,21 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
 using AutoClick.Data;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+using AutoClick.Models;
 
 namespace AutoClick.Pages.Admin
 {
-    public class HistorialRechazosModel : PageModel
+    public class PublicacionesPagadasModel : PageModel
     {
         private readonly ApplicationDbContext _context;
         private const int PageSize = 15;
 
-        public HistorialRechazosModel(ApplicationDbContext context)
+        public PublicacionesPagadasModel(ApplicationDbContext context)
         {
             _context = context;
         }
 
-        public List<RejectedAdItem> RejectedAds { get; set; } = new();
+        public List<PaidAdItem> PaidAds { get; set; } = new List<PaidAdItem>();
         
         [BindProperty(SupportsGet = true)]
         public int PaginaActual { get; set; } = 1;
@@ -28,9 +26,9 @@ namespace AutoClick.Pages.Admin
 
         public async Task OnGetAsync()
         {
-            // Contar total de rechazados
+            // Contar total de publicaciones pagadas
             TotalRegistros = await _context.Autos
-                .Where(a => !a.Activo && a.PlanVisibilidad == 0)
+                .Where(a => a.PlanVisibilidad > 0)
                 .CountAsync();
 
             // Calcular total de páginas
@@ -40,32 +38,31 @@ namespace AutoClick.Pages.Admin
             if (PaginaActual < 1) PaginaActual = 1;
             if (PaginaActual > TotalPaginas && TotalPaginas > 0) PaginaActual = TotalPaginas;
 
-            // Cargar anuncios rechazados con paginación
-            var rejectedAutos = await _context.Autos
-                .Where(a => !a.Activo && a.PlanVisibilidad == 0)
-                .OrderByDescending(a => a.FechaActualizacion)
+            // Obtener publicaciones pagadas con paginación
+            PaidAds = await _context.Autos
+                .Where(a => a.PlanVisibilidad > 0)
+                .OrderByDescending(a => a.PlanVisibilidad) // Mostrar primero los planes más altos
+                .ThenByDescending(a => a.FechaCreacion)
                 .Skip((PaginaActual - 1) * PageSize)
                 .Take(PageSize)
-                .Select(a => new RejectedAdItem
+                .Select(a => new PaidAdItem
                 {
                     Id = a.Id,
                     Code = $"#{a.Id}",
                     Title = a.NombreCompleto,
-                    Date = a.FechaActualizacion.ToString("dd/MM/yyyy"),
-                    Status = "Rechazado"
+                    PlanLevel = a.PlanVisibilidad,
+                    Status = a.Activo ? "Activo" : "Inactivo"
                 })
                 .ToListAsync();
-
-            RejectedAds = rejectedAutos;
         }
-    }
 
-    public class RejectedAdItem
-    {
-        public int Id { get; set; }
-        public string Code { get; set; } = string.Empty;
-        public string Title { get; set; } = string.Empty;
-        public string Date { get; set; } = string.Empty;
-        public string Status { get; set; } = string.Empty;
+        public class PaidAdItem
+        {
+            public int Id { get; set; }
+            public string Code { get; set; } = string.Empty;
+            public string Title { get; set; } = string.Empty;
+            public int PlanLevel { get; set; }
+            public string Status { get; set; } = string.Empty;
+        }
     }
 }
