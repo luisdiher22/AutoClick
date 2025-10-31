@@ -671,11 +671,9 @@ function toggleDropdown(dropdownId) {
 
 // Funciones para modal de confirmación de aprobación
 function abrirModalConfirmarAprobar(id, title) {
-    console.log('abrirModalConfirmarAprobar - Recibido ID:', id, 'Title:', title);
     anuncioIdProcesar = id;
     anuncioTituloProcesar = title;
     accionTipo = 'aprobar';
-    console.log('anuncioIdProcesar establecido a:', anuncioIdProcesar);
     document.getElementById('tituloAnuncioAprobar').textContent = title;
     document.getElementById('modalConfirmarAprobar').classList.add('active');
 }
@@ -691,11 +689,9 @@ function cerrarModalConfirmarAprobar(event) {
 
 // Funciones para modal de confirmación de rechazo
 function abrirModalConfirmarRechazar(id, title) {
-    console.log('abrirModalConfirmarRechazar - Recibido ID:', id, 'Title:', title);
     anuncioIdProcesar = id;
     anuncioTituloProcesar = title;
     accionTipo = 'rechazar';
-    console.log('anuncioIdProcesar establecido a:', anuncioIdProcesar);
     document.getElementById('tituloAnuncioRechazar').textContent = title;
     document.getElementById('modalConfirmarRechazar').classList.add('active');
 }
@@ -725,24 +721,19 @@ function cerrarModalExito(event) {
 
 // Confirmar aprobación
 async function confirmarAprobacion() {
-    console.log('confirmarAprobacion - anuncioIdProcesar:', anuncioIdProcesar);
-    
     if (!anuncioIdProcesar) {
-        console.error('Error: anuncioIdProcesar es null o undefined');
         alert('Error: No se pudo identificar el anuncio a aprobar');
         return;
     }
 
     // Guardar el ID antes de cerrar el modal
     const idAaprobar = anuncioIdProcesar;
-    console.log('ID guardado para aprobar:', idAaprobar);
     
     // Cerrar el modal de confirmación
     document.getElementById('modalConfirmarAprobar').classList.remove('active');
 
     try {
         const url = '/api/admin/AdminApproval/approve/' + idAaprobar;
-        console.log('Fetching URL:', url);
         
         const response = await fetch(url, {
             method: 'POST',
@@ -751,17 +742,11 @@ async function confirmarAprobacion() {
             }
         });
 
-        console.log('Response status:', response.status);
-        console.log('Response ok:', response.ok);
-
         if (!response.ok) {
-            const errorText = await response.text();
-            console.error('Error response:', errorText);
             throw new Error('HTTP error! status: ' + response.status);
         }
 
         const data = await response.json();
-        console.log('Response data:', data);
 
         if (data.success) {
             // Remover la fila de la tabla
@@ -781,31 +766,25 @@ async function confirmarAprobacion() {
             alert(data.message || 'Error al aprobar el anuncio');
         }
     } catch (error) {
-        console.error('Error completo:', error);
-        alert('Error al aprobar el anuncio. Por favor, intente nuevamente. Revise la consola para más detalles.');
+        alert('Error al aprobar el anuncio. Por favor, intente nuevamente.');
     }
 }
 
 // Confirmar rechazo
 async function confirmarRechazo() {
-    console.log('confirmarRechazo - anuncioIdProcesar:', anuncioIdProcesar);
-    
     if (!anuncioIdProcesar) {
-        console.error('Error: anuncioIdProcesar es null o undefined');
         alert('Error: No se pudo identificar el anuncio a rechazar');
         return;
     }
 
     // Guardar el ID antes de cerrar el modal
     const idArechazar = anuncioIdProcesar;
-    console.log('ID guardado para rechazar:', idArechazar);
     
     // Cerrar el modal de confirmación
     document.getElementById('modalConfirmarRechazar').classList.remove('active');
 
     try {
         const url = '/api/admin/AdminApproval/reject/' + idArechazar;
-        console.log('Fetching URL:', url);
         
         const response = await fetch(url, {
             method: 'POST',
@@ -814,17 +793,11 @@ async function confirmarRechazo() {
             }
         });
 
-        console.log('Response status:', response.status);
-        console.log('Response ok:', response.ok);
-
         if (!response.ok) {
-            const errorText = await response.text();
-            console.error('Error response:', errorText);
             throw new Error('HTTP error! status: ' + response.status);
         }
 
         const data = await response.json();
-        console.log('Response data:', data);
 
         if (data.success) {
             // Remover la fila de la tabla
@@ -844,8 +817,7 @@ async function confirmarRechazo() {
             alert(data.message || 'Error al rechazar el anuncio');
         }
     } catch (error) {
-        console.error('Error completo:', error);
-        alert('Error al rechazar el anuncio. Por favor, intente nuevamente. Revise la consola para más detalles.');
+        alert('Error al rechazar el anuncio. Por favor, intente nuevamente.');
     }
     anuncioTituloProcesar = '';
 }
@@ -854,18 +826,12 @@ async function confirmarRechazo() {
 function approveItem(button) {
     const id = parseInt(button.getAttribute('data-id'));
     const title = button.getAttribute('data-title');
-    console.log('approveItem - ID:', id, 'Title:', title);
-    console.log('button element:', button);
-    console.log('data-id attribute:', button.getAttribute('data-id'));
     abrirModalConfirmarAprobar(id, title);
 }
 
 function rejectItem(button) {
     const id = parseInt(button.getAttribute('data-id'));
     const title = button.getAttribute('data-title');
-    console.log('rejectItem - ID:', id, 'Title:', title);
-    console.log('button element:', button);
-    console.log('data-id attribute:', button.getAttribute('data-id'));
     abrirModalConfirmarRechazar(id, title);
 }
 

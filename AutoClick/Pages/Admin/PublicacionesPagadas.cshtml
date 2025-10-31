@@ -239,7 +239,7 @@
     <div class="admin-main-content">
         <!-- Page Title -->
         <h1 class="page-title">
-            💎 Publicaciones Pagadas
+            Publicaciones Pagadas
         </h1>
 
         <!-- Table -->
@@ -249,6 +249,7 @@
                     <tr>
                         <th>Código</th>
                         <th>Título</th>
+                        <th>Fecha de Publicación</th>
                         <th>Plan de Visibilidad</th>
                         <th>Estado</th>
                     </tr>
@@ -257,7 +258,7 @@
                     @if (Model.PaidAds.Count == 0)
                     {
                         <tr>
-                            <td colspan="4" style="text-align: center; padding: 40px;">
+                            <td colspan="5" style="text-align: center; padding: 40px;">
                                 No hay publicaciones pagadas registradas
                             </td>
                         </tr>
@@ -269,6 +270,7 @@
                             <tr>
                                 <td>@item.Code</td>
                                 <td>@item.Title</td>
+                                <td>@item.Date.ToString("dd/MM/yyyy")</td>
                                 <td>
                                     @{
                                         string planClass = item.PlanLevel switch

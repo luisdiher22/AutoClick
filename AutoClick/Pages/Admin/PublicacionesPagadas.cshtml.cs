@@ -41,8 +41,8 @@ namespace AutoClick.Pages.Admin
             // Obtener publicaciones pagadas con paginación
             PaidAds = await _context.Autos
                 .Where(a => a.PlanVisibilidad > 0)
-                .OrderByDescending(a => a.PlanVisibilidad) // Mostrar primero los planes más altos
-                .ThenByDescending(a => a.FechaCreacion)
+                .OrderByDescending(a => a.FechaCreacion) // Ordenar por fecha primero
+                .ThenByDescending(a => a.PlanVisibilidad) // Luego por plan de visibilidad
                 .Skip((PaginaActual - 1) * PageSize)
                 .Take(PageSize)
                 .Select(a => new PaidAdItem
@@ -50,6 +50,7 @@ namespace AutoClick.Pages.Admin
                     Id = a.Id,
                     Code = $"#{a.Id}",
                     Title = a.NombreCompleto,
+                    Date = a.FechaCreacion,
                     PlanLevel = a.PlanVisibilidad,
                     Status = a.Activo ? "Activo" : "Inactivo"
                 })
@@ -61,6 +62,7 @@ namespace AutoClick.Pages.Admin
             public int Id { get; set; }
             public string Code { get; set; } = string.Empty;
             public string Title { get; set; } = string.Empty;
+            public DateTime Date { get; set; }
             public int PlanLevel { get; set; }
             public string Status { get; set; } = string.Empty;
         }

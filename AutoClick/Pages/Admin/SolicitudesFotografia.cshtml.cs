@@ -62,20 +62,30 @@ namespace AutoClick.Pages.Admin
         }
 
         // Endpoint para cambiar el estado de la agenda
-        public async Task<IActionResult> OnPostCambiarEstadoAsync(int id, string nuevoEstado)
+        public async Task<IActionResult> OnPostCambiarEstadoAsync([FromForm] int id, [FromForm] string nuevoEstado)
         {
-            var auto = await _context.Autos.FindAsync(id);
-            if (auto == null)
+            try
             {
-                return NotFound();
+                var auto = await _context.Autos.FindAsync(id);
+                if (auto == null)
+                {
+                    return new JsonResult(new { success = false, message = "Vehículo no encontrado" });
+                }
+                
+                auto.EstadoAgendaFotografia = nuevoEstado;
+                auto.FechaActualizacion = DateTime.UtcNow;
+                
+                // Marcar explícitamente como modificado
+                _context.Entry(auto).State = EntityState.Modified;
+                
+                await _context.SaveChangesAsync();
+
+                return new JsonResult(new { success = true });
             }
-
-            auto.EstadoAgendaFotografia = nuevoEstado;
-            auto.FechaActualizacion = DateTime.UtcNow;
-            
-            await _context.SaveChangesAsync();
-
-            return RedirectToPage();
+            catch (Exception ex)
+            {
+                return new JsonResult(new { success = false, message = ex.Message });
+            }
         }
     }
 
