@@ -1,392 +1,90 @@
-@page
+﻿@page
 @model PoliticaPrivacidadModel
 @{
     ViewData["Title"] = "Política de Privacidad - AutoClick.cr";
     Layout = "_Layout";
 }
 
-<!DOCTYPE html>
-<html lang="es">
-<head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>@ViewData["Title"]</title>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,200..800;1,200..800&family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="~/css/politica-privacidad.css" asp-append-version="true" />
-</head>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="~/css/politica-privacidad.css" asp-append-version="true" />
 
-<body>
-    <!-- Header -->
-    <partial name="~/Pages/Shared/_Header.cshtml" />
-
-    <!-- Breadcrumb Navigation -->
+<div class="privacidad-page">
     <div class="breadcrumb-container">
-        <nav class="breadcrumb">
-            <a href="/" class="breadcrumb-item">Inicio</a>
-            <span class="breadcrumb-separator">/</span>
-            <span class="breadcrumb-item active">Política de Privacidad</span>
-        </nav>
+        <a asp-page="/Index" class="breadcrumb-link">Inicio</a>
+        <span class="breadcrumb-separator">/</span>
+        <span class="breadcrumb-current">Política de Privacidad</span>
     </div>
-
-    <!-- Main Content -->
-    <div class="privacy-container">
-        <header class="privacy-header">
-            <h1 class="privacy-title">Política de Privacidad | AutoClick.cr</h1>
-            <p class="last-updated">Última actualización: 19 de agosto de 2025</p>
-        </header>
-
+    <h1 class="page-title">Política de Privacidad | AutoClick.cr</h1>
+    <div class="content-container">
         <div class="privacy-content">
-            <!-- Sidebar Navigation -->
-            <aside class="privacy-sidebar">
-                <div class="sidebar-content">
-                    <h3 class="sidebar-title">Contenido</h3>
-                    <nav class="privacy-nav">
-                        <a href="#introduccion" class="nav-item active">Introducción</a>
-                        <a href="#responsable" class="nav-item">1. Responsable del Tratamiento</a>
-                        <a href="#finalidad" class="nav-item">2. Finalidad de la Recolección</a>
-                        <a href="#datos-recopilados" class="nav-item">3. Datos que Recopilamos</a>
-                        <a href="#consentimiento" class="nav-item">4. Consentimiento del Usuario</a>
-                        <a href="#confidencialidad" class="nav-item">5. Confidencialidad y Transferencia</a>
-                        <a href="#derechos-titular" class="nav-item">6. Derechos del Titular</a>
-                        <a href="#seguridad" class="nav-item">7. Medidas de Seguridad</a>
-                        <a href="#cookies" class="nav-item">8. Cookies y Tecnologías</a>
-                        <a href="#modificaciones" class="nav-item">9. Modificaciones a la Política</a>
-                        <a href="#legislacion" class="nav-item">10. Legislación Aplicable</a>
-                        <a href="#contacto" class="nav-item">11. Contacto</a>
-                    </nav>
-                </div>
-            </aside>
-
-            <!-- Main Content -->
-            <main class="privacy-main">
-                <!-- Introduction -->
-                <section id="introduccion" class="privacy-section intro-section">
-                    <div class="intro-content">
-                        <p class="intro-text">
-                            En AutoClick.cr, nos comprometemos a proteger la privacidad y los datos personales de nuestros usuarios, de conformidad con la Ley N.º 8968 y demás normativa aplicable en la República de Costa Rica.
-                        </p>
-                    </div>
-                </section>
-
-                <!-- Section 1 -->
-                <section id="responsable" class="privacy-section">
-                    <h2 class="section-title">1. Responsable del Tratamiento de Datos</h2>
-                    <div class="section-content">
-                        <div class="info-card">
-                            <div class="info-item">
-                                <strong>Razón Social:</strong> AutoClick.cr
-                            </div>
-                            <div class="info-item">
-                                <strong>Cédula física:</strong> 208080611
-                            </div>
-                            <div class="info-item">
-                                <strong>Correo electrónico:</strong> 
-                                <a href="mailto:g.montero@AutoClick.cr">g.montero@AutoClick.cr</a>
-                            </div>
-                        </div>
-                    </div>
-                </section>
-
-                <!-- Section 2 -->
-                <section id="finalidad" class="privacy-section">
-                    <h2 class="section-title">2. Finalidad de la Recolección de Datos</h2>
-                    <div class="section-content">
-                        <p>Los datos personales proporcionados por el usuario serán utilizados para los siguientes fines:</p>
-                        <ul class="purpose-list">
-                            <li>Creación y administración de cuentas en la plataforma</li>
-                            <li>Publicación y gestión de anuncios de vehículos</li>
-                            <li>Emisión de facturas y gestión de pagos</li>
-                            <li>Contacto entre usuarios (vendedores y compradores)</li>
-                            <li>Envío de notificaciones y contenido relacionado con AutoClick.cr</li>
-                            <li>Mejora de la experiencia de navegación</li>
-                            <li>Cumplimiento de obligaciones legales</li>
-                        </ul>
-                    </div>
-                </section>
-
-                <!-- Section 3 -->
-                <section id="datos-recopilados" class="privacy-section">
-                    <h2 class="section-title">3. Datos que Recopilamos</h2>
-                    <div class="section-content">
-                        <p>Dependiendo del tipo de usuario (particular o empresa), podemos solicitar:</p>
-                        
-                        <div class="data-categories">
-                            <div class="data-category">
-                                <h3>Información Personal</h3>
-                                <ul>
-                                    <li>Nombre completo o razón social</li>
-                                    <li>Cédula de identidad o jurídica</li>
-                                    <li>Dirección física y correo electrónico</li>
-                                    <li>Número de teléfono</li>
-                                </ul>
-                            </div>
-                            
-                            <div class="data-category">
-                                <h3>Información de Vehículos</h3>
-                                <ul>
-                                    <li>Información de los vehículos publicados</li>
-                                    <li>Fotografías y documentación</li>
-                                    <li>Historial de transacciones</li>
-                                </ul>
-                            </div>
-                            
-                            <div class="data-category">
-                                <h3>Información Técnica</h3>
-                                <ul>
-                                    <li>Información de pago (procesada por terceros seguros)</li>
-                                    <li>Dirección IP y datos de navegación</li>
-                                    <li>Cookies, geolocalización, dispositivo</li>
-                                </ul>
-                            </div>
-                        </div>
-                    </div>
-                </section>
-
-                <!-- Section 4 -->
-                <section id="consentimiento" class="privacy-section">
-                    <h2 class="section-title">4. Consentimiento del Usuario</h2>
-                    <div class="section-content">
-                        <div class="consent-box">
-                            <p>El usuario otorga su consentimiento libre, informado y explícito al aceptar esta política y al registrar sus datos en nuestro sitio.</p>
-                            <div class="important-notice">
-                                <strong>Importante:</strong> En cualquier momento podrá revocar dicho consentimiento escribiendo a 
-                                <a href="mailto:privacidad@AutoClick.cr">privacidad@AutoClick.cr</a>, 
-                                conforme al artículo 5 de la Ley N.º 8968.
-                            </div>
-                        </div>
-                    </div>
-                </section>
-
-                <!-- Section 5 -->
-                <section id="confidencialidad" class="privacy-section">
-                    <h2 class="section-title">5. Confidencialidad y Transferencia de Datos</h2>
-                    <div class="section-content">
-                        <p>AutoClick.cr no venderá ni compartirá datos personales con terceros, salvo que:</p>
-                        <ul class="exceptions-list">
-                            <li><span class="exception-icon">⚖️</span> Sea necesario para cumplir con una obligación legal</li>
-                            <li><span class="exception-icon">🏛️</span> Sea requerido por una autoridad competente</li>
-                            <li><span class="exception-icon">✅</span> El usuario autorice expresamente la transferencia</li>
-                            <li><span class="exception-icon">🔒</span> Se trate de servicios contratados a terceros (ej. procesadores de pago), los cuales también están sujetos a políticas de confidencialidad</li>
-                        </ul>
-                    </div>
-                </section>
-
-                <!-- Section 6 -->
-                <section id="derechos-titular" class="privacy-section">
-                    <h2 class="section-title">6. Derechos del Titular de los Datos</h2>
-                    <div class="section-content">
-                        <p>El usuario podrá ejercer los siguientes derechos:</p>
-                        
-                        <div class="rights-grid">
-                            <div class="right-card">
-                                <div class="right-icon">👁️</div>
-                                <h4>Acceso</h4>
-                                <p>Conocer qué datos hemos recopilado.</p>
-                            </div>
-                            
-                            <div class="right-card">
-                                <div class="right-icon">✏️</div>
-                                <h4>Rectificación</h4>
-                                <p>Solicitar correcciones en caso de errores o cambios.</p>
-                            </div>
-                            
-                            <div class="right-card">
-                                <div class="right-icon">🗑️</div>
-                                <h4>Cancelación</h4>
-                                <p>Eliminar sus datos cuando ya no sean necesarios.</p>
-                            </div>
-                            
-                            <div class="right-card">
-                                <div class="right-icon">🚫</div>
-                                <h4>Oposición</h4>
-                                <p>Negarse a que sus datos sean utilizados con fines específicos.</p>
-                            </div>
-                        </div>
-                        
-                        <div class="rights-notice">
-                            <p>Estos derechos pueden ejercerse en cualquier momento escribiendo a 
-                            <a href="mailto:g.montero@AutoClick.cr">g.montero@AutoClick.cr</a>, 
-                            según lo estipulado en la Ley 8968, artículos 11 y 12.</p>
-                        </div>
-                    </div>
-                </section>
-
-                <!-- Section 7 -->
-                <section id="seguridad" class="privacy-section">
-                    <h2 class="section-title">7. Medidas de Seguridad</h2>
-                    <div class="section-content">
-                        <div class="security-info">
-                            <p>Implementamos medidas administrativas, técnicas y físicas razonables para proteger la confidencialidad, integridad y disponibilidad de los datos personales que tratamos.</p>
-                            
-                            <div class="security-measures">
-                                <div class="security-measure">
-                                    <h4>🛡️ Administrativas</h4>
-                                    <p>Políticas internas de acceso y manejo de datos</p>
-                                </div>
-                                
-                                <div class="security-measure">
-                                    <h4>💻 Técnicas</h4>
-                                    <p>Encriptación, firewalls y sistemas de autenticación</p>
-                                </div>
-                                
-                                <div class="security-measure">
-                                    <h4>🏢 Físicas</h4>
-                                    <p>Control de acceso a instalaciones y equipos</p>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </section>
-
-                <!-- Section 8 -->
-                <section id="cookies" class="privacy-section">
-                    <h2 class="section-title">8. Cookies y Tecnologías Similares</h2>
-                    <div class="section-content">
-                        <div class="cookies-info">
-                            <p>El sitio web utiliza cookies para analizar patrones de navegación, recordar preferencias y mejorar la experiencia del usuario.</p>
-                            
-                            <div class="cookies-control">
-                                <h4>Control de Cookies</h4>
-                                <p>El usuario puede desactivarlas en cualquier momento desde la configuración de su navegador.</p>
-                                
-                                <div class="cookie-types">
-                                    <div class="cookie-type">
-                                        <strong>Cookies esenciales:</strong> Necesarias para el funcionamiento básico del sitio
-                                    </div>
-                                    <div class="cookie-type">
-                                        <strong>Cookies de análisis:</strong> Nos ayudan a entender cómo los usuarios interactúan con el sitio
-                                    </div>
-                                    <div class="cookie-type">
-                                        <strong>Cookies de personalización:</strong> Recuerdan sus preferencias y configuraciones
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </section>
-
-                <!-- Section 9 -->
-                <section id="modificaciones" class="privacy-section">
-                    <h2 class="section-title">9. Modificaciones a la Política</h2>
-                    <div class="section-content">
-                        <div class="modifications-info">
-                            <p>AutoClick.cr se reserva el derecho de modificar esta Política de Privacidad en cualquier momento. Cualquier cambio será comunicado a través del sitio web y surtirá efecto desde su publicación.</p>
-                            
-                            <div class="notification-methods">
-                                <h4>Métodos de Notificación</h4>
-                                <ul>
-                                    <li>📧 Correo electrónico a usuarios registrados</li>
-                                    <li>🌐 Aviso prominente en el sitio web</li>
-                                    <li>📱 Notificaciones push (si están habilitadas)</li>
-                                </ul>
-                            </div>
-                        </div>
-                    </div>
-                </section>
-
-                <!-- Section 10 -->
-                <section id="legislacion" class="privacy-section">
-                    <h2 class="section-title">10. Legislación Aplicable y Jurisdicción</h2>
-                    <div class="section-content">
-                        <div class="legal-info">
-                            <p>Esta política se rige por la Ley N.º 8968 y demás legislación costarricense. En caso de disputa, las partes se someterán a los tribunales de San José, Costa Rica.</p>
-                            
-                            <div class="legal-references">
-                                <h4>Referencias Legales</h4>
-                                <ul>
-                                    <li><strong>Ley N.º 8968:</strong> Protección de la Persona frente al Tratamiento de sus Datos Personales</li>
-                                    <li><strong>Decreto N.º 37554-JP:</strong> Reglamento a la Ley de Protección de Datos Personales</li>
-                                    <li><strong>Constitución Política:</strong> Artículo 24 (Derecho a la intimidad)</li>
-                                </ul>
-                            </div>
-                        </div>
-                    </div>
-                </section>
-
-                <!-- Section 11 -->
-                <section id="contacto" class="privacy-section">
-                    <h2 class="section-title">11. Contacto</h2>
-                    <div class="section-content">
-                        <div class="contact-section">
-                            <p>Para ejercer sus derechos o realizar consultas sobre nuestra política de privacidad, puede escribir a:</p>
-                            
-                            <div class="contact-cards">
-                                <div class="contact-card primary">
-                                    <h4>📧 Consultas de Privacidad</h4>
-                                    <p><a href="mailto:g.montero@AutoClick.cr">g.montero@AutoClick.cr</a></p>
-                                    <small>Tiempo de respuesta: 5 días hábiles</small>
-                                </div>
-                                
-                                <div class="contact-card">
-                                    <h4>🏢 Dirección Física</h4>
-                                    <address>
-                                        AutoClick.cr<br>
-                                        Edificio Centro Colón, Piso 15<br>
-                                        Paseo Colón, San José<br>
-                                        Costa Rica, 10101
-                                    </address>
-                                </div>
-                                
-                                <div class="contact-card">
-                                    <h4>📞 Teléfono</h4>
-                                    <p><a href="tel:+50622345678">+506 2234-5678</a></p>
-                                    <small>Lunes a Viernes: 8:00 AM - 6:00 PM</small>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </section>
-
-                <!-- Summary Section -->
-                <section class="summary-section">
-                    <div class="summary-content">
-                        <h3>Resumen de sus Derechos</h3>
-                        <div class="summary-grid">
-                            <div class="summary-item">
-                                <strong>Acceso:</strong> Solicite una copia de sus datos
-                            </div>
-                            <div class="summary-item">
-                                <strong>Corrección:</strong> Actualice información incorrecta
-                            </div>
-                            <div class="summary-item">
-                                <strong>Eliminación:</strong> Solicite borrar sus datos
-                            </div>
-                            <div class="summary-item">
-                                <strong>Portabilidad:</strong> Traslade sus datos a otro servicio
-                            </div>
-                            <div class="summary-item">
-                                <strong>Limitación:</strong> Restrinja el procesamiento
-                            </div>
-                            <div class="summary-item">
-                                <strong>Oposición:</strong> Objete ciertos usos de sus datos
-                            </div>
-                        </div>
-                        
-                        <div class="summary-footer">
-                            <p><strong>¿Tiene preguntas?</strong> Contáctenos en <a href="mailto:g.montero@AutoClick.cr">g.montero@AutoClick.cr</a></p>
-                            <p class="version-info">Versión 2.1 • Actualizada el 19 de agosto de 2025</p>
-                        </div>
-                    </div>
-                </section>
-            </main>
+            <p class="last-update"><em>Última actualización: 19 de agosto de 2025</em></p>
+            <p class="intro-text">En AutoClick.cr, nos comprometemos a proteger la privacidad y los datos personales de nuestros usuarios, de conformidad con la Ley N.º 8968 y demás normativa aplicable en la República de Costa Rica.</p>
+            <h2 class="section-title">1. Responsable del Tratamiento de Datos</h2>
+            <p>AutoClick.cr</p>
+            <p>Cédula física: 208080611</p>
+            <p>Correo electrónico: g.montero@AutoClick.cr</p>
+            <h2 class="section-title">2. Finalidad de la Recolección de Datos</h2>
+            <p>Los datos personales proporcionados por el usuario serán utilizados para los siguientes fines:</p>
+            <ul class="privacy-list">
+                <li>Creación y administración de cuentas en la plataforma</li>
+                <li>Publicación y gestión de anuncios de vehículos</li>
+                <li>Emisión de facturas y gestión de pagos</li>
+                <li>Contacto entre usuarios (vendedores y compradores)</li>
+                <li>Envío de notificaciones y contenido relacionado con AutoClick.cr</li>
+                <li>Mejora de la experiencia de navegación</li>
+                <li>Cumplimiento de obligaciones legales</li>
+            </ul>
+            <h2 class="section-title">3. Datos que Recopilamos</h2>
+            <p>Dependiendo del tipo de usuario (particular o empresa), podemos solicitar:</p>
+            <ul class="privacy-list">
+                <li>Nombre completo o razón social</li>
+                <li>Cédula de identidad o jurídica</li>
+                <li>Dirección física y correo electrónico</li>
+                <li>Número de teléfono</li>
+                <li>Información de los vehículos publicados</li>
+                <li>Información de pago (procesada por terceros seguros)</li>
+                <li>Dirección IP y datos de navegación (cookies, geolocalización, dispositivo)</li>
+            </ul>
+            <h2 class="section-title">4. Consentimiento del Usuario</h2>
+            <p>El usuario otorga su consentimiento libre, informado y explícito al aceptar esta política y al registrar sus datos en nuestro sitio.</p>
+            <p>En cualquier momento podrá revocar dicho consentimiento escribiendo a privacidad@AutoClick.cr, conforme al artículo 5 de la Ley N.º 8968.</p>
+            <h2 class="section-title">5. Confidencialidad y Transferencia de Datos</h2>
+            <p>AutoClick.cr no venderá ni compartirá datos personales con terceros, salvo que:</p>
+            <ul class="privacy-list">
+                <li>Sea necesario para cumplir con una obligación legal</li>
+                <li>Sea requerido por una autoridad competente</li>
+                <li>El usuario autorice expresamente la transferencia</li>
+                <li>Se trate de servicios contratados a terceros (ej. procesadores de pago), los cuales también están sujetos a políticas de confidencialidad</li>
+            </ul>
+            <h2 class="section-title">6. Derechos del Titular de los Datos</h2>
+            <p>El usuario podrá ejercer los siguientes derechos:</p>
+            <ul class="privacy-list">
+                <li>Acceso: Conocer qué datos hemos recopilado.</li>
+                <li>Rectificación: Solicitar correcciones en caso de errores o cambios.</li>
+                <li>Cancelación: Eliminar sus datos cuando ya no sean necesarios.</li>
+                <li>Oposición: Negarse a que sus datos sean utilizados con fines específicos.</li>
+            </ul>
+            <p>Estos derechos pueden ejercerse en cualquier momento escribiendo a g.montero@AutoClick.cr, según lo estipulado en la Ley 8968, artículos 11 y 12.</p>
+            <h2 class="section-title">7. Medidas de Seguridad</h2>
+            <p>Implementamos medidas administrativas, técnicas y físicas razonables para proteger la confidencialidad, integridad y disponibilidad de los datos personales que tratamos.</p>
+            <h2 class="section-title">8. Cookies y Tecnologías Similares</h2>
+            <p>El sitio web utiliza cookies para analizar patrones de navegación, recordar preferencias y mejorar la experiencia del usuario. El usuario puede desactivarlas en cualquier momento desde la configuración de su navegador.</p>
+            <h2 class="section-title">9. Modificaciones a la Política</h2>
+            <p>AutoClick.cr se reserva el derecho de modificar esta Política de Privacidad en cualquier momento. Cualquier cambio será comunicado a través del sitio web y surtirá efecto desde su publicación.</p>
+            <h2 class="section-title">10. Legislación Aplicable y Jurisdicción</h2>
+            <p>Esta política se rige por la Ley N.º 8968 y demás legislación costarricense. En caso de disputa, las partes se someterán a los tribunales de San José, Costa Rica.</p>
+            <h2 class="section-title">11. Contacto</h2>
+            <p>Para ejercer sus derechos o realizar consultas sobre nuestra política de privacidad, puede escribir a:</p>
+            <p>g.montero@AutoClick.cr</p>
         </div>
-    </div>
-
-    <!-- Advertisement Section -->
-    <div class="advertisement-section">
-        <div class="ad-container">
-            <img src="https://placehold.co/168x27" alt="Logo Publicitario" class="ad-logo" />
+        <div class="ad-banner">
+            <img src="~/images/logos/autoclick-logo-hd.png" alt="AutoClick.cr" class="ad-logo" />
             <h2 class="ad-title">SU ANUNCIO AQUÍ</h2>
             <p class="ad-subtitle">¡Haga click en este recuadro para empezar!</p>
         </div>
     </div>
-
-    <!-- Footer -->
-    <partial name="_Footer" />
-
-    <script src="~/js/politica-privacidad.js" asp-append-version="true"></script>
-</body>
-</html>
-
+</div>
+<partial name="_Footer" />
+<script src="~/js/politica-privacidad.js" asp-append-version="true"></script>

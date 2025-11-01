@@ -12,8 +12,8 @@ System.Text.Encoding.RegisterProvider(System.Text.CodePagesEncodingProvider.Inst
 builder.Services.AddApplicationInsightsTelemetry(options =>
 {
     options.ConnectionString = builder.Configuration["ApplicationInsights:ConnectionString"];
-    options.EnableAdaptiveSampling = false; // Disable sampling for accurate counts
-    options.EnableQuickPulseMetricStream = true;
+    options.EnableAdaptiveSampling = true; // Enable sampling to reduce telemetry volume and DB wake-ups
+    options.EnableQuickPulseMetricStream = false; // Disable live metrics to reduce constant connections
 });
 
 // Add services to the container.
@@ -69,8 +69,8 @@ builder.Services.AddDbContext<ApplicationDbContext>(options =>
             maxRetryDelay: TimeSpan.FromSeconds(30),
             errorNumbersToAdd: null);
         
-        // Set command timeout for long-running operations (60 seconds)
-        sqlOptions.CommandTimeout(60);
+        // Set command timeout for long-running operations (30 seconds reduced from 60)
+        sqlOptions.CommandTimeout(30);
     });
     
     // Enable sensitive data logging in development for debugging
@@ -82,7 +82,7 @@ builder.Services.AddDbContext<ApplicationDbContext>(options =>
     
     // Add performance optimizations
     options.UseQueryTrackingBehavior(QueryTrackingBehavior.NoTracking);
-});
+}, ServiceLifetime.Scoped, ServiceLifetime.Singleton); // Explicitly set lifetimes
 
 // Add Storage Service - Local for development, Azure for production
 builder.Services.AddScoped<IStorageService>(provider =>

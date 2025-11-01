@@ -1,59 +1,115 @@
-// Términos y Condiciones JavaScript Functionality
+// Términos y Condiciones - Simple JavaScript// Términos y Condiciones JavaScript Functionality
 
-document.addEventListener('DOMContentLoaded', function() {
-    // Initialize components
-    initSidebarNavigation();
-    initSmoothScrolling();
-    initSectionHighlighting();
-    initNewsletterForm();
-    initPrintFunctionality();
-    initSearchFunctionality();
-    
+
+
+document.addEventListener('DOMContentLoaded', function() {document.addEventListener('DOMContentLoaded', function() {
+
+    // Initialize smooth scrolling    // Initialize components
+
+    initSmoothScrolling();    initSidebarNavigation();
+
+        initSmoothScrolling();
+
+    // Initialize ad banner click    initSectionHighlighting();
+
+    initAdBanner();    initNewsletterForm();
+
+        initPrintFunctionality();
+
+    console.log('Términos y Condiciones page initialized');    initSearchFunctionality();
+
+});    
+
     console.log('Términos y Condiciones page initialized successfully');
-});
 
-// Sidebar Navigation
-function initSidebarNavigation() {
-    const navItems = document.querySelectorAll('.nav-item');
-    const sections = document.querySelectorAll('.terms-section');
-    
-    // Handle navigation clicks
-    navItems.forEach(item => {
-        item.addEventListener('click', function(e) {
-            e.preventDefault();
-            
-            const targetId = this.getAttribute('href').substring(1);
-            const targetSection = document.getElementById(targetId);
-            
-            if (targetSection) {
-                // Update active state
-                updateActiveNavItem(this);
+// Smooth scrolling for anchor links});
+
+function initSmoothScrolling() {
+
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {// Sidebar Navigation
+
+        anchor.addEventListener('click', function (e) {function initSidebarNavigation() {
+
+            e.preventDefault();    const navItems = document.querySelectorAll('.nav-item');
+
+            const target = document.querySelector(this.getAttribute('href'));    const sections = document.querySelectorAll('.terms-section');
+
                 
-                // Scroll to section
+
+            if (target) {    // Handle navigation clicks
+
+                const headerOffset = 100;    navItems.forEach(item => {
+
+                const elementPosition = target.getBoundingClientRect().top;        item.addEventListener('click', function(e) {
+
+                const offsetPosition = elementPosition + window.pageYOffset - headerOffset;            e.preventDefault();
+
+            
+
+                window.scrollTo({            const targetId = this.getAttribute('href').substring(1);
+
+                    top: offsetPosition,            const targetSection = document.getElementById(targetId);
+
+                    behavior: 'smooth'            
+
+                });            if (targetSection) {
+
+            }                // Update active state
+
+        });                updateActiveNavItem(this);
+
+    });                
+
+}                // Scroll to section
+
                 scrollToSection(targetSection);
-                
-                // Update URL without triggering page reload
-                updateURL(targetId);
-            }
-        });
-    });
-    
-    // Handle direct URL navigation
-    handleDirectNavigation();
+
+// Ad banner functionality                
+
+function initAdBanner() {                // Update URL without triggering page reload
+
+    const adBanner = document.querySelector('.ad-banner');                updateURL(targetId);
+
+                }
+
+    if (adBanner) {        });
+
+        adBanner.addEventListener('click', function() {    });
+
+            // Redirect to advertising page or contact page    
+
+            window.location.href = '/Contacto';    // Handle direct URL navigation
+
+        });    handleDirectNavigation();
+
+    }}
+
 }
 
 // Update active navigation item
-function updateActiveNavItem(clickedItem) {
-    document.querySelectorAll('.nav-item').forEach(item => {
-        item.classList.remove('active');
-    });
-    clickedItem.classList.add('active');
-}
 
-// Smooth scrolling to sections
-function initSmoothScrolling() {
-    // Polyfill for browsers that don't support smooth scrolling
-    if (!CSS.supports('scroll-behavior', 'smooth')) {
+// Print functionalityfunction updateActiveNavItem(clickedItem) {
+
+function printTerms() {    document.querySelectorAll('.nav-item').forEach(item => {
+
+    window.print();        item.classList.remove('active');
+
+}    });
+
+    clickedItem.classList.add('active');
+
+// Export for testing}
+
+if (typeof module !== 'undefined' && module.exports) {
+
+    module.exports = {// Smooth scrolling to sections
+
+        printTermsfunction initSmoothScrolling() {
+
+    };    // Polyfill for browsers that don't support smooth scrolling
+
+}    if (!CSS.supports('scroll-behavior', 'smooth')) {
+
         enableSmoothScrollPolyfill();
     }
 }
