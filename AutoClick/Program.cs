@@ -179,12 +179,14 @@ if (!app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 
-// Force UTF-8 encoding for all responses
+// Force UTF-8 encoding ONLY for HTML responses (not for static files like CSS/JS)
 app.Use(async (context, next) =>
 {
     context.Response.OnStarting(() =>
     {
-        if (!context.Response.ContentType?.Contains("charset") ?? true)
+        // Only set UTF-8 for HTML responses, don't override CSS, JS, or other static files
+        if (context.Response.ContentType?.StartsWith("text/html") == true && 
+            !context.Response.ContentType.Contains("charset"))
         {
             context.Response.ContentType = "text/html; charset=utf-8";
         }

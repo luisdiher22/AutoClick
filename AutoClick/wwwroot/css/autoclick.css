@@ -26,6 +26,7 @@ body {
     background-color: var(--primary-bg);
     color: var(--text-white);
     line-height: 1.5;
+    padding-top: 80px; /* Compensate for fixed header */
 }
 
 .font-jakarta {
