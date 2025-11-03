@@ -178,6 +178,21 @@ if (!app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
+
+// Force UTF-8 encoding for all responses
+app.Use(async (context, next) =>
+{
+    context.Response.OnStarting(() =>
+    {
+        if (!context.Response.ContentType?.Contains("charset") ?? true)
+        {
+            context.Response.ContentType = "text/html; charset=utf-8";
+        }
+        return Task.CompletedTask;
+    });
+    await next();
+});
+
 app.UseStaticFiles();
 
 app.UseRouting();

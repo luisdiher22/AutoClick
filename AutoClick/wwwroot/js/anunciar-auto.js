@@ -1,4 +1,4 @@
-﻿// AnunciarMiAuto JavaScript functionality
+// AnunciarMiAuto JavaScript functionality
 
 // Datos de marcas y modelos (A-M)
 const marcasModelos = {
@@ -243,35 +243,67 @@ document.addEventListener('DOMContentLoaded', function() {
             checkbox.addEventListener('change', updateEquipmentSelection);
         });
         
-        // Visibility plan selection
+        // Visibility plan selection - con funcionalidad de deselección
         const planRadios = document.querySelectorAll('input[name="Formulario.PlanVisibilidad"]');
         planRadios.forEach(radio => {
-            radio.addEventListener('change', function(e) {
-                updatePlanSelection(e);
-                // Permitir deseleccionar al hacer clic en el mismo radio
-                if (this._wasChecked) {
-                    this.checked = false;
-                    this._wasChecked = false;
-                    // Actualizar UI para mostrar que no hay plan seleccionado
-                    document.querySelectorAll('.plan-card').forEach(card => {
-                        card.style.borderColor = 'rgba(255, 255, 255, 0.5)';
-                        card.style.background = '#02081C';
-                    });
-                    updatePaymentSummary();
-                } else {
-                    this._wasChecked = true;
-                    // Limpiar el estado de otros radios
-                    planRadios.forEach(r => {
-                        if (r !== this) r._wasChecked = false;
-                    });
-                }
-            });
+            // Agregar event listener al contenedor de la tarjeta para hacer clic en toda el área
+            const planCard = radio.closest('.plan-option')?.querySelector('.plan-card');
+            if (planCard) {
+                planCard.addEventListener('click', function(e) {
+                    // Si el click no fue en el radio button directamente
+                    if (e.target !== radio) {
+                        e.preventDefault();
+                        
+                        // Si ya estaba seleccionado, deseleccionarlo
+                        if (radio.checked) {
+                            radio.checked = false;
+                            // Actualizar UI para mostrar que no hay plan seleccionado
+                            planCard.style.borderColor = 'rgba(255, 255, 255, 0.5)';
+                            planCard.style.background = '#02081C';
+                            planCard.style.boxShadow = 'none';
+                        } else {
+                            // Deseleccionar otros radios y sus tarjetas
+                            planRadios.forEach(r => {
+                                r.checked = false;
+                                const otherCard = r.closest('.plan-option')?.querySelector('.plan-card');
+                                if (otherCard) {
+                                    otherCard.style.borderColor = 'rgba(255, 255, 255, 0.5)';
+                                    otherCard.style.background = '#02081C';
+                                    otherCard.style.boxShadow = 'none';
+                                }
+                            });
+                            
+                            // Seleccionar este radio
+                            radio.checked = true;
+                            planCard.style.borderColor = '#00CC00';
+                            planCard.style.background = 'rgba(0, 204, 0, 0.1)';
+                            planCard.style.boxShadow = '0 0 20px rgba(0, 204, 0, 0.3)';
+                        }
+                        
+                        updatePaymentSummary();
+                    }
+                });
+            }
             
-            // Prevenir el comportamiento default del click para controlar la selecciÃ³n
-            radio.addEventListener('click', function(e) {
-                if (this._wasChecked) {
-                    e.preventDefault();
-                }
+            // Event listener para el radio button directo
+            radio.addEventListener('change', function(e) {
+                // Actualizar UI de todas las tarjetas
+                planRadios.forEach(r => {
+                    const card = r.closest('.plan-option')?.querySelector('.plan-card');
+                    if (card) {
+                        if (r.checked) {
+                            card.style.borderColor = '#00CC00';
+                            card.style.background = 'rgba(0, 204, 0, 0.1)';
+                            card.style.boxShadow = '0 0 20px rgba(0, 204, 0, 0.3)';
+                        } else {
+                            card.style.borderColor = 'rgba(255, 255, 255, 0.5)';
+                            card.style.background = '#02081C';
+                            card.style.boxShadow = 'none';
+                        }
+                    }
+                });
+                
+                updatePaymentSummary();
             });
         });
         
@@ -445,7 +477,7 @@ document.addEventListener('DOMContentLoaded', function() {
             if (currentSection === totalSections) {
                 nextBtn.textContent = 'Publicar anuncio';
             } else {
-                nextBtn.textContent = 'Siguiente secciÃ³n';
+                nextBtn.textContent = 'Siguiente sección';
             }
         }
     }

@@ -1,4 +1,4 @@
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using AutoClick.Data;
 using AutoClick.Models;
@@ -45,6 +45,9 @@ namespace AutoClick.Pages
 
         public void OnGet(string? edit)
         {
+            // Force UTF-8 encoding
+            Response.ContentType = "text/html; charset=utf-8";
+            
             Edit = edit;
             if (!string.IsNullOrEmpty(edit) && int.TryParse(edit, out int id))
             {
