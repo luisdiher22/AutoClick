@@ -120,10 +120,9 @@ public class Auto
     [Display(Name = "Provincia")]
     public string Provincia { get; set; } = string.Empty;
     
-    [Required]
     [MaxLength(50)]
     [Display(Name = "Cantón")]
-    public string Canton { get; set; } = string.Empty;
+    public string? Canton { get; set; }
     
     [MaxLength(200)]
     [Display(Name = "Ubicación Exacta")]
@@ -190,8 +189,8 @@ public class Auto
     [Display(Name = "Ubicación Completa")]
     public string UbicacionCompleta => 
         !string.IsNullOrEmpty(UbicacionExacta) ? 
-        $"{UbicacionExacta}, {Canton}, {Provincia}" : 
-        $"{Canton}, {Provincia}";
+        $"{UbicacionExacta}, {(!string.IsNullOrEmpty(Canton) ? Canton + ", " : "")}{Provincia}" : 
+        $"{(!string.IsNullOrEmpty(Canton) ? Canton + ", " : "")}{Provincia}";
     
     [NotMapped]
     [Display(Name = "Precio Formateado")]

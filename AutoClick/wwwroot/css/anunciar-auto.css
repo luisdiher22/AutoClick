@@ -72,6 +72,16 @@
     z-index: 100;
 }
 
+/* Ajuste especial para sección 4 (planes de visibilidad) */
+#seccion4 {
+    min-height: 900px; /* Aumentar altura mínima para dar espacio */
+}
+
+#seccion4 + .form-nav-buttons,
+#seccion4 ~ .form-nav-buttons {
+    bottom: -50px; /* Mover botones más abajo cuando se muestra sección 4 */
+}
+
 .btn-back {
     display: flex;
     align-items: center;
@@ -228,6 +238,55 @@
 }
 
 /* Currency and unit selectors */
+.currency-selector,
+.unit-selector {
+    position: absolute;
+    right: 0;
+    top: 26px;
+    height: 44px;
+}
+
+/* Modelo select styling */
+.modelo-select {
+    width: 260px !important;
+    min-height: 42px !important;
+    padding: 8px 16px !important;
+    position: absolute !important;
+    left: 0px !important;
+    top: 18px !important;
+    background: #02081C !important;
+    border-radius: 4px !important;
+    border: 0.50px solid rgba(255, 255, 255, 0.50) !important;
+    color: rgba(255, 255, 255, 0.50) !important;
+    font-size: 14px !important;
+    font-family: Montserrat, sans-serif !important;
+    font-weight: 500 !important;
+    cursor: pointer !important;
+    z-index: 10 !important;
+}
+
+.modelo-select:focus {
+    outline: 2px solid rgba(255, 255, 255, 0.75) !important;
+    z-index: 100 !important;
+}
+
+.modelo-select option {
+    background: #02081C !important;
+    color: white !important;
+    padding: 8px 16px !important;
+    font-size: 14px !important;
+}
+
+/* Remove all custom appearance styling to let browser handle it natively */
+
+/* Minimal option styling to ensure visibility */
+select#modelo option,
+select#marca option, 
+select#ano option {
+    color: #000 !important;
+    background: #fff !important;
+}
+
 .currency-selector,
 .unit-selector {
     position: absolute;
@@ -444,9 +503,12 @@
     position: relative;
 }
 
-.tag-option input[type="checkbox"] {
+.tag-option input[type="radio"] {
     position: absolute;
     opacity: 0;
+    width: 0;
+    height: 0;
+    pointer-events: none;
 }
 
 .tag-card {
@@ -455,7 +517,7 @@
     align-items: center;
     padding: 16px;
     background: #02081C;
-    border: 0.5px solid rgba(255, 255, 255, 0.5);
+    border: 2px solid rgba(255, 255, 255, 0.5);
     border-radius: 4px;
     cursor: pointer;
     transition: all 0.3s;
@@ -463,9 +525,16 @@
     width: 175px;
 }
 
-.tag-option input[type="checkbox"]:checked + .tag-card {
-    border-color: white;
-    background: rgba(255, 255, 255, 0.05);
+.tag-card:hover {
+    border-color: rgba(255, 255, 255, 0.8);
+    background: rgba(255, 255, 255, 0.03);
+    transform: translateY(-2px);
+}
+
+.tag-option input[type="radio"]:checked + .tag-card {
+    border-color: #00CC00;
+    background: rgba(0, 204, 0, 0.1);
+    box-shadow: 0 0 20px rgba(0, 204, 0, 0.3);
 }
 
 .tag-price {

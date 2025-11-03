@@ -79,37 +79,15 @@ namespace AutoClick.Pages
         }
 
         // Endpoint para verificar si una placa ya existe
+        // NOTA: La validación de placa duplicada ha sido removida, 
+        // ya que las placas pueden estar duplicadas en la base de datos
         public IActionResult OnGetVerificarPlaca(string placa, string? editId)
         {
             Console.WriteLine($"=== Verificando placa: {placa} ===");
+            Console.WriteLine("Validación de placa duplicada deshabilitada - se permiten placas duplicadas");
             
-            if (string.IsNullOrWhiteSpace(placa))
-            {
-                return new JsonResult(new { existe = false });
-            }
-
-            // Normalizar la placa (mayúsculas y sin espacios)
-            var placaNormalizada = placa.Trim().ToUpper();
-
-            // Buscar si existe la placa en la base de datos
-            var placaExiste = _context.Autos
-                .Where(a => a.PlacaVehiculo != null && a.PlacaVehiculo.ToUpper() == placaNormalizada)
-                .Where(a => a.Activo == true) // Solo verificar autos activos
-                .Any();
-
-            // Si estamos editando, excluir el auto actual de la búsqueda
-            if (!string.IsNullOrEmpty(editId) && int.TryParse(editId, out int id))
-            {
-                placaExiste = _context.Autos
-                    .Where(a => a.PlacaVehiculo != null && a.PlacaVehiculo.ToUpper() == placaNormalizada)
-                    .Where(a => a.Activo == true)
-                    .Where(a => a.Id != id) // Excluir el auto que se está editando
-                    .Any();
-            }
-
-            Console.WriteLine($"Placa {placaNormalizada} existe: {placaExiste}");
-
-            return new JsonResult(new { existe = placaExiste });
+            // Siempre retornar que la placa no existe (no validar duplicados)
+            return new JsonResult(new { existe = false });
         }
 
         public async Task<IActionResult> OnPostFinalizarAsync()

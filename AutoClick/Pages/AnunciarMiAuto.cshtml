@@ -48,7 +48,7 @@
                 
                 <!-- Section 1: Datos del Vehículo -->
                 <div class="form-section active" data-section="1" id="seccion1">
-                    <div style="width: 100%; height: 800px; position: relative; overflow: hidden;">
+                    <div style="width: 100%; height: 800px; position: relative; overflow: visible;">
                         @if (Model.IsEditMode)
                         {
                             <div style="left: 20px; top: -20px; position: absolute; background: rgba(34, 197, 94, 0.2); color: #22C55E; padding: 8px 16px; border-radius: 6px; font-size: 12px; font-family: Montserrat; font-weight: 600;">
@@ -62,15 +62,129 @@
                         <div data-asterizco="true" data-property-1="Default" style="width: 260px; height: 60px; left: 32px; top: 50px; position: absolute">
                             <select asp-for="Formulario.Marca" id="marca" required style="width: 260px; height: 42px; padding-left: 16px; padding-right: 16px; padding-top: 8px; padding-bottom: 8px; left: 0px; top: 18px; position: absolute; background: #02081C; border-radius: 4px; outline: 0.50px rgba(255, 255, 255, 0.50) solid; outline-offset: -0.50px; justify-content: space-between; align-items: center; display: inline-flex; color: rgba(255, 255, 255, 0.50); font-size: 14px; font-family: Montserrat; font-weight: 500; border: none;">
                                 <option value="">Elija una marca</option>
-                                <option value="toyota">Toyota</option>
-                                <option value="honda">Honda</option>
-                                <option value="nissan">Nissan</option>
-                                <option value="hyundai">Hyundai</option>
-                                <option value="kia">Kia</option>
-                                <option value="mazda">Mazda</option>
-                                <option value="chevrolet">Chevrolet</option>
-                                <option value="ford">Ford</option>
-                                <option value="volkswagen">Volkswagen</option>
+                                <option value="Acura">Acura</option>
+                                <option value="Aion">Aion</option>
+                                <option value="Alfa Romeo">Alfa Romeo</option>
+                                <option value="Aston Martin">Aston Martin</option>
+                                <option value="Audi">Audi</option>
+                                <option value="Austin">Austin</option>
+                                <option value="BAIC">BAIC</option>
+                                <option value="BAW">BAW</option>
+                                <option value="Bentley">Bentley</option>
+                                <option value="Bluebird">Bluebird</option>
+                                <option value="BMW">BMW</option>
+                                <option value="Brilliance">Brilliance</option>
+                                <option value="Buick">Buick</option>
+                                <option value="BYD">BYD</option>
+                                <option value="Cadillac">Cadillac</option>
+                                <option value="Chana">Chana</option>
+                                <option value="Changan">Changan</option>
+                                <option value="Chery">Chery</option>
+                                <option value="Chevrolet">Chevrolet</option>
+                                <option value="Chrysler">Chrysler</option>
+                                <option value="Citroen">Citroen</option>
+                                <option value="CMC">CMC</option>
+                                <option value="Dacia">Dacia</option>
+                                <option value="Daewoo">Daewoo</option>
+                                <option value="Daihatsu">Daihatsu</option>
+                                <option value="Datsun">Datsun</option>
+                                <option value="Dodge">Dodge</option>
+                                <option value="Dongfeng">Dongfeng</option>
+                                <option value="Eagle">Eagle</option>
+                                <option value="FAW">FAW</option>
+                                <option value="Ferrari">Ferrari</option>
+                                <option value="Fiat">Fiat</option>
+                                <option value="Ford">Ford</option>
+                                <option value="Foton">Foton</option>
+                                <option value="Geely">Geely</option>
+                                <option value="Genesis">Genesis</option>
+                                <option value="Geo">Geo</option>
+                                <option value="GMC">GMC</option>
+                                <option value="Gonow">Gonow</option>
+                                <option value="Great Wall">Great Wall</option>
+                                <option value="Hafei">Hafei</option>
+                                <option value="Haima">Haima</option>
+                                <option value="Haval">Haval</option>
+                                <option value="Heibao">Heibao</option>
+                                <option value="Higer">Higer</option>
+                                <option value="Hino">Hino</option>
+                                <option value="Honda">Honda</option>
+                                <option value="Hummer">Hummer</option>
+                                <option value="Hyundai">Hyundai</option>
+                                <option value="Infiniti">Infiniti</option>
+                                <option value="International">International</option>
+                                <option value="Isuzu">Isuzu</option>
+                                <option value="Iveco">Iveco</option>
+                                <option value="JAC">JAC</option>
+                                <option value="Jaecoo">Jaecoo</option>
+                                <option value="Jaguar">Jaguar</option>
+                                <option value="Jeep">Jeep</option>
+                                <option value="Jetour">Jetour</option>
+                                <option value="Jinbei">Jinbei</option>
+                                <option value="JMC">JMC</option>
+                                <option value="Jonway">Jonway</option>
+                                <option value="Kaiyi">Kaiyi</option>
+                                <option value="Kia">Kia</option>
+                                <option value="Lada">Lada</option>
+                                <option value="Lamborghini">Lamborghini</option>
+                                <option value="Lancia">Lancia</option>
+                                <option value="Land Rover">Land Rover</option>
+                                <option value="Lexus">Lexus</option>
+                                <option value="Lifan">Lifan</option>
+                                <option value="Lincoln">Lincoln</option>
+                                <option value="Lotus">Lotus</option>
+                                <option value="Magiruz">Magiruz</option>
+                                <option value="Mahindra">Mahindra</option>
+                                <option value="Maserati">Maserati</option>
+                                <option value="Maxus">Maxus</option>
+                                <option value="Mazda">Mazda</option>
+                                <option value="Mercedes Benz">Mercedes Benz</option>
+                                <option value="Mercury">Mercury</option>
+                                <option value="MG">MG</option>
+                                <option value="Mini Cooper">Mini Cooper</option>
+                                <option value="Mitsubishi">Mitsubishi</option>
+                                <option value="Nissan">Nissan</option>
+                                <option value="Oldsmobile">Oldsmobile</option>
+                                <option value="Omoda">Omoda</option>
+                                <option value="Opel">Opel</option>
+                                <option value="Peugeot">Peugeot</option>
+                                <option value="Piaggio">Piaggio</option>
+                                <option value="Plymouth">Plymouth</option>
+                                <option value="Polarsun">Polarsun</option>
+                                <option value="Porsche">Porsche</option>
+                                <option value="Proton">Proton</option>
+                                <option value="Ram">Ram</option>
+                                <option value="Rambler">Rambler</option>
+                                <option value="Renault">Renault</option>
+                                <option value="Reva">Reva</option>
+                                <option value="Rivian">Rivian</option>
+                                <option value="Rolls Royce">Rolls Royce</option>
+                                <option value="Rover">Rover</option>
+                                <option value="Saab">Saab</option>
+                                <option value="Samsung">Samsung</option>
+                                <option value="Saturn">Saturn</option>
+                                <option value="Scion">Scion</option>
+                                <option value="Seat">Seat</option>
+                                <option value="Shinenay">Shinenay</option>
+                                <option value="Skoda">Skoda</option>
+                                <option value="Smart">Smart</option>
+                                <option value="Soueast">Soueast</option>
+                                <option value="Ssang Yong">Ssang Yong</option>
+                                <option value="Subaru">Subaru</option>
+                                <option value="Suzuki">Suzuki</option>
+                                <option value="Tesla">Tesla</option>
+                                <option value="Tiger Truck">Tiger Truck</option>
+                                <option value="Toyota">Toyota</option>
+                                <option value="VGV">VGV</option>
+                                <option value="Volkswagen">Volkswagen</option>
+                                <option value="Volvo">Volvo</option>
+                                <option value="Western Star">Western Star</option>
+                                <option value="Xpeng">Xpeng</option>
+                                <option value="Yugo">Yugo</option>
+                                <option value="Zap">Zap</option>
+                                <option value="Zotye">Zotye</option>
+                                <option value="Lucid">Lucid</option>
+                                <option value="Neta">Neta</option>
                             </select>
                             <div style="left: 0px; top: 0px; position: absolute; justify-content: flex-start; align-items: center; gap: 4px; display: inline-flex">
                                 <div style="text-box-trim: trim-both; text-box-edge: cap alphabetic; color: white; font-size: 14px; font-family: Montserrat; font-weight: 500; word-wrap: break-word">Marca</div>
@@ -80,17 +194,17 @@
                         
                         <!-- Modelo -->
                         <div data-asterizco="true" data-property-1="Default" style="width: 260px; height: 60px; left: 325px; top: 50px; position: absolute">
-                            <select id="modelo" name="Formulario.Modelo" required style="width: 260px; height: 42px; padding-left: 16px; padding-right: 16px; padding-top: 8px; padding-bottom: 8px; left: 0px; top: 18px; position: absolute; background: #02081C; border-radius: 4px; outline: 0.50px rgba(255, 255, 255, 0.50) solid; outline-offset: -0.50px; justify-content: space-between; align-items: center; display: inline-flex; color: rgba(255, 255, 255, 0.50); font-size: 14px; font-family: Montserrat; font-weight: 500; border: none;">
+                            <div style="left: 0px; top: 0px; position: absolute; justify-content: flex-start; align-items: center; gap: 4px; display: inline-flex; pointer-events: none;">
+                                <div style="text-box-trim: trim-both; text-box-edge: cap alphabetic; color: white; font-size: 14px; font-family: Montserrat; font-weight: 500; word-wrap: break-word">Modelo</div>
+                                <div style="text-box-trim: trim-both; text-box-edge: cap alphabetic; color: #FF0000; font-size: 14px; font-family: Montserrat; font-weight: 500; word-wrap: break-word">*</div>
+                            </div>
+                            <select id="modelo" name="Formulario.Modelo" required style="width: 260px; height: 42px; padding-left: 16px; padding-right: 16px; padding-top: 8px; padding-bottom: 8px; left: 0px; top: 18px; position: absolute; background: #02081C; border-radius: 4px; outline: 0.50px rgba(255, 255, 255, 0.50) solid; outline-offset: -0.50px; color: rgba(255, 255, 255, 0.50); font-size: 14px; font-family: Montserrat; font-weight: 500; border: none;">
                                 <option value="">Elija un modelo</option>
                                 @if (!string.IsNullOrEmpty(Model.Formulario?.Modelo))
                                 {
                                     <option value="@Model.Formulario.Modelo" selected>@Model.Formulario.Modelo</option>
                                 }
                             </select>
-                            <div style="left: 0px; top: 0px; position: absolute; justify-content: flex-start; align-items: center; gap: 4px; display: inline-flex">
-                                <div style="text-box-trim: trim-both; text-box-edge: cap alphabetic; color: white; font-size: 14px; font-family: Montserrat; font-weight: 500; word-wrap: break-word">Modelo</div>
-                                <div style="text-box-trim: trim-both; text-box-edge: cap alphabetic; color: #FF0000; font-size: 14px; font-family: Montserrat; font-weight: 500; word-wrap: break-word">*</div>
-                            </div>
                         </div>
                         
                         <!-- Año -->
