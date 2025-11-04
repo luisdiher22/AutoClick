@@ -4104,26 +4104,43 @@ body {
     font-size: 20px;
     font-weight: 700;
     color: white;
-    margin: 0 0 8px 0;
+    font-family: 'Montserrat', sans-serif;
+    margin: 0 0 21px 0;
+    line-height: normal;
+}
+
+.equipment-divider {
+    width: 100%;
+    height: 0.5px;
+    background: rgba(255, 255, 255, 0.5);
+    margin-bottom: 21px;
 }
 
 .equipment-grid {
-    display: flex;
-    justify-content: space-between;
-    gap: 40px;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 24px 20px; /* row-gap column-gap */
+    align-items: start;
 }
 
 .equipment-column {
-    display: flex;
-    flex-direction: column;
-    gap: 24px;
-    flex: 1;
+    display: contents; /* Permite que los items sean hijos directos del grid */
 }
 
 .equipment-item {
     font-size: 16px;
     font-weight: 500;
     color: rgba(255, 255, 255, 0.75);
+    font-family: 'Montserrat', sans-serif;
+    margin: 0;
+    padding: 0;
+    list-style-position: inside;
+    line-height: 1.4; /* Mejor line-height para textos largos */
+    align-self: start;
+}
+
+.equipment-item li {
+    line-height: 1.4;
 }
 
 /* Financing Calculator Section */

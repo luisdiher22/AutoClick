@@ -1332,103 +1332,32 @@ document.addEventListener('DOMContentLoaded', function() {
             return;
         }
         
-        // Remove any existing equipment inputs to avoid duplicates
-        const existingEquipmentInputs = form.querySelectorAll('input[name*="ExtrasExterior"], input[name*="ExtrasInterior"], input[name*="ExtrasMultimedia"], input[name*="ExtrasSeguridad"], input[name*="ExtrasRendimiento"], input[name*="ExtrasAntiRobo"]');
-        existingEquipmentInputs.forEach(input => input.remove());
+        // NO eliminar los checkboxes originales - FormData los capturará automáticamente
+        // Solo verificar que existan
+        const allExtrasCheckboxes = form.querySelectorAll('input[type="checkbox"][name*="Extras"]');
+        console.log(`Total extras checkboxes found in form: ${allExtrasCheckboxes.length}`);
         
-        // Find section 2 container
-        const section2 = document.querySelector('#seccion2');
-        if (!section2) {
-            console.error('Section 2 not found!');
-            return;
-        }
+        const checkedExtras = form.querySelectorAll('input[type="checkbox"][name*="Extras"]:checked');
+        console.log(`Total extras checkboxes CHECKED: ${checkedExtras.length}`);
         
-        console.log('Section 2 found, analyzing structure...');
-        
-        // Simple approach: find all checkboxes in section 2 and organize by closest H2
-        const allCheckboxes = section2.querySelectorAll('input[type="checkbox"]:checked');
-        console.log(`Total checked checkboxes in section 2: ${allCheckboxes.length}`);
-        
-        // If no checkboxes are checked, let's see all checkboxes
-        if (allCheckboxes.length === 0) {
-            const allCheckboxesUnchecked = section2.querySelectorAll('input[type="checkbox"]');
-            console.log(`Total checkboxes (including unchecked) in section 2: ${allCheckboxesUnchecked.length}`);
-            
-            if (allCheckboxesUnchecked.length > 0) {
-                console.log('Sample checkbox:', allCheckboxesUnchecked[0]);
-                console.log('Sample checkbox container:', allCheckboxesUnchecked[0].closest('div'));
-            }
-        }
-        
-        // Collect equipment by sections based on H2 headers
-        const equipmentSections = {
-            'Equipamiento del vehÃ­culo': 'Formulario.ExtrasExterior',
-            'Equipamiento Interior': 'Formulario.ExtrasInterior', 
-            'Multimedia': 'Formulario.ExtrasMultimedia',
-            'Seguridad al volante': 'Formulario.ExtrasSeguridad',
-            'Desempeño': 'Formulario.ExtrasRendimiento',
-            'Antirrobo': 'Formulario.ExtrasAntiRobo'
-        };
-        
-        // Process each equipment category
-        Object.entries(equipmentSections).forEach(([sectionTitle, fieldName]) => {
-            console.log(`Processing section: ${sectionTitle} -> ${fieldName}`);
-            
-            // Find the H2 header with this title in section 2
-            const headers = section2.querySelectorAll('h2');
-            let targetHeader = null;
-            
-            headers.forEach(header => {
-                if (header.textContent.trim() === sectionTitle) {
-                    targetHeader = header;
-                }
-            });
-            
-            if (targetHeader) {
-                console.log(`Found header for ${sectionTitle}:`, targetHeader);
-                
-                // Look for checkboxes only in the next sibling container until the next H2
-                let checkboxes = [];
-                let nextElement = targetHeader.nextElementSibling;
-                
-                console.log(`Looking for checkboxes after header: ${sectionTitle}`);
-                
-                while (nextElement && nextElement.tagName !== 'H2') {
-                    console.log(`Checking element:`, nextElement.tagName, nextElement.className);
-                    
-                    if (nextElement.classList && nextElement.classList.contains('equipment-grid')) {
-                        const gridCheckboxes = nextElement.querySelectorAll('input[type="checkbox"]:checked');
-                        checkboxes.push(...gridCheckboxes);
-                        console.log(`Found equipment-grid with ${gridCheckboxes.length} checked items`);
-                        break; // Stop after finding the first equipment-grid for this header
-                    }
-                    
-                    nextElement = nextElement.nextElementSibling;
-                }
-                
-                console.log(`Final checkboxes for ${sectionTitle}: ${checkboxes.length}`)
-                
-                console.log(`Found ${checkboxes.length} checked items in ${sectionTitle}`);
-                
-                // Create hidden inputs for each checked item
-                checkboxes.forEach((checkbox, index) => {
-                    const hiddenInput = document.createElement('input');
-                    hiddenInput.type = 'hidden';
-                    hiddenInput.name = `${fieldName}[${index}]`;
-                    hiddenInput.value = checkbox.value || checkbox.getAttribute('data-value') || 'unknown';
-                    form.appendChild(hiddenInput);
-                    
-                    console.log(`Added: ${fieldName}[${index}] = ${hiddenInput.value}`);
-                });
-            } else {
-                console.warn(`Section header not found: ${sectionTitle}`);
-                // Let's see what H2s we do have
-                const availableHeaders = Array.from(headers).map(h => h.textContent.trim());
-                console.log('Available H2 headers in section 2:', availableHeaders);
-            }
+        checkedExtras.forEach(cb => {
+            console.log(`Checked: ${cb.name} = ${cb.value}`);
         });
         
-        console.log('=== EQUIPMENT DATA PREPARATION COMPLETE ===');
+        // Los checkboxes ya tienen los nombres correctos en el HTML
+        // FormData(form) los capturará automáticamente cuando estén checked
+        // No necesitamos crear hidden inputs
+        
+        console.log('Equipment data ready - checkboxes will be captured by FormData');
+        
+        /* ===================================================================
+         * CÓDIGO ANTERIOR DESHABILITADO
+         * Ya no es necesario manipular los checkboxes porque:
+         * 1. Los checkboxes HTML ya tienen los nombres correctos (Formulario.ExtrasExterior, etc.)
+         * 2. FormData(form) captura automáticamente los checkboxes checked
+         * 3. ASP.NET Core agrupa múltiples inputs con el mismo nombre en un array
+         * 4. El método SerializarExtrasFromForm() en C# los serializa a JSON
+         * =================================================================== */
     }
     
     function prepareFileData() {

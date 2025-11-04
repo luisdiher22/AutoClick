@@ -1,5 +1,6 @@
 @page "/producto/{id:int}"
 @model ProductoModel
+@using AutoClick.Helpers
 @{
     ViewData["Title"] = $"{Model.Vehicle?.NombreCompleto} - AutoClick.cr";
     
@@ -163,16 +164,13 @@
                     {
                         <section class="producto-equipment">
                             <h2>Equipamiento</h2>
-                            <div class="equipment-list">
+                            <div class="equipment-divider"></div>
+                            <div class="equipment-grid">
                                 @foreach (var item in allExtras)
                                 {
-                                    <div class="equipment-item">
-                                        <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
-                                            <circle cx="8" cy="8" r="8" fill="#06174D"/>
-                                            <path d="M5 8L7 10L11 6" stroke="white" stroke-width="2"/>
-                                        </svg>
-                                        <span>@item</span>
-                                    </div>
+                                    <ul class="equipment-item">
+                                        <li>@ExtrasHelper.GetDisplayName(item)</li>
+                                    </ul>
                                 }
                             </div>
                         </section>

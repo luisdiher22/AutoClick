@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 using AutoClick.Data;
 using AutoClick.Models;
 using AutoClick.Services;
+using System.Text.Json;
 
 namespace AutoClick.Pages
 {
@@ -140,6 +141,9 @@ namespace AutoClick.Pages
 
                 Console.WriteLine($"Edit mode: {IsEditMode}, Edit value: {Edit}");
                 Console.WriteLine($"Formulario data: Marca={Formulario.Marca}, Modelo={Formulario.Modelo}, Precio={Formulario.Precio}");
+
+                // Procesar y serializar los extras de los checkboxes a JSON
+                SerializarExtrasFromForm();
 
                 if (!string.IsNullOrEmpty(Edit) && int.TryParse(Edit, out int editId))
                 {
@@ -392,6 +396,91 @@ namespace AutoClick.Pages
             Console.WriteLine($"Main image: {auto.ImagenPrincipal}");
             
             return auto;
+        }
+
+        /// <summary>
+        /// Serializa los arrays de checkboxes del formulario a JSON strings.
+        /// ASP.NET Core recibe múltiples checkboxes con el mismo nombre como un array,
+        /// pero el modelo espera un string JSON. Este método realiza la conversión.
+        /// </summary>
+        private void SerializarExtrasFromForm()
+        {
+            Console.WriteLine("=== SerializarExtrasFromForm called ===");
+            Console.WriteLine($"Total form keys: {Request.Form.Keys.Count}");
+            
+            // Lista de todas las propiedades de extras que deben ser serializadas
+            var extrasProperties = new Dictionary<string, string>
+            {
+                { "Formulario.ExtrasExterior", "ExtrasExterior" },
+                { "Formulario.ExtrasInterior", "ExtrasInterior" },
+                { "Formulario.ExtrasMultimedia", "ExtrasMultimedia" },
+                { "Formulario.ExtrasSeguridad", "ExtrasSeguridad" },
+                { "Formulario.ExtrasRendimiento", "ExtrasRendimiento" },
+                { "Formulario.ExtrasAntiRobo", "ExtrasAntiRobo" }
+            };
+
+            foreach (var kvp in extrasProperties)
+            {
+                var propertyKey = kvp.Key;
+                var propertyName = kvp.Value;
+                
+                Console.WriteLine($"Looking for key: {propertyKey}");
+                
+                if (Request.Form.ContainsKey(propertyKey))
+                {
+                    // Obtener todos los valores seleccionados para este grupo de checkboxes
+                    var selectedValues = Request.Form[propertyKey].ToList();
+                    
+                    Console.WriteLine($"Found {selectedValues.Count} values for {propertyKey}: {string.Join(", ", selectedValues)}");
+                    
+                    // Serializar a JSON
+                    var jsonString = JsonSerializer.Serialize(selectedValues);
+                    
+                    // Asignar al modelo usando reflection o switch
+                    AsignarExtraAlFormulario(propertyName, jsonString);
+                    Console.WriteLine($"{propertyName} serialized to: {jsonString}");
+                }
+                else
+                {
+                    // Si no hay checkboxes seleccionados, asignar array vacío
+                    var emptyJson = "[]";
+                    AsignarExtraAlFormulario(propertyName, emptyJson);
+                    Console.WriteLine($"{propertyKey} not found in form, set to empty array");
+                }
+            }
+            
+            Console.WriteLine("=== Extras after serialization ===");
+            Console.WriteLine($"ExtrasExterior: {Formulario.ExtrasExterior}");
+            Console.WriteLine($"ExtrasInterior: {Formulario.ExtrasInterior}");
+            Console.WriteLine($"ExtrasMultimedia: {Formulario.ExtrasMultimedia}");
+            Console.WriteLine($"ExtrasSeguridad: {Formulario.ExtrasSeguridad}");
+            Console.WriteLine($"ExtrasRendimiento: {Formulario.ExtrasRendimiento}");
+            Console.WriteLine($"ExtrasAntiRobo: {Formulario.ExtrasAntiRobo}");
+        }
+
+        private void AsignarExtraAlFormulario(string propertyName, string jsonValue)
+        {
+            switch (propertyName)
+            {
+                case "ExtrasExterior":
+                    Formulario.ExtrasExterior = jsonValue;
+                    break;
+                case "ExtrasInterior":
+                    Formulario.ExtrasInterior = jsonValue;
+                    break;
+                case "ExtrasMultimedia":
+                    Formulario.ExtrasMultimedia = jsonValue;
+                    break;
+                case "ExtrasSeguridad":
+                    Formulario.ExtrasSeguridad = jsonValue;
+                    break;
+                case "ExtrasRendimiento":
+                    Formulario.ExtrasRendimiento = jsonValue;
+                    break;
+                case "ExtrasAntiRobo":
+                    Formulario.ExtrasAntiRobo = jsonValue;
+                    break;
+            }
         }
     }
 }
