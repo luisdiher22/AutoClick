@@ -525,7 +525,7 @@
             font-size: 16px;
             font-family: 'Montserrat', sans-serif;
             font-weight: 700;
-            transition: background-color 0.3s ease;
+            transition: background-color 0.2s ease;
         }
         
         .faq-question:hover {
@@ -537,7 +537,9 @@
             height: 6px;
             background: white;
             clip-path: polygon(0 0, 100% 0, 50% 100%);
-            transition: transform 0.3s ease;
+            transition: transform 0.2s ease;
+            flex-shrink: 0;
+            margin-left: 16px;
         }
         
         .faq-item.active .faq-toggle {
@@ -545,23 +547,30 @@
         }
         
         .faq-answer {
-            max-height: 0;
+            display: grid;
+            grid-template-rows: 0fr;
+            transition: grid-template-rows 0.3s ease-out, padding 0.3s ease-out;
             overflow: hidden;
-            transition: max-height 0.3s ease, padding 0.3s ease;
+            padding: 0 32px;
         }
         
         .faq-item.active .faq-answer {
-            max-height: 300px;
-            padding: 0 32px 24px;
+            grid-template-rows: 1fr;
+            padding: 0 32px 24px 32px;
+        }
+        
+        .faq-answer > div {
+            min-height: 0;
         }
         
         .faq-answer p {
-            color: white;
+            color: #B0B0B0;
             font-size: 14px;
             font-family: 'Montserrat', sans-serif;
             font-weight: 400;
-            line-height: 1.5;
+            line-height: 1.6;
             margin: 0;
+            padding-top: 8px;
         }
         
         /* Ad Banner */
@@ -851,7 +860,9 @@
                 <div class="faq-toggle"></div>
             </div>
             <div class="faq-answer">
-                <p>Cualquier negocio relacionado con el mundo automotriz puede anunciarse en nuestra plataforma: concesionarios, talleres mecánicos, empresas de detailing, aseguradoras, financieras, venta de repuestos y accesorios, servicios de inspección técnica, y más.</p>
+                <div>
+                    <p>Cualquier empresa relacionada con el sector automotriz: aseguradoras, talleres de detailing, servicios de PPF y cerámico, financieras, productos y más.</p>
+                </div>
             </div>
         </div>
         
@@ -861,7 +872,9 @@
                 <div class="faq-toggle"></div>
             </div>
             <div class="faq-answer">
-                <p>Su empresa tendrá un perfil público personalizado con logo, descripción detallada, información de contacto, galería de imágenes, y podrá aparecer como proveedor recomendado en las publicaciones de vehículos relacionados con su sector.</p>
+                <div>
+                    <p>Usted tendrá un perfil personalizado con su logotipo, descripción, datos de contacto, enlaces externos y un espacio destacado dentro del ecosistema AutoClick.cr. Su marca puede aparecer en anuncios, artículos y secciones estratégicas.</p>
+                </div>
             </div>
         </div>
         
@@ -871,7 +884,9 @@
                 <div class="faq-toggle"></div>
             </div>
             <div class="faq-answer">
-                <p>Sí, proporcionamos métricas detalladas sobre las visualizaciones de su perfil, clics en su información de contacto, y estadísticas de interacción para que pueda medir el retorno de su inversión publicitaria.</p>
+                <div>
+                    <p>Sí. AutoClick.cr le enviará un reporte mensual con el rendimiento de sus anuncios.</p>
+                </div>
             </div>
         </div>
     </div>
@@ -887,60 +902,5 @@
 @section Scripts {
     <script src="~/js/anunciar-empresa.js" asp-append-version="true"></script>
     <partial name="_ValidationScriptsPartial" />
-    
-    <script>
-        // Additional functionality for the updated design
-        document.addEventListener('DOMContentLoaded', function() {
-            // Smooth scroll to form functionality
-            window.scrollToForm = function() {
-                const contactSection = document.getElementById('contact-form');
-                if (contactSection) {
-                    contactSection.scrollIntoView({ 
-                        behavior: 'smooth',
-                        block: 'start'
-                    });
-                }
-            };
-            
-            // FAQ toggle functionality
-            const faqItems = document.querySelectorAll('.faq-item');
-            
-            faqItems.forEach(item => {
-                const question = item.querySelector('.faq-question');
-                
-                question.addEventListener('click', function() {
-                    const isActive = item.classList.contains('active');
-                    
-                    // Close all FAQ items
-                    faqItems.forEach(faq => {
-                        faq.classList.remove('active');
-                    });
-                    
-                    // Open clicked item if it wasn't active
-                    if (!isActive) {
-                        item.classList.add('active');
-                    }
-                });
-            });
-            
-            // Form validation enhancements
-            const form = document.querySelector('.empresa-form');
-            const submitButton = form?.querySelector('.submit-button');
-            
-            if (form && submitButton) {
-                form.addEventListener('submit', function() {
-                    // Disable button to prevent double submission
-                    submitButton.disabled = true;
-                    submitButton.textContent = 'Enviando...';
-                    
-                    // Re-enable after 5 seconds as fallback
-                    setTimeout(() => {
-                        submitButton.disabled = false;
-                        submitButton.textContent = 'Enviar';
-                    }, 5000);
-                });
-            }
-        });
-    </script>
 }
 

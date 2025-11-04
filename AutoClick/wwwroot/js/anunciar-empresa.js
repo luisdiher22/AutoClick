@@ -5,6 +5,7 @@ document.addEventListener('DOMContentLoaded', function() {
     initializeFAQ();
     initializeScrollToForm();
     initializePhoneValidation();
+    initializeFormSubmit();
 });
 
 // Form validation functionality
@@ -211,19 +212,23 @@ function initializeFAQ() {
     faqItems.forEach(item => {
         const question = item.querySelector('.faq-question');
         
-        question.addEventListener('click', function() {
-            const isActive = item.classList.contains('active');
-            
-            // Close all FAQ items
-            faqItems.forEach(faq => {
-                faq.classList.remove('active');
+        if (question) {
+            question.addEventListener('click', function(e) {
+                e.preventDefault();
+                
+                const isActive = item.classList.contains('active');
+                
+                // Close all FAQ items
+                faqItems.forEach(faq => {
+                    faq.classList.remove('active');
+                });
+                
+                // Open clicked item if it wasn't active
+                if (!isActive) {
+                    item.classList.add('active');
+                }
             });
-            
-            // Open clicked item if it wasn't active
-            if (!isActive) {
-                item.classList.add('active');
-            }
-        });
+        }
     });
 }
 
@@ -396,3 +401,23 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     });
 });
+
+// Form submit handling
+function initializeFormSubmit() {
+    const form = document.querySelector('.empresa-form');
+    const submitButton = form?.querySelector('.submit-button');
+    
+    if (form && submitButton) {
+        form.addEventListener('submit', function() {
+            // Disable button to prevent double submission
+            submitButton.disabled = true;
+            submitButton.textContent = 'Enviando...';
+            
+            // Re-enable after 5 seconds as fallback
+            setTimeout(() => {
+                submitButton.disabled = false;
+                submitButton.textContent = 'Enviar';
+            }, 5000);
+        });
+    }
+}
