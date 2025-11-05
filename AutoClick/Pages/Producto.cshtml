@@ -432,7 +432,7 @@
                 
                 <div class="financing-row">
                     <div class="financing-field">
-                        <label for="currency">Moneda *</label>
+                        <label for="currency">Moneda <span class="required-asterisk">*</span></label>
                         <select name="currency" id="currency" class="financing-select">
                             <option value="USD" selected="@(Model.Currency == "USD")">Dólar (USD)</option>
                             <option value="CRC" selected="@(Model.Currency == "CRC")">Colones (CRC)</option>
@@ -440,14 +440,14 @@
                     </div>
                     
                     <div class="financing-field">
-                        <label for="vehiclePrice">Precio total del vehículo *</label>
+                        <label for="vehiclePrice">Precio total del vehículo <span class="required-asterisk">*</span></label>
                         <input type="text" name="vehiclePrice" id="vehiclePrice" value="@Model.FormatPrice(Model.VehiclePrice)" class="financing-input" readonly />
                     </div>
                 </div>
                 
                 <div class="financing-row">
                     <div class="financing-field">
-                        <label for="loanTerm">Plazo del préstamo *</label>
+                        <label for="loanTerm">Plazo del préstamo <span class="required-asterisk">*</span></label>
                         <select name="loanTerm" id="loanTerm" class="financing-select">
                             <option value="84" selected="@(Model.LoanTerm == 84)">84 meses</option>
                             <option value="72" selected="@(Model.LoanTerm == 72)">72 meses</option>
