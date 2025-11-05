@@ -3,26 +3,23 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 using AutoClick.Data;
 using AutoClick.Models;
 using Microsoft.EntityFrameworkCore;
-using AutoClick.Services;
 
 namespace AutoClick.Pages.Admin
 {
     public class DashboardModel : PageModel
     {
         private readonly ApplicationDbContext _context;
-        private readonly IApplicationInsightsService _appInsightsService;
 
         public DashboardModel(
-            ApplicationDbContext context,
-            IApplicationInsightsService appInsightsService)
+            ApplicationDbContext context)
         {
             _context = context;
-            _appInsightsService = appInsightsService;
         }
 
-        // Estadísticas de visitas (Application Insights)
-        public string VisitasSemanales { get; set; } = "0";
-        public string VisitasHoy { get; set; } = "0";
+        // Estadísticas de visitas (Google Analytics)
+        // Nota: Las métricas de tráfico ahora se monitorean a través de Google Tag Manager
+        public string VisitasSemanales { get; set; } = "Ver en Google Analytics";
+        public string VisitasHoy { get; set; } = "Ver en Google Analytics";
         
         // Anuncios - Datos reales de la base de datos
         public int TotalAutos { get; set; }
@@ -51,14 +48,9 @@ namespace AutoClick.Pages.Admin
             {
                 UltimaActualizacion = DateTime.Now;
 
-                // ===== ESTADÍSTICAS DE VISITAS (APPLICATION INSIGHTS) =====
-                // Obtener métricas reales de Application Insights
-                var visitasSemanales = await _appInsightsService.GetWeeklyPageViewsAsync();
-                var visitasHoy = await _appInsightsService.GetDailyPageViewsAsync();
-                
-                // Formatear números (K para miles, M para millones)
-                VisitasSemanales = FormatNumber(visitasSemanales);
-                VisitasHoy = FormatNumber(visitasHoy);
+                // ===== ESTADÍSTICAS DE VISITAS =====
+                // Las métricas de tráfico ahora se monitorean a través de Google Tag Manager
+                // Consulta Google Analytics para ver visitantes únicos y páginas vistas
 
                 // ===== ESTADÍSTICAS DE ANUNCIOS (TABLA AUTOS) =====
                 TotalAutos = await _context.Autos.AsNoTracking().CountAsync();
