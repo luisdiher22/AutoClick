@@ -28,6 +28,10 @@ namespace AutoClick.Models
 
         public bool Activo { get; set; } = true;
 
+        // Nuevo campo para el tamaño del anuncio
+        [Required]
+        public TamanoAnuncio Tamano { get; set; } = TamanoAnuncio.Horizontal;
+
         // Navegación
         [ForeignKey("EmpresaPublicidadId")]
         public virtual EmpresaPublicidad? EmpresaPublicidad { get; set; }

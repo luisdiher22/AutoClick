@@ -140,6 +140,9 @@ builder.Services.AddScoped<IEmailService, EmailService>();
 // Add Application Insights Service
 builder.Services.AddScoped<IApplicationInsightsService, ApplicationInsightsService>();
 
+// Add Image Processing Service para publicidad
+builder.Services.AddScoped<IImageProcessingService, ImageProcessingService>();
+
 // Add HttpClient Factory para TasaCambioService
 builder.Services.AddHttpClient();
 

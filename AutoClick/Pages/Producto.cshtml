@@ -289,6 +289,14 @@
                         </div>
                     </div>
                 }
+
+                <!-- Espacios Publicitarios Verticales -->
+                <div style="display: flex; flex-direction: column; gap: 24px; margin-top: 24px;">
+                    @await Component.InvokeAsync("AnuncioGrandeVertical")
+                    @await Component.InvokeAsync("AnuncioGrandeVertical")
+                    @await Component.InvokeAsync("AnuncioGrandeVertical")
+                    @await Component.InvokeAsync("AnuncioGrandeVertical")
+                </div>
             </div>
         </div>
 

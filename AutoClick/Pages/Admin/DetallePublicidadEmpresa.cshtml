@@ -732,7 +732,7 @@
                                     <path d="M22 20V22.6667H4.66667V20" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
                                 </svg>
                             </a>
-                            <button class="card-action-btn edit-btn" onclick="openEditModal(@anuncio.Id, '@anuncio.UrlImagen', '@anuncio.UrlDestino')" title="Editar anuncio">
+                            <button class="card-action-btn edit-btn" onclick="openEditModal(@anuncio.Id, '@anuncio.UrlImagen', '@anuncio.UrlDestino', @((int)anuncio.Tamano))" title="Editar anuncio">
                                 <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
                                     <path d="M14.166 2.5C14.3849 2.28113 14.6447 2.10752 14.9307 1.98893C15.2167 1.87035 15.5232 1.80908 15.8327 1.80908C16.1422 1.80908 16.4487 1.87035 16.7347 1.98893C17.0206 2.10752 17.2805 2.28113 17.4993 2.5C17.7182 2.71887 17.8918 2.97871 18.0104 3.26468C18.129 3.55064 18.1903 3.85714 18.1903 4.16667C18.1903 4.47619 18.129 4.78269 18.0104 5.06866C17.8918 5.35462 17.7182 5.61446 17.4993 5.83333L6.24935 17.0833L1.66602 18.3333L2.91602 13.75L14.166 2.5Z" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
                                 </svg>
@@ -805,7 +805,7 @@
                                         <path d="M22 20V22.6667H4.66667V20" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
                                     </svg>
                                 </a>
-                                <button class="card-action-btn edit-btn" onclick="openEditModal(@anuncio.Id, '@anuncio.UrlImagen', '@anuncio.UrlDestino')" title="Editar anuncio">
+                                <button class="card-action-btn edit-btn" onclick="openEditModal(@anuncio.Id, '@anuncio.UrlImagen', '@anuncio.UrlDestino', @((int)anuncio.Tamano))" title="Editar anuncio">
                                     <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
                                         <path d="M14.166 2.5C14.3849 2.28113 14.6447 2.10752 14.9307 1.98893C15.2167 1.87035 15.5232 1.80908 15.8327 1.80908C16.1422 1.80908 16.4487 1.87035 16.7347 1.98893C17.0206 2.10752 17.2805 2.28113 17.4993 2.5C17.7182 2.71887 17.8918 2.97871 18.0104 3.26468C18.129 3.55064 18.1903 3.85714 18.1903 4.16667C18.1903 4.47619 18.129 4.78269 18.0104 5.06866C17.8918 5.35462 17.7182 5.61446 17.4993 5.83333L6.24935 17.0833L1.66602 18.3333L2.91602 13.75L14.166 2.5Z" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
                                     </svg>
@@ -885,6 +885,19 @@
                         URL a la que redirigirá el anuncio al hacer clic
                     </small>
                 </div>
+
+                <div class="modal-field">
+                    <span class="modal-field-label">Tamaño del anuncio <span style="color: #EF4444;">*</span></span>
+                    <select name="TamanoAnuncio" class="modal-field-input" required>
+                        <option value="">Seleccione un tamaño</option>
+                        <option value="1">Horizontal (1010 x 189 px)</option>
+                        <option value="2">Medio Vertical (401 x 287 px)</option>
+                        <option value="3">Grande Vertical (344 x 423 px)</option>
+                    </select>
+                    <small class="modal-field-hint">
+                        La imagen se adaptará automáticamente a este tamaño
+                    </small>
+                </div>
             </div>
 
             <div class="modal-detalles-footer">
@@ -938,6 +951,19 @@
                     <input type="url" asp-for="UrlDestino" id="editUrlDestino" class="modal-field-input" placeholder="https://ejemplo.com/landing-page" />
                     <small class="modal-field-hint">
                         URL a la que redirigirá el anuncio al hacer clic
+                    </small>
+                </div>
+
+                <div class="modal-field">
+                    <span class="modal-field-label">Tamaño del anuncio <span style="color: #EF4444;">*</span></span>
+                    <select name="TamanoAnuncio" id="editTamanoAnuncio" class="modal-field-input" required>
+                        <option value="">Seleccione un tamaño</option>
+                        <option value="1">Horizontal (1010 x 189 px)</option>
+                        <option value="2">Medio Vertical (401 x 287 px)</option>
+                        <option value="3">Grande Vertical (344 x 423 px)</option>
+                    </select>
+                    <small class="modal-field-hint">
+                        Si sube una nueva imagen, se adaptará a este tamaño
                     </small>
                 </div>
             </div>
@@ -1000,10 +1026,11 @@
         document.querySelector('#modalAgregarAnuncio form').reset();
     }
 
-    function openEditModal(anuncioId, urlImagen, urlDestino) {
+    function openEditModal(anuncioId, urlImagen, urlDestino, tamano) {
         document.getElementById('editAnuncioId').value = anuncioId;
         document.getElementById('editUrlImagen').value = urlImagen;
         document.getElementById('editUrlDestino').value = urlDestino || '';
+        document.getElementById('editTamanoAnuncio').value = tamano || '1';
         document.getElementById('modalEditarAnuncio').classList.add('active');
         document.body.style.overflow = 'hidden';
     }

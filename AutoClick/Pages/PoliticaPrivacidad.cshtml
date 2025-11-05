@@ -79,10 +79,9 @@
             <p>Para ejercer sus derechos o realizar consultas sobre nuestra política de privacidad, puede escribir a:</p>
             <p>g.montero@AutoClick.cr</p>
         </div>
-        <div class="ad-banner">
-            <img src="~/images/logos/autoclick-logo-hd.png" alt="AutoClick.cr" class="ad-logo" />
-            <h2 class="ad-title">SU ANUNCIO AQUÍ</h2>
-            <p class="ad-subtitle">¡Haga click en este recuadro para empezar!</p>
+        <!-- Advertising Banner -->
+        <div style="margin-top: 48px;">
+            @await Component.InvokeAsync("AnuncioHorizontal")
         </div>
     </div>
 </div>

@@ -15,15 +15,18 @@ namespace AutoClick.Pages.Admin
         private readonly ApplicationDbContext _context;
         private readonly IAuthService _authService;
         private readonly IPublicidadStorageService _publicidadStorageService;
+        private readonly IImageProcessingService _imageProcessingService;
 
         public DetallePublicidadEmpresaModel(
             ApplicationDbContext context, 
             IAuthService authService,
-            IPublicidadStorageService publicidadStorageService)
+            IPublicidadStorageService publicidadStorageService,
+            IImageProcessingService imageProcessingService)
         {
             _context = context;
             _authService = authService;
             _publicidadStorageService = publicidadStorageService;
+            _imageProcessingService = imageProcessingService;
         }
 
         // Información de la empresa
@@ -125,14 +128,32 @@ namespace AutoClick.Pages.Admin
                     return RedirectToPage("/Admin/Publicidad");
                 }
 
+                // Determinar el tamaño del anuncio
+                var tamanoAnuncio = TamanoAnuncio.Horizontal; // Default
+                if (Request.Form.ContainsKey("TamanoAnuncio"))
+                {
+                    Enum.TryParse<TamanoAnuncio>(Request.Form["TamanoAnuncio"], out tamanoAnuncio);
+                }
+
+                // Obtener las dimensiones del tamaño seleccionado
+                var (targetWidth, targetHeight) = tamanoAnuncio.GetDimensions();
+
                 string urlImagen;
 
-                // Si se subió un archivo, usar el servicio de almacenamiento
+                // Si se subió un archivo, procesarlo y redimensionarlo
                 if (ImagenAnuncio != null && ImagenAnuncio.Length > 0)
                 {
                     try
                     {
-                        urlImagen = await _publicidadStorageService.UploadAnuncioImageAsync(ImagenAnuncio);
+                        // Usar el servicio de procesamiento de imágenes para redimensionar
+                        using var stream = ImagenAnuncio.OpenReadStream();
+                        var fileName = $"{Guid.NewGuid()}{Path.GetExtension(ImagenAnuncio.FileName)}";
+                        
+                        urlImagen = await _imageProcessingService.ProcessAndSaveAdvertisementImageAsync(
+                            stream, 
+                            fileName, 
+                            targetWidth, 
+                            targetHeight);
                     }
                     catch (ArgumentException ex)
                     {
@@ -159,7 +180,8 @@ namespace AutoClick.Pages.Admin
                     FechaPublicacion = DateTime.Now,
                     NumeroVistas = 0,
                     NumeroClics = 0,
-                    Activo = true
+                    Activo = true,
+                    Tamano = tamanoAnuncio
                 };
 
                 _context.AnunciosPublicidad.Add(nuevoAnuncio);
@@ -196,21 +218,38 @@ namespace AutoClick.Pages.Admin
                     return RedirectToPage(new { id = EmpresaId });
                 }
 
+                // Actualizar el tamaño si se especificó
+                var tamanoAnuncio = anuncio.Tamano; // Mantener el tamaño actual por defecto
+                if (Request.Form.ContainsKey("TamanoAnuncio"))
+                {
+                    Enum.TryParse<TamanoAnuncio>(Request.Form["TamanoAnuncio"], out tamanoAnuncio);
+                }
+
                 string nuevaUrlImagen = anuncio.UrlImagen; // Mantener la imagen actual por defecto
 
-                // Si se subió un archivo nuevo, reemplazar la imagen
+                // Si se subió un archivo nuevo, procesarlo y redimensionarlo
                 if (ImagenAnuncio != null && ImagenAnuncio.Length > 0)
                 {
                     try
                     {
+                        // Obtener las dimensiones del tamaño seleccionado
+                        var (targetWidth, targetHeight) = tamanoAnuncio.GetDimensions();
+
                         // Eliminar la imagen anterior si existe
                         if (!string.IsNullOrWhiteSpace(anuncio.UrlImagen))
                         {
                             await _publicidadStorageService.DeleteAnuncioImageAsync(anuncio.UrlImagen);
                         }
 
-                        // Subir la nueva imagen
-                        nuevaUrlImagen = await _publicidadStorageService.UploadAnuncioImageAsync(ImagenAnuncio);
+                        // Procesar y subir la nueva imagen con el tamaño correcto
+                        using var stream = ImagenAnuncio.OpenReadStream();
+                        var fileName = $"{Guid.NewGuid()}{Path.GetExtension(ImagenAnuncio.FileName)}";
+                        
+                        nuevaUrlImagen = await _imageProcessingService.ProcessAndSaveAdvertisementImageAsync(
+                            stream, 
+                            fileName, 
+                            targetWidth, 
+                            targetHeight);
                     }
                     catch (ArgumentException ex)
                     {
@@ -223,9 +262,10 @@ namespace AutoClick.Pages.Admin
                 {
                     nuevaUrlImagen = UrlImagen;
                 }
-                // Si no hay imagen nueva, mantener la actual (permitir editar solo UrlDestino)
+                // Si no hay imagen nueva, mantener la actual (permitir editar solo UrlDestino y Tamano)
 
                 anuncio.UrlImagen = nuevaUrlImagen;
+                anuncio.Tamano = tamanoAnuncio;
                 // Asignar UrlDestino, incluso si es null o vacío
                 anuncio.UrlDestino = string.IsNullOrWhiteSpace(UrlDestino) ? null : UrlDestino;
                 

@@ -1,0 +1,35 @@
+@model AutoClick.Models.AnuncioPublicidad
+
+@if (Model != null)
+{
+    <div class="anuncio-container anuncio-grande-vertical">
+        <a href="@(string.IsNullOrEmpty(Model.UrlDestino) ? "#" : Model.UrlDestino)" 
+           target="_blank" 
+           class="anuncio-link"
+           onclick="registrarClic(@Model.Id)">
+            <img src="@Model.UrlImagen" 
+                 alt="@Model.EmpresaPublicidad?.NombreEmpresa" 
+                 class="anuncio-imagen" />
+            <span class="anuncio-badge">Publicidad</span>
+        </a>
+    </div>
+}
+
+<script>
+function registrarClic(anuncioId) {
+    fetch(`/api/publicidad/registrar-clic/${anuncioId}`, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        }
+    });
+}
+</script>
+
+<style>
+.anuncio-grande-vertical {
+    width: 100%;
+    max-width: 344px;
+    height: 423px;
+}
+</style>

@@ -211,14 +211,7 @@
 
             <!-- Advertisement Placeholder -->
             <div class="sidebar-ad">
-                <img src="https://via.placeholder.com/344x423/333333/FFFFFF?text=SU+ANUNCIO+AQUÍ" alt="Publicidad" />
-                <div class="ad-content">
-                    <div class="ad-logo">
-                        <img src="https://via.placeholder.com/138x22/FFFFFF/333333?text=AutoClick.cr" alt="AutoClick.cr" />
-                    </div>
-                    <h3>SU ANUNCIO AQUÍ</h3>
-                    <p>¡Haga click en este recuadro para empezar!</p>
-                </div>
+                @await Component.InvokeAsync("AnuncioGrandeVertical")
             </div>
         </aside>
 
@@ -319,18 +312,14 @@
 
             <!-- Bottom Advertisement -->
             <div class="bottom-ad">
-                <img src="https://via.placeholder.com/851x159/333333/FFFFFF?text=SU+ANUNCIO+AQUÍ" alt="Publicidad" />
-                <div class="ad-content">
-                    <div class="ad-logo">
-                        <img src="https://via.placeholder.com/143x23/FFFFFF/333333?text=AutoClick.cr" alt="AutoClick.cr" />
-                    </div>
-                    <h3>SU ANUNCIO AQUÍ</h3>
-                    <p>¡Haga click en este recuadro para empezar!</p>
-                </div>
+                @await Component.InvokeAsync("AnuncioHorizontal")
             </div>
         </main>
     </div>
     </div>
+
+    <!-- Footer -->
+    <partial name="_Footer" />
 </div>
 
 @section Scripts {
