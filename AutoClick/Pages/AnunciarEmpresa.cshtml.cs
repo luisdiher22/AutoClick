@@ -63,6 +63,17 @@ namespace AutoClick.Pages
             // Initialize the page
             ErrorMessage = "";
             SuccessMessage = "";
+            
+            // Obtener mensajes de TempData si existen
+            if (TempData["SuccessMessage"] != null)
+            {
+                SuccessMessage = TempData["SuccessMessage"]?.ToString() ?? "";
+            }
+            
+            if (TempData["ErrorMessage"] != null)
+            {
+                ErrorMessage = TempData["ErrorMessage"]?.ToString() ?? "";
+            }
         }
 
         public async Task<IActionResult> OnPostAsync()

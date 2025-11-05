@@ -275,5 +275,57 @@ namespace AutoClick.Pages
                 return 15; // Fallback en caso de error
             }
         }
+
+        /// <summary>
+        /// Handler para crear solicitud de pre-aprobación
+        /// </summary>
+        public async Task<IActionResult> OnPostSolicitarPreAprobacionAsync(
+            [FromForm] string nombre,
+            [FromForm] string apellidos,
+            [FromForm] string telefono,
+            [FromForm] string email,
+            [FromForm] int autoId)
+        {
+            try
+            {
+                // Validar datos
+                if (string.IsNullOrWhiteSpace(nombre) || 
+                    string.IsNullOrWhiteSpace(apellidos) || 
+                    string.IsNullOrWhiteSpace(telefono) || 
+                    string.IsNullOrWhiteSpace(email))
+                {
+                    return new JsonResult(new { success = false, message = "Todos los campos son obligatorios" });
+                }
+
+                // Validar que el auto existe
+                var autoExists = await _context.Autos.AnyAsync(a => a.Id == autoId);
+                if (!autoExists)
+                {
+                    return new JsonResult(new { success = false, message = "El vehículo no existe" });
+                }
+
+                // Crear la solicitud
+                var solicitud = new SolicitudPreAprobacion
+                {
+                    Nombre = nombre.Trim(),
+                    Apellidos = apellidos.Trim(),
+                    Telefono = telefono.Trim(),
+                    Email = email.Trim(),
+                    AutoId = autoId,
+                    FechaSolicitud = DateTime.Now,
+                    Procesada = false
+                };
+
+                _context.SolicitudesPreAprobacion.Add(solicitud);
+                await _context.SaveChangesAsync();
+
+                return new JsonResult(new { success = true, message = "Su solicitud ha sido registrada exitosamente. Le contactaremos cuando tengamos una alianza bancaria disponible." });
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error al crear solicitud de pre-aprobación: {ex.Message}");
+                return new JsonResult(new { success = false, message = "Ocurrió un error al procesar su solicitud. Por favor intente nuevamente." });
+            }
+        }
     }
 }

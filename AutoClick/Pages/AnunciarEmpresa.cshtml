@@ -650,6 +650,86 @@
                 font-size: 28px;
             }
         }
+
+        /* Modal de Confirmación */
+        .confirmation-modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.7);
+            z-index: 10000;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+
+        .confirmation-content {
+            background: #030D2B;
+            border-radius: 12px;
+            max-width: 400px;
+            width: 100%;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+            text-align: center;
+            padding: 32px 24px 24px 24px;
+        }
+
+        .confirmation-icon {
+            width: 60px;
+            height: 60px;
+            margin: 0 auto 20px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 32px;
+        }
+
+        .confirmation-icon.success {
+            background: rgba(0, 204, 0, 0.2);
+            color: #00CC00;
+        }
+
+        .confirmation-icon.error {
+            background: rgba(255, 0, 0, 0.2);
+            color: #ff0000;
+        }
+
+        .confirmation-title {
+            color: white;
+            font-family: 'Montserrat', sans-serif;
+            font-weight: 700;
+            font-size: 20px;
+            margin: 0 0 12px 0;
+        }
+
+        .confirmation-message {
+            color: rgba(255, 255, 255, 0.8);
+            font-family: 'Montserrat', sans-serif;
+            font-size: 14px;
+            line-height: 1.6;
+            margin: 0 0 24px 0;
+        }
+
+        .confirmation-button {
+            width: 100%;
+            padding: 14px 24px;
+            background: white;
+            color: #030D2B;
+            border: none;
+            border-radius: 4px;
+            font-family: 'Montserrat', sans-serif;
+            font-weight: 700;
+            font-size: 15px;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .confirmation-button:hover {
+            background: #f5f5f5;
+        }
     </style>
 }
 
@@ -768,16 +848,17 @@
                     <h3>¡Queremos saber acerca de su empresa!</h3>
                 </div>
                 
+                @* Mensajes ahora se muestran en modal *@
                 @if (!string.IsNullOrEmpty(Model.ErrorMessage))
                 {
-                    <div class="error-message">
+                    <div class="error-message" style="display: none;">
                         @Model.ErrorMessage
                     </div>
                 }
                 
                 @if (!string.IsNullOrEmpty(Model.SuccessMessage))
                 {
-                    <div class="success-message">
+                    <div class="success-message" style="display: none;">
                         @Model.SuccessMessage
                     </div>
                 }
@@ -899,8 +980,63 @@
     <partial name="_Footer" />
 </div>
 
+<!-- Modal de Confirmación -->
+<div id="confirmationModal" class="confirmation-modal">
+    <div class="confirmation-content">
+        <div class="confirmation-icon" id="confirmationIcon">
+            <span id="confirmationIconText">✓</span>
+        </div>
+        <h3 class="confirmation-title" id="confirmationTitle">¡Éxito!</h3>
+        <p class="confirmation-message" id="confirmationMessage">Su solicitud ha sido enviada correctamente.</p>
+        <button class="confirmation-button" onclick="closeConfirmationModal()">Aceptar</button>
+    </div>
+</div>
+
 @section Scripts {
     <script src="~/js/anunciar-empresa.js" asp-append-version="true"></script>
     <partial name="_ValidationScriptsPartial" />
+    
+    <script>
+        // Funciones del modal de confirmación
+        function showConfirmationModal(isSuccess, title, message) {
+            const modal = document.getElementById('confirmationModal');
+            const icon = document.getElementById('confirmationIcon');
+            const iconText = document.getElementById('confirmationIconText');
+            const titleElement = document.getElementById('confirmationTitle');
+            const messageElement = document.getElementById('confirmationMessage');
+            
+            if (isSuccess) {
+                icon.className = 'confirmation-icon success';
+                iconText.textContent = '✓';
+            } else {
+                icon.className = 'confirmation-icon error';
+                iconText.textContent = '✕';
+            }
+            
+            titleElement.textContent = title;
+            messageElement.textContent = message;
+            modal.style.display = 'flex';
+        }
+
+        function closeConfirmationModal() {
+            document.getElementById('confirmationModal').style.display = 'none';
+        }
+
+        // Mostrar modal si hay mensaje de éxito o error
+        document.addEventListener('DOMContentLoaded', function() {
+            @if (!string.IsNullOrEmpty(Model.SuccessMessage))
+            {
+                <text>
+                showConfirmationModal(true, '¡Solicitud Enviada!', '@Html.Raw(Model.SuccessMessage.Replace("'", "\\'"))');
+                </text>
+            }
+            @if (!string.IsNullOrEmpty(Model.ErrorMessage))
+            {
+                <text>
+                showConfirmationModal(false, 'Error', '@Html.Raw(Model.ErrorMessage.Replace("'", "\\'"))');
+                </text>
+            }
+        });
+    </script>
 }
 

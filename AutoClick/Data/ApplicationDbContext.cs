@@ -20,6 +20,7 @@ public class ApplicationDbContext : DbContext
     public DbSet<Favorito> Favoritos { get; set; }
     public DbSet<EmpresaPublicidad> EmpresasPublicidad { get; set; }
     public DbSet<AnuncioPublicidad> AnunciosPublicidad { get; set; }
+    public DbSet<SolicitudPreAprobacion> SolicitudesPreAprobacion { get; set; }
     // Car model eliminado
     
     protected override void OnModelCreating(ModelBuilder modelBuilder)
