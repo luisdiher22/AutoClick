@@ -1,8 +1,12 @@
 @model AutoClick.ViewComponents.CarruselPublicidadViewModel
 
 @{
-    var esHorizontal = Model.Formato == "horizontal";
-    var claseContenedor = esHorizontal ? "ad-carousel-horizontal" : "ad-carousel-cuadrado";
+    var claseContenedor = Model.Formato switch
+    {
+        "horizontal" => "ad-carousel-horizontal",
+        "medio-vertical" => "ad-carousel-medio-vertical",
+        _ => "ad-carousel-cuadrado"
+    };
 }
 
 <div class="@claseContenedor" data-seccion="@Model.Seccion">
@@ -11,7 +15,7 @@
         {
             <!-- Solo placeholder cuando no hay anuncios -->
             <div class="ad-carousel-item ad-placeholder" onclick="abrirModalSolicitudAnuncio()">
-                <div class="placeholder-content @(esHorizontal ? "horizontal" : "cuadrado")">
+                <div class="placeholder-content">
                     <img src="/images/logos/logo-autoclick-white.png" alt="AutoClick" class="placeholder-logo" />
                     <p class="placeholder-title">SU ANUNCIO AQUÍ</p>
                     <p class="placeholder-subtitle">¡Haga click en este recuadro para empezar!</p>
@@ -41,7 +45,7 @@
             
             <!-- Placeholder "SU ANUNCIO AQUÍ" al final del carrusel -->
             <div class="ad-carousel-item ad-placeholder" onclick="abrirModalSolicitudAnuncio()">
-                <div class="placeholder-content @(esHorizontal ? "horizontal" : "cuadrado")">
+                <div class="placeholder-content">
                     <img src="/images/logos/logo-autoclick-white.png" alt="AutoClick" class="placeholder-logo" />
                     <p class="placeholder-title">SU ANUNCIO AQUÍ</p>
                     <p class="placeholder-subtitle">¡Haga click en este recuadro para empezar!</p>
@@ -63,14 +67,6 @@
                 <path d="M9 18L15 12L9 6" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
             </svg>
         </button>
-
-        <!-- Indicadores -->
-        <div class="ad-carousel-indicators">
-            @for (int i = 0; i <= Model.Anuncios.Count; i++)
-            {
-                <span class="indicator @(i == 0 ? "active" : "")" data-index="@i"></span>
-            }
-        </div>
     }
 </div>
 
@@ -84,12 +80,22 @@
     }
 
     .ad-carousel-cuadrado {
-        aspect-ratio: 1 / 1;
+        width: 100%;
+        max-width: 344px;
+        height: 423px;
     }
 
     .ad-carousel-horizontal {
-        aspect-ratio: 16 / 5;
-        max-height: 200px;
+        width: 100%;
+        max-width: 1010px;
+        height: 189px;
+        margin: 0 auto;
+    }
+
+    .ad-carousel-medio-vertical {
+        width: 100%;
+        max-width: 401px;
+        height: 287px;
     }
 
     .ad-carousel-wrapper {

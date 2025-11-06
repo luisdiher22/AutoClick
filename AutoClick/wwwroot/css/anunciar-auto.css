@@ -1028,39 +1028,7 @@ select#ano option {
     border: 1px solid rgba(255, 255, 255, 0.25);
 }
 
-.ad-placeholder {
-    width: 852px;
-    height: 159px;
-    padding: 29px;
-    background: rgba(255, 255, 255, 0.05);
-    border-radius: 3.79px;
-    text-align: center;
-    margin: 0 auto;
-}
-
-.ad-placeholder img {
-    width: 142.92px;
-    height: 22.68px;
-    margin-bottom: 20px;
-}
-
-.ad-placeholder h3 {
-    color: white;
-    font-size: 29.32px;
-    font-family: 'Montserrat', sans-serif;
-    font-weight: 700;
-    text-shadow: 0px 4px 4px rgba(0, 0, 0, 0.5);
-    margin: 0 0 16px 0;
-}
-
-.ad-placeholder p {
-    color: white;
-    font-size: 19.55px;
-    font-family: 'Montserrat', sans-serif;
-    font-weight: 500;
-    text-shadow: 0px 4px 4px rgba(0, 0, 0, 0.5);
-    margin: 0;
-}
+/* Estilos de .ad-placeholder movidos a CarruselPublicidad ViewComponent */
 
 /* Footer */
 .anunciar-footer {

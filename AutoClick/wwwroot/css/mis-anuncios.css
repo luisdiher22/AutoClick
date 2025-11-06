@@ -192,48 +192,7 @@
 
 /* Sidebar Advertisement */
 .sidebar-ad {
-    position: relative;
-    border-radius: 12px;
-    overflow: hidden;
-    height: 423px;
-}
-
-.sidebar-ad img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-}
-
-.sidebar-ad .ad-content {
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background: rgba(0, 0, 0, 0.7);
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    text-align: center;
-    padding: 20px;
-}
-
-.sidebar-ad .ad-logo img {
-    max-width: 138px;
-    margin-bottom: 20px;
-}
-
-.sidebar-ad .ad-content h3 {
-    font-size: 1.5rem;
-    font-weight: 700;
-    margin-bottom: 10px;
-    color: #ffffff;
-}
-
-.sidebar-ad .ad-content p {
-    color: #ffffff;
-    opacity: 0.9;
+    background: #02081C;
 }
 
 /* Main Content */
@@ -504,49 +463,7 @@
 
 /* Bottom Advertisement */
 .bottom-ad {
-    position: relative;
-    border-radius: 12px;
-    overflow: hidden;
-    height: 159px;
     margin-top: 40px;
-}
-
-.bottom-ad img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-}
-
-.bottom-ad .ad-content {
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background: rgba(0, 0, 0, 0.7);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    text-align: center;
-    padding: 20px;
-    gap: 20px;
-}
-
-.bottom-ad .ad-logo img {
-    max-width: 143px;
-}
-
-.bottom-ad .ad-content h3 {
-    font-size: 1.25rem;
-    font-weight: 700;
-    margin: 0;
-    color: #ffffff;
-}
-
-.bottom-ad .ad-content p {
-    color: #ffffff;
-    opacity: 0.9;
-    margin: 0;
 }
 
 /* Responsive Design */
@@ -644,9 +561,5 @@
     
     .filter-panel {
         padding: 15px;
-    }
-    
-    .sidebar-ad {
-        height: 300px;
     }
 }

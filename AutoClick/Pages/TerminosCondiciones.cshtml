@@ -75,12 +75,12 @@
             <p>Para cualquier consulta relacionada con estos Términos y Condiciones, puede contactarnos a:</p>
             <p>📩 g.montero@autoclick.cr</p>
         </div>
-
-        <!-- Advertising Banner -->
-        <div style="margin-top: 48px;">
-            @await Component.InvokeAsync("AnuncioHorizontal")
-        </div>
     </div>
+</div>
+
+<!-- Advertising Banner -->
+<div style="margin: 48px auto; max-width: 1200px; padding: 0 32px;">
+    @await Component.InvokeAsync("CarruselPublicidad", new { formato = "horizontal", seccion = "terminos-footer" })
 </div>
 
 <!-- Footer -->

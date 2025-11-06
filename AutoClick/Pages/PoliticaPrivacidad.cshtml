@@ -79,11 +79,13 @@
             <p>Para ejercer sus derechos o realizar consultas sobre nuestra política de privacidad, puede escribir a:</p>
             <p>g.montero@AutoClick.cr</p>
         </div>
-        <!-- Advertising Banner -->
-        <div style="margin-top: 48px;">
-            @await Component.InvokeAsync("AnuncioHorizontal")
-        </div>
     </div>
 </div>
+
+<!-- Advertising Banner -->
+<div style="margin: 48px auto; max-width: 1200px; padding: 0 32px;">
+    @await Component.InvokeAsync("CarruselPublicidad", new { formato = "horizontal", seccion = "politica-footer" })
+</div>
+
 <partial name="_Footer" />
 <script src="~/js/politica-privacidad.js" asp-append-version="true"></script>

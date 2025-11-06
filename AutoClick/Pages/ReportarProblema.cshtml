@@ -116,15 +116,15 @@
             </form>
         </div>
     </div>
-
-    <!-- Espacio Publicitario -->
-    <div style="margin: 48px auto; max-width: 1200px; padding: 0 32px;">
-        @await Component.InvokeAsync("AnuncioHorizontal")
-    </div>
-
-    <!-- Footer -->
-    <partial name="_Footer" />
 </div>
+
+<!-- Espacio Publicitario -->
+<div style="margin: 48px auto; max-width: 1200px; padding: 0 32px;">
+    @await Component.InvokeAsync("CarruselPublicidad", new { formato = "horizontal", seccion = "reportar-problema-footer" })
+</div>
+
+<!-- Footer -->
+<partial name="_Footer" />
 
 @section Scripts {
     <partial name="_ValidationScriptsPartial" />

@@ -291,11 +291,9 @@
                 }
 
                 <!-- Espacios Publicitarios Verticales -->
-                <div style="display: flex; flex-direction: column; gap: 24px; margin-top: 24px;">
-                    @await Component.InvokeAsync("AnuncioGrandeVertical")
-                    @await Component.InvokeAsync("AnuncioGrandeVertical")
-                    @await Component.InvokeAsync("AnuncioGrandeVertical")
-                    @await Component.InvokeAsync("AnuncioGrandeVertical")
+                <div style="display: flex; flex-direction: column; gap: 0; margin-top: 8px;">
+                    @await Component.InvokeAsync("CarruselPublicidad", new { formato = "cuadrado", seccion = "producto-sidebar-1" })
+                    @await Component.InvokeAsync("CarruselPublicidad", new { formato = "cuadrado", seccion = "producto-sidebar-2" })
                 </div>
             </div>
         </div>

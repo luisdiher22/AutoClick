@@ -162,7 +162,7 @@
 
         <!-- Espacio Publicitario -->
         <div class="ad-space">
-            @await Component.InvokeAsync("AnuncioMedioVertical")
+            @await Component.InvokeAsync("CarruselPublicidad", new { formato = "medio-vertical", seccion = "gumout-sidebar" })
         </div>
     </section>
 
@@ -221,7 +221,8 @@
         </div>
     </section>
 
-    <!-- Footer included from layout -->
+    <!-- Footer -->
+    <partial name="_Footer" />
 </div>
 
 <script src="~/js/gumout.js"></script>

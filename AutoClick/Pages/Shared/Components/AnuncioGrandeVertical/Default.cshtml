@@ -1,19 +1,26 @@
 @model AutoClick.Models.AnuncioPublicidad
 
+<div class="anuncio-container anuncio-grande-vertical">
 @if (Model != null)
 {
-    <div class="anuncio-container anuncio-grande-vertical">
-        <a href="@(string.IsNullOrEmpty(Model.UrlDestino) ? "#" : Model.UrlDestino)" 
-           target="_blank" 
-           class="anuncio-link"
-           onclick="registrarClic(@Model.Id)">
-            <img src="@Model.UrlImagen" 
-                 alt="@Model.EmpresaPublicidad?.NombreEmpresa" 
-                 class="anuncio-imagen" />
-            <span class="anuncio-badge">Publicidad</span>
-        </a>
+    <a href="@(string.IsNullOrEmpty(Model.UrlDestino) ? "#" : Model.UrlDestino)" 
+       target="_blank" 
+       class="anuncio-link"
+       onclick="registrarClic(@Model.Id)">
+        <img src="@Model.UrlImagen" 
+             alt="@Model.EmpresaPublicidad?.NombreEmpresa" 
+             class="anuncio-imagen" />
+    </a>
+}
+else
+{
+    <div class="anuncio-placeholder" onclick="abrirModalSolicitudAnuncio()" style="cursor: pointer;">
+        <img src="/images/logos/logo-autoclick-white.png" alt="AutoClick" class="placeholder-logo" style="max-width: 138px; margin-bottom: 16px;" />
+        <h3 style="font-size: 1.5rem; font-weight: 700; margin-bottom: 8px; color: #ffffff;">SU ANUNCIO AQUÍ</h3>
+        <p style="color: rgba(255,255,255,0.9); margin: 0;">¡Haga click en este recuadro para empezar!</p>
     </div>
 }
+</div>
 
 <script>
 function registrarClic(anuncioId) {
@@ -31,5 +38,23 @@ function registrarClic(anuncioId) {
     width: 100%;
     max-width: 344px;
     height: 423px;
+    background: #04091F;
+}
+
+.anuncio-placeholder {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    background: #04091F;
+    transition: background 0.3s ease;
+    padding: 20px;
+}
+
+.anuncio-placeholder:hover {
+    background: #0a1228;
 }
 </style>

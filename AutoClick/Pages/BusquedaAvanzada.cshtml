@@ -224,7 +224,7 @@
 
                 <!-- Sidebar Advertisement -->
                 <div style="margin-top: 24px;">
-                    @await Component.InvokeAsync("AnuncioGrandeVertical")
+                    @await Component.InvokeAsync("CarruselPublicidad", new { formato = "cuadrado", seccion = "busqueda-sidebar" })
                 </div>
             </aside>
 
@@ -271,13 +271,9 @@
                     }
                 </div>
 
-                <!-- Advertisement Banners -->
+                <!-- Advertisement Banner -->
                 <div style="margin-bottom: 24px;">
-                    @await Component.InvokeAsync("AnuncioHorizontal")
-                </div>
-
-                <div style="margin-bottom: 24px;">
-                    @await Component.InvokeAsync("AnuncioHorizontal")
+                    @await Component.InvokeAsync("CarruselPublicidad", new { formato = "horizontal", seccion = "busqueda-banner" })
                 </div>
 
                 <!-- Pagination -->
@@ -318,7 +314,7 @@
 
                 <!-- Advertisement after pagination -->
                 <div style="margin-top: 48px;">
-                    @await Component.InvokeAsync("AnuncioHorizontal")
+                    @await Component.InvokeAsync("CarruselPublicidad", new { formato = "horizontal", seccion = "busqueda-footer" })
                 </div>
             </main>
         </div>

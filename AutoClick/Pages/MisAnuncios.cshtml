@@ -211,7 +211,7 @@
 
             <!-- Advertisement Placeholder -->
             <div class="sidebar-ad">
-                @await Component.InvokeAsync("AnuncioGrandeVertical")
+                @await Component.InvokeAsync("CarruselPublicidad", new { formato = "cuadrado", seccion = "mis-anuncios-sidebar" })
             </div>
         </aside>
 
@@ -312,7 +312,7 @@
 
             <!-- Bottom Advertisement -->
             <div class="bottom-ad">
-                @await Component.InvokeAsync("AnuncioHorizontal")
+                @await Component.InvokeAsync("CarruselPublicidad", new { formato = "horizontal", seccion = "mis-anuncios-footer" })
             </div>
         </main>
     </div>

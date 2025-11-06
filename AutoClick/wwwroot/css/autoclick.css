@@ -2598,6 +2598,8 @@ body {
     display: flex;
     flex-direction: column;
     gap: 30px;
+    width: 344px;
+    margin-left: -64px;
 }
 
 .busqueda-filters-container {
@@ -3590,7 +3592,7 @@ body {
     grid-template-columns: 1200px 392px;
     gap: 40px;
     align-items: start;
-    margin-bottom: 0;
+    margin-bottom: -200px; /* Subir calculadora cuando sidebar es más alto */
 }
 
 /* Main Content Column (Gallery + Description + Specifications + Equipment) */
@@ -3715,7 +3717,7 @@ body {
 .producto-sidebar {
     display: flex;
     flex-direction: column;
-    gap: 24px;
+    gap: 16px; /* Reducido de 24px a 16px */
 }
 
 .produto-info-card,
@@ -4146,7 +4148,7 @@ body {
 /* Marchamo Calculator Section */
 .producto-marchamo {
     max-width: 1200px;
-    margin: 48px 0;
+    margin: 0 0 32px 0; /* Eliminar margin-top para reducir espacio */
 }
 
 .marchamo-content {

@@ -378,10 +378,8 @@
 }
 
 .ad-space {
-    width: 392px;
-    height: 390px;
-    background: #04091F;
-    border: 1px solid rgba(255, 255, 255, 0.15);
+    width: 401px;
+    height: 287px;
     display: flex;
     align-items: center;
     justify-content: center;
