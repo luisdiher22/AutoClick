@@ -6,7 +6,7 @@ document.addEventListener('DOMContentLoaded', function() {
 function initializeAuthPage() {
     initializeUserTypeSelection();
     initializeFormValidation();
-    initializeSocialButtons();
+    // initializeSocialButtons(); // Removed - social login disabled
     checkRememberedUser();
 }
 
@@ -187,6 +187,7 @@ function showError(message) {
     }
 }
 
+/* Social login functions - REMOVED
 function initializeSocialButtons() {
     const googleBtn = document.querySelector('.google-btn');
     const facebookBtn = document.querySelector('.facebook-btn');
@@ -221,6 +222,7 @@ function handleSocialLogin(provider) {
         button.disabled = false;
     }, 1500);
 }
+*/
 
 function checkRememberedUser() {
     // Check if there's a remember me cookie

@@ -5,58 +5,10 @@
     background: #02081C;
     overflow: hidden;
     position: relative;
+    padding-top: 80px; /* Space for global header */
 }
 
-/* Header Styles */
-.auth-header {
-    width: 100%;
-    height: 80px;
-    background: #02081C;
-    border-bottom: 0.5px solid rgba(255, 255, 255, 0.5);
-    position: fixed;
-    top: 0;
-    left: 0;
-    z-index: 1000;
-}
-
-.auth-header-content {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    height: 100%;
-    padding: 0 40px;
-    max-width: 1280px;
-    margin: 0 auto;
-}
-
-.header-logo img {
-    width: 148px;
-    height: 23.49px;
-}
-
-.back-home-btn {
-    display: flex;
-    align-items: center;
-    gap: 16px;
-    color: white;
-    font-size: 16px;
-    font-family: 'Montserrat', sans-serif;
-    font-weight: 400;
-    text-decoration: none;
-    padding: 8px 16px;
-    transition: color 0.3s;
-}
-
-.back-home-btn:hover {
-    color: rgba(255, 255, 255, 0.8);
-}
-
-.back-arrow {
-    width: 14px;
-    height: 16.33px;
-    background: white;
-    clip-path: polygon(100% 50%, 0 0, 0 100%);
-}
+/* Old auth-header styles removed - now using global header */
 
 /* Main Content */
 .auth-main {
@@ -66,7 +18,7 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    padding: 40px 20px;
+    padding: 20px;
 }
 
 .auth-content {
@@ -74,8 +26,7 @@
     max-width: 1400px;
     display: flex;
     gap: 40px;
-    align-items: stretch;
-    min-height: 600px;
+    align-items: center;
 }
 
 /* Auth Sections */
@@ -88,13 +39,24 @@
     padding: 32px;
     display: flex;
     flex-direction: column;
+}
+
+.auth-section.register-section {
     min-height: 500px;
+}
+
+.auth-section.login-section {
+    padding: 24px 32px;
 }
 
 .section-header {
     margin-bottom: 24px;
     text-align: center;
     flex-shrink: 0;
+}
+
+.login-section .section-header {
+    margin-bottom: 20px;
 }
 
 .section-title {
@@ -280,13 +242,16 @@
 /* Form Styles */
 .auth-form {
     width: 100%;
-    flex: 1;
     display: flex;
     flex-direction: column;
 }
 
+.register-section .auth-form {
+    flex: 1; /* Only stretch in register section */
+}
+
 .form-group {
-    margin-bottom: 20px;
+    margin-bottom: 16px;
 }
 
 .form-group label {
@@ -296,6 +261,12 @@
     font-family: 'Montserrat', sans-serif;
     font-weight: 500;
     margin-bottom: 8px;
+}
+
+.form-group .forgot-password {
+    display: inline-block;
+    margin-top: 8px;
+    font-size: 13px;
 }
 
 .form-input {
@@ -322,7 +293,7 @@
     color: rgba(255, 255, 255, 0.5);
 }
 
-/* Form Options */
+/* Form Options - REMOVED (checkbox removed from login form)
 .form-options {
     display: flex;
     justify-content: space-between;
@@ -369,6 +340,7 @@
     font-size: 12px;
     font-weight: bold;
 }
+*/
 
 .forgot-password {
     color: rgba(255, 255, 255, 0.75);
@@ -386,8 +358,7 @@
 /* Buttons */
 .register-actions,
 .login-actions {
-    margin-top: auto;
-    padding-top: 20px;
+    margin-top: 20px;
 }
 
 .btn-register,
@@ -466,7 +437,8 @@
     color: rgba(255, 255, 255, 0.8);
 }
 
-/* Social Login */
+/* Social Login - REMOVED - Using only email/password login */
+/*
 .social-login {
     margin-top: 24px;
     border-top: 1px solid rgba(255, 255, 255, 0.1);
@@ -547,6 +519,7 @@
 .facebook-icon {
     background: linear-gradient(135deg, #4267B2, #365899);
 }
+*/
 
 /* Error Messages */
 .error-message {

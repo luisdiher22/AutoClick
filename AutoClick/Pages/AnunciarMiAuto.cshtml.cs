@@ -4,9 +4,11 @@ using AutoClick.Data;
 using AutoClick.Models;
 using AutoClick.Services;
 using System.Text.Json;
+using Microsoft.AspNetCore.Authorization;
 
 namespace AutoClick.Pages
 {
+    [Authorize]
     public class AnunciarMiAutoModel : PageModel
     {
         private readonly ApplicationDbContext _context;
@@ -132,11 +134,11 @@ namespace AutoClick.Pages
                 var userEmail = User?.Identity?.Name;
                 Console.WriteLine($"User email: {userEmail}");
                 
-                // Para testing, usar un email por defecto si no hay usuario autenticado
+                // Verificar que el usuario esté autenticado
                 if (string.IsNullOrEmpty(userEmail))
                 {
-                    Console.WriteLine("No user email found, using default test email");
-                    userEmail = "test@autoclick.cr"; // Email por defecto para testing
+                    Console.WriteLine("User not authenticated");
+                    return RedirectToPage("/Auth");
                 }
 
                 Console.WriteLine($"Edit mode: {IsEditMode}, Edit value: {Edit}");

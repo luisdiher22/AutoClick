@@ -17,26 +17,6 @@
 }
 
 <div class="auth-container">
-    <!-- Header -->
-    <header class="auth-header">
-        <div class="auth-header-content">
-            <!-- Logo -->
-            <div class="header-logo">
-                <a asp-page="/Index">
-                    <img src="~/images/logo.png" alt="AutoClick.cr" />
-                </a>
-            </div>
-            
-            <!-- Back to Home -->
-            <div class="header-nav">
-                <a asp-page="/Index" class="back-home-btn">
-                    <div class="back-arrow"></div>
-                    Volver al inicio
-                </a>
-            </div>
-        </div>
-    </header>
-
     <!-- Main Content -->
     <div class="auth-main">
         <div class="auth-content">
@@ -145,15 +125,6 @@
                         <label for="loginPassword">Contraseña</label>
                         <input type="password" id="loginPassword" name="LoginPassword" asp-for="LoginPassword" required 
                                placeholder="Su contraseña" class="form-input" autocomplete="off" />
-                    </div>
-                    
-                    <div class="form-options">
-                        <label class="checkbox-container">
-                            <input type="checkbox" name="RememberMe" asp-for="RememberMe" />
-                            <span class="checkbox-custom"></span>
-                            Recordar mi sesión
-                        </label>
-                        
                         <a href="#" class="forgot-password">¿Olvidó su contraseña?</a>
                     </div>
                     
@@ -164,25 +135,6 @@
                         </button>
                     </div>
                 </form>
-                
-                <!-- Social Login Options -->
-                <div class="social-login">
-                    <div class="social-divider">
-                        <span>O inicie sesión con</span>
-                    </div>
-                    
-                    <div class="social-buttons">
-                        <button type="button" class="social-btn google-btn">
-                            <div class="social-icon google-icon"></div>
-                            Google
-                        </button>
-                        
-                        <button type="button" class="social-btn facebook-btn">
-                            <div class="social-icon facebook-icon"></div>
-                            Facebook
-                        </button>
-                    </div>
-                </div>
             </div>
         </div>
     </div>

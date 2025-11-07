@@ -22,7 +22,6 @@
                 </button>
                 <div class="dropdown-content">
                     <a asp-page="/AnunciarMiAuto" class="dropdown-link">Anunciar Mi Auto</a>
-                    <a asp-page="/AnunciarEmpresa" class="dropdown-link">Anunciar Empresa</a>
                 </div>
             </div>
             
@@ -31,7 +30,7 @@
                     <span>Productos & Servicios </span>
                 </button>
                 <div class="dropdown-content">
-                    <a asp-page="/PpfCeramico" class="dropdown-link">PPF y Cerámico</a>
+                    <a asp-page="/PpfCeramico" class="dropdown-link">Rain-X: Máxima visibilidad al conducir</a>
                 </div>
             </div>
             
@@ -40,7 +39,7 @@
                     <span>Financiamiento </span>
                 </button>
                 <div class="dropdown-content">
-                    <a asp-page="/Gumout" class="dropdown-link">Gumout</a>
+                    <a asp-page="/AnunciarEmpresa" class="dropdown-link">Anunciar Empresa</a>
                 </div>
             </div>
         </nav>
@@ -53,6 +52,8 @@
             @{
                 bool isUserLoggedIn = User.Identity?.IsAuthenticated == true;
                 string userName = User.Identity?.Name ?? User.FindFirst(System.Security.Claims.ClaimTypes.Name)?.Value ?? User.FindFirst("FullName")?.Value ?? "Usuario";
+                string currentPage = ViewContext.RouteData.Values["page"]?.ToString() ?? "";
+                bool isAuthPage = currentPage.Contains("/Auth");
             }
             
             <!-- Favorites Button -->
@@ -84,9 +85,9 @@
                     </div>
                 </div>
             }
-            else
+            else if (!isAuthPage)
             {
-                <!-- Not logged in - show login/register -->
+                <!-- Not logged in - show login/register (hidden on auth page) -->
                 <div class="auth-section">
                     <a asp-page="/Auth" class="login-register-btn">Inicie sesión/Registro</a>
                 </div>

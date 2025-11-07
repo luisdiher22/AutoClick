@@ -3,9 +3,11 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 using AutoClick.Models;
 using AutoClick.Data;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.Authorization;
 
 namespace AutoClick.Pages
 {
+    [Authorize]
     public class GuardadosModel : PageModel
     {
         private readonly ApplicationDbContext _context;

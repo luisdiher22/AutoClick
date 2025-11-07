@@ -119,8 +119,14 @@ namespace AutoClick.Pages
                 HttpContext.Session.SetString("TipoUsuario", TipoUsuario);
 
                 // Redirect to appropriate registration page based on user type
-                // Only individual registration is supported
-                return RedirectToPage("/RegistroIndividuo");
+                if (TipoUsuario == "Agencia")
+                {
+                    return RedirectToPage("/RegistroAgencia");
+                }
+                else
+                {
+                    return RedirectToPage("/RegistroIndividuo");
+                }
             }
             catch (Exception ex)
             {

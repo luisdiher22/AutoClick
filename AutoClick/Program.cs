@@ -36,6 +36,9 @@ builder.Services.AddAuthentication("Cookies")
         options.Cookie.SameSite = SameSiteMode.Lax;
     });
 
+// Add Authorization services
+builder.Services.AddAuthorization();
+
 // Add session support
 builder.Services.AddDistributedMemoryCache();
 builder.Services.AddMemoryCache(); // Agregar Memory Cache para performance
