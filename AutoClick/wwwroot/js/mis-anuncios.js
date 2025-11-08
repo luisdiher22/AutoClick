@@ -474,15 +474,8 @@ function editListing(id) {
         return;
     }
     
-    const url = `/AnunciarMiAuto?edit=${id}`;
-    console.log('Generated URL:', url);
-    console.log('About to redirect...');
-    
-    // Add a small delay to see if the logs appear
-    setTimeout(() => {
-        console.log('Executing redirect now...');
-        window.location.href = url;
-    }, 100);
+    // Redirect to edit page
+    window.location.href = `/AnunciarMiAuto?edit=${id}`;
 }
 
 function viewStats(id) {

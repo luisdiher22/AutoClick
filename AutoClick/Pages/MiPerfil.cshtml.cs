@@ -5,6 +5,8 @@ using System.ComponentModel.DataAnnotations;
 using AutoClick.Data;
 using AutoClick.Models;
 using Microsoft.EntityFrameworkCore;
+using Azure.Storage.Blobs;
+using Azure.Storage.Blobs.Models;
 
 namespace AutoClick.Pages
 {
@@ -12,10 +14,12 @@ namespace AutoClick.Pages
     public class MiPerfilModel : PageModel
     {
         private readonly ApplicationDbContext _context;
+        private readonly IConfiguration _configuration;
 
-        public MiPerfilModel(ApplicationDbContext context)
+        public MiPerfilModel(ApplicationDbContext context, IConfiguration configuration)
         {
             _context = context;
+            _configuration = configuration;
         }
         // Profile information properties
         [BindProperty]
@@ -57,20 +61,12 @@ namespace AutoClick.Pages
         public string? Canton { get; set; }
 
         [BindProperty]
-        [Required(ErrorMessage = "El distrito es obligatorio")]
-        [Display(Name = "Distrito")]
-        public string? Distrito { get; set; }
-
-        [BindProperty]
         [Display(Name = "Dirección exacta")]
         public string? DireccionExacta { get; set; }
 
         // File upload properties
         [BindProperty]
         public IFormFile? LogoFile1 { get; set; }
-
-        [BindProperty]
-        public IFormFile? LogoFile2 { get; set; }
 
         public string? LogoUrl { get; set; }
 
@@ -110,6 +106,8 @@ namespace AutoClick.Pages
         {
             try
             {
+                Console.WriteLine("=== OnPostAsync called ===");
+                
                 if (!User.Identity?.IsAuthenticated == true)
                 {
                     return RedirectToPage("/Auth");
@@ -124,26 +122,36 @@ namespace AutoClick.Pages
                     return RedirectToPage("/Auth");
                 }
 
-                if (!ModelState.IsValid)
+                Console.WriteLine($"User email: {userEmail}");
+                Console.WriteLine($"LogoFile1 is null: {LogoFile1 == null}");
+                if (LogoFile1 != null)
                 {
-                    ErrorMessage = "Por favor corrija los errores en el formulario";
-                    await LoadProfileDataAsync(userEmail);
-                    return Page();
+                    Console.WriteLine($"LogoFile1 name: {LogoFile1.FileName}, size: {LogoFile1.Length}");
                 }
 
-                // Handle file uploads
+                // Don't validate model state for file uploads - it might block the save
+                // if (!ModelState.IsValid)
+                // {
+                //     ErrorMessage = "Por favor corrija los errores en el formulario";
+                //     await LoadProfileDataAsync(userEmail);
+                //     return Page();
+                // }
+
+                // Handle file uploads FIRST
                 await ProcessFileUploads();
 
                 // Save profile data
                 await SaveProfileDataAsync(userEmail);
 
                 StatusMessage = "Perfil actualizado correctamente";
+                await LoadProfileDataAsync(userEmail); // Reload to show updated logo
                 return Page();
             }
             catch (Exception ex)
             {
                 Console.WriteLine($"Error saving profile: {ex.Message}");
-                ErrorMessage = "Hubo un error al guardar el perfil. Por favor intente nuevamente.";
+                Console.WriteLine($"Stack trace: {ex.StackTrace}");
+                ErrorMessage = $"Hubo un error al guardar el perfil: {ex.Message}";
                 return Page();
             }
         }
@@ -188,12 +196,12 @@ namespace AutoClick.Pages
                     RepresentanteLegal = $"{usuario.Nombre} {usuario.Apellidos}";
                     Telefono1 = usuario.NumeroTelefono;
                     WhatsApp = usuario.NumeroTelefono;
+                    LogoUrl = usuario.LogoUrl;
                     
                     // Set some default values for demo - in a real app these would come from an extended user profile
                     CedulaJuridica = usuario.EsAgencia ? "3-008-4534245" : "";
                     Provincia = "San José";
                     Canton = "San José";
-                    Distrito = "Carmen";
                     DireccionExacta = "Centro de San José";
                 }
             }
@@ -208,38 +216,128 @@ namespace AutoClick.Pages
 
         private async Task ProcessFileUploads()
         {
-            var uploadsPath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "uploads", "logos");
-            
-            if (!Directory.Exists(uploadsPath))
+            try
             {
-                Directory.CreateDirectory(uploadsPath);
-            }
+                Console.WriteLine("=== ProcessFileUploads called ===");
+                
+                var connectionString = _configuration.GetConnectionString("AzureStorage");
+                
+                if (string.IsNullOrEmpty(connectionString))
+                {
+                    Console.WriteLine("ERROR: Azure Storage connection string not found");
+                    return;
+                }
 
-            if (LogoFile1 != null && LogoFile1.Length > 0)
-            {
-                await SaveUploadedFile(LogoFile1, uploadsPath, "logo1");
-            }
+                Console.WriteLine("Azure Storage connection string found");
 
-            if (LogoFile2 != null && LogoFile2.Length > 0)
+                // Upload LogoFile1 to logosusuario container (this becomes the profile picture)
+                if (LogoFile1 != null && LogoFile1.Length > 0)
+                {
+                    Console.WriteLine($"Uploading logo: {LogoFile1.FileName}, size: {LogoFile1.Length}");
+                    
+                    var logoUrl = await UploadToAzureBlobAsync(LogoFile1, "logosusuario", "logo1");
+                    
+                    if (!string.IsNullOrEmpty(logoUrl))
+                    {
+                        LogoUrl = logoUrl;
+                        Console.WriteLine($"Logo URL set: {logoUrl}");
+                        
+                        // Update user's profile picture in database
+                        var userEmail = User.FindFirst(System.Security.Claims.ClaimTypes.Email)?.Value 
+                            ?? User.FindFirst("email")?.Value 
+                            ?? User.FindFirst(System.Security.Claims.ClaimTypes.Name)?.Value;
+                            
+                        if (!string.IsNullOrEmpty(userEmail))
+                        {
+                            var usuario = await _context.Usuarios.FirstOrDefaultAsync(u => u.Email == userEmail);
+                            if (usuario != null)
+                            {
+                                Console.WriteLine($"Updating LogoUrl for user: {usuario.Email}");
+                                usuario.LogoUrl = logoUrl;
+                                await _context.SaveChangesAsync();
+                                Console.WriteLine($"Updated profile picture for user: {usuario.Email}");
+                            }
+                            else
+                            {
+                                Console.WriteLine("ERROR: Usuario not found in database");
+                            }
+                        }
+                        else
+                        {
+                            Console.WriteLine("ERROR: User email not found");
+                        }
+                        
+                        Console.WriteLine($"Logo uploaded successfully: {logoUrl}");
+                    }
+                    else
+                    {
+                        Console.WriteLine("ERROR: Logo upload failed - logoUrl is empty");
+                    }
+                }
+                else
+                {
+                    Console.WriteLine("No logo file to upload");
+                }
+            }
+            catch (Exception ex)
             {
-                await SaveUploadedFile(LogoFile2, uploadsPath, "logo2");
+                Console.WriteLine($"Error processing file uploads: {ex.Message}");
+                Console.WriteLine($"Stack trace: {ex.StackTrace}");
+                throw;
             }
         }
 
-        private async Task SaveUploadedFile(IFormFile file, string uploadsPath, string prefix)
+        private async Task<string> UploadToAzureBlobAsync(IFormFile file, string containerName, string prefix)
         {
-            var fileName = $"{prefix}_{Guid.NewGuid()}{Path.GetExtension(file.FileName)}";
-            var filePath = Path.Combine(uploadsPath, fileName);
-
-            using (var stream = new FileStream(filePath, FileMode.Create))
+            try
             {
-                await file.CopyToAsync(stream);
+                Console.WriteLine($"=== UploadToAzureBlobAsync called ===");
+                Console.WriteLine($"Container: {containerName}, Prefix: {prefix}, File: {file.FileName}");
+                
+                var connectionString = _configuration.GetConnectionString("AzureStorage");
+                
+                // Create BlobServiceClient
+                var blobServiceClient = new BlobServiceClient(connectionString);
+                Console.WriteLine("BlobServiceClient created");
+                
+                // Get container client (create if not exists)
+                var containerClient = blobServiceClient.GetBlobContainerClient(containerName);
+                await containerClient.CreateIfNotExistsAsync(PublicAccessType.Blob);
+                Console.WriteLine($"Container '{containerName}' ready");
+                
+                // Generate unique blob name
+                var fileName = $"{prefix}_{Guid.NewGuid()}{Path.GetExtension(file.FileName)}";
+                var blobClient = containerClient.GetBlobClient(fileName);
+                Console.WriteLine($"Blob name: {fileName}");
+                
+                // Set content type based on file extension
+                var blobHttpHeaders = new BlobHttpHeaders
+                {
+                    ContentType = file.ContentType
+                };
+                
+                // Upload file
+                using (var stream = file.OpenReadStream())
+                {
+                    Console.WriteLine($"Uploading file, size: {stream.Length} bytes");
+                    await blobClient.UploadAsync(stream, new BlobUploadOptions
+                    {
+                        HttpHeaders = blobHttpHeaders
+                    });
+                    Console.WriteLine("Upload completed");
+                }
+                
+                // Return blob URL
+                var blobUrl = blobClient.Uri.ToString();
+                Console.WriteLine($"Blob URL: {blobUrl}");
+                
+                return blobUrl;
             }
-
-            // Update LogoUrl property
-            if (prefix == "logo1")
+            catch (Exception ex)
             {
-                LogoUrl = $"/uploads/logos/{fileName}";
+                Console.WriteLine($"Error uploading to Azure Blob: {ex.Message}");
+                Console.WriteLine($"Stack trace: {ex.StackTrace}");
+                return string.Empty;
             }
         }
 

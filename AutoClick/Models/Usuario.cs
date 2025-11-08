@@ -43,6 +43,10 @@ public class Usuario
     [Display(Name = "Es Administrador")]
     public bool EsAdministrador { get; set; } = false;
     
+    [MaxLength(500)]
+    [Display(Name = "URL del Logo")]
+    public string? LogoUrl { get; set; }
+    
     // Propiedades computadas para facilitar el uso
     [NotMapped]
     [Display(Name = "Nombre Completo")]

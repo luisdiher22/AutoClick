@@ -135,18 +135,8 @@
                         
                         <div class="form-group">
                             <label for="canton">Cantón <span class="required">*</span></label>
-                            <select id="canton" name="Canton" asp-for="Canton" class="form-input" required>
-                                <option value="">Seleccione cantón</option>
-                            </select>
+                            <input type="text" id="canton" name="Canton" asp-for="Canton" class="form-input" placeholder="Ingrese el cantón" required />
                             <span asp-validation-for="Canton" class="validation-message"></span>
-                        </div>
-                        
-                        <div class="form-group">
-                            <label for="distrito">Distrito <span class="required">*</span></label>
-                            <select id="distrito" name="Distrito" asp-for="Distrito" class="form-input" required>
-                                <option value="">Seleccione distrito</option>
-                            </select>
-                            <span asp-validation-for="Distrito" class="validation-message"></span>
                         </div>
                     </div>
                     
@@ -164,7 +154,7 @@
 
             <!-- Logos Section -->
             <section class="form-section logos-section">
-                <h2 class="section-title">Logos</h2>
+                <h2 class="section-title">Logo</h2>
                 
                 <div class="logos-container">
                     <div class="logo-upload-area" id="logoUpload1">
@@ -172,14 +162,6 @@
                         <div class="logo-placeholder">
                             <div class="upload-icon"></div>
                             <div class="upload-text">Subir logo</div>
-                        </div>
-                    </div>
-                    
-                    <div class="logo-upload-area" id="logoUpload2">
-                        <input type="file" id="logoFile2" name="LogoFile2" accept="image/*" style="display: none;" />
-                        <div class="logo-placeholder">
-                            <div class="upload-icon"></div>
-                            <div class="upload-text">Subir logo adicional</div>
                         </div>
                     </div>
                 </div>

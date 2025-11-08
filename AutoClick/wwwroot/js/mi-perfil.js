@@ -29,76 +29,48 @@ function initSidebarNavigation() {
 
 // File Upload Handling
 function initFileUploads() {
-    // Profile avatar upload
-    const profileAvatarInput = document.getElementById('ProfileImage');
-    const avatarDisplay = document.querySelector('.profile-avatar');
+    // Logo upload
+    const logoArea = document.getElementById('logoUpload1');
+    const logoInput = document.getElementById('logoFile1');
     
-    if (profileAvatarInput && avatarDisplay) {
-        // Create hidden file input if not exists
-        let avatarFileInput = document.getElementById('avatar-upload');
-        if (!avatarFileInput) {
-            avatarFileInput = document.createElement('input');
-            avatarFileInput.type = 'file';
-            avatarFileInput.id = 'avatar-upload';
-            avatarFileInput.accept = 'image/*';
-            avatarFileInput.style.display = 'none';
-            document.body.appendChild(avatarFileInput);
-        }
-        
-        // Click handler for avatar
-        avatarDisplay.addEventListener('click', function() {
-            avatarFileInput.click();
+    if (logoArea && logoInput) {
+        // Click handler for logo area
+        logoArea.addEventListener('click', function() {
+            logoInput.click();
         });
         
         // File change handler
-        avatarFileInput.addEventListener('change', function(e) {
+        logoInput.addEventListener('change', function(e) {
             const file = e.target.files[0];
             if (file) {
-                handleImageUpload(file, avatarDisplay, 'avatar');
-                // Update hidden input value
-                profileAvatarInput.value = file.name;
+                handleImageUpload(file, logoArea, 'logo');
+            }
+        });
+        
+        // Drag and drop functionality
+        logoArea.addEventListener('dragover', function(e) {
+            e.preventDefault();
+            logoArea.classList.add('dragover');
+        });
+        
+        logoArea.addEventListener('dragleave', function() {
+            logoArea.classList.remove('dragover');
+        });
+        
+        logoArea.addEventListener('drop', function(e) {
+            e.preventDefault();
+            logoArea.classList.remove('dragover');
+            
+            const file = e.dataTransfer.files[0];
+            if (file && file.type.startsWith('image/')) {
+                handleImageUpload(file, logoArea, 'logo');
+                // Update input files
+                const dataTransfer = new DataTransfer();
+                dataTransfer.items.add(file);
+                logoInput.files = dataTransfer.files;
             }
         });
     }
-    
-    // Logo uploads
-    const logoAreas = document.querySelectorAll('.logo-upload-area');
-    logoAreas.forEach((area, index) => {
-        const input = area.querySelector('input[type="file"]');
-        if (input) {
-            area.addEventListener('click', function() {
-                input.click();
-            });
-            
-            input.addEventListener('change', function(e) {
-                const file = e.target.files[0];
-                if (file) {
-                    handleImageUpload(file, area, `logo-${index}`);
-                }
-            });
-            
-            // Drag and drop functionality
-            area.addEventListener('dragover', function(e) {
-                e.preventDefault();
-                area.classList.add('dragover');
-            });
-            
-            area.addEventListener('dragleave', function() {
-                area.classList.remove('dragover');
-            });
-            
-            area.addEventListener('drop', function(e) {
-                e.preventDefault();
-                area.classList.remove('dragover');
-                
-                const file = e.dataTransfer.files[0];
-                if (file && file.type.startsWith('image/')) {
-                    handleImageUpload(file, area, `logo-${index}`);
-                    input.files = e.dataTransfer.files;
-                }
-            });
-        }
-    });
 }
 
 // Handle image upload and preview
@@ -117,18 +89,13 @@ function handleImageUpload(file, container, type) {
     // Create file reader
     const reader = new FileReader();
     reader.onload = function(e) {
-        if (type === 'avatar') {
-            // Update avatar display
-            container.innerHTML = `<img src="${e.target.result}" alt="Avatar">`;
-        } else {
-            // Update logo display
-            const placeholder = container.querySelector('.logo-placeholder');
-            if (placeholder) {
-                placeholder.innerHTML = `<img src="${e.target.result}" style="width: 100%; height: 100%; object-fit: cover; border-radius: 4px;" alt="Logo">`;
-            }
+        // Update logo display
+        const placeholder = container.querySelector('.logo-placeholder');
+        if (placeholder) {
+            placeholder.innerHTML = `<img src="${e.target.result}" style="width: 100%; height: 100%; object-fit: cover; border-radius: 4px;" alt="Logo">`;
         }
         
-        showStatusMessage('Imagen cargada exitosamente', 'success');
+        showStatusMessage('Imagen cargada exitosamente. Haz clic en "Guardar cambios" para guardarla.', 'success');
     };
     
     reader.onerror = function() {
@@ -140,7 +107,12 @@ function handleImageUpload(file, container, type) {
 
 // Form Validation
 function initFormValidation() {
-    const form = document.querySelector('.profile-form form');
+    const form = document.querySelector('.profile-form');
+    if (!form) {
+        console.log('Profile form not found');
+        return;
+    }
+    
     const inputs = form.querySelectorAll('input, textarea, select');
     
     // Real-time validation
@@ -264,95 +236,20 @@ function clearFieldError(field) {
 
 // Address Dropdowns (Costa Rica)
 function initAddressDropdowns() {
-    // Mock data for Costa Rica provinces, cantons, and districts
-    const addressData = {
-        provinces: [
-            { id: 1, name: 'San José' },
-            { id: 2, name: 'Alajuela' },
-            { id: 3, name: 'Cartago' },
-            { id: 4, name: 'Heredia' },
-            { id: 5, name: 'Guanacaste' },
-            { id: 6, name: 'Puntarenas' },
-            { id: 7, name: 'Limón' }
-        ],
-        cantons: {
-            1: [
-                { id: 101, name: 'San José' },
-                { id: 102, name: 'Escazú' },
-                { id: 103, name: 'Desamparados' },
-                { id: 104, name: 'Puriscal' },
-                { id: 105, name: 'Tarrazú' }
-            ],
-            2: [
-                { id: 201, name: 'Alajuela' },
-                { id: 202, name: 'San Ramón' },
-                { id: 203, name: 'Grecia' },
-                { id: 204, name: 'San Mateo' },
-                { id: 205, name: 'Atenas' }
-            ]
-        },
-        districts: {
-            101: [
-                { id: 10101, name: 'Carmen' },
-                { id: 10102, name: 'Merced' },
-                { id: 10103, name: 'Hospital' },
-                { id: 10104, name: 'Catedral' }
-            ],
-            102: [
-                { id: 10201, name: 'Escazú' },
-                { id: 10202, name: 'San Antonio' },
-                { id: 10203, name: 'San Rafael' }
-            ]
-        }
-    };
-    
-    const provinceSelect = document.getElementById('Province');
-    const cantonSelect = document.getElementById('Canton');
-    const districtSelect = document.getElementById('District');
-    
-    if (provinceSelect && cantonSelect && districtSelect) {
-        // Populate provinces
-        populateSelect(provinceSelect, addressData.provinces);
-        
-        // Province change handler
-        provinceSelect.addEventListener('change', function() {
-            const provinceId = parseInt(this.value);
-            const cantons = addressData.cantons[provinceId] || [];
-            
-            // Reset and populate cantons
-            cantonSelect.innerHTML = '<option value="">Selecciona un cantón</option>';
-            districtSelect.innerHTML = '<option value="">Selecciona un distrito</option>';
-            
-            populateSelect(cantonSelect, cantons);
-        });
-        
-        // Canton change handler
-        cantonSelect.addEventListener('change', function() {
-            const cantonId = parseInt(this.value);
-            const districts = addressData.districts[cantonId] || [];
-            
-            // Reset and populate districts
-            districtSelect.innerHTML = '<option value="">Selecciona un distrito</option>';
-            
-            populateSelect(districtSelect, districts);
-        });
-    }
-}
-
-// Populate select element
-function populateSelect(selectElement, options) {
-    options.forEach(option => {
-        const optionElement = document.createElement('option');
-        optionElement.value = option.id;
-        optionElement.textContent = option.name;
-        selectElement.appendChild(optionElement);
-    });
+    // No cascading dropdowns needed - canton is now a text input
+    // This function can be used for future address functionality if needed
 }
 
 // Profile Form Management
 function initProfileForm() {
     const editBtn = document.querySelector('.edit-profile-btn');
-    const form = document.querySelector('.profile-form form');
+    const form = document.querySelector('.profile-form');
+    
+    if (!form) {
+        console.log('Profile form not found');
+        return;
+    }
+    
     const inputs = form.querySelectorAll('input, textarea, select');
     
     let isEditing = false;
