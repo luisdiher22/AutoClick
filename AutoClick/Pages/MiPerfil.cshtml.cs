@@ -129,19 +129,8 @@ namespace AutoClick.Pages
                     Console.WriteLine($"LogoFile1 name: {LogoFile1.FileName}, size: {LogoFile1.Length}");
                 }
 
-                // Don't validate model state for file uploads - it might block the save
-                // if (!ModelState.IsValid)
-                // {
-                //     ErrorMessage = "Por favor corrija los errores en el formulario";
-                //     await LoadProfileDataAsync(userEmail);
-                //     return Page();
-                // }
-
-                // Handle file uploads FIRST
-                await ProcessFileUploads();
-
-                // Save profile data
-                await SaveProfileDataAsync(userEmail);
+                // Save profile data and handle file uploads in one transaction
+                await SaveProfileAndFilesAsync(userEmail);
 
                 StatusMessage = "Perfil actualizado correctamente";
                 await LoadProfileDataAsync(userEmail); // Reload to show updated logo
@@ -187,9 +176,17 @@ namespace AutoClick.Pages
         {
             try
             {
-                var usuario = await _context.Usuarios.FirstOrDefaultAsync(u => u.Email == userEmail);
+                Console.WriteLine($"=== LoadProfileDataAsync called for {userEmail} ===");
+                
+                // Force reload from database without tracking
+                var usuario = await _context.Usuarios
+                    .AsNoTracking()
+                    .FirstOrDefaultAsync(u => u.Email == userEmail);
+                    
                 if (usuario != null)
                 {
+                    Console.WriteLine($"Usuario found. LogoUrl in DB: '{usuario.LogoUrl ?? "(null)"}'");
+                    
                     // Basic user information
                     NombreEmpresa = usuario.NombreAMostrar;
                     NombreComercial = usuario.EsAgencia ? usuario.NombreAgencia : $"{usuario.Nombre} {usuario.Apellidos}";
@@ -198,11 +195,17 @@ namespace AutoClick.Pages
                     WhatsApp = usuario.NumeroTelefono;
                     LogoUrl = usuario.LogoUrl;
                     
+                    Console.WriteLine($"LogoUrl loaded into model: '{LogoUrl ?? "(null)"}'");
+                    
                     // Set some default values for demo - in a real app these would come from an extended user profile
                     CedulaJuridica = usuario.EsAgencia ? "3-008-4534245" : "";
                     Provincia = "San José";
                     Canton = "San José";
                     DireccionExacta = "Centro de San José";
+                }
+                else
+                {
+                    Console.WriteLine("ERROR: Usuario not found in LoadProfileDataAsync");
                 }
             }
             catch (Exception ex)
@@ -211,6 +214,78 @@ namespace AutoClick.Pages
                 // Set default values if loading fails
                 NombreEmpresa = "Mi Perfil";
                 NombreComercial = "Mi Perfil";
+            }
+        }
+
+        private async Task SaveProfileAndFilesAsync(string userEmail)
+        {
+            try
+            {
+                Console.WriteLine("=== SaveProfileAndFilesAsync called ===");
+                
+                // Get user from database
+                var usuario = await _context.Usuarios.FirstOrDefaultAsync(u => u.Email == userEmail);
+                if (usuario == null)
+                {
+                    Console.WriteLine("ERROR: Usuario not found");
+                    return;
+                }
+
+                // 1. Upload logo to Azure if provided
+                if (LogoFile1 != null && LogoFile1.Length > 0)
+                {
+                    Console.WriteLine($"Uploading logo: {LogoFile1.FileName}, size: {LogoFile1.Length}");
+                    
+                    var connectionString = _configuration.GetConnectionString("AzureStorage");
+                    if (!string.IsNullOrEmpty(connectionString))
+                    {
+                        var logoUrl = await UploadToAzureBlobAsync(LogoFile1, "logosusuario", "logo1");
+                        
+                        if (!string.IsNullOrEmpty(logoUrl))
+                        {
+                            usuario.LogoUrl = logoUrl;
+                            LogoUrl = logoUrl;
+                            Console.WriteLine($"Logo URL set on usuario: {logoUrl}");
+                        }
+                    }
+                }
+
+                // 2. Update other profile fields
+                if (!string.IsNullOrWhiteSpace(NombreComercial))
+                {
+                    if (usuario.EsAgencia)
+                    {
+                        usuario.NombreAgencia = NombreComercial;
+                    }
+                    else
+                    {
+                        var nameParts = NombreComercial.Split(' ', StringSplitOptions.RemoveEmptyEntries);
+                        if (nameParts.Length >= 2)
+                        {
+                            usuario.Nombre = nameParts[0];
+                            usuario.Apellidos = string.Join(" ", nameParts.Skip(1));
+                        }
+                    }
+                }
+
+                if (!string.IsNullOrWhiteSpace(Telefono1))
+                {
+                    usuario.NumeroTelefono = Telefono1;
+                }
+
+                // 3. Mark entity as modified to ensure EF tracks the changes
+                _context.Entry(usuario).State = EntityState.Modified;
+                
+                // 4. Save all changes in one transaction
+                var changesSaved = await _context.SaveChangesAsync();
+                Console.WriteLine($"Changes saved count: {changesSaved}");
+                Console.WriteLine($"Profile saved for user: {usuario.Email}, LogoUrl: {usuario.LogoUrl ?? "(null)"}");
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error saving profile and files: {ex.Message}");
+                Console.WriteLine($"Stack trace: {ex.StackTrace}");
+                throw;
             }
         }
 

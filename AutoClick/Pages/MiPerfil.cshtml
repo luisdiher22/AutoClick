@@ -42,7 +42,7 @@
                     <div class="profile-avatar">
                         @if (!string.IsNullOrEmpty(Model.LogoUrl))
                         {
-                            <img src="@Model.LogoUrl" alt="Logo de la empresa" />
+                            <img src="@Model.LogoUrl" alt="Logo de la empresa" style="width: 100%; height: 100%; object-fit: cover; border-radius: 50%;" />
                         }
                         else
                         {
@@ -53,11 +53,6 @@
                     </div>
                     
                     <h1 class="company-name">@(Model.NombreEmpresa ?? "Nombre de la empresa")</h1>
-                    
-                    <button type="button" class="edit-profile-btn" id="editProfileBtn">
-                        <div class="edit-icon"></div>
-                        <span>Editar</span>
-                    </button>
                 </div>
             </div>
 
