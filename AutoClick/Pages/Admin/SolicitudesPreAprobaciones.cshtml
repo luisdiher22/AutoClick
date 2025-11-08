@@ -1,0 +1,340 @@
+@page
+@model AutoClick.Pages.Admin.SolicitudesPreAprobacionesModel
+@{
+    ViewData["Title"] = "Solicitudes de Pre-aprobación";
+    Layout = "~/Pages/Shared/_Layout.cshtml";
+}
+
+<style>
+    /* Reset body styles for admin dashboard */
+    body {
+        margin: 0;
+        padding: 0;
+        background: #02081C !important;
+        font-family: 'Montserrat', sans-serif !important;
+        overflow-x: hidden;
+    }
+
+    .main-container {
+        background: #02081C !important;
+        min-height: 100vh;
+        position: relative;
+        width: 100%;
+        overflow: hidden;
+    }
+
+    /* Admin Dashboard Container */
+    .admin-dashboard-container {
+        width: 100%;
+        min-height: 100vh;
+        position: relative;
+        background: #02081C;
+        overflow-x: hidden;
+        overflow-y: auto;
+    }
+
+    /* Main Content Area */
+    .admin-main-content {
+        margin-left: 396px;
+        padding: 120px 40px 40px 20px;
+        background: #02081C;
+    }
+
+    /* Page Title */
+    .page-title {
+        color: white;
+        font-size: 24px;
+        font-family: 'Montserrat', sans-serif;
+        font-weight: 700;
+        margin-bottom: 30px;
+        margin-top: 0;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+    }
+
+    /* Table Container */
+    .tabla-figma-wrapper {
+        max-width: 1400px;
+        background: rgba(255, 255, 255, 0.15);
+        border: 0.5px solid rgba(255, 255, 255, 0.25);
+        border-radius: 8px;
+        overflow: hidden;
+        margin-bottom: 40px;
+    }
+
+    /* Table Styles */
+    .tabla-figma {
+        width: 100%;
+        margin: 0;
+        border-collapse: collapse;
+    }
+
+    .tabla-figma thead {
+        background: transparent;
+    }
+
+    .tabla-figma thead th {
+        color: #F7F7F7;
+        font-size: 14px;
+        font-family: 'Montserrat', sans-serif;
+        font-weight: 700;
+        text-align: left;
+        padding: 15px 32px;
+        border: none;
+        border-bottom: 0.5px solid rgba(255, 255, 255, 0.25);
+    }
+
+    .tabla-figma tbody tr {
+        border-bottom: 0.5px solid rgba(255, 255, 255, 0.25);
+        transition: background-color 0.2s ease;
+    }
+
+    .tabla-figma tbody tr:nth-child(odd) {
+        background: rgba(255, 255, 255, 0.1);
+    }
+
+    .tabla-figma tbody tr:hover {
+        background: rgba(255, 147, 30, 0.1);
+    }
+
+    .tabla-figma tbody td {
+        padding: 15px 32px;
+        color: #F7F7F7;
+        font-family: 'Montserrat', sans-serif;
+        font-size: 14px;
+        font-weight: 500;
+        border: none;
+        vertical-align: middle;
+    }
+
+    /* Column Widths */
+    .tabla-figma .id-col {
+        width: 80px;
+    }
+
+    .tabla-figma .nombre-col {
+        width: 150px;
+    }
+
+    .tabla-figma .apellidos-col {
+        width: 150px;
+    }
+
+    .tabla-figma .telefono-col {
+        width: 130px;
+    }
+
+    .tabla-figma .email-col {
+        width: 200px;
+    }
+
+    .tabla-figma .fecha-col {
+        width: 120px;
+    }
+
+    .tabla-figma .auto-col {
+        width: 120px;
+        text-align: center;
+    }
+
+    /* Botón Revisar estilo Figma */
+    .btn-revisar-figma {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        padding: 6px 10.5px 6px 6px;
+        background: transparent;
+        border: none;
+        color: white;
+        font-family: 'Montserrat', sans-serif;
+        font-size: 12px;
+        font-weight: 500;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        border-radius: 4px;
+        text-decoration: none;
+    }
+
+    .btn-revisar-figma:hover {
+        background: #FF931E;
+        transform: translateX(4px);
+        color: white;
+    }
+
+    .btn-revisar-figma svg {
+        transform: rotate(-90deg);
+        transition: transform 0.3s ease;
+    }
+
+    .btn-revisar-figma:hover svg {
+        transform: rotate(-90deg) translateX(2px);
+    }
+
+    /* Pagination Styles */
+    .paginacion-wrapper {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        gap: 20px;
+        margin-top: 30px;
+        padding: 20px 0;
+    }
+
+    .btn-paginacion {
+        padding: 10px 20px;
+        background: #FF931E;
+        color: white;
+        border: none;
+        border-radius: 4px;
+        font-family: 'Montserrat', sans-serif;
+        font-size: 14px;
+        font-weight: 500;
+        cursor: pointer;
+        text-decoration: none;
+        transition: all 0.3s ease;
+    }
+
+    .btn-paginacion:hover {
+        background: #e67d0f;
+        transform: translateY(-2px);
+        color: white;
+    }
+
+    .btn-paginacion.disabled {
+        background: #666;
+        cursor: not-allowed;
+        opacity: 0.5;
+    }
+
+    .paginacion-info {
+        color: white;
+        font-family: 'Montserrat', sans-serif;
+        font-size: 14px;
+        font-weight: 500;
+    }
+
+    .no-data-text {
+        color: #ccc;
+        text-align: center;
+        padding: 40px 20px;
+        font-size: 16px;
+    }
+
+    .error-message {
+        background: rgba(244, 67, 54, 0.1);
+        border: 1px solid #f44336;
+        color: #f44336;
+        padding: 15px 20px;
+        border-radius: 4px;
+        margin-bottom: 20px;
+        font-size: 14px;
+    }
+
+    /* Badge de estado procesada */
+    .badge-procesada {
+        display: inline-block;
+        padding: 4px 8px;
+        border-radius: 4px;
+        font-size: 12px;
+        font-weight: 600;
+    }
+
+    .badge-procesada.si {
+        background: rgba(76, 175, 80, 0.2);
+        color: #4CAF50;
+    }
+
+    .badge-procesada.no {
+        background: rgba(255, 147, 30, 0.2);
+        color: #FF931E;
+    }
+</style>
+
+<div class="admin-dashboard-container">
+    @await Html.PartialAsync("_AdminSidebar")
+
+    <div class="admin-main-content">
+        <h1 class="page-title">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M9 12L11 14L15 10M21 12C21 16.9706 16.9706 21 12 21C7.02944 21 3 16.9706 3 12C3 7.02944 7.02944 3 12 3C16.9706 3 21 7.02944 21 12Z" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+            Solicitudes de Pre-aprobación
+        </h1>
+
+        @if (!string.IsNullOrEmpty(Model.ErrorMessage))
+        {
+            <div class="error-message">
+                @Model.ErrorMessage
+            </div>
+        }
+
+        @if (Model.Solicitudes.Any())
+        {
+            <div class="tabla-figma-wrapper">
+                <table class="tabla-figma">
+                    <thead>
+                        <tr>
+                            <th class="id-col">ID</th>
+                            <th class="nombre-col">Nombre</th>
+                            <th class="apellidos-col">Apellidos</th>
+                            <th class="telefono-col">Teléfono</th>
+                            <th class="email-col">Email</th>
+                            <th class="fecha-col">Fecha</th>
+                            <th class="auto-col">Auto</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var solicitud in Model.Solicitudes)
+                        {
+                            <tr>
+                                <td class="id-col">#@solicitud.Id.ToString("D5")</td>
+                                <td class="nombre-col">@solicitud.Nombre</td>
+                                <td class="apellidos-col">@solicitud.Apellidos</td>
+                                <td class="telefono-col">@solicitud.Telefono</td>
+                                <td class="email-col">@solicitud.Email</td>
+                                <td class="fecha-col">@solicitud.FechaSolicitud.ToString("dd/MM/yyyy")</td>
+                                <td class="auto-col">
+                                    <a href="/producto/@solicitud.AutoId" class="btn-revisar-figma" target="_blank">
+                                        <span>Revisar</span>
+                                        <svg width="9" height="5" viewBox="0 0 9 5" fill="none">
+                                            <path d="M4.5 4.5L0.602886 0L8.39711 0L4.5 4.5Z" fill="white"/>
+                                        </svg>
+                                    </a>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- Paginación -->
+            @if (Model.TotalPaginas > 1)
+            {
+                <div class="paginacion-wrapper">
+                    <a href="?paginaActual=@(Model.PaginaActual - 1)" 
+                       class="btn-paginacion @(Model.PaginaActual <= 1 ? "disabled" : "")"
+                       style="@(Model.PaginaActual <= 1 ? "pointer-events: none;" : "")">
+                        Anterior
+                    </a>
+                    
+                    <span class="paginacion-info">
+                        Página @Model.PaginaActual de @Model.TotalPaginas
+                    </span>
+                    
+                    <a href="?paginaActual=@(Model.PaginaActual + 1)" 
+                       class="btn-paginacion @(Model.PaginaActual >= Model.TotalPaginas ? "disabled" : "")"
+                       style="@(Model.PaginaActual >= Model.TotalPaginas ? "pointer-events: none;" : "")">
+                        Siguiente
+                    </a>
+                </div>
+            }
+        }
+        else
+        {
+            <div class="tabla-figma-wrapper">
+                <p class="no-data-text">No hay solicitudes de pre-aprobación registradas.</p>
+            </div>
+        }
+    </div>
+</div>

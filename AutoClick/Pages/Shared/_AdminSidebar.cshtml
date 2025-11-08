@@ -107,6 +107,20 @@
         </div>
     </div>
 
+    <!-- Solicitudes de Pre-aprobación -->
+    <div class="sidebar-item" data-estado="@(currentPage.Contains("SolicitudesPreAprobaciones") ? "active" : "Default")" style="width: 344px; height: 56px; position: relative;">
+        <div style="width: 344px; height: 50px; padding-top: 14px; padding-bottom: 14px; padding-left: 16px; padding-right: 22px; left: 0px; top: 3px; position: absolute; overflow: hidden; border-radius: 2px; justify-content: flex-start; align-items: center; display: inline-flex; @(currentPage.Contains("SolicitudesPreAprobaciones") ? "background: rgba(255, 255, 255, 0.25);" : "") transition: background-color 0.2s ease;">
+            <a href="/Admin/SolicitudesPreAprobaciones" style="text-decoration: none; color: white; display: flex; align-items: center; gap: 8px; width: 100%;">
+                <div style="justify-content: flex-start; align-items: center; gap: 8px; display: flex">
+                    <svg width="22" height="22" viewBox="0 0 22 22" fill="none" xmlns="http://www.w3.org/2000/svg" style="flex-shrink: 0;">
+                        <path d="M9 12L11 14L15 10M21 12C21 16.9706 16.9706 21 12 21C7.02944 21 3 16.9706 3 12C3 7.02944 7.02944 3 12 3C16.9706 3 21 7.02944 21 12Z" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+                    </svg>
+                    <div style="text-box-trim: trim-both; text-box-edge: cap alphabetic; color: white; font-size: 16px; font-family: Montserrat; font-weight: 500; word-wrap: break-word">Solicitudes de Pre-aprobación</div>
+                </div>
+            </a>
+        </div>
+    </div>
+
     <!-- Importar Ventas Externas -->
     <div class="sidebar-item" data-estado="@(currentPage.Contains("ImportarVentasExternas") ? "active" : "Default")" style="width: 344px; height: 56px; position: relative;">
         <div style="width: 344px; height: 50px; padding-top: 14px; padding-bottom: 14px; padding-left: 16px; padding-right: 22px; left: 0px; top: 3px; position: absolute; overflow: hidden; border-radius: 2px; justify-content: flex-start; align-items: center; display: inline-flex; @(currentPage.Contains("ImportarVentasExternas") ? "background: rgba(255, 255, 255, 0.25);" : "") transition: background-color 0.2s ease;">
