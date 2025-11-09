@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Mvc.ModelBinding;
 using System.ComponentModel.DataAnnotations;
 using AutoClick.Data;
 using AutoClick.Models;
+using AutoClick.Helpers;
 using Microsoft.EntityFrameworkCore;
 using System.Security.Claims;
 
@@ -21,52 +22,36 @@ namespace AutoClick.Pages
         }
 
         [BindProperty]
-        [EmailAddress(ErrorMessage = "Ingresa un correo electrónico válido")]
         public string Email { get; set; } = "usuario@autoclick.cr";
 
         [BindProperty]
-        [EmailAddress(ErrorMessage = "Ingresa un correo electrónico válido")]
-        public string NewEmail { get; set; } = string.Empty;
+        public string CurrentEmailForChange { get; set; } = string.Empty;
 
         [BindProperty]
-        [EmailAddress(ErrorMessage = "Ingresa un correo electrónico válido")]
-        [Compare("NewEmail", ErrorMessage = "Los correos electrónicos no coinciden")]
-        public string ConfirmEmail { get; set; } = string.Empty;
-
-        [BindProperty]
-        [Required(ErrorMessage = "La contraseña actual es obligatoria")]
-        public string CurrentPassword { get; set; } = string.Empty;
-
-        [BindProperty]
-        [Required(ErrorMessage = "La contraseña actual es obligatoria")]
         public string CurrentPasswordForEmail { get; set; } = string.Empty;
 
         [BindProperty]
-        [Required(ErrorMessage = "La nueva contraseña es obligatoria")]
-        [MinLength(8, ErrorMessage = "La contraseña debe tener al menos 8 caracteres")]
-        [RegularExpression(@"^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]", 
-            ErrorMessage = "La contraseña debe contener al menos una mayúscula, una minúscula, un número y un carácter especial")]
+        public string NewEmail { get; set; } = string.Empty;
+
+        [BindProperty]
+        public string CurrentPassword { get; set; } = string.Empty;
+
+        [BindProperty]
         public string NewPassword { get; set; } = string.Empty;
 
         [BindProperty]
-        [Required(ErrorMessage = "Confirma la nueva contraseña")]
-        [Compare("NewPassword", ErrorMessage = "Las contraseñas no coinciden")]
         public string ConfirmPassword { get; set; } = string.Empty;
 
         [BindProperty]
-        [EmailAddress(ErrorMessage = "Ingresa un correo electrónico válido")]
         public string ForgotPasswordEmail { get; set; } = string.Empty;
 
         [BindProperty]
-        [Required(ErrorMessage = "La contraseña es obligatoria para eliminar la cuenta")]
         public string DeleteConfirmPassword { get; set; } = string.Empty;
 
         [BindProperty]
-        [Required(ErrorMessage = "Debes confirmar que entiendes que esta acción es irreversible")]
         public bool ConfirmDeletion { get; set; }
 
         [BindProperty]
-        [EmailAddress(ErrorMessage = "Ingresa un correo electrónico válido")]
         public string NewsletterEmail { get; set; } = string.Empty;
 
         public string MaskedEmail { get; private set; } = string.Empty;
@@ -103,7 +88,7 @@ namespace AutoClick.Pages
                             Nombre = "Usuario",
                             Apellidos = "Administrador", 
                             NumeroTelefono = "8888-8888",
-                            Contrasena = "temporal123" // En producción esto estaría hasheado
+                            Contrasena = PasswordHelper.HashPassword("temporal123") // Contraseña hasheada
                         };
                         
                         _context.Usuarios.Add(nuevoUsuario);
@@ -145,6 +130,36 @@ namespace AutoClick.Pages
 
         public async Task<IActionResult> OnPostChangeEmailAsync()
         {
+            // Limpiar ModelState de campos no relevantes para este formulario
+            ModelState.Remove(nameof(Email));
+            ModelState.Remove(nameof(CurrentPassword));
+            ModelState.Remove(nameof(NewPassword));
+            ModelState.Remove(nameof(ConfirmPassword));
+            ModelState.Remove(nameof(ForgotPasswordEmail));
+            ModelState.Remove(nameof(DeleteConfirmPassword));
+            ModelState.Remove(nameof(ConfirmDeletion));
+            ModelState.Remove(nameof(NewsletterEmail));
+            
+            // Validación manual de campos requeridos
+            if (string.IsNullOrWhiteSpace(CurrentEmailForChange))
+            {
+                ModelState.AddModelError("CurrentEmailForChange", "El correo actual es obligatorio");
+            }
+            
+            if (string.IsNullOrWhiteSpace(CurrentPasswordForEmail))
+            {
+                ModelState.AddModelError("CurrentPasswordForEmail", "La contraseña actual es obligatoria");
+            }
+            
+            if (string.IsNullOrWhiteSpace(NewEmail))
+            {
+                ModelState.AddModelError("NewEmail", "El nuevo correo es obligatorio");
+            }
+            else if (!System.Text.RegularExpressions.Regex.IsMatch(NewEmail, @"^[a-zA-Z0-9._%+-]+@gmail\.com$"))
+            {
+                ModelState.AddModelError("NewEmail", "El correo debe tener el formato @gmail.com");
+            }
+            
             if (!ModelState.IsValid)
             {
                 OnGet();
@@ -153,33 +168,115 @@ namespace AutoClick.Pages
 
             try
             {
-                // Verificar contraseña actual (simulado)
-                if (!VerifyCurrentPassword(CurrentPasswordForEmail))
+                var currentUserEmail = GetCurrentUserEmail();
+                
+                // Verificar que el correo actual ingresado coincide con el correo actual del usuario
+                if (CurrentEmailForChange.Trim().ToLower() != currentUserEmail.ToLower())
+                {
+                    ModelState.AddModelError("CurrentEmailForChange", "El correo actual no es correcto");
+                    OnGet();
+                    return Page();
+                }
+
+                // Buscar el usuario en la base de datos
+                var usuario = await _context.Usuarios.FindAsync(currentUserEmail);
+                
+                if (usuario == null)
+                {
+                    ModelState.AddModelError("", "Usuario no encontrado en el sistema");
+                    OnGet();
+                    return Page();
+                }
+
+                // Verificar contraseña actual usando el hash
+                if (!PasswordHelper.VerifyPassword(CurrentPasswordForEmail, usuario.Contrasena))
                 {
                     ModelState.AddModelError("CurrentPasswordForEmail", "La contraseña actual no es correcta");
                     OnGet();
                     return Page();
                 }
 
-                // Verificar que el nuevo email no esté en uso (simulado)
-                if (await IsEmailInUse(NewEmail))
+                // Verificar que el nuevo email no esté en uso
+                var emailExists = await _context.Usuarios.AnyAsync(u => u.Email.ToLower() == NewEmail.ToLower());
+                if (emailExists)
                 {
                     ModelState.AddModelError("NewEmail", "Este correo electrónico ya está en uso");
                     OnGet();
                     return Page();
                 }
 
-                // Simular cambio de email
-                await Task.Delay(500);
-                Email = NewEmail;
-                MaskedEmail = MaskEmail(Email);
-
+                // IMPORTANTE: Como Email es Primary Key y hay FKs que lo referencian,
+                // usamos SQL raw para actualizar directamente con deshabilitar/habilitar constraints
+                // Solo Autos y Favoritos tienen FK constraints (Mensajes y Reclamos no tienen FK)
+                
+                // Usar la estrategia de ejecución para manejar transacciones con reintentos
+                var strategy = _context.Database.CreateExecutionStrategy();
+                
+                await strategy.ExecuteAsync(async () =>
+                {
+                    using (var transaction = await _context.Database.BeginTransactionAsync())
+                    {
+                        // 1. Deshabilitar temporalmente las constraints de FK (solo Autos y Favoritos)
+                        await _context.Database.ExecuteSqlRawAsync("ALTER TABLE Autos NOCHECK CONSTRAINT FK_Autos_Usuarios_EmailPropietario");
+                        await _context.Database.ExecuteSqlRawAsync("ALTER TABLE Favoritos NOCHECK CONSTRAINT FK_Favoritos_Usuarios_EmailUsuario");
+                        
+                        // 2. Actualizar todas las FK primero
+                        await _context.Database.ExecuteSqlRawAsync(
+                            "UPDATE Autos SET EmailPropietario = {0} WHERE EmailPropietario = {1}", 
+                            NewEmail, currentUserEmail);
+                        
+                        await _context.Database.ExecuteSqlRawAsync(
+                            "UPDATE Favoritos SET EmailUsuario = {0} WHERE EmailUsuario = {1}", 
+                            NewEmail, currentUserEmail);
+                        
+                        // Actualizar Mensajes (no tiene FK, solo columnas de texto)
+                        await _context.Database.ExecuteSqlRawAsync(
+                            "UPDATE Mensajes SET EmailCliente = {0} WHERE EmailCliente = {1}", 
+                            NewEmail, currentUserEmail);
+                        
+                        await _context.Database.ExecuteSqlRawAsync(
+                            "UPDATE Mensajes SET EmailAdminRespuesta = {0} WHERE EmailAdminRespuesta = {1}", 
+                            NewEmail, currentUserEmail);
+                        
+                        // Actualizar Reclamos (no tiene FK, solo columnas de texto)
+                        await _context.Database.ExecuteSqlRawAsync(
+                            "UPDATE Reclamos SET EmailCliente = {0} WHERE EmailCliente = {1}", 
+                            NewEmail, currentUserEmail);
+                        
+                        await _context.Database.ExecuteSqlRawAsync(
+                            "UPDATE Reclamos SET EmailAdminRespuesta = {0} WHERE EmailAdminRespuesta = {1}", 
+                            NewEmail, currentUserEmail);
+                        
+                        // 3. Actualizar el Email del usuario (Primary Key)
+                        await _context.Database.ExecuteSqlRawAsync(
+                            "UPDATE Usuarios SET Email = {0} WHERE Email = {1}", 
+                            NewEmail, currentUserEmail);
+                        
+                        // 4. Reactivar las constraints de FK (solo Autos y Favoritos)
+                        await _context.Database.ExecuteSqlRawAsync("ALTER TABLE Autos CHECK CONSTRAINT FK_Autos_Usuarios_EmailPropietario");
+                        await _context.Database.ExecuteSqlRawAsync("ALTER TABLE Favoritos CHECK CONSTRAINT FK_Favoritos_Usuarios_EmailUsuario");
+                        
+                        // Commit de la transacción
+                        await transaction.CommitAsync();
+                    }
+                });
+                
                 TempData["SuccessMessage"] = "Tu correo electrónico ha sido actualizado exitosamente";
+                
+                // IMPORTANTE: Cerrar sesión del usuario ya que su email cambió
+                // En un sistema real con autenticación, aquí deberías hacer logout
+                // Por ahora solo redirigimos
                 return RedirectToPage();
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-                ModelState.AddModelError("", "Ha ocurrido un error al cambiar el correo electrónico. Intenta de nuevo.");
+                Console.WriteLine($"Error general al cambiar email: {ex.Message}");
+                Console.WriteLine($"Stack trace: {ex.StackTrace}");
+                if (ex.InnerException != null)
+                {
+                    Console.WriteLine($"Inner exception: {ex.InnerException.Message}");
+                }
+                ModelState.AddModelError("", $"Ha ocurrido un error al cambiar el correo electrónico: {ex.Message}");
                 OnGet();
                 return Page();
             }
@@ -187,6 +284,40 @@ namespace AutoClick.Pages
 
         public async Task<IActionResult> OnPostChangePasswordAsync()
         {
+            // Limpiar ModelState de campos no relevantes para este formulario
+            ModelState.Remove(nameof(Email));
+            ModelState.Remove(nameof(CurrentEmailForChange));
+            ModelState.Remove(nameof(CurrentPasswordForEmail));
+            ModelState.Remove(nameof(NewEmail));
+            ModelState.Remove(nameof(ForgotPasswordEmail));
+            ModelState.Remove(nameof(DeleteConfirmPassword));
+            ModelState.Remove(nameof(ConfirmDeletion));
+            ModelState.Remove(nameof(NewsletterEmail));
+            
+            // Validación manual de campos requeridos
+            if (string.IsNullOrWhiteSpace(CurrentPassword))
+            {
+                ModelState.AddModelError("CurrentPassword", "La contraseña actual es obligatoria");
+            }
+            
+            if (string.IsNullOrWhiteSpace(NewPassword))
+            {
+                ModelState.AddModelError("NewPassword", "La nueva contraseña es obligatoria");
+            }
+            else if (NewPassword.Length < 8)
+            {
+                ModelState.AddModelError("NewPassword", "La contraseña debe tener al menos 8 caracteres");
+            }
+            
+            if (string.IsNullOrWhiteSpace(ConfirmPassword))
+            {
+                ModelState.AddModelError("ConfirmPassword", "Confirma la nueva contraseña");
+            }
+            else if (NewPassword != ConfirmPassword)
+            {
+                ModelState.AddModelError("ConfirmPassword", "Las contraseñas no coinciden");
+            }
+            
             if (!ModelState.IsValid)
             {
                 OnGet();
@@ -195,23 +326,41 @@ namespace AutoClick.Pages
 
             try
             {
-                // Verificar contraseña actual (simulado)
-                if (!VerifyCurrentPassword(CurrentPassword))
+                var currentUserEmail = GetCurrentUserEmail();
+                
+                var usuario = await _context.Usuarios.FindAsync(currentUserEmail);
+                
+                if (usuario == null)
+                {
+                    ModelState.AddModelError("", "Usuario no encontrado en el sistema");
+                    OnGet();
+                    return Page();
+                }
+
+                // Verificar contraseña actual usando el hash
+                if (!PasswordHelper.VerifyPassword(CurrentPassword, usuario.Contrasena))
                 {
                     ModelState.AddModelError("CurrentPassword", "La contraseña actual no es correcta");
                     OnGet();
                     return Page();
                 }
 
-                // Simular cambio de contraseña
-                await Task.Delay(500);
+                // Actualizar la contraseña en la base de datos (hasheada)
+                usuario.Contrasena = PasswordHelper.HashPassword(NewPassword);
+                
+                // Marcar explícitamente como modificado
+                _context.Entry(usuario).State = EntityState.Modified;
+                
+                await _context.SaveChangesAsync();
 
                 TempData["SuccessMessage"] = "Tu contraseña ha sido actualizada exitosamente";
                 return RedirectToPage();
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-                ModelState.AddModelError("", "Ha ocurrido un error al cambiar la contraseña. Intenta de nuevo.");
+                Console.WriteLine($"EXCEPCIÓN: {ex.Message}");
+                Console.WriteLine($"Stack trace: {ex.StackTrace}");
+                ModelState.AddModelError("", $"Ha ocurrido un error al cambiar la contraseña: {ex.Message}");
                 OnGet();
                 return Page();
             }
@@ -244,6 +393,28 @@ namespace AutoClick.Pages
 
         public async Task<IActionResult> OnPostDeleteAccountAsync()
         {
+            // Limpiar ModelState de campos no relevantes para este formulario
+            ModelState.Remove(nameof(Email));
+            ModelState.Remove(nameof(CurrentEmailForChange));
+            ModelState.Remove(nameof(CurrentPasswordForEmail));
+            ModelState.Remove(nameof(NewEmail));
+            ModelState.Remove(nameof(CurrentPassword));
+            ModelState.Remove(nameof(NewPassword));
+            ModelState.Remove(nameof(ConfirmPassword));
+            ModelState.Remove(nameof(ForgotPasswordEmail));
+            ModelState.Remove(nameof(NewsletterEmail));
+            
+            // Validación manual de campos requeridos
+            if (string.IsNullOrWhiteSpace(DeleteConfirmPassword))
+            {
+                ModelState.AddModelError("DeleteConfirmPassword", "La contraseña es obligatoria para eliminar la cuenta");
+            }
+            
+            if (!ConfirmDeletion)
+            {
+                ModelState.AddModelError("ConfirmDeletion", "Debes confirmar que entiendes que esta acción es irreversible");
+            }
+            
             if (!ModelState.IsValid)
             {
                 OnGet();
@@ -252,24 +423,94 @@ namespace AutoClick.Pages
 
             try
             {
-                // Verificar contraseña actual (simulado)
-                if (!VerifyCurrentPassword(DeleteConfirmPassword))
+                var currentUserEmail = GetCurrentUserEmail();
+                var usuario = await _context.Usuarios.FindAsync(currentUserEmail);
+                
+                if (usuario == null)
+                {
+                    ModelState.AddModelError("", "Usuario no encontrado en el sistema");
+                    OnGet();
+                    return Page();
+                }
+
+                // Verificar contraseña actual usando el hash
+                if (!PasswordHelper.VerifyPassword(DeleteConfirmPassword, usuario.Contrasena))
                 {
                     ModelState.AddModelError("DeleteConfirmPassword", "La contraseña no es correcta");
                     OnGet();
                     return Page();
                 }
 
-                // Simular eliminación de cuenta
-                await Task.Delay(1000);
+                // Eliminar el usuario y todas sus relaciones en una transacción
+                using (var transaction = await _context.Database.BeginTransactionAsync())
+                {
+                    try
+                    {
+                        // Eliminar registros relacionados
+                        var autos = await _context.Autos
+                            .Where(a => a.EmailPropietario == currentUserEmail)
+                            .ToListAsync();
+                        _context.Autos.RemoveRange(autos);
+                        
+                        var favoritos = await _context.Favoritos
+                            .Where(f => f.EmailUsuario == currentUserEmail)
+                            .ToListAsync();
+                        _context.Favoritos.RemoveRange(favoritos);
+                        
+                        // Para mensajes y reclamos, solo eliminar donde el usuario es cliente
+                        // Si es admin, mejor poner null en vez de eliminar los registros
+                        var mensajesCliente = await _context.Mensajes
+                            .Where(m => m.EmailCliente == currentUserEmail)
+                            .ToListAsync();
+                        _context.Mensajes.RemoveRange(mensajesCliente);
+                        
+                        var mensajesAdmin = await _context.Mensajes
+                            .Where(m => m.EmailAdminRespuesta == currentUserEmail)
+                            .ToListAsync();
+                        foreach (var mensaje in mensajesAdmin)
+                        {
+                            mensaje.EmailAdminRespuesta = null;
+                        }
+                        
+                        var reclamosCliente = await _context.Reclamos
+                            .Where(r => r.EmailCliente == currentUserEmail)
+                            .ToListAsync();
+                        _context.Reclamos.RemoveRange(reclamosCliente);
+                        
+                        var reclamosAdmin = await _context.Reclamos
+                            .Where(r => r.EmailAdminRespuesta == currentUserEmail)
+                            .ToListAsync();
+                        foreach (var reclamo in reclamosAdmin)
+                        {
+                            reclamo.EmailAdminRespuesta = null;
+                        }
+                        
+                        await _context.SaveChangesAsync();
 
-                // Redireccionar a página de despedida o login
-                TempData["AccountDeleted"] = "Tu cuenta ha sido eliminada exitosamente";
-                return RedirectToPage("/Index");
+                        // Eliminar el usuario
+                        _context.Usuarios.Remove(usuario);
+                        await _context.SaveChangesAsync();
+
+                        // Commit de la transacción
+                        await transaction.CommitAsync();
+
+                        // Redireccionar a página de despedida o login
+                        TempData["AccountDeleted"] = "Tu cuenta ha sido eliminada exitosamente";
+                        return RedirectToPage("/Index");
+                    }
+                    catch (Exception ex)
+                    {
+                        // Rollback en caso de error
+                        await transaction.RollbackAsync();
+                        ModelState.AddModelError("", $"Error al eliminar la cuenta: {ex.Message}");
+                        OnGet();
+                        return Page();
+                    }
+                }
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-                ModelState.AddModelError("", "Ha ocurrido un error al eliminar la cuenta. Intenta de nuevo.");
+                ModelState.AddModelError("", $"Ha ocurrido un error al eliminar la cuenta: {ex.Message}");
                 OnGet();
                 return Page();
             }

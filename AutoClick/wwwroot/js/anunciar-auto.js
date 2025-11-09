@@ -1233,30 +1233,6 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     }
     
-    function initializeFAQ() {
-        const faqQuestions = document.querySelectorAll('.faq-question');
-        
-        faqQuestions.forEach(question => {
-            question.addEventListener('click', function() {
-                const faqItem = this.parentElement;
-                const answer = faqItem.querySelector('.faq-answer');
-                const arrow = this.querySelector('.faq-arrow');
-                
-                if (answer.style.display === 'block') {
-                    answer.style.display = 'none';
-                    arrow.style.transform = 'rotate(0deg)';
-                } else {
-                    // Close other open answers
-                    document.querySelectorAll('.faq-answer').forEach(a => a.style.display = 'none');
-                    document.querySelectorAll('.faq-arrow').forEach(a => a.style.transform = 'rotate(0deg)');
-                    
-                    answer.style.display = 'block';
-                    arrow.style.transform = 'rotate(180deg)';
-                }
-            });
-        });
-    }
-    
     function submitForm() {
         console.log('=== SUBMIT FORM CALLED ===');
         
@@ -1844,3 +1820,64 @@ function initializeMarcaModeloSelectors() {
     console.log('[MARCA-MODELO] Inicializacion completa');
 }
 
+
+// FAQ functionality
+let faqInitialized = false; // Bandera para evitar inicialización múltiple
+
+function initializeFAQ() {
+    if (faqInitialized) {
+        console.log('FAQ already initialized, skipping...');
+        return;
+    }
+    
+    console.log('=== FAQ INIT START ===');
+    const faqItems = document.querySelectorAll('.faq-item');
+    console.log('FAQ items found:', faqItems.length);
+    
+    if (faqItems.length === 0) {
+        console.warn('NO FAQ ITEMS FOUND!');
+        return;
+    }
+    
+    faqItems.forEach((item, index) => {
+        const question = item.querySelector('.faq-question');
+        console.log(`FAQ ${index}: question element found:`, !!question);
+        
+        if (question) {
+            question.addEventListener('click', function(e) {
+                console.log(`FAQ ${index} CLICKED`);
+                e.stopPropagation(); // Evitar que el evento se propague
+                
+                const isActive = item.classList.contains('active');
+                console.log(`Is active: ${isActive}`);
+                
+                // Close all FAQ items
+                faqItems.forEach(faq => {
+                    faq.classList.remove('active');
+                });
+                
+                // Open clicked item if it wasn't active
+                if (!isActive) {
+                    item.classList.add('active');
+                    console.log(`FAQ ${index} opened - active class added`);
+                }
+            });
+        }
+    });
+    
+    faqInitialized = true; // Marcar como inicializado
+    console.log('=== FAQ INIT COMPLETE ===');
+}
+
+// Initialize FAQ when DOM is ready
+console.log('FAQ script loaded, readyState:', document.readyState);
+if (document.readyState === 'loading') {
+    console.log('Waiting for DOMContentLoaded...');
+    document.addEventListener('DOMContentLoaded', function() {
+        console.log('DOMContentLoaded fired');
+        initializeFAQ();
+    });
+} else {
+    console.log('DOM already ready, initializing now');
+    initializeFAQ();
+}

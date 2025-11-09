@@ -2,7 +2,6 @@
 
 /* Page wrapper to ensure footer stays at bottom */
 .page-wrapper {
-    min-height: 100vh;
     display: flex;
     flex-direction: column;
     background: #02081C;
@@ -12,7 +11,7 @@
     flex: 1;
     color: #ffffff;
     display: flex;
-    min-height: 100%;
+    min-height: calc(100vh - 80px - 300px); /* Resta altura del header y footer aproximada */
 }
 
 /* Sidebar */
@@ -120,17 +119,17 @@
 /* Main Content */
 .account-content {
     flex: 1;
-    padding: 40px 18px;
+    padding: 24px 32px;
     max-width: 800px;
-    margin: 0 auto;
+    margin: 0;
     display: flex;
     flex-direction: column;
-    gap: 24px;
+    gap: 12px;
     overflow-x: hidden;
 }
 
 .page-header {
-    margin-bottom: 20px;
+    margin-bottom: 4px;
 }
 
 .page-title {
@@ -143,9 +142,9 @@
 
 /* Alert Messages */
 .alert {
-    padding: 12px 16px;
+    padding: 10px 14px;
     border-radius: 4px;
-    margin-bottom: 20px;
+    margin-bottom: 12px;
     font-family: 'Montserrat', sans-serif;
     font-size: 14px;
 }
@@ -172,14 +171,14 @@
 .account-form {
     display: flex;
     flex-direction: column;
-    gap: 40px;
+    gap: 20px;
     max-width: 525px;
 }
 
 .form-section {
     display: flex;
     flex-direction: column;
-    gap: 16px;
+    gap: 8px;
 }
 
 .form-group {
@@ -187,7 +186,7 @@
     height: auto;
     display: flex;
     flex-direction: column;
-    gap: 8px;
+    gap: 6px;
 }
 
 .form-group label {
@@ -229,8 +228,8 @@
 .form-actions {
     display: flex;
     flex-direction: column;
-    gap: 8px;
-    margin-top: 8px;
+    gap: 6px;
+    margin-top: 6px;
 }
 
 .change-email-btn,
@@ -259,9 +258,12 @@
 
 /* Danger Section */
 .danger-section {
-    position: absolute;
-    right: 162px;
-    bottom: 80px;
+    display: flex;
+    justify-content: flex-end;
+    margin-top: 80px;
+    margin-bottom: 120px;
+    padding-bottom: 40px;
+    padding-right: 0;
 }
 
 .delete-account-btn {
@@ -309,12 +311,12 @@
     background: #030D2B;
     border-radius: 8px;
     border: 1px solid rgba(255, 255, 255, 0.3);
-    padding: 30px;
-    max-width: 500px;
+    padding: 48px 40px;
+    max-width: 600px;
     width: 90%;
     color: white;
     font-family: 'Montserrat', sans-serif;
-    max-height: 80vh;
+    max-height: 85vh;
     overflow-y: auto;
 }
 
@@ -326,7 +328,7 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
-    margin-bottom: 20px;
+    margin-bottom: 16px;
 }
 
 .modal-header h3 {
@@ -362,19 +364,19 @@
     color: rgba(255, 255, 255, 0.8);
     font-size: 14px;
     line-height: 1.5;
-    margin: 0 0 20px 0;
+    margin: 0 0 14px 0;
 }
 
 .danger-warning {
     color: #FF4444;
     font-weight: 700;
-    margin-bottom: 10px;
+    margin-bottom: 8px;
 }
 
 .modal-form {
     display: flex;
     flex-direction: column;
-    gap: 20px;
+    gap: 14px;
 }
 
 .modal-form .form-group {
@@ -407,9 +409,18 @@
 
 .modal-actions {
     display: flex;
-    gap: 16px;
+    gap: 12px;
     justify-content: flex-end;
-    margin-top: 20px;
+    margin-top: 14px;
+}
+
+.modal-actions-stacked {
+    flex-direction: column;
+    gap: 10px;
+}
+
+.btn-full-width {
+    width: 100%;
 }
 
 .btn-primary,

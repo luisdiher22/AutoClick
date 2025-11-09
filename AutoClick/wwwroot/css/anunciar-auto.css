@@ -980,54 +980,6 @@ select#ano option {
     line-height: 1.3;
 }
 
-/* FAQ Section */
-.faq-section {
-    padding: 40px 32px 80px;
-    background: #02081C;
-}
-
-.faq-section h2 {
-    color: white;
-    font-size: 32px;
-    font-family: 'Montserrat', sans-serif;
-    font-weight: 700;
-    margin: 0 0 40px 0;
-}
-
-.faq-list {
-    display: flex;
-    flex-direction: column;
-    gap: 40px;
-    max-width: 1200px;
-    margin: 0 0 40px 0;
-}
-
-.faq-item {
-    border-top: 1px solid rgba(255, 255, 255, 0.25);
-    padding-top: 24px;
-}
-
-.faq-question {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    cursor: pointer;
-}
-
-.faq-question span {
-    color: white;
-    font-size: 16px;
-    font-family: 'Montserrat', sans-serif;
-    font-weight: 700;
-}
-
-.faq-arrow {
-    width: 12px;
-    height: 6px;
-    background: white;
-    border: 1px solid rgba(255, 255, 255, 0.25);
-}
-
 /* Estilos de .ad-placeholder movidos a CarruselPublicidad ViewComponent */
 
 /* Footer */
@@ -1485,3 +1437,4 @@ select#ano option {
         grid-template-columns: repeat(2, 1fr);
     }
 }
+

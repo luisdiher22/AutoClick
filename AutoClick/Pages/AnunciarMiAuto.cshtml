@@ -7,6 +7,91 @@
 
 @section Styles {
     <link rel="stylesheet" href="~/css/anunciar-auto.css" />
+    <style>
+        /* FAQ Section */
+        .faq-section {
+            padding: 80px 32px;
+            background: #02081C;
+            max-width: 852px;
+            margin: 0 auto;
+        }
+        
+        .faq-title {
+            color: white;
+            font-size: 32px;
+            font-family: 'Montserrat', sans-serif;
+            font-weight: 700;
+            margin-bottom: 40px;
+            padding-left: 32px;
+        }
+        
+        .faq-list {
+            margin-bottom: 60px;
+        }
+        
+        .faq-item {
+            border-bottom: 1px solid rgba(255, 255, 255, 0.25);
+            cursor: pointer;
+        }
+        
+        .faq-question {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 24px 32px;
+            color: white;
+            font-size: 16px;
+            font-family: 'Montserrat', sans-serif;
+            font-weight: 700;
+            transition: background-color 0.2s ease;
+        }
+        
+        .faq-question:hover {
+            background: rgba(255, 255, 255, 0.05);
+        }
+        
+        .faq-toggle {
+            width: 12px;
+            height: 6px;
+            background: white;
+            clip-path: polygon(0 0, 100% 0, 50% 100%);
+            transition: transform 0.2s ease;
+            flex-shrink: 0;
+            margin-left: 16px;
+        }
+        
+        .faq-item.active .faq-toggle {
+            transform: rotate(180deg);
+        }
+        
+        .faq-answer {
+            display: grid;
+            grid-template-rows: 0fr;
+            transition: grid-template-rows 0.3s ease-out, padding 0.3s ease-out;
+            overflow: hidden;
+            padding: 0 32px;
+        }
+        
+        .faq-item.active .faq-answer {
+            grid-template-rows: 1fr;
+            padding: 0 32px 24px 32px;
+        }
+        
+        .faq-answer > div {
+            min-height: 0;
+            overflow: hidden;
+        }
+        
+        .faq-answer p {
+            color: #B0B0B0;
+            font-size: 14px;
+            font-family: 'Montserrat', sans-serif;
+            font-weight: 400;
+            line-height: 1.6;
+            margin: 0;
+            padding-top: 8px;
+        }
+    </style>
 }
 
 @section Scripts {
@@ -1010,30 +1095,53 @@
 
     <!-- FAQ Section -->
     <div class="faq-section">
-        <h2>Preguntas frecuentes</h2>
+        <h2 class="faq-title">Preguntas frecuentes</h2>
         <div class="faq-list">
-            <div class="faq-item">
+            <div class="faq-item" data-faq="1">
                 <div class="faq-question">
                     <span>¿Hay algún costo por publicar?</span>
-                    <div class="faq-arrow"></div>
+                    <div class="faq-toggle"></div>
+                </div>
+                <div class="faq-answer">
+                    <div>
+                        <p>La publicación básica es gratuita. También ofrecemos opciones de promoción pagada para que su anuncio tenga más visibilidad.</p>
+                    </div>
                 </div>
             </div>
-            <div class="faq-item">
+            
+            <div class="faq-item" data-faq="2">
                 <div class="faq-question">
                     <span>¿Puedo editar los datos luego de publicar?</span>
-                    <div class="faq-arrow"></div>
+                    <div class="faq-toggle"></div>
+                </div>
+                <div class="faq-answer">
+                    <div>
+                        <p>Claro. Usted puede modificar cualquier dato del anuncio (precio, descripción, fotos, etc.) desde su panel de usuario.</p>
+                    </div>
                 </div>
             </div>
-            <div class="faq-item">
+            
+            <div class="faq-item" data-faq="3">
                 <div class="faq-question">
                     <span>¿Mi información de contacto es pública?</span>
-                    <div class="faq-arrow"></div>
+                    <div class="faq-toggle"></div>
+                </div>
+                <div class="faq-answer">
+                    <div>
+                        <p>Solo mostramos la información necesaria para que los interesados le contacten. Su correo, datos personales y placa del vehículo no se muestran públicamente.</p>
+                    </div>
                 </div>
             </div>
-            <div class="faq-item">
+            
+            <div class="faq-item" data-faq="4">
                 <div class="faq-question">
                     <span>¿Puedo guardar el formulario y continuar después?</span>
-                    <div class="faq-arrow"></div>
+                    <div class="faq-toggle"></div>
+                </div>
+                <div class="faq-answer">
+                    <div>
+                        <p>No. Si abandona el formulario antes de publicarlo, se perderán todos los datos.</p>
+                    </div>
                 </div>
             </div>
         </div>
