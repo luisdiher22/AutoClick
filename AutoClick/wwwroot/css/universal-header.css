@@ -171,6 +171,14 @@ button.dropdown-toggle::before {
     transition: background-color 0.2s ease;
 }
 
+/* Remove any arrows or indicators from dropdown links */
+.dropdown-link::after,
+.dropdown-link::before {
+    display: none !important;
+    content: none !important;
+    border: none !important;
+}
+
 .dropdown-link:hover {
     background: #f8f9fa;
     color: #02081C;
