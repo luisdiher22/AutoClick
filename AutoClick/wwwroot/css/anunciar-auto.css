@@ -369,8 +369,8 @@ select#ano option {
 }
 
 .equipment-item input[type="checkbox"] {
-    width: 16px;
-    height: 16px;
+    width: 42px;
+    height: 42px;
     border: 0.89px solid white;
     border-radius: 2px;
     background: transparent;

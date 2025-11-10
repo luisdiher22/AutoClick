@@ -66,7 +66,7 @@
     color: white;
     font-size: 16px;
     font-family: 'Montserrat', sans-serif;
-    font-weight: 400;
+    font-weight: 700;
     text-decoration: none;
     padding: 8px 16px;
     border-radius: 4px;
@@ -113,13 +113,25 @@
 
 /* Override Bootstrap dropdown arrows */
 .nav-item::after,
-.nav-item::before {
+.nav-item::before,
+.nav-dropdown .nav-item::after,
+.nav-dropdown .nav-item::before,
+.nav-dropdown button::after,
+.nav-dropdown button::before {
     display: none !important;
+    content: none !important;
+    border: none !important;
+    width: 0 !important;
+    height: 0 !important;
 }
 
 .dropdown-toggle::after,
-.dropdown-toggle::before {
+.dropdown-toggle::before,
+button.dropdown-toggle::after,
+button.dropdown-toggle::before {
     display: none !important;
+    content: none !important;
+    border: none !important;
 }
 
 /* Dropdown Content */

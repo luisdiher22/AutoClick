@@ -302,26 +302,37 @@
         @if (Model.Vehicle != null)
         {
             <section class="producto-marchamo">
-                <div class="marchamo-content">
-                    <div class="marchamo-header">
-                        <p class="marchamo-subtitle">Calculadora de marchamo y traspaso</p>
+                <div class="marchamo-tari-content">
+                    <!-- Logo TariFlash y subtítulo -->
+                    <div class="marchamo-tari-header">
+                        <div class="marchamo-tari-logo">
+                            <!-- Placeholder para logo TariFlash (255x48px) -->
+                            <svg width="255" height="48" viewBox="0 0 255 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <text x="10" y="35" font-family="Montserrat" font-weight="700" font-size="28" fill="#FF8500">TariFlash</text>
+                            </svg>
+                        </div>
+                        <p class="marchamo-tari-subtitle">Calculadora de marchamo y traspaso</p>
                     </div>
 
-                    <h2 class="marchamo-car-title">@Model.Vehicle.NombreCompleto</h2>
+                    <!-- Nombre del vehículo -->
+                    <h2 class="marchamo-tari-car-title">@Model.Vehicle.NombreCompleto</h2>
 
-                    <div class="marchamo-sections">
-                        <div class="marchamo-section">
-                            <h3>Marchamo 2025</h3>
-                            <p class="coming-soon">DISPONIBLE PRÓXIMAMENTE</p>
-                        </div>
-
-                        <div class="marchamo-section">
-                            <h3>Costos de traspaso</h3>
-                            <p class="coming-soon">DISPONIBLE PRÓXIMAMENTE</p>
-                        </div>
+                    <!-- Marchamo 2025 -->
+                    <div class="marchamo-tari-section marchamo-tari-section-top">
+                        <h3 class="marchamo-tari-title-orange-1">Marchamo 2025</h3>
+                        <p class="marchamo-tari-disponible">DISPONIBLE PRÓXIMAMENTE</p>
                     </div>
 
-                    <p class="marchamo-powered">Impulsado por AutoClick.cr</p>
+                    <!-- Costos de traspaso -->
+                    <div class="marchamo-tari-section marchamo-tari-section-bottom">
+                        <h3 class="marchamo-tari-title-orange-2">Costos de traspaso</h3>
+                        <p class="marchamo-tari-disponible">DISPONIBLE PRÓXIMAMENTE</p>
+                    </div>
+
+                    <!-- Footer -->
+                    <div class="marchamo-tari-footer">
+                        <p class="marchamo-tari-powered">Impulsado por AutoClick.cr</p>
+                    </div>
                 </div>
 
                 <div class="marchamo-disclaimer">
@@ -747,6 +758,128 @@ function toggleFavorite(vehicleId) {
 
 .producto-marchamo {
     margin-top: 48px;
+}
+
+/* Marchamo Calculator - TariFlash Design */
+.marchamo-tari-content {
+    background: #F7F7F7;
+    border: 0.694px solid rgba(255, 255, 255, 0.25);
+    border-radius: 5.555px;
+    padding: 32px;
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+    align-items: center;
+}
+
+.marchamo-tari-header {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    align-items: center;
+    justify-content: center;
+}
+
+.marchamo-tari-logo {
+    width: 255px;
+    height: 48px;
+}
+
+.marchamo-tari-subtitle {
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 500;
+    font-style: italic;
+    font-size: 12.75px;
+    color: rgba(0, 0, 0, 0.5);
+    margin: 0;
+    white-space: nowrap;
+}
+
+.marchamo-tari-car-title {
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 700;
+    font-size: 20px;
+    color: rgba(0, 0, 0, 0.5);
+    margin: 0;
+    width: 100%;
+    min-width: 100%;
+}
+
+.marchamo-tari-section {
+    width: 100%;
+    border-radius: 1.389px;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    overflow: hidden;
+}
+
+.marchamo-tari-section-top {
+    height: 109.716px;
+    border-top: 0.694px solid rgba(0, 0, 0, 0.25);
+    border-bottom: 0.694px solid rgba(0, 0, 0, 0.25);
+}
+
+.marchamo-tari-section-bottom {
+    height: 98.606px;
+    border-bottom: 0.694px solid rgba(0, 0, 0, 0.25);
+}
+
+.marchamo-tari-title-orange-1,
+.marchamo-tari-title-orange-2 {
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 700;
+    font-size: 20px;
+    margin: 0 0 16px 0;
+    white-space: nowrap;
+}
+
+.marchamo-tari-title-orange-1 {
+    color: #FF8500;
+}
+
+.marchamo-tari-title-orange-2 {
+    color: #FF8400;
+}
+
+.marchamo-tari-disponible {
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 700;
+    font-size: 24px;
+    color: rgba(0, 0, 0, 0.75);
+    margin: 0;
+    white-space: nowrap;
+}
+
+.marchamo-tari-footer {
+    width: 100%;
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    gap: 11.111px;
+}
+
+.marchamo-tari-powered {
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 600;
+    font-size: 14px;
+    color: rgba(0, 0, 0, 0.5);
+    margin: 0;
+    white-space: nowrap;
+}
+
+.marchamo-disclaimer {
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 4px;
+    padding: 16px;
+    margin-top: 16px;
+    color: rgba(255, 255, 255, 0.7);
+    font-size: 12px;
+    line-height: 1.6;
 }
 
 /* Market Value Analysis Styles */

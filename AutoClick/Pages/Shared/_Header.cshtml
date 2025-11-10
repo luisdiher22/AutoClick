@@ -18,7 +18,10 @@
             <!-- Navigation Items -->
             <div class="nav-dropdown" data-dropdown="anunciese">
                 <button class="nav-item">
-                    <span>Anúnciese </span>
+                    <span>Anúnciese</span>
+                    <svg width="12" height="6" viewBox="0 0 12 6" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M1 1L6 5L11 1" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
                 </button>
                 <div class="dropdown-content">
                     <a asp-page="/AnunciarMiAuto" class="dropdown-link">Anunciar Mi Auto</a>
@@ -27,7 +30,10 @@
             
             <div class="nav-dropdown" data-dropdown="productos">
                 <button class="nav-item">
-                    <span>Productos & Servicios </span>
+                    <span>Productos & Servicios</span>
+                    <svg width="12" height="6" viewBox="0 0 12 6" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M1 1L6 5L11 1" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
                 </button>
                 <div class="dropdown-content">
                     <a asp-page="/PpfCeramico" class="dropdown-link">Rain-X: Máxima visibilidad al conducir</a>
@@ -36,7 +42,10 @@
             
             <div class="nav-dropdown" data-dropdown="financiamiento">
                 <button class="nav-item">
-                    <span>Financiamiento </span>
+                    <span>Financiamiento</span>
+                    <svg width="12" height="6" viewBox="0 0 12 6" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M1 1L6 5L11 1" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
                 </button>
                 <div class="dropdown-content">
                     <a asp-page="/AnunciarEmpresa" class="dropdown-link">Anunciar Empresa</a>
@@ -67,7 +76,13 @@
                 
                 <!-- Logged in user -->
                 <div class="user-section nav-dropdown" data-dropdown="user">
-                    <button class="user-name nav-item">@userName</button>
+                    <button class="user-name nav-item">
+                        <svg width="11" height="13" viewBox="0 0 11 13" fill="none" xmlns="http://www.w3.org/2000/svg" style="margin-right: 4px;">
+                            <path d="M5.33333 6.5C6.99238 6.5 8.33333 5.15905 8.33333 3.5C8.33333 1.84095 6.99238 0.5 5.33333 0.5C3.67428 0.5 2.33333 1.84095 2.33333 3.5C2.33333 5.15905 3.67428 6.5 5.33333 6.5Z" stroke="white" stroke-width="1" stroke-linecap="round" stroke-linejoin="round"/>
+                            <path d="M10.3333 12.5C10.3333 10.0147 8.08866 8 5.33333 8C2.578 8 0.333333 10.0147 0.333333 12.5" stroke="white" stroke-width="1" stroke-linecap="round" stroke-linejoin="round"/>
+                        </svg>
+                        <span>@userName</span>
+                    </button>
                     <div class="user-dropdown dropdown-content" id="userDropdown">
                         @if (isAdmin)
                         {
@@ -97,10 +112,9 @@
 </header>
 
 <script>
-    // Universal Header JavaScript Functionality
+    // Simplified Header JavaScript - NO TIMEOUTS, NO LOOPS
     document.addEventListener('DOMContentLoaded', function() {
         initializeDropdowns();
-        initializeUserMenu();
         initializeSearch();
     });
 
@@ -146,46 +160,6 @@
                 });
             }
         });
-        
-        // Prevent auth section from being treated as dropdown
-        const authSection = document.querySelector('.auth-section');
-        const loginBtn = document.querySelector('.login-register-btn');
-        if (authSection && loginBtn) {
-            // Simple cleanup without mutation observer (prevents freezing)
-            const removeBootstrapClasses = () => {
-                try {
-                    loginBtn.classList.remove(
-                        'active', 'dropdown-toggle', 'dropdown', 'btn', 'btn-group',
-                        'show', 'dropdown-menu-end', 'dropdown-menu-start'
-                    );
-                    authSection.classList.remove(
-                        'active', 'dropdown-toggle', 'dropdown', 'btn-group', 'show'
-                    );
-                    
-                    // Remove Bootstrap attributes
-                    loginBtn.removeAttribute('data-bs-toggle');
-                    loginBtn.removeAttribute('data-bs-target');
-                    loginBtn.removeAttribute('aria-expanded');
-                    loginBtn.removeAttribute('aria-haspopup');
-                } catch (e) {
-                    console.log('Error cleaning auth button:', e);
-                }
-            };
-            
-            // Remove classes immediately
-            removeBootstrapClasses();
-            
-            // Simple click handler without complex logic
-            loginBtn.addEventListener('click', (e) => {
-                // Don't prevent default - allow normal navigation
-                removeBootstrapClasses();
-            }, { once: false, passive: true });
-        }
-    }
-
-    function initializeUserMenu() {
-        // User menu is now handled by the same dropdown system as navigation
-        // No additional initialization needed since it uses nav-dropdown class
     }
 
     function initializeSearch() {
@@ -197,8 +171,6 @@
     }
 
     function toggleUserMenu() {
-        // User menu now uses the same dropdown system as navigation
-        // Toggle is handled by the dropdown system
         const userDropdown = document.querySelector('.user-section');
         if (userDropdown) {
             userDropdown.classList.toggle('active');
@@ -207,14 +179,11 @@
 
     function handleLogout() {
         if (confirm('¿Estás seguro que deseas cerrar sesión?')) {
-            // Redirect to logout page
             window.location.href = '/Logout';
         }
     }
 
     function handleSearch() {
-        console.log('Search functionality to be implemented');
-        // Implement search modal or redirect to search page
         window.location.href = '/BusquedaAvanzada';
     }
 </script>
