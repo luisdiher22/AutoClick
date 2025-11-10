@@ -380,36 +380,6 @@
             Última actualización: @(Model.UltimaActualizacion?.ToString("dd/MM/yyyy HH:mm:ss") ?? "N/A")
         </div>
         
-        <!-- Estadísticas de Visitas Section -->
-        <div class="section-header">
-            <h2 class="section-title">Visitas del sitio web</h2>
-        </div>
-        
-        <div style="color: rgba(255, 255, 255, 0.6); font-size: 14px; margin-bottom: 16px; font-style: italic;">
-            📊 Datos de tráfico web (Google Analytics / Application Insights)
-        </div>
-        
-        <div class="stats-container">
-            <div class="stat-item">
-                <div class="stat-number">@Model.VisitasSemanales</div>
-                <div class="stat-label stat-label-short">Visitas semanales</div>
-            </div>
-            <div class="stat-divider"></div>
-            <div class="stat-item">
-                <div class="stat-number">@Model.VisitasHoy</div>
-                <div class="stat-label stat-label-short">Visitas hoy</div>
-            </div>
-        </div>
-        
-        <div style="background: rgba(255, 193, 7, 0.1); border-left: 4px solid #FFC107; padding: 16px; border-radius: 4px; margin-bottom: 40px; max-width: 853px;">
-            <div style="color: #FFC107; font-size: 14px; font-weight: 600; margin-bottom: 8px;">💡 Nota de Implementación</div>
-            <div style="color: rgba(255, 255, 255, 0.8); font-size: 13px;">
-                Para obtener datos reales de visitas, se recomienda integrar:
-                <br />• <strong>Google Analytics 4</strong> - Analytics para web tracking
-                <br />• <strong>Application Insights</strong> - Servicio de Azure para telemetría y monitoreo
-            </div>
-        </div>
-        
         <!-- Anuncios Section -->
         <div class="section-header">
             <h2 class="section-title">Anuncios Actuales</h2>

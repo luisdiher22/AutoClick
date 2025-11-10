@@ -24,14 +24,17 @@ namespace AutoClick.Pages
     {
         private readonly ApplicationDbContext _context;
         private readonly IMemoryCache _cache;
+        private readonly Services.IBanderinesService _banderinesService;
 
-        public BusquedaAvanzadaModel(ApplicationDbContext context, IMemoryCache cache)
+        public BusquedaAvanzadaModel(ApplicationDbContext context, IMemoryCache cache, Services.IBanderinesService banderinesService)
         {
             _context = context;
             _cache = cache;
+            _banderinesService = banderinesService;
         }
 
         public IList<Auto> Autos { get; set; } = new List<Auto>();
+        public Dictionary<int, string?> BanderinUrls { get; set; } = new();
         
         // Filter Parameters
         [BindProperty(SupportsGet = true)]
@@ -199,6 +202,21 @@ namespace AutoClick.Pages
                     .Skip((Page - 1) * PageSize)
                     .Take(PageSize)
                     .ToList();
+            }
+            
+            // Cargar URLs de banderines para los autos
+            await LoadBanderinUrlsAsync(Autos.ToList());
+        }
+        
+        private async Task LoadBanderinUrlsAsync(List<Auto> autos)
+        {
+            foreach (var auto in autos)
+            {
+                if (!string.IsNullOrEmpty(auto.BanderinVideoUrl) && !BanderinUrls.ContainsKey(auto.Id))
+                {
+                    var url = await _banderinesService.GetBanderinUrlAsync(auto.BanderinVideoUrl);
+                    BanderinUrls[auto.Id] = url;
+                }
             }
         }
 

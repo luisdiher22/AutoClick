@@ -234,7 +234,7 @@
                 <div class="busqueda-sort-header">
                     <div class="busqueda-sort-wrapper">
                         <select class="busqueda-sort-select" onchange="changeBusquedaSorting(this.value)">
-                            <option value="recent" selected="@(Model.SortBy == "recent")">Ordenar por: Más recientes</option>
+                            <option value="recent" selected="@(Model.SortBy == "recent" || string.IsNullOrEmpty(Model.SortBy))">Ordenar por: Más recientes</option>
                             <option value="price-asc" selected="@(Model.SortBy == "price-asc")">Ordenar por: Precio menor a mayor</option>
                             <option value="price-desc" selected="@(Model.SortBy == "price-desc")">Ordenar por: Precio mayor a menor</option>
                             <option value="year" selected="@(Model.SortBy == "year")">Ordenar por: Año más nuevo</option>
@@ -246,28 +246,61 @@
                 <div class="busqueda-cars-grid">
                     @foreach (var auto in Model.Autos)
                     {
-                        <a asp-page="/Producto" asp-route-id="@auto.Id" class="simple-auto-tile">
-                            <!-- Car Image -->
-                            <div class="simple-auto-tile-image">
-                                <img src="@auto.ImagenPrincipal" alt="@auto.NombreCompleto" />
+                        <div class="busqueda-auto-card">
+                            <!-- Banderín superior derecho (fuera del link) -->
+                            @if (!string.IsNullOrEmpty(auto.BanderinVideoUrl) && Model.BanderinUrls.ContainsKey(auto.Id))
+                            {
+                                <div class="busqueda-banderin-container">
+                                    @if (auto.BanderinVideoUrl.EndsWith(".gif", StringComparison.OrdinalIgnoreCase))
+                                    {
+                                        <img src="@Model.BanderinUrls[auto.Id]" alt="Banderín" />
+                                    }
+                                    else
+                                    {
+                                        <video autoplay loop muted playsinline>
+                                            <source src="@Model.BanderinUrls[auto.Id]" type="video/mp4">
+                                        </video>
+                                    }
+                                </div>
+                            }
+                            
+                            <a asp-page="/Producto" asp-route-id="@auto.Id" class="busqueda-auto-card-link">
+                                <!-- Car Image -->
+                                <div class="busqueda-auto-card-image">
+                                    <img src="@auto.ImagenPrincipal" alt="@auto.NombreCompleto" />
+                                </div>
 
-                                <!-- Botón de Favoritos -->
-                                <button class="favorite-btn" 
-                                        data-auto-id="@auto.Id" 
-                                        data-email-usuario="@(User.Identity?.IsAuthenticated == true ? User.FindFirst(System.Security.Claims.ClaimTypes.Email)?.Value ?? User.FindFirst("Email")?.Value : "")"
-                                        title="Agregar a favoritos"
-                                        type="button">
-                                    <img src="https://autoclickstorage.blob.core.windows.net/uploads/Component%20183.png" 
-                                         alt="Favorito" />
-                                </button>
-                            </div>
-
-                            <!-- Car Info -->
-                            <div class="simple-auto-tile-info">
-                                <div class="simple-auto-tile-title">@auto.NombreCompleto</div>
-                                <div class="simple-auto-tile-price">@auto.PrecioEnCRC</div>
-                            </div>
-                        </a>
+                                <!-- Car Info Container with dark background -->
+                                <div class="busqueda-auto-card-info">
+                                    <!-- Top row: Title on left, Favorite+KM+Cuota column on right -->
+                                    <div class="busqueda-auto-card-row-top">
+                                        <div class="busqueda-auto-card-title">@auto.NombreCompleto</div>
+                                        
+                                        <!-- Right column: Favorito, Kilometraje, Cuota -->
+                                        <div class="busqueda-auto-card-right-column">
+                                            <!-- Botón de Favoritos -->
+                                            <button class="busqueda-favorite-btn favorite-btn" 
+                                                    data-auto-id="@auto.Id" 
+                                                    data-email-usuario="@(User.Identity?.IsAuthenticated == true ? User.FindFirst(System.Security.Claims.ClaimTypes.Email)?.Value ?? User.FindFirst("Email")?.Value : "")"
+                                                    title="Agregar a favoritos"
+                                                    type="button"
+                                                    onclick="event.preventDefault(); event.stopPropagation();">
+                                                <img src="https://autoclickstorage.blob.core.windows.net/uploads/Component%20183.png" 
+                                                     alt="Favorito" />
+                                            </button>
+                                            
+                                            <div class="busqueda-auto-card-km">@auto.KilometrajeFormateado</div>
+                                            <div class="busqueda-auto-card-cuota">Est. @auto.CuotaMensualEstimada</div>
+                                        </div>
+                                    </div>
+                                    
+                                    <!-- Middle row: Price -->
+                                    <div class="busqueda-auto-card-row-middle">
+                                        <div class="busqueda-auto-card-price">@auto.PrecioFormateado</div>
+                                    </div>
+                                </div>
+                            </a>
+                        </div>
                     }
                 </div>
 
@@ -324,6 +357,7 @@
     <partial name="_Footer" />
 </div>
 
+<script src="~/js/favoritos.js"></script>
 <script>
 function changeBusquedaSorting(sortBy) {
     const url = new URL(window.location);

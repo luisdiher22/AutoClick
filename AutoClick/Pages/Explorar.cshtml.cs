@@ -127,6 +127,8 @@ namespace AutoClick.Pages
                     Modelo = "X5M",
                     Ano = 2025,
                     Precio = 170000,
+                    Divisa = "USD",
+                    Kilometraje = 2800,
                     UbicacionExacta = "SUV deportivo de alto rendimiento",
                     ImagenPrincipal = "https://placehold.co/415x262",
                     Carroceria = "SUV",
@@ -138,6 +140,8 @@ namespace AutoClick.Pages
                     PlacaVehiculo = "BMW001",
                     Condicion = "Excelente",
                     EmailPropietario = "bmw@dealer.com",
+                    PlanVisibilidad = 1,
+                    BanderinAdquirido = 1,
                     FechaCreacion = DateTime.Now.AddDays(-1)
                 },
                 new Auto
@@ -147,6 +151,8 @@ namespace AutoClick.Pages
                     Modelo = "GLC 300 Coupé",
                     Ano = 2021,
                     Precio = 90000,
+                    Divisa = "USD",
+                    Kilometraje = 45000,
                     UbicacionExacta = "SUV coupé premium",
                     ImagenPrincipal = "https://placehold.co/415x262",
                     Carroceria = "SUV",
@@ -158,6 +164,8 @@ namespace AutoClick.Pages
                     PlacaVehiculo = "MER002",
                     Condicion = "Excelente",
                     EmailPropietario = "mercedes@dealer.com",
+                    PlanVisibilidad = 0,
+                    BanderinAdquirido = 0,
                     FechaCreacion = DateTime.Now.AddDays(-2)
                 },
                 new Auto
@@ -167,6 +175,8 @@ namespace AutoClick.Pages
                     Modelo = "Q5 Sportback",
                     Ano = 2022,
                     Precio = 75000,
+                    Divisa = "USD",
+                    Kilometraje = 32000,
                     UbicacionExacta = "SUV deportivo compacto",
                     ImagenPrincipal = "https://placehold.co/415x262",
                     Carroceria = "SUV",
@@ -178,6 +188,8 @@ namespace AutoClick.Pages
                     PlacaVehiculo = "AUD003",
                     Condicion = "Muy Buena",
                     EmailPropietario = "audi@dealer.com",
+                    PlanVisibilidad = 0,
+                    BanderinAdquirido = 0,
                     FechaCreacion = DateTime.Now.AddDays(-3)
                 }
             };

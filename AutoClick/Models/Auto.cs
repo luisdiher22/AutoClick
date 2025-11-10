@@ -202,6 +202,15 @@ public class Auto
     public string PrecioEnCRC => 
         AutoClick.Helpers.PrecioHelper.FormatearPrecioEnCRC(Precio, Divisa);
     
+    [NotMapped]
+    [Display(Name = "Cuota Mensual Estimada")]
+    public string CuotaMensualEstimada => 
+        AutoClick.Helpers.PrecioHelper.FormatearCuotaMensual(Precio, Divisa);
+    
+    [NotMapped]
+    [Display(Name = "Kilometraje Formateado")]
+    public string KilometrajeFormateado => $"{Kilometraje:N0} km";
+    
     // Métodos helper para manejar los arrays JSON
     [NotMapped]
     public List<string> ExtrasExteriorList

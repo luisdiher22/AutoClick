@@ -62,5 +62,43 @@ namespace AutoClick.Helpers
                 ? precio * _tasaCacheada
                 : precio;
         }
+        
+        /// <summary>
+        /// Calcula la cuota mensual estimada de un préstamo
+        /// Prima fija: 20% del valor
+        /// Plazo: 84 meses
+        /// Tasa de interés: 8% anual
+        /// </summary>
+        public static decimal CalcularCuotaMensual(decimal precio, string divisa)
+        {
+            // Convertir precio a CRC si está en USD
+            decimal precioEnCRC = ConvertirACRC(precio, divisa);
+            
+            // Prima del 20%
+            decimal prima = precioEnCRC * 0.20m;
+            decimal montoFinanciado = precioEnCRC - prima;
+            
+            // Tasa de interés mensual (8% anual / 12 meses)
+            decimal tasaMensual = 0.08m / 12m;
+            
+            // Plazo en meses
+            int plazoMeses = 84;
+            
+            // Fórmula de cuota: P * [r(1+r)^n] / [(1+r)^n - 1]
+            // Donde: P = monto financiado, r = tasa mensual, n = plazo en meses
+            decimal potencia = (decimal)Math.Pow((double)(1 + tasaMensual), plazoMeses);
+            decimal cuota = montoFinanciado * (tasaMensual * potencia) / (potencia - 1);
+            
+            return cuota;
+        }
+        
+        /// <summary>
+        /// Formatea la cuota mensual estimada
+        /// </summary>
+        public static string FormatearCuotaMensual(decimal precio, string divisa)
+        {
+            decimal cuota = CalcularCuotaMensual(precio, divisa);
+            return $"₡{cuota:N0}/mes";
+        }
     }
 }

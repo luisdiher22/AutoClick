@@ -231,28 +231,55 @@
             <div class="explorar-cars-grid">
                 @foreach (var auto in Model.Autos)
                 {
-                    <a asp-page="/Producto" asp-route-id="@auto.Id" class="simple-auto-tile">
-                        <!-- Car Image -->
-                        <div class="simple-auto-tile-image">
-                            <img src="@auto.ImagenPrincipal" alt="@auto.NombreCompleto" />
+                    <div class="explorar-auto-card">
+                        <a asp-page="/Producto" asp-route-id="@auto.Id" class="explorar-auto-card-link">
+                            <!-- Car Image -->
+                            <div class="explorar-auto-card-image">
+                                <img src="@auto.ImagenPrincipal" alt="@auto.NombreCompleto" />
+                                
+                                @* Badge destacado si tiene plan de visibilidad mayor a 0 *@
+                                @if (auto.PlanVisibilidad > 0)
+                                {
+                                    <div class="explorar-destacado-badge">Destacado</div>
+                                }
+                                
+                                @* Banderín si tiene banderín adquirido *@
+                                @if (auto.BanderinAdquirido > 0 && !string.IsNullOrEmpty(auto.BanderinVideoUrl))
+                                {
+                                    <div class="explorar-banderin-badge">
+                                        <img src="https://autoclickstorage.blob.core.windows.net/banderin/@auto.BanderinVideoUrl" 
+                                             alt="Banderín" />
+                                    </div>
+                                }
+                            </div>
 
-                            <!-- Botón de Favoritos -->
-                            <button class="favorite-btn" 
-                                    data-auto-id="@auto.Id" 
-                                    data-email-usuario="@(User.Identity?.IsAuthenticated == true ? User.FindFirst(System.Security.Claims.ClaimTypes.Email)?.Value ?? User.FindFirst("Email")?.Value : "")"
-                                    title="Agregar a favoritos"
-                                    type="button">
-                                <img src="https://autoclickstorage.blob.core.windows.net/uploads/Component%20183.png" 
-                                     alt="Favorito" />
-                            </button>
-                        </div>
-
-                        <!-- Car Info -->
-                        <div class="simple-auto-tile-info">
-                            <div class="simple-auto-tile-title">@auto.NombreCompleto</div>
-                            <div class="simple-auto-tile-price">@auto.PrecioEnCRC</div>
-                        </div>
-                    </a>
+                            <!-- Car Info -->
+                            <div class="explorar-auto-card-info">
+                                <div class="explorar-auto-card-header">
+                                    <div>
+                                        <div class="explorar-auto-card-title">@auto.NombreCompleto</div>
+                                        <div class="explorar-auto-card-price">@auto.PrecioFormateado</div>
+                                    </div>
+                                    
+                                    <!-- Botón de Favoritos -->
+                                    <button class="explorar-favorite-btn favorite-btn" 
+                                            data-auto-id="@auto.Id" 
+                                            data-email-usuario="@(User.Identity?.IsAuthenticated == true ? User.FindFirst(System.Security.Claims.ClaimTypes.Email)?.Value ?? User.FindFirst("Email")?.Value : "")"
+                                            title="Agregar a favoritos"
+                                            type="button"
+                                            onclick="event.preventDefault(); event.stopPropagation();">
+                                        <img src="https://autoclickstorage.blob.core.windows.net/uploads/Component%20183.png" 
+                                             alt="Favorito" />
+                                    </button>
+                                </div>
+                                
+                                <div class="explorar-auto-card-details">
+                                    <div class="explorar-auto-card-km">@auto.KilometrajeFormateado</div>
+                                    <div class="explorar-auto-card-cuota">Est. @auto.CuotaMensualEstimada</div>
+                                </div>
+                            </div>
+                        </a>
+                    </div>
                 }
             </div>
 
@@ -312,6 +339,7 @@
 <!-- Footer -->
 <partial name="_Footer" />
 
+<script src="~/js/favoritos.js"></script>
 <script>
 function changeExplorarSorting(sortBy) {
     const url = new URL(window.location);

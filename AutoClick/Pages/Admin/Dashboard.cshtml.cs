@@ -16,11 +16,6 @@ namespace AutoClick.Pages.Admin
             _context = context;
         }
 
-        // Estadísticas de visitas (Google Analytics)
-        // Nota: Las métricas de tráfico ahora se monitorean a través de Google Tag Manager
-        public string VisitasSemanales { get; set; } = "Ver en Google Analytics";
-        public string VisitasHoy { get; set; } = "Ver en Google Analytics";
-        
         // Anuncios - Datos reales de la base de datos
         public int TotalAutos { get; set; }
         public int AutosActivos { get; set; }
@@ -47,10 +42,6 @@ namespace AutoClick.Pages.Admin
             try
             {
                 UltimaActualizacion = DateTime.Now;
-
-                // ===== ESTADÍSTICAS DE VISITAS =====
-                // Las métricas de tráfico ahora se monitorean a través de Google Tag Manager
-                // Consulta Google Analytics para ver visitantes únicos y páginas vistas
 
                 // ===== ESTADÍSTICAS DE ANUNCIOS (TABLA AUTOS) =====
                 TotalAutos = await _context.Autos.AsNoTracking().CountAsync();

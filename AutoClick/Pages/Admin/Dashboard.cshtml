@@ -403,50 +403,6 @@
             <span>Última actualización: @(Model.UltimaActualizacion?.ToString("dd/MM/yyyy HH:mm:ss") ?? "N/A")</span>
         </div>
         
-        <!-- Visitas del sitio web -->
-        <div class="section-header">
-            <div class="section-title">
-                <div class="section-icon">
-                    <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                        <path d="M3 13H5.582L7.5 7L10.5 17L12.418 13H15M2 12C2 6.477 6.477 2 12 2C17.523 2 22 6.477 22 12C22 17.523 17.523 22 12 22C6.477 22 2 17.523 2 12Z" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
-                    </svg>
-                </div>
-                <span>Visitas del sitio web</span>
-            </div>
-        </div>
-        
-        <div class="stats-grid">
-            <div class="stat-card visits">
-                <div class="stat-card-header">
-                    <div>
-                        <div class="stat-card-title">SEMANALES</div>
-                        <div class="stat-card-value">@Model.VisitasSemanales</div>
-                    </div>
-                    <div class="stat-card-icon">
-                        <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                            <path d="M18 20V10M12 20V4M6 20V14" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                        </svg>
-                    </div>
-                </div>
-                <div class="stat-card-label">Últimos 7 días</div>
-            </div>
-            
-            <div class="stat-card visits">
-                <div class="stat-card-header">
-                    <div>
-                        <div class="stat-card-title">HOY</div>
-                        <div class="stat-card-value">@Model.VisitasHoy</div>
-                    </div>
-                    <div class="stat-card-icon">
-                        <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                            <path d="M13 2L3 14H12L11 22L21 10H12L13 2Z" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                        </svg>
-                    </div>
-                </div>
-                <div class="stat-card-label">Tráfico diario</div>
-            </div>
-        </div>
-        
         <!-- Anuncios Actuales -->
         <div class="section-header">
             <div class="section-title">
