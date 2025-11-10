@@ -156,10 +156,9 @@ using (var scope = app.Services.CreateScope())
             var tasa = await tasaCambioService.ObtenerTasaCambioUSDaCRC();
             AutoClick.Helpers.PrecioHelper.ActualizarTasaCacheada(tasa);
         }
-        catch (Exception ex)
+        catch (Exception)
         {
             // Log error pero no bloquear inicio de app
-            Console.WriteLine($"Error al obtener tasa inicial: {ex.Message}");
         }
     });
 }
@@ -220,7 +219,6 @@ _ = Task.Run(async () =>
         var adminExists = await authService.EmailExistsAsync("admin@gmail.com");
         if (!adminExists)
         {
-            Console.WriteLine("[INIT] Creating admin user...");
             var adminUser = new Usuario
             {
                 Email = "admin@gmail.com",
@@ -231,23 +229,15 @@ _ = Task.Run(async () =>
             };
             
             var result = await authService.RegisterAsync(adminUser, "prueba123");
-            if (result.Success)
+            if (!result.Success)
             {
-                Console.WriteLine("[INIT] Admin user created successfully!");
+                // Failed to create admin user
             }
-            else
-            {
-                Console.WriteLine($"[INIT] Failed to create admin user: {result.Message}");
-            }
-        }
-        else
-        {
-            Console.WriteLine("[INIT] Admin user already exists");
         }
     }
-    catch (Exception ex)
+    catch (Exception)
     {
-        Console.WriteLine($"[INIT] Error initializing admin user: {ex.Message}");
+        // Error initializing admin user
     }
 });
 

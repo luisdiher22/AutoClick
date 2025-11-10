@@ -34,7 +34,7 @@
     display: flex;
     align-items: center;
     justify-content: flex-start;
-    padding-left: 0;
+    padding-left: 60px !important;
     flex-shrink: 0;
 }
 
@@ -44,11 +44,49 @@
     display: flex;
     align-items: center;
     height: 100%;
+    position: relative;
 }
 
-.logo-image {
+/* Logo Container for hover effect */
+.logo-section .logo-container {
+    position: relative;
     width: 148px;
     height: 23.49px;
+    overflow: hidden !important;
+    display: block;
+}
+
+.logo-section .logo-container .logo-image {
+    width: 148px;
+    height: 23.49px;
+    position: absolute !important;
+    top: 0;
+    left: 0;
+    transition: transform 0.5s cubic-bezier(0.4, 0.0, 0.2, 1);
+    will-change: transform;
+    object-fit: contain;
+    display: block !important;
+}
+
+/* Main logo - visible by default, in position */
+.logo-section .logo-container .logo-main {
+    transform: translateX(0) !important;
+    z-index: 2;
+}
+
+/* Hover logo (Logo 06) - hidden to the LEFT off-screen initially */
+.logo-section .logo-container .logo-hover {
+    transform: translateX(-100%) !important;
+    z-index: 1;
+}
+
+/* On hover: Main logo slides LEFT (out of screen), Hover logo slides IN from LEFT */
+.logo-section .logo-link:hover .logo-container .logo-main {
+    transform: translateX(-100%) !important;
+}
+
+.logo-section .logo-link:hover .logo-container .logo-hover {
+    transform: translateX(0) !important;
 }
 
 /* Navigation Section */
@@ -483,7 +521,12 @@ button.dropdown-toggle::before {
         padding-left: 15px;
     }
     
-    .logo-image {
+    .logo-section .logo-container {
+        width: 120px;
+        height: auto;
+    }
+    
+    .logo-section .logo-container .logo-image {
         width: 120px;
         height: auto;
     }

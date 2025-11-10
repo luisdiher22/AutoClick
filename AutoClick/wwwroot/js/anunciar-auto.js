@@ -132,23 +132,13 @@ document.addEventListener('DOMContentLoaded', function() {
     let currentSection = 1;
     const totalSections = 8;
     
-    console.log('DOM Content Loaded - Initializing AnunciarMiAuto form');
-    
     // Inicializar selector de marca/modelo
     initializeMarcaModeloSelectors();
-    
-    // Add global click listener for debugging
-    document.addEventListener('click', function(e) {
-        if (e.target.id === 'btn-next') {
-            console.log('Next button clicked via global listener');
-        }
-    });
     
     // Initialize form
     initializeForm();
     
     function initializeForm() {
-        debugFormStructure();
         showSection(1);
         updateSectionIndicator();
         initializeEventListeners();
@@ -157,44 +147,10 @@ document.addEventListener('DOMContentLoaded', function() {
         initializeFAQ();
     }
     
-    function debugFormStructure() {
-        console.log('=== Form Structure Debug ===');
-        
-        // Check for all sections
-        for (let i = 1; i <= totalSections; i++) {
-            const section = document.querySelector(`#seccion${i}`);
-            if (section) {
-                console.log(`âœ“ Section ${i} found:`, section);
-                console.log(`  - Visible:`, section.offsetWidth > 0 && section.offsetHeight > 0);
-                console.log(`  - Display:`, getComputedStyle(section).display);
-                console.log(`  - Classes:`, section.className);
-            } else {
-                console.log(`âœ— Section ${i} NOT FOUND`);
-            }
-        }
-        
-        // Check form sections container
-        const formSections = document.querySelector('#form-sections');
-        console.log('Form sections container:', formSections);
-        
-        // Check for any slider containers
-        const slider = document.querySelector('.form-sections-slider');
-        const wrapper = document.querySelector('.form-sections-wrapper');
-        console.log('Slider container:', slider);
-        console.log('Wrapper container:', wrapper);
-        
-        console.log('=== End Form Structure Debug ===');
-    }
-    
     function initializeEventListeners() {
         // Navigation buttons
         const nextBtn = document.querySelector('#btn-next');
         const backBtn = document.querySelector('#btn-back');
-        
-        console.log('NextBtn found:', nextBtn);
-        console.log('BackBtn found:', backBtn);
-        console.log('NextBtn innerHTML:', nextBtn ? nextBtn.innerHTML : 'not found');
-        console.log('NextBtn disabled:', nextBtn ? nextBtn.disabled : 'not found');
         
         if (nextBtn) {
             // Remove any existing event listeners first
@@ -202,21 +158,14 @@ document.addEventListener('DOMContentLoaded', function() {
             
             // Add only ONE event listener
             nextBtn.addEventListener('click', handleNextClick);
-            
-            console.log('Next button event listener added');
-        } else {
-            console.error('Next button not found!');
         }
         
         if (backBtn) {
             backBtn.removeEventListener('click', handleBackClick);
             backBtn.addEventListener('click', handleBackClick);
-            console.log('Back button event listener added');
-        } else {
-            console.log('Back button not found (this is normal for section 1)');
         }
         
-        // Form input handlers (sin validaciÃ³n en tiempo real)
+        // Form input handlers (sin validación en tiempo real)
         const formInputs = document.querySelectorAll('input, select, textarea');
         formInputs.forEach(input => {
             // Add character counter for description field
@@ -372,7 +321,6 @@ document.addEventListener('DOMContentLoaded', function() {
     }
     
     async function handleNextClick(e) {
-        console.log('handleNextClick called');
         e.preventDefault();
         
         // Mostrar estado de carga
@@ -384,7 +332,6 @@ document.addEventListener('DOMContentLoaded', function() {
         }
         
         const isValid = await validateCurrentSection();
-        console.log('Current section valid:', isValid, 'Current section:', currentSection);
         
         // Restaurar botÃ³n
         if (nextBtn) {
@@ -396,30 +343,25 @@ document.addEventListener('DOMContentLoaded', function() {
             if (currentSection < totalSections) {
                 const previousSection = currentSection;
                 currentSection++;
-                console.log(`Moving from section ${previousSection} to section ${currentSection}`);
                 
                 showSection(currentSection);
                 updateSectionIndicator();
                 updateNavigationButtons();
             } else {
                 // Final submission
-                console.log('Final submission');
                 submitForm();
             }
         } else {
-            console.log('Validation failed for current section');
             // Hacer scroll hacia arriba para que el usuario vea el error
             window.scrollTo({ top: 0, behavior: 'smooth' });
         }
     }
     
     function handleBackClick(e) {
-        console.log('handleBackClick called');
         e.preventDefault();
         
         if (currentSection > 1) {
             currentSection--;
-            console.log('Moving back to section:', currentSection);
             showSection(currentSection);
             updateSectionIndicator();
             updateNavigationButtons();
@@ -429,7 +371,6 @@ document.addEventListener('DOMContentLoaded', function() {
 
     
     function showSection(sectionNumber) {
-        console.log(`showSection called with section ${sectionNumber}`);
         
         // Hide all sections first
         const sections = document.querySelectorAll('.form-section');
@@ -441,15 +382,12 @@ document.addEventListener('DOMContentLoaded', function() {
         const currentSectionElement = document.querySelector(`#seccion${sectionNumber}`);
         if (currentSectionElement) {
             currentSectionElement.classList.add('active');
-            console.log(`Activated section: seccion${sectionNumber}`);
         } else {
-            console.error(`Section seccion${sectionNumber} not found!`);
         }
         
         updateNavigationButtons();
         updateSectionIndicator();
         
-        console.log(`Section ${sectionNumber} is now active`);
     }
     
     function updateSectionIndicator() {
@@ -502,25 +440,20 @@ document.addEventListener('DOMContentLoaded', function() {
     };
 
     async function validateCurrentSection() {
-        console.log(`Validating section ${currentSection}`);
         const currentSectionElement = document.querySelector(`#seccion${currentSection}`);
         if (!currentSectionElement) {
-            console.log(`Section element not found for section ${currentSection}`);
             return true;
         }
         
         const requiredFields = currentSectionElement.querySelectorAll('input[required], select[required], textarea[required]');
-        console.log(`Found ${requiredFields.length} required fields in section ${currentSection}`);
         
         let isValid = true;
         
         requiredFields.forEach(field => {
             const fieldName = field.name || field.id;
             const fieldValue = field.value ? field.value.trim() : '';
-            console.log(`Checking field ${fieldName}: "${fieldValue}"`);
             
             if (!fieldValue) {
-                console.log(`Field ${fieldName} is empty`);
                 showFieldError(field, 'Este campo es requerido');
                 isValid = false;
             } else {
@@ -531,37 +464,27 @@ document.addEventListener('DOMContentLoaded', function() {
         // Section-specific validations
         switch (currentSection) {
             case 1: // Datos del vehÃ­culo
-                console.log('Running vehicle data validation...');
                 const vehicleValid = await validateVehicleData();
                 isValid = vehicleValid && isValid;
-                console.log('Vehicle validation result:', vehicleValid);
                 break;
             case 2: // Equipamiento (opcional)
-                console.log('Running equipment validation (optional)...');
                 // Equipment section is optional but must be shown to user
                 // User must click "Next" to continue, regardless of selections
                 isValid = true;
-                console.log('Equipment validation result: true (optional)');
                 break;
             case 3: // UbicaciÃ³n
-                console.log('Running location validation...');
                 const locationValid = validateLocationData();
                 isValid = locationValid && isValid;
-                console.log('Location validation result:', locationValid);
                 break;
             case 6: // Pago
-                console.log('Running payment validation...');
                 const paymentValid = validatePaymentData();
                 isValid = paymentValid && isValid;
-                console.log('Payment validation result:', paymentValid);
                 break;
             default:
                 // For sections without specific validation, check only required fields
-                console.log(`Section ${currentSection} using default validation`);
                 break;
         }
         
-        console.log(`Final validation result for section ${currentSection}:`, isValid);
         return isValid;
     }
     
@@ -588,7 +511,6 @@ document.addEventListener('DOMContentLoaded', function() {
         
         let isValid = true;
         
-        console.log('Validating vehicle data - found fields:', {
             marca: !!marca,
             modelo: !!modelo,
             ano: !!ano,
@@ -752,7 +674,6 @@ document.addEventListener('DOMContentLoaded', function() {
         // NOTA: La validaciÃ³n de placa duplicada ha sido removida
         // Las placas pueden estar duplicadas en la base de datos
         
-        console.log('Vehicle data validation result:', isValid);
         return isValid;
     }
     
@@ -760,7 +681,6 @@ document.addEventListener('DOMContentLoaded', function() {
         const provincia = document.querySelector('select[name="Formulario.Provincia"]');
         let isValid = true;
         
-        console.log('Validating location data - provincia found:', !!provincia);
         
         if (!provincia || !provincia.value) {
             if (provincia) showFieldError(provincia, 'Seleccione una provincia');
@@ -769,19 +689,16 @@ document.addEventListener('DOMContentLoaded', function() {
             if (provincia) clearFieldError(provincia);
         }
         
-        console.log('Location validation result:', isValid);
         return isValid;
     }
     
     function validatePaymentData() {
-        console.log('Validating payment data...');
         
         const aceptoTerminos = document.querySelector('#acepto-terminos');
         let isValid = true;
         
         // Verificar que se aceptaron los tÃ©rminos y condiciones
         if (!aceptoTerminos || !aceptoTerminos.checked) {
-            console.log('TÃ©rminos y condiciones no aceptados');
             if (aceptoTerminos) {
                 showFieldError(aceptoTerminos, 'Debe aceptar los tÃ©rminos y condiciones para continuar');
             }
@@ -794,7 +711,6 @@ document.addEventListener('DOMContentLoaded', function() {
             clearGlobalError();
         }
         
-        console.log('Payment validation result:', isValid);
         return isValid;
     }
     
@@ -878,7 +794,6 @@ document.addEventListener('DOMContentLoaded', function() {
     
     function updateEquipmentSelection() {
         // Update equipment selection logic if needed
-        console.log('Equipment selection updated');
     }
     
     function updatePaymentSummary() {
@@ -989,20 +904,16 @@ document.addEventListener('DOMContentLoaded', function() {
     
     function initializeFileUploads() {
         const uploadAreas = document.querySelectorAll('.upload-area');
-        console.log('Initializing file uploads - found upload areas:', uploadAreas.length);
         
         uploadAreas.forEach((area, index) => {
-            console.log(`Upload area ${index}:`, area, 'Classes:', area.className);
             
             area.addEventListener('click', function() {
-                console.log('Upload area clicked:', this);
                 const fileInput = document.createElement('input');
                 fileInput.type = 'file';
                 fileInput.accept = this.classList.contains('video') ? 'video/*' : 'image/*';
                 fileInput.multiple = !this.classList.contains('video');
                 
                 fileInput.addEventListener('change', function(e) {
-                    console.log('File selected:', e.target.files);
                     handleFileUpload(e.target.files, area);
                 });
                 
@@ -1033,12 +944,9 @@ document.addEventListener('DOMContentLoaded', function() {
     }
     
     function handleFileUpload(files, uploadArea) {
-        console.log('handleFileUpload called with:', files.length, 'files');
-        console.log('Upload area:', uploadArea);
         
         const fileArray = Array.from(files);
         const isVideo = uploadArea.classList.contains('video');
-        console.log('Is video area:', isVideo);
         
         // Para videos: solo permitir 1 archivo
         if (isVideo && fileArray.length > 1) {
@@ -1056,7 +964,6 @@ document.addEventListener('DOMContentLoaded', function() {
         }
         
         fileArray.forEach(file => {
-            console.log('Processing file:', file.name, 'Type:', file.type);
             if (isVideo && !file.type.startsWith('video/')) {
                 alert('Por favor, seleccione solo archivos de video');
                 return;
@@ -1096,7 +1003,6 @@ document.addEventListener('DOMContentLoaded', function() {
     function addImagePreview(uploadArea, src, fileName, file) {
         // Store file reference
         uploadedFiles.push(file);
-        console.log(`File added to uploadedFiles: ${fileName}, Total files: ${uploadedFiles.length}`);
         
         // NO crear previsualizaciones en el Ã¡rea de subida
         // Solo actualizar el texto del placeholder para indicar cuÃ¡ntas fotos se han subido
@@ -1234,7 +1140,6 @@ document.addEventListener('DOMContentLoaded', function() {
     }
     
     function submitForm() {
-        console.log('=== SUBMIT FORM CALLED ===');
         
         // Show loading state
         const nextBtn = document.querySelector('.btn-next');
@@ -1245,11 +1150,9 @@ document.addEventListener('DOMContentLoaded', function() {
         
         const form = document.querySelector('#anuncioForm');
         if (!form) {
-            console.error('Form not found!');
             return;
         }
         
-        console.log('Form found, preparing FormData...');
         
         // Prepare all data before creating FormData
         prepareEquipmentData();
@@ -1262,12 +1165,9 @@ document.addEventListener('DOMContentLoaded', function() {
         formData.append('handler', 'Finalizar');
         
         // Debug: log all FormData entries
-        console.log('=== FormData Contents ===');
         for (let [key, value] of formData.entries()) {
             if (value instanceof File) {
-                console.log(`${key}: File - ${value.name} (${value.size} bytes)`);
             } else {
-                console.log(`${key}: ${value}`);
             }
         }
         
@@ -1277,17 +1177,13 @@ document.addEventListener('DOMContentLoaded', function() {
             body: formData
         })
         .then(response => {
-            console.log('Response received:', response.status);
             if (response.ok) {
-                console.log('Form submitted successfully');
                 window.location.href = '/'; // Redirect on success
             } else {
-                console.error('Form submission failed:', response.status);
                 alert('Error al enviar el formulario');
             }
         })
         .catch(error => {
-            console.error('Network error:', error);
             alert('Error de conexiÃ³n');
         })
         .finally(() => {
@@ -1300,31 +1196,25 @@ document.addEventListener('DOMContentLoaded', function() {
     }
     
     function prepareEquipmentData() {
-        console.log('=== PREPARING EQUIPMENT DATA ===');
         
         const form = document.querySelector('#anuncioForm');
         if (!form) {
-            console.error('Form not found!');
             return;
         }
         
         // NO eliminar los checkboxes originales - FormData los capturará automáticamente
         // Solo verificar que existan
         const allExtrasCheckboxes = form.querySelectorAll('input[type="checkbox"][name*="Extras"]');
-        console.log(`Total extras checkboxes found in form: ${allExtrasCheckboxes.length}`);
         
         const checkedExtras = form.querySelectorAll('input[type="checkbox"][name*="Extras"]:checked');
-        console.log(`Total extras checkboxes CHECKED: ${checkedExtras.length}`);
         
         checkedExtras.forEach(cb => {
-            console.log(`Checked: ${cb.name} = ${cb.value}`);
         });
         
         // Los checkboxes ya tienen los nombres correctos en el HTML
         // FormData(form) los capturará automáticamente cuando estén checked
         // No necesitamos crear hidden inputs
         
-        console.log('Equipment data ready - checkboxes will be captured by FormData');
         
         /* ===================================================================
          * CÓDIGO ANTERIOR DESHABILITADO
@@ -1337,35 +1227,28 @@ document.addEventListener('DOMContentLoaded', function() {
     }
     
     function prepareFileData() {
-        console.log('=== PREPARING FILE DATA ===');
         
         const fotosInput = document.getElementById('fotosInput');
         if (!fotosInput) {
-            console.error('Fotos input not found!');
             return;
         }
         
         if (uploadedFiles.length > 0) {
-            console.log(`Preparing ${uploadedFiles.length} files for upload...`);
             
             // Create a new DataTransfer object to hold our files
             const dt = new DataTransfer();
             
             // Add each file to the DataTransfer
             uploadedFiles.forEach((file, index) => {
-                console.log(`Adding file ${index + 1}: ${file.name}`);
                 dt.items.add(file);
             });
             
             // Assign the files to the input
             fotosInput.files = dt.files;
             
-            console.log(`Files assigned to input. Input now has ${fotosInput.files.length} files`);
         } else {
-            console.log('No files to prepare');
         }
         
-        console.log('=== FILE DATA PREPARATION COMPLETE ===');
     }
     
     // Utility functions for form inputs
@@ -1461,7 +1344,6 @@ document.addEventListener('DOMContentLoaded', function() {
             img.style.objectFit = objectFitValue;
         });
         
-        console.log(`Updated image view mode to: ${mode}`);
     }
 
     function updateEquipmentSelection(event) {
@@ -1522,15 +1404,12 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 
     function initializeTagVideos() {
-        console.log('Initializing tag videos...');
         const tagVideos = document.querySelectorAll('.tag-video');
-        console.log(`Found ${tagVideos.length} tag videos`);
 
         tagVideos.forEach((video, index) => {
             const videoSrc = video.getAttribute('data-src');
 
             if (videoSrc) {
-                console.log(`Loading video ${index + 1}:`, videoSrc);
 
                 // Set sources on source elements if they exist
                 const sources = video.querySelectorAll('source[data-src]');
@@ -1538,7 +1417,6 @@ document.addEventListener('DOMContentLoaded', function() {
                     const src = source.getAttribute('data-src');
                     if (src) {
                         source.src = src;
-                        console.log(`  - Set source with type: ${source.type}`);
                     }
                 });
 
@@ -1547,8 +1425,6 @@ document.addEventListener('DOMContentLoaded', function() {
 
                 // Add error handler
                 video.addEventListener('error', function(e) {
-                    console.error(`âŒ Error loading video ${index + 1} (${videoSrc}):`, e);
-                    console.error('Error details:', {
                         code: video.error?.code,
                         message: video.error?.message,
                         MEDIA_ERR_ABORTED: video.error?.MEDIA_ERR_ABORTED === 1 ? 'ABORTED' : false,
@@ -1575,12 +1451,10 @@ document.addEventListener('DOMContentLoaded', function() {
 
                 // Add success handler
                 video.addEventListener('loadeddata', function() {
-                    console.log(`âœ“ Video ${index + 1} loaded successfully`);
                 }, { once: true });
 
                 // Add loadstart handler
                 video.addEventListener('loadstart', function() {
-                    console.log(`â†’ Video ${index + 1} started loading...`);
                 });
 
                 // Force video to load
@@ -1590,14 +1464,11 @@ document.addEventListener('DOMContentLoaded', function() {
                 const playPromise = video.play();
                 if (playPromise !== undefined) {
                     playPromise.then(() => {
-                        console.log(`â–¶ Video ${index + 1} is now playing`);
                     }).catch(err => {
-                        console.warn(`âš  Could not autoplay video ${index + 1}:`, err.name, err.message);
 
                         // If autoplay fails, try on user interaction
                         video.addEventListener('canplay', () => {
                             video.play().catch(e => {
-                                console.warn(`âš  Still cannot play video ${index + 1}:`, e.name);
                             });
                         }, { once: true });
                     });
@@ -1614,12 +1485,9 @@ document.addEventListener('DOMContentLoaded', function() {
             'QuickTime MOV': testVideo.canPlayType('video/quicktime'),
             'MOV (H.264)': testVideo.canPlayType('video/mp4; codecs="avc1.42E01E"')
         };
-        console.log('ðŸ“¹ Browser video format support:', supportInfo);
 
         // Check if QuickTime is supported
         if (!supportInfo['QuickTime MOV'] || supportInfo['QuickTime MOV'] === '') {
-            console.warn('âš  This browser does not support QuickTime MOV files.');
-            console.warn('ðŸ’¡ Consider converting .MOV files to .MP4 for better browser compatibility.');
         }
     }
 
@@ -1628,7 +1496,6 @@ document.addEventListener('DOMContentLoaded', function() {
 });
 
 async function loadBanderinesFromBlobStorage() {
-    console.log('ðŸ·ï¸ Loading banderines from Azure Blob Storage...');
     
     try {
         // Get all banderines with data-banderinfile attribute
@@ -1643,14 +1510,11 @@ async function loadBanderinesFromBlobStorage() {
                         const url = await response.text(); // Controller returns URL as string
                         if (url && url.startsWith('http')) {
                             img.src = url.replace(/"/g, ''); // Remove any quotes
-                            console.log(`âœ… Loaded banderin: ${fileName}`);
                         }
                     } else {
-                        console.warn(`âš  Failed to load banderin ${fileName}: ${response.status}`);
                         // Keep the image hidden on error
                     }
                 } catch (error) {
-                    console.warn(`âš  Error loading banderin ${fileName}:`, error);
                 }
             }
         }
@@ -1668,46 +1532,36 @@ async function loadBanderinesFromBlobStorage() {
                         const url = await response.text();
                         if (url && url.startsWith('http')) {
                             img.src = url.replace(/"/g, '');
-                            console.log(`âœ… Loaded logo: ${fileName}`);
                         }
                     } else {
-                        console.warn(`âš  Failed to load logo ${fileName}: ${response.status}`);
                     }
                 } catch (error) {
-                    console.warn(`âš  Error loading logo ${fileName}:`, error);
                 }
             }
         }
     } catch (error) {
-        console.error('âŒ Error loading banderines:', error);
     }
 }
 // Funciï¿½n para inicializar los selectores de marca y modelo
 function initializeMarcaModeloSelectors() {
-    console.log('[MARCA-MODELO] Iniciando inicializacion...');
     
     const marcaSelect = document.getElementById('marca');
     let modeloSelect = document.getElementById('modelo'); // Cambiar const a let
     
     if (!marcaSelect || !modeloSelect) {
-        console.error('[MARCA-MODELO] ERROR: No se encontraron los selectores');
         return;
     }
     
-    console.log('[MARCA-MODELO] Selectores encontrados');
     
     if (typeof marcasModelos === 'undefined') {
-        console.error('[MARCA-MODELO] ERROR: marcasModelos no definido');
         return;
     }
     
-    console.log('[MARCA-MODELO] Marcas disponibles:', Object.keys(marcasModelos).length);
     
     // No need to set styles here - CSS handles it
     
     marcaSelect.addEventListener('change', function() {
         const marcaSeleccionada = this.value;
-        console.log('[MARCA-MODELO] Seleccionada:', marcaSeleccionada);
         
         const parentDiv = modeloSelect.parentElement;
         const oldSelect = modeloSelect;
@@ -1742,8 +1596,6 @@ function initializeMarcaModeloSelectors() {
         
         if (marcaSeleccionada && marcasModelos[marcaSeleccionada]) {
             const modelos = marcasModelos[marcaSeleccionada];
-            console.log('[MARCA-MODELO] Cargando ' + modelos.length + ' modelos');
-            console.log('[MARCA-MODELO] Primeros 3 modelos:', modelos.slice(0, 3));
             
             // Agregar opción por defecto
             const defaultOption = document.createElement('option');
@@ -1761,63 +1613,38 @@ function initializeMarcaModeloSelectors() {
             
             newSelect.disabled = false;
             
-            console.log('[MARCA-MODELO] Total de opciones en el select:', newSelect.options.length);
-            console.log('[MARCA-MODELO] Primera opción:', newSelect.options[0]?.textContent);
-            console.log('[MARCA-MODELO] Segunda opción:', newSelect.options[1]?.textContent);
-            console.log('[MARCA-MODELO] Tercera opción:', newSelect.options[2]?.textContent);
         } else {
             const defaultOption = document.createElement('option');
             defaultOption.value = '';
             defaultOption.textContent = 'Elija un modelo';
             newSelect.appendChild(defaultOption);
             newSelect.disabled = true;
-            console.log('[MARCA-MODELO] Sin modelos para esta marca');
         }
         
-        console.log('[MARCA-MODELO] Select recreado y agregado al DOM');
-        console.log('[MARCA-MODELO] Opciones ANTES de agregar al DOM:', newSelect.options.length);
-        console.log('[MARCA-MODELO] innerHTML ANTES:', newSelect.innerHTML.substring(0, 200));
         
         // Insertar el nuevo select en el DOM
         parentDiv.appendChild(newSelect);
         
-        console.log('[MARCA-MODELO] Opciones DESPUÉS de agregar al DOM:', newSelect.options.length);
-        console.log('[MARCA-MODELO] innerHTML DESPUÉS:', newSelect.innerHTML.substring(0, 200));
-        console.log('[MARCA-MODELO] Select completo:', newSelect.outerHTML.substring(0, 300));
         
         // Actualizar la referencia global
         modeloSelect = newSelect;
         
-        console.log('[MARCA-MODELO] Parent div:', parentDiv.outerHTML.substring(0, 150));
-        console.log('[MARCA-MODELO] Computed styles del select:');
         const computedStyles = window.getComputedStyle(newSelect);
-        console.log('  - display:', computedStyles.display);
-        console.log('  - visibility:', computedStyles.visibility);
-        console.log('  - opacity:', computedStyles.opacity);
-        console.log('  - pointer-events:', computedStyles.pointerEvents);
-        console.log('  - z-index:', computedStyles.zIndex);
         
         // Verificar opciones una vez más
-        console.log('[MARCA-MODELO] Verificación final de opciones:', newSelect.options.length);
         for (let i = 0; i < Math.min(5, newSelect.options.length); i++) {
-            console.log(`  [${i}]:`, newSelect.options[i].value, '-', newSelect.options[i].textContent);
         }
         
         // Intentar abrir el dropdown programáticamente para ver si funciona
         setTimeout(function() {
-            console.log('[MARCA-MODELO] Intentando hacer focus en el select...');
             newSelect.focus();
-            console.log('[MARCA-MODELO] Select tiene focus:', document.activeElement === newSelect);
-            console.log('[MARCA-MODELO] Opciones en el timeout:', newSelect.options.length);
         }, 100);
     });
     
     if (marcaSelect.value) {
-        console.log('[MARCA-MODELO] Cargando modelos pre-seleccionados');
         marcaSelect.dispatchEvent(new Event('change'));
     }
     
-    console.log('[MARCA-MODELO] Inicializacion completa');
 }
 
 
@@ -1826,30 +1653,23 @@ let faqInitialized = false; // Bandera para evitar inicialización múltiple
 
 function initializeFAQ() {
     if (faqInitialized) {
-        console.log('FAQ already initialized, skipping...');
         return;
     }
     
-    console.log('=== FAQ INIT START ===');
     const faqItems = document.querySelectorAll('.faq-item');
-    console.log('FAQ items found:', faqItems.length);
     
     if (faqItems.length === 0) {
-        console.warn('NO FAQ ITEMS FOUND!');
         return;
     }
     
     faqItems.forEach((item, index) => {
         const question = item.querySelector('.faq-question');
-        console.log(`FAQ ${index}: question element found:`, !!question);
         
         if (question) {
             question.addEventListener('click', function(e) {
-                console.log(`FAQ ${index} CLICKED`);
                 e.stopPropagation(); // Evitar que el evento se propague
                 
                 const isActive = item.classList.contains('active');
-                console.log(`Is active: ${isActive}`);
                 
                 // Close all FAQ items
                 faqItems.forEach(faq => {
@@ -1859,25 +1679,19 @@ function initializeFAQ() {
                 // Open clicked item if it wasn't active
                 if (!isActive) {
                     item.classList.add('active');
-                    console.log(`FAQ ${index} opened - active class added`);
                 }
             });
         }
     });
     
     faqInitialized = true; // Marcar como inicializado
-    console.log('=== FAQ INIT COMPLETE ===');
 }
 
 // Initialize FAQ when DOM is ready
-console.log('FAQ script loaded, readyState:', document.readyState);
 if (document.readyState === 'loading') {
-    console.log('Waiting for DOMContentLoaded...');
     document.addEventListener('DOMContentLoaded', function() {
-        console.log('DOMContentLoaded fired');
         initializeFAQ();
     });
 } else {
-    console.log('DOM already ready, initializing now');
     initializeFAQ();
 }

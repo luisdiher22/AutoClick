@@ -451,12 +451,12 @@ namespace AutoClick.Pages
                 // Filtrar cantones basados en provincia seleccionada
                 AvailableCantons = string.IsNullOrEmpty(Province) 
                     ? cachedOptions.Cantones 
-                    : cachedOptions.Cantones; // TODO: Implementar filtro provincia-cantón
+                    : cachedOptions.Cantones;
 
                 // Filtrar modelos basados en marca seleccionada  
                 AvailableModels = string.IsNullOrEmpty(Brand) 
                     ? cachedOptions.Modelos 
-                    : cachedOptions.Modelos; // TODO: Implementar filtro marca-modelo
+                    : cachedOptions.Modelos;
             }
         }
 

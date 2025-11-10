@@ -8,8 +8,6 @@ document.addEventListener('DOMContentLoaded', function() {
     initializeGallery();
     initializeScrollAnimations();
     initializeDropdownMenus();
-    
-    console.log('Raloy Detailing page initialized');
 });
 
 // FAQ Functionality

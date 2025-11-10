@@ -45,7 +45,7 @@ body {
 .content-width {
     max-width: 1280px;
     margin: 0 auto;
-    padding: 0 32px;
+    padding: 0 32px; /* Desktop: 32px mínimo */
 }
 
 /* Header Styles */
@@ -504,7 +504,7 @@ body {
 .explorar-container {
     max-width: 1368px;
     margin: 0 auto;
-    padding: 0 20px;
+    padding: 0 32px; /* Desktop: 32px mínimo */
 }
 
 .explorar-breadcrumb {
@@ -1144,6 +1144,11 @@ body {
         grid-template-columns: 1fr;
         gap: 20px;
     }
+    
+    .explorar-container,
+    .destacados-container {
+        padding: 0 24px; /* Reducción proporcional para tablets */
+    }
 }
 
 @media (max-width: 768px) {
@@ -1163,6 +1168,11 @@ body {
         grid-template-columns: repeat(2, 1fr);
         gap: 15px;
     }
+    
+    .explorar-container,
+    .destacados-container {
+        padding: 0 20px; /* Reducción proporcional para tablets pequeños */
+    }
 }
 
 @media (max-width: 480px) {
@@ -1170,8 +1180,16 @@ body {
         grid-template-columns: 1fr;
     }
     
-    .explorar-container {
-        padding: 0 15px;
+    .explorar-container,
+    .destacados-container {
+        padding: 0 16px; /* Reducción proporcional para móviles */
+    }
+}
+
+@media (max-width: 375px) {
+    .explorar-container,
+    .destacados-container {
+        padding: 0 12px; /* Reducción proporcional para móviles pequeños */
     }
 }
 
@@ -1182,7 +1200,7 @@ body {
 .destacados-container {
     max-width: 1368px;
     margin: 0 auto;
-    padding: 0 20px;
+    padding: 0 32px; /* Desktop: 32px mínimo */
 }
 
 .destacados-breadcrumb {
@@ -1661,10 +1679,6 @@ body {
         gap: 20px;
     }
     
-    .destacados-container {
-        padding: 0 15px;
-    }
-    
     .destacados-main-title {
         font-size: 24px;
     }
@@ -1849,7 +1863,7 @@ body {
 /* Responsive Design */
 @media (max-width: 1280px) {
     .content-width {
-        padding: 0 20px;
+        padding: 0 28px; /* Reducción proporcional para pantallas menores a 1280px */
     }
     
     .hero-section {
@@ -1863,7 +1877,17 @@ body {
     }
 }
 
+@media (max-width: 1024px) {
+    .content-width {
+        padding: 0 24px; /* Reducción proporcional para tablets */
+    }
+}
+
 @media (max-width: 768px) {
+    .content-width {
+        padding: 0 20px; /* Reducción proporcional para tablets pequeños */
+    }
+    
     .cars-grid {
         grid-template-columns: 1fr;
         gap: 16px;
@@ -1897,6 +1921,10 @@ body {
 }
 
 @media (max-width: 480px) {
+    .content-width {
+        padding: 0 16px; /* Reducción proporcional para móviles */
+    }
+    
     .search-container {
         width: 95%;
         padding: 16px;
@@ -1912,6 +1940,12 @@ body {
     
     .brands-grid {
         grid-template-columns: 1fr;
+    }
+}
+
+@media (max-width: 375px) {
+    .content-width {
+        padding: 0 12px; /* Reducción proporcional para móviles pequeños */
     }
 }
 

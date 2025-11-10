@@ -97,7 +97,6 @@ async function toggleFavorito(autoId, emailUsuario = null) {
 // Mostrar notificación de favorito (opcional)
 function showFavoriteNotification(isFavorite) {
     // Puedes implementar una notificación toast aquí si lo deseas
-    console.log(isFavorite ? 'Auto agregado a favoritos' : 'Auto removido de favoritos');
 }
 
 // Event listener para los botones de favoritos

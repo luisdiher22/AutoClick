@@ -22,7 +22,7 @@ body {
 .breadcrumb-container {
     max-width: 1200px;
     margin: 0 auto;
-    padding: 0 40px;
+    padding: 0 32px; /* Desktop: 32px mínimo */
     display: flex;
     align-items: center;
     gap: 8px;
@@ -62,14 +62,14 @@ body {
     color: #FFFFFF;
     margin: 0 auto 100px;
     max-width: 1200px;
-    padding: 0 40px;
+    padding: 0 32px; /* Desktop: 32px mínimo */
 }
 
 /* Content Container */
 .content-container {
     max-width: 1200px;
     margin: 0 auto;
-    padding: 0 120px;
+    padding: 0 32px; /* Desktop: 32px mínimo, será ajustado en media queries */
 }
 
 /* Terms Content */
@@ -179,9 +179,21 @@ body {
 }
 
 /* Responsive Design */
+@media (max-width: 1280px) {
+    .content-container,
+    .breadcrumb-container,
+    .page-title {
+        padding-left: 28px;
+        padding-right: 28px;
+    }
+}
+
 @media (max-width: 1024px) {
-    .content-container {
-        padding: 0 60px;
+    .content-container,
+    .breadcrumb-container,
+    .page-title {
+        padding-left: 24px;
+        padding-right: 24px;
     }
 
     .page-title {
@@ -190,7 +202,6 @@ body {
     }
 
     .breadcrumb-container {
-        padding: 0 60px;
         margin-bottom: 40px;
     }
 }
@@ -200,12 +211,14 @@ body {
         padding: 20px 0 60px;
     }
 
-    .content-container {
-        padding: 0 30px;
+    .content-container,
+    .breadcrumb-container,
+    .page-title {
+        padding-left: 20px;
+        padding-right: 20px;
     }
 
     .breadcrumb-container {
-        padding: 0 30px;
         margin-bottom: 30px;
         font-size: 14px;
     }
@@ -213,7 +226,6 @@ body {
     .page-title {
         font-size: 24px;
         margin-bottom: 40px;
-        padding: 0 30px;
     }
 
     .last-update {
@@ -252,18 +264,19 @@ body {
 }
 
 @media (max-width: 480px) {
-    .content-container {
-        padding: 0 20px;
+    .content-container,
+    .breadcrumb-container,
+    .page-title {
+        padding-left: 16px;
+        padding-right: 16px;
     }
 
     .breadcrumb-container {
-        padding: 0 20px;
         font-size: 12px;
     }
 
     .page-title {
         font-size: 20px;
-        padding: 0 20px;
     }
 
     .last-update {
@@ -289,6 +302,15 @@ body {
 
     .ad-subtitle {
         font-size: 14px;
+    }
+}
+
+@media (max-width: 375px) {
+    .content-container,
+    .breadcrumb-container,
+    .page-title {
+        padding-left: 12px;
+        padding-right: 12px;
     }
 }
 

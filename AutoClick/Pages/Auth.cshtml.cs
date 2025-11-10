@@ -43,52 +43,6 @@ namespace AutoClick.Pages
                 return Page();
             }
 
-            // DEBUG: List all users in database (temporal)
-            try
-            {
-                var allUsers = await _context.Usuarios.ToListAsync();
-                System.Diagnostics.Debug.WriteLine($"[AUTH DEBUG] Total users in database: {allUsers.Count}");
-                foreach (var user in allUsers)
-                {
-                    System.Diagnostics.Debug.WriteLine($"[AUTH DEBUG] User: {user.Email}, Name: {user.Nombre} {user.Apellidos}");
-                }
-                
-                // DEBUG: Create admin user if not exists (temporal for testing)
-                var adminUser = allUsers.FirstOrDefault(u => u.Email == "admin@gmail.com");
-                if (adminUser == null)
-                {
-                    System.Diagnostics.Debug.WriteLine("[AUTH DEBUG] Creating admin user for testing...");
-                    var newAdmin = new Usuario
-                    {
-                        Email = "admin@gmail.com",
-                        Nombre = "Admin",
-                        Apellidos = "User",
-                        NumeroTelefono = "12345678",
-                        Contrasena = "placeholder", // Will be set properly when user registers
-                        NombreAgencia = null
-                    };
-                    
-                    // Use AuthService to register the admin user properly
-                    var registerResult = await _authService.RegisterAsync(newAdmin, "prueba123");
-                    if (registerResult.Success)
-                    {
-                        System.Diagnostics.Debug.WriteLine("[AUTH DEBUG] Admin user created successfully!");
-                    }
-                    else
-                    {
-                        System.Diagnostics.Debug.WriteLine($"[AUTH DEBUG] Failed to create admin user: {registerResult.Message}");
-                    }
-                }
-                else
-                {
-                    System.Diagnostics.Debug.WriteLine($"[AUTH DEBUG] Admin user already exists");
-                }
-            }
-            catch (Exception ex)
-            {
-                System.Diagnostics.Debug.WriteLine($"[AUTH DEBUG] Error managing users: {ex.Message}");
-            }
-
             // Initialize the page
             ErrorMessage = "";
             SuccessMessage = "";

@@ -47,9 +47,6 @@ namespace AutoClick.Pages
                 // For now, we'll simulate the process
                 await Task.Delay(500); // Simulate API call
 
-                // Log the subscription (in production, save to database)
-                Console.WriteLine($"New newsletter subscription: {Email} at {DateTime.Now}");
-
                 StatusMessage = "¡Gracias por suscribirse! Recibirá las últimas noticias y promociones en su correo electrónico.";
                 
                 // Clear the email field after successful subscription
@@ -57,10 +54,8 @@ namespace AutoClick.Pages
                 
                 return Page();
             }
-            catch (Exception ex)
+            catch (Exception)
             {
-                // Log error (in production, use proper logging)
-                Console.WriteLine($"Error in newsletter subscription: {ex.Message}");
                 ErrorMessage = "Hubo un error al procesar su suscripción. Por favor intente nuevamente.";
                 return Page();
             }

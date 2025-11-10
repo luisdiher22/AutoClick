@@ -2,16 +2,16 @@
 
 .sobre-nosotros-container {
     background: #02081C;
-    min-height: 100vh;
+    min-height: 3000px; /* Altura suficiente para todas las secciones con valores completos */
     color: #ffffff;
-    overflow: hidden;
     position: relative;
+    padding-bottom: 50px;
 }
 
 /* Breadcrumb */
 .breadcrumb {
     position: absolute;
-    left: 32px;
+    left: 32px; /* Desktop: 32px mínimo */
     top: 96px;
     display: flex;
     align-items: center;
@@ -48,40 +48,43 @@
 
 /* Content Sections */
 .content-section {
-    width: 1248px;
-    position: relative;
-    left: 32px;
-    margin-bottom: 100px;
+    position: absolute;
     display: flex;
     flex-direction: column;
 }
 
-/* Historia Section */
+/* Historia Section - Izquierda */
 .historia-section {
     top: 232px;
-    position: absolute;
+    left: 32px;
+    width: 1248px;
+    z-index: 4;
 }
 
-/* Misión Section */
+/* Misión Section - Derecha */
 .mision-section {
     top: 624px;
-    position: absolute;
-    left: 401px;
+    left: 50%;
+    transform: translateX(-12.5%);
     width: 847px;
+    z-index: 4;
 }
 
-/* Visión Section */
+/* Visión Section - Izquierda */
 .vision-section {
     top: 926px;
-    position: absolute;
+    left: 32px;
+    width: 1248px;
+    z-index: 4;
 }
 
-/* Valores Section */
+/* Valores Section - Derecha */
 .valores-section {
     top: 1222px;
-    position: absolute;
-    left: 471px;
+    right: 32px;
     width: 777px;
+    min-height: 600px;
+    z-index: 5;
 }
 
 /* Background Text */
@@ -102,27 +105,32 @@
 /* Section Content */
 .section-content {
     display: flex;
-    align-items: center;
-    justify-content: center;
+    align-items: flex-start;
     gap: 8px;
-    margin-top: -40px;
+    margin-top: 20px;
 }
 
 .section-content.left-aligned {
     padding-left: 119px;
+    justify-content: flex-start;
 }
 
 .section-content.right-aligned {
     justify-content: flex-end;
+    padding-right: 134px;
 }
 
 .section-content.right-aligned .section-text {
     text-align: right;
-    padding-right: 134px;
 }
 
-.mision-section .section-content.right-aligned .section-text {
+.mision-section .section-content.right-aligned {
     padding-right: 212px;
+}
+
+/* Ajustes específicos de espaciado para evitar superposición */
+.vision-section .section-content {
+    margin-top: 40px;
 }
 
 /* Section Text */
@@ -132,11 +140,16 @@
     font-weight: 500;
     font-size: 20px;
     color: #ffffff;
-    line-height: 1.6;
+    line-height: 1.5;
 }
 
 .mision-section .section-text {
     width: 635px;
+}
+
+.valores-section .section-text {
+    width: 100%;
+    max-width: 643px;
 }
 
 .section-text p {
@@ -149,34 +162,42 @@
 
 /* Valores Specific Styles */
 .valores-text {
-    text-align: left;
-    padding-right: 0;
+    text-align: left !important;
 }
 
-.valor-item {
-    margin-bottom: 32px;
+.valores-section .section-content {
+    margin-top: 70px;
 }
 
-.valor-item:last-child {
-    margin-bottom: 0;
+.valores-section .section-content.right-aligned {
+    padding-right: 134px;
 }
 
-.valor-item h3 {
-    font-family: 'Montserrat', sans-serif;
-    font-weight: 700;
-    font-size: 20px;
-    color: #ffffff;
-    margin: 0 0 8px 0;
-    display: inline;
-}
-
-.valor-item p {
+.valores-list {
+    list-style: disc;
+    margin: 0;
+    padding-left: calc(1.5 * 1em);
     font-family: 'Montserrat', sans-serif;
     font-weight: 500;
     font-size: 20px;
     color: #ffffff;
-    margin: 0;
-    display: inline;
+    line-height: 1.5;
+    text-align: left;
+}
+
+.valores-list li {
+    margin-bottom: 20px;
+}
+
+.valores-list li:last-child {
+    margin-bottom: 0;
+}
+
+.valores-list strong {
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 700;
+    font-size: 20px;
+    color: #ffffff;
 }
 
 /* Footer */
@@ -456,7 +477,17 @@
     }
 }
 
+@media (max-width: 1280px) {
+    .breadcrumb {
+        left: 28px;
+    }
+}
+
 @media (max-width: 1024px) {
+    .breadcrumb {
+        left: 24px;
+    }
+    
     .section-background-text {
         font-size: 80px;
     }
@@ -471,15 +502,15 @@
     }
     
     .section-content.left-aligned {
-        padding-left: 60px;
+        padding-left: 48px;
     }
     
     .section-content.right-aligned .section-text {
-        padding-right: 60px;
+        padding-right: 48px;
     }
     
     .mision-section .section-content.right-aligned .section-text {
-        padding-right: 60px;
+        padding-right: 48px;
     }
 }
 
@@ -597,6 +628,12 @@
     
     .breadcrumb {
         font-size: 14px;
+    }
+}
+
+@media (max-width: 375px) {
+    .breadcrumb {
+        left: 12px;
     }
 }
 
