@@ -629,6 +629,13 @@
 }
 
 /* Responsive Design */
+/* Media query para pantallas extra grandes (1728px o más) - 3 columnas */
+@media (min-width: 1728px) {
+    .listings-grid {
+        grid-template-columns: repeat(3, 1fr);
+    }
+}
+
 @media (max-width: 1400px) {
     .listings-grid {
         grid-template-columns: repeat(2, 1fr);

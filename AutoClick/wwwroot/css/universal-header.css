@@ -1,4 +1,5 @@
 /* Universal Header Styles - AutoClick */
+/* Version: 2.0 - Figma Dark Dropdowns - Updated 2025-11-10 */
 
 .universal-header {
     width: 100%;
@@ -10,6 +11,8 @@
     top: 0;
     left: 0;
     z-index: 1000;
+    /* CRITICAL: No transform to allow position:fixed children to work correctly */
+    transform: none !important;
 }
 
 .header-container {
@@ -23,6 +26,8 @@
     padding: 0;
     position: relative;
     overflow: visible;
+    /* CRITICAL: Do NOT use transform on header-container as it breaks position:fixed children */
+    transform: none !important;
 }
 
 /* Logo Section */
@@ -97,6 +102,8 @@
     gap: 64px;
     flex: 1;
     padding: 0 20px;
+    /* CRITICAL: No transform to allow position:fixed children to work correctly */
+    transform: none !important;
 }
 
 /* Explorar Autos Button */
@@ -125,6 +132,16 @@
     display: flex;
     justify-content: flex-start;
     align-items: center;
+    /* CRITICAL: No transform to allow position:fixed children to work correctly */
+    transform: none !important;
+}
+
+/* Special positioning for full-width dropdowns */
+.nav-dropdown[data-dropdown="productos"],
+.nav-dropdown[data-dropdown="anunciese"],
+.nav-dropdown[data-dropdown="financiamiento"] {
+    position: static;
+    transform: none !important;
 }
 
 .nav-item {
@@ -172,22 +189,171 @@ button.dropdown-toggle::before {
     border: none !important;
 }
 
-/* Dropdown Content */
+/* Dropdown Content - BASE STYLE WITH DARK BACKGROUND */
 .dropdown-content {
     position: absolute;
     top: 100%;
     left: 0;
-    background: white;
-    min-width: 200px;
-    border-radius: 8px;
-    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+    background: rgba(4, 17, 56, 0.95) !important;
+    min-width: 250px;
+    border-radius: 0 !important;
+    box-shadow: none !important;
     opacity: 0;
     visibility: hidden;
     transform: translateY(-10px);
     transition: all 0.3s ease;
     z-index: 1001;
+    overflow: visible;
+    margin-top: 0;
+    padding: 32px;
+    border: none !important;
+}
+
+/* Dark dropdown style (Figma design) - Default for all */
+.dropdown-content.dropdown-dark {
+    background: rgba(4, 17, 56, 0.95) !important;
+    border: none;
+    padding: 32px;
+}
+
+/* Large dropdown for Productos & Servicios - EXACTLY FROM FIGMA */
+.dropdown-content.dropdown-large {
+    position: fixed;
+    top: 80px;
+    left: 50% !important;
+    width: 100vw !important;
+    max-width: none !important;
+    padding: 32px 0 !important;
+    transform: translate(-50%, -10px) !important;
+    z-index: 9999 !important;
+    background: rgba(4, 17, 56, 0.95) !important;
     overflow: hidden;
-    margin-top: 8px;
+    margin: 0 !important;
+}
+
+.nav-dropdown:hover .dropdown-content.dropdown-large,
+.nav-dropdown.active .dropdown-content.dropdown-large {
+    transform: translate(-50%, 0) !important;
+}
+
+/* Dropdown columns container - EXACTLY FROM FIGMA */
+.dropdown-columns {
+    display: flex;
+    gap: 168px; /* EXACTLY 168px gap between Productos and Servicios */
+    align-items: flex-start;
+    justify-content: center;
+    max-width: none; /* No max-width constraint */
+    margin: 0 auto;
+    padding: 0;
+}
+
+/* Horizontal dropdown for Anúnciese - EXACTLY FROM FIGMA */
+.dropdown-content.dropdown-anunciese {
+    position: fixed;
+    top: 80px;
+    left: 50% !important;
+    width: 100vw !important;
+    max-width: none !important;
+    height: 200px;
+    margin: 0 !important;
+    display: flex;
+    flex-direction: row;
+    gap: 80px;
+    padding: 32px 0 !important;
+    justify-content: center;
+    align-items: flex-start;
+    transform: translate(-50%, -10px) !important;
+    z-index: 9999 !important;
+    background: rgba(4, 17, 56, 0.95) !important;
+    overflow: hidden;
+}
+
+.nav-dropdown:hover .dropdown-content.dropdown-anunciese,
+.nav-dropdown.active .dropdown-content.dropdown-anunciese {
+    transform: translate(-50%, 0) !important;
+}
+
+/* Anuncio item with icon - FROM FIGMA */
+.dropdown-anuncio-item {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 8px; /* EXACTLY from Figma */
+    padding: 0;
+    height: 40px; /* Match Figma height */
+    white-space: nowrap;
+    background: transparent;
+    transition: none; /* No hover effect on Anúnciese items */
+}
+
+.dropdown-anuncio-item:hover {
+    background: transparent; /* Keep transparent - no hover background */
+}
+
+.dropdown-anuncio-item .dropdown-icon {
+    flex-shrink: 0;
+    /* Icon sizes are set inline in HTML: 16px, 22px, 20px per Figma */
+}
+
+.dropdown-anuncio-item span {
+    color: white !important;
+    font-size: 16px; /* EXACTLY from Figma */
+    font-weight: 400; /* Regular weight from Figma */
+    line-height: 1;
+}
+
+/* Horizontal dropdown for Financiamiento - EXACTLY FROM FIGMA */
+.dropdown-content.dropdown-horizontal {
+    position: fixed;
+    top: 80px;
+    left: 50% !important;
+    width: 100vw !important;
+    max-width: none !important;
+    height: 200px;
+    margin: 0 !important;
+    display: flex;
+    flex-direction: row;
+    gap: 80px;
+    padding: 32px 0 !important;
+    justify-content: center;
+    align-items: flex-start;
+    transform: translate(-50%, -10px) !important;
+    background: rgba(4, 17, 56, 0.95) !important;
+    z-index: 9999 !important;
+    overflow: hidden;
+}
+
+.nav-dropdown:hover .dropdown-content.dropdown-horizontal,
+.nav-dropdown.active .dropdown-content.dropdown-horizontal {
+    transform: translate(-50%, 0) !important;
+}
+
+/* Individual dropdown column */
+.dropdown-column {
+    display: flex;
+    flex-direction: column;
+    gap: 8px; /* 8px gap between items */
+    flex: 0 0 auto; /* Don't grow or shrink, natural size */
+    min-width: 0; /* Remove minimum width */
+}
+
+.dropdown-column-title {
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 700;
+    font-size: 24px;
+    color: rgba(255, 255, 255, 0.75); /* EXACTLY 75% opacity white */
+    margin: 0 0 16px 0; /* 24px gap from Figma: 16px margin bottom + 8px item gap */
+    padding: 0;
+    line-height: 1;
+}
+
+/* Vertical divider between columns - FROM FIGMA */
+.dropdown-divider-vertical {
+    width: 1px;
+    background: rgba(255, 255, 255, 0.2); /* Subtle white divider */
+    align-self: stretch;
+    margin: 0; /* NO MARGIN - gap is controlled by parent .dropdown-columns */
+    flex-shrink: 0;
 }
 
 .nav-dropdown:hover .dropdown-content,
@@ -198,15 +364,107 @@ button.dropdown-toggle::before {
 }
 
 .dropdown-link {
-    display: block;
-    padding: 12px 20px;
-    color: #02081C;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 8px 12px;
+    color: white !important;
     text-decoration: none;
-    font-size: 14px;
+    font-size: 16px;
     font-family: 'Montserrat', sans-serif;
     font-weight: 400;
-    border-bottom: 1px solid #f0f0f0;
+    border-bottom: none;
+    border-radius: 4px;
     transition: background-color 0.2s ease;
+    line-height: 1.5;
+}
+
+/* Dark dropdown link styles */
+.dropdown-dark .dropdown-link {
+    color: white !important;
+    border-bottom: none;
+    padding: 8px 12px;
+    border-radius: 4px;
+    font-size: 16px;
+    font-weight: 400;
+    gap: 8px;
+}
+
+.dropdown-link:hover {
+    background: rgba(255, 255, 255, 0.1) !important;
+    color: white !important;
+    text-decoration: none;
+}
+
+.dropdown-dark .dropdown-link:hover {
+    background: rgba(255, 255, 255, 0.1) !important;
+    color: white !important;
+}
+
+/* Icon in dropdown links */
+.dropdown-icon {
+    width: 16px;
+    height: 16px;
+    flex-shrink: 0;
+}
+
+/* Product logo in dropdown - EXACTLY FROM FIGMA */
+.dropdown-product {
+    display: flex;
+    align-items: center;
+    gap: 12px; /* 12px gap between logo and text */
+    padding: 14px 8px; /* height: 48px with this padding */
+    border-radius: 4px;
+    background: transparent;
+    transition: background-color 0.2s ease;
+    height: 48px; /* EXACTLY from Figma */
+    box-sizing: border-box;
+}
+
+.dropdown-product:hover {
+    background: rgba(255, 255, 255, 0.1) !important;
+}
+
+.product-logo {
+    height: 17px; /* EXACTLY from Figma */
+    width: 63px; /* EXACTLY from Figma */
+    object-fit: contain;
+    flex-shrink: 0;
+}
+
+.dropdown-product span {
+    font-size: 14px; /* EXACTLY from Figma - Body Regular/14pts */
+    font-weight: 500; /* Medium weight from Figma */
+    color: white;
+    line-height: 1;
+}
+
+/* Reserve link styles - EXACTLY FROM FIGMA */
+.dropdown-reserve {
+    font-weight: 700 !important; /* Bold from Figma */
+    font-size: 16px !important; /* EXACTLY from Figma */
+    color: white !important;
+    padding: 8px 0 !important; /* height: 40px with 8px padding */
+    justify-content: flex-start !important;
+    background: transparent !important;
+    height: 40px; /* EXACTLY from Figma */
+    display: flex !important;
+    align-items: center !important;
+    line-height: 1;
+}
+
+.dropdown-reserve .highlight {
+    color: #ff931e; /* EXACTLY from Figma - orange highlight */
+    font-weight: 700;
+}
+
+.dropdown-reserve:hover {
+    background: transparent !important; /* NO background on hover for these links */
+    color: white !important;
+}
+
+.dropdown-reserve:hover .highlight {
+    color: #ffb84d; /* Lighter orange on hover */
 }
 
 /* Remove any arrows or indicators from dropdown links */
@@ -215,16 +473,6 @@ button.dropdown-toggle::before {
     display: none !important;
     content: none !important;
     border: none !important;
-}
-
-.dropdown-link:hover {
-    background: #f8f9fa;
-    color: #02081C;
-    text-decoration: none;
-}
-
-.dropdown-link:last-child {
-    border-bottom: none;
 }
 
 /* Actions Section */
@@ -320,11 +568,6 @@ button.dropdown-toggle::before {
     margin-left: 20px;
     position: relative;
     z-index: 10;
-    /* Prevent any dropdown behavior */
-    user-select: none;
-    -webkit-user-select: none;
-    -moz-user-select: none;
-    -ms-user-select: none;
 }
 
 .login-register-btn:hover {
@@ -333,49 +576,10 @@ button.dropdown-toggle::before {
     text-decoration: none;
 }
 
-/* Prevent any pseudo-elements that might create dropdown appearance */
 .login-register-btn::after,
 .login-register-btn::before {
     display: none !important;
     content: none !important;
-}
-
-/* Override any Bootstrap dropdown styles */
-.login-register-btn.dropdown-toggle::after {
-    display: none !important;
-}
-
-/* Force reset all dropdown-related styles */
-.auth-section .dropdown,
-.auth-section .dropdown-toggle,
-.auth-section .dropdown-menu,
-.login-register-btn.dropdown,
-.login-register-btn.dropdown-toggle {
-    position: static !important;
-    display: inline-flex !important;
-    transform: none !important;
-    height: 40px !important;
-    max-height: 40px !important;
-}
-
-/* Nuclear option - completely isolate auth section */
-.universal-header .actions-section .auth-section {
-    isolation: isolate !important;
-    contain: layout style size !important;
-}
-
-/* Ensure auth section is always visible */
-.actions-section .auth-section {
-    display: flex !important;
-    visibility: visible !important;
-    opacity: 1 !important;
-}
-
-.login-register-btn {
-    display: inline-flex !important;
-    visibility: visible !important;
-    opacity: 1 !important;
-    color: white !important;
 }
 
 /* User avatar (only for logged-in users) */
@@ -431,17 +635,17 @@ button.dropdown-toggle::before {
     position: absolute;
     top: 100%;
     right: 0;
-    background: white;
-    min-width: 200px;
-    border-radius: 8px;
-    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+    min-width: 250px;
     opacity: 0;
     visibility: hidden;
     transform: translateY(-10px);
     transition: all 0.3s ease;
     z-index: 1001;
     overflow: hidden;
-    margin-top: 8px;
+    margin-top: 0;
+    background: rgba(4, 17, 56, 0.95) !important;
+    padding: 20px;
+    border-radius: 0;
 }
 
 /* User dropdown shows on hover using the same system as nav dropdowns */
@@ -454,11 +658,13 @@ button.dropdown-toggle::before {
 }
 
 .user-menu-item {
-    display: block;
+    display: flex;
+    align-items: center;
+    gap: 8px;
     padding: 12px 20px;
-    color: #02081C;
+    color: white !important;
     text-decoration: none;
-    font-size: 14px;
+    font-size: 16px;
     font-family: 'Montserrat', sans-serif;
     font-weight: 400;
     border: none;
@@ -467,33 +673,23 @@ button.dropdown-toggle::before {
     text-align: left;
     cursor: pointer;
     transition: background-color 0.2s ease;
-    border-bottom: 1px solid #f0f0f0;
+    border-radius: 4px;
 }
 
 .user-menu-item:hover {
-    background: #f8f9fa;
-    color: #02081C;
+    background: rgba(255, 255, 255, 0.1) !important;
+    color: white !important;
     text-decoration: none;
 }
 
-.user-menu-item:last-child {
-    border-bottom: none;
-}
-
-.user-menu-item.logout {
-    color: #dc3545;
-    border-top: 1px solid #f0f0f0;
-}
-
-.user-menu-item.logout:hover {
-    background: #fff5f5;
-    color: #dc3545;
+.user-menu-item .admin-icon {
+    font-size: 16px;
 }
 
 .menu-divider {
-    margin: 0;
+    margin: 8px 0;
     border: none;
-    border-top: 1px solid #f0f0f0;
+    border-top: 1px solid rgba(255, 255, 255, 0.2);
 }
 
 /* Responsive Design */
@@ -504,6 +700,11 @@ button.dropdown-toggle::before {
     
     .header-container {
         padding: 0 15px;
+    }
+    
+    /* Adjust dropdown columns for smaller screens */
+    .dropdown-columns {
+        gap: 80px;
     }
 }
 
@@ -546,6 +747,17 @@ button.dropdown-toggle::before {
     
     .user-name {
         font-size: 14px;
+    }
+    
+    /* Mobile dropdown adjustments */
+    .dropdown-columns {
+        flex-direction: column;
+        gap: 24px;
+        padding: 0 20px;
+    }
+    
+    .dropdown-divider-vertical {
+        display: none;
     }
 }
 
@@ -600,27 +812,9 @@ body.auth-body {
 
 .dropdown-link:focus,
 .user-menu-item:focus {
-    outline: 2px solid #02081C;
-    outline-offset: -2px;
+    outline: none;
 }
 
-/* Clean auth section styles */
-.universal-header .auth-section {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-}
-
-.universal-header .login-register-btn {
-    color: white;
-    text-decoration: none;
-    padding: 8px 12px;
-    border-radius: 6px;
-    transition: background-color 0.3s ease;
-}
-
-/* Prevent dropdown arrows */
-.auth-section .dropdown-toggle::after,
-.login-register-btn.dropdown-toggle::after {
-    display: none !important;
-}
+/* ========================================== */
+/* END OF UNIVERSAL HEADER STYLES */
+/* ========================================== */

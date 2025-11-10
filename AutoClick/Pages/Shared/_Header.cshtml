@@ -26,8 +26,33 @@
                         <path d="M1 1L6 5L11 1" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
                     </svg>
                 </button>
-                <div class="dropdown-content">
-                    <a asp-page="/AnunciarMiAuto" class="dropdown-link">Anunciar Mi Auto</a>
+                <div class="dropdown-content dropdown-dark dropdown-anunciese" style="background: rgba(4, 17, 56, 0.95) !important; border-radius: 0 !important; border: none !important;">
+                    <a asp-page="/AnunciarMiAuto" class="dropdown-link dropdown-anuncio-item">
+                        <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg" class="dropdown-icon" style="width: 16px; height: 16px;">
+                            <path d="M14 2L8 8L2 2" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                            <path d="M14 14L8 8L2 14" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                            <circle cx="8" cy="8" r="6" stroke="white" stroke-width="1.5" fill="none"/>
+                        </svg>
+                        <span>Anunciar mi auto</span>
+                    </a>
+                    <a asp-page="/AnunciarEmpresa" class="dropdown-link dropdown-anuncio-item">
+                        <svg width="22" height="22" viewBox="0 0 22 22" fill="none" xmlns="http://www.w3.org/2000/svg" class="dropdown-icon" style="width: 22px; height: 22px;">
+                            <path d="M7 11L10 14L15 8" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                            <circle cx="11" cy="11" r="9" stroke="white" stroke-width="2" fill="none"/>
+                        </svg>
+                        <span>Anunciarme como agencia</span>
+                    </a>
+                    <a asp-page="/AnunciarEmpresa" class="dropdown-link dropdown-anuncio-item">
+                        <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg" class="dropdown-icon" style="width: 20px; height: 20px;">
+                            <rect x="3" y="3" width="14" height="14" rx="1" stroke="white" stroke-width="1.5" fill="none"/>
+                            <rect x="6" y="6" width="2" height="2" fill="white"/>
+                            <rect x="10" y="6" width="2" height="2" fill="white"/>
+                            <rect x="6" y="10" width="2" height="2" fill="white"/>
+                            <rect x="10" y="10" width="2" height="2" fill="white"/>
+                            <rect x="6" y="14" width="8" height="1" fill="white"/>
+                        </svg>
+                        <span>Anunciar mi empresa</span>
+                    </a>
                 </div>
             </div>
             
@@ -38,8 +63,35 @@
                         <path d="M1 1L6 5L11 1" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
                     </svg>
                 </button>
-                <div class="dropdown-content">
-                    <a asp-page="/PpfCeramico" class="dropdown-link">Rain-X: Máxima visibilidad al conducir</a>
+                <div class="dropdown-content dropdown-dark dropdown-large" style="background: rgba(4, 17, 56, 0.95) !important; border-radius: 0 !important; border: none !important;">
+                    <div class="dropdown-columns">
+                        <div class="dropdown-column">
+                            <h4 class="dropdown-column-title">Productos</h4>
+                            <a asp-page="/PpfCeramico" class="dropdown-link dropdown-product">
+                                <img src="https://autoclickstorage.blob.core.windows.net/uploads/rainx-logo.png" alt="Rain-X" class="product-logo" />
+                                <span>¡Máxima visibilidad al conducir!</span>
+                            </a>
+                            <a asp-page="/AnunciarEmpresa" class="dropdown-link dropdown-reserve">
+                                Espacio disponible <span class="highlight">¡Reserve ya!</span>
+                            </a>
+                            <a asp-page="/AnunciarEmpresa" class="dropdown-link dropdown-reserve">
+                                Espacio disponible <span class="highlight">¡Reserve ya!</span>
+                            </a>
+                        </div>
+                        <div class="dropdown-divider-vertical"></div>
+                        <div class="dropdown-column">
+                            <h4 class="dropdown-column-title">Servicios</h4>
+                            <a asp-page="/AnunciarEmpresa" class="dropdown-link dropdown-reserve">
+                                Espacio disponible <span class="highlight">¡Reserve ya!</span>
+                            </a>
+                            <a asp-page="/AnunciarEmpresa" class="dropdown-link dropdown-reserve">
+                                Espacio disponible <span class="highlight">¡Reserve ya!</span>
+                            </a>
+                            <a asp-page="/AnunciarEmpresa" class="dropdown-link dropdown-reserve">
+                                Espacio disponible <span class="highlight">¡Reserve ya!</span>
+                            </a>
+                        </div>
+                    </div>
                 </div>
             </div>
             
@@ -50,8 +102,16 @@
                         <path d="M1 1L6 5L11 1" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
                     </svg>
                 </button>
-                <div class="dropdown-content">
-                    <a asp-page="/AnunciarEmpresa" class="dropdown-link">Anunciar Empresa</a>
+                <div class="dropdown-content dropdown-dark dropdown-horizontal" style="background: rgba(4, 17, 56, 0.95) !important; border-radius: 0 !important; border: none !important;">
+                    <a asp-page="/AnunciarEmpresa" class="dropdown-link dropdown-reserve">
+                        Espacio disponible <span class="highlight">¡Reserve ya!</span>
+                    </a>
+                    <a asp-page="/AnunciarEmpresa" class="dropdown-link dropdown-reserve">
+                        Espacio disponible <span class="highlight">¡Reserve ya!</span>
+                    </a>
+                    <a asp-page="/AnunciarEmpresa" class="dropdown-link dropdown-reserve">
+                        Espacio disponible <span class="highlight">¡Reserve ya!</span>
+                    </a>
                 </div>
             </div>
         </nav>
@@ -86,20 +146,16 @@
                         </svg>
                         <span>@userName</span>
                     </button>
-                    <div class="user-dropdown dropdown-content" id="userDropdown">
+                    <div class="user-dropdown dropdown-content dropdown-dark" id="userDropdown" style="background: rgba(4, 17, 56, 0.95) !important; border-radius: 0 !important; border: none !important;">
                         @if (isAdmin)
                         {
-                            <a asp-page="/Admin/Dashboard" class="user-menu-item dropdown-link admin-link">
-                                <span class="admin-icon">⚙️</span> Admin Dashboard
+                            <a asp-page="/Admin/Dashboard" class="user-menu-item dropdown-link">
+                                <span class="admin-icon">⚙️</span> Panel de administrador
                             </a>
-                            <hr class="menu-divider">
                         }
-                        <a asp-page="/MiPerfil" class="user-menu-item dropdown-link">Mi Perfil</a>
-                        <a asp-page="/MisAnuncios" class="user-menu-item dropdown-link">Mis Anuncios</a>
-                        <a asp-page="/HistorialPagos" class="user-menu-item dropdown-link">Historial de Pagos</a>
-                        <a asp-page="/ConfiguracionCuenta" class="user-menu-item dropdown-link">Configuración</a>
-                        <hr class="menu-divider">
-                        <a asp-page="/Logout" class="user-menu-item logout dropdown-link">Cerrar Sesión</a>
+                        <a asp-page="/MiPerfil" class="user-menu-item dropdown-link">Mi perfil</a>
+                        <a asp-page="/AnunciarMiAuto" class="user-menu-item dropdown-link">Anunciar mi auto</a>
+                        <a asp-page="/MisAnuncios" class="user-menu-item dropdown-link">Mis anuncios</a>
                     </div>
                 </div>
             }

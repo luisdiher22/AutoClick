@@ -1134,6 +1134,20 @@ body {
 }
 
 /* Responsive Design */
+/* Media query para pantallas extra grandes (1728px o más) - 4 columnas */
+@media (min-width: 1728px) {
+    .explorar-cars-grid {
+        grid-template-columns: repeat(4, 1fr);
+    }
+}
+
+/* Media query para pantallas grandes (1200px - 1727px) - 3 columnas */
+@media (min-width: 1200px) and (max-width: 1727px) {
+    .explorar-cars-grid {
+        grid-template-columns: repeat(3, 1fr);
+    }
+}
+
 @media (max-width: 1024px) {
     .explorar-content {
         grid-template-columns: 200px 1fr;
@@ -3629,6 +3643,20 @@ body {
 }
 
 /* Responsive Design for Búsqueda Avanzada */
+/* Media query para pantallas extra grandes (1728px o más) - 4 columnas */
+@media (min-width: 1728px) {
+    .busqueda-cars-grid {
+        grid-template-columns: repeat(4, 1fr);
+    }
+}
+
+/* Media query para pantallas grandes (1200px - 1727px) - 3 columnas */
+@media (min-width: 1200px) and (max-width: 1727px) {
+    .busqueda-cars-grid {
+        grid-template-columns: repeat(3, 1fr);
+    }
+}
+
 @media (max-width: 1200px) {
     .busqueda-container {
         max-width: 1200px;
@@ -3735,6 +3763,13 @@ body {
 }
 
 /* Responsive Design for Guardados */
+/* Media query para pantallas extra grandes (1728px o más) - 4 columnas */
+@media (min-width: 1728px) {
+    .guardados-grid {
+        grid-template-columns: repeat(4, 1fr);
+    }
+}
+
 @media (max-width: 1024px) {
     .guardados-grid {
         grid-template-columns: repeat(2, 1fr);
@@ -4975,6 +5010,13 @@ body {
     
     .similar-cars-grid {
         grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+/* Media query para pantallas extra grandes (1728px o más) - 4 columnas para similar-cars-grid */
+@media (min-width: 1728px) {
+    .similar-cars-grid {
+        grid-template-columns: repeat(4, 1fr);
     }
 }
 

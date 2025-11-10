@@ -86,7 +86,7 @@
     </div>
     
     @{int destacadoIndex = 0;}
-    @foreach (var auto in Model.AutosDestacados.Take(3))
+    @foreach (var auto in Model.AutosDestacados.Take(4))
     {
         <div class="auto-card" data-estado="Default" style="width: calc((100% - 160px) / 4); height: 360px; padding: 8px; left: calc(32px + @destacadoIndex * (100% - 160px) / 4 + @destacadoIndex * 32px); top: 872px; position: absolute; border-radius: 8px; overflow: visible; flex-direction: column; justify-content: flex-start; align-items: flex-start; display: flex; cursor: pointer;" onclick="window.location.href='@Url.Page("/Producto", new { id = auto.Id })'">
             <div style="width: 100%; height: 260px; position: relative; overflow: hidden; border-radius: 4px;">
@@ -145,7 +145,7 @@
     </div>
 
     @{int recientesIndex = 0;}
-    @foreach (var auto in Model.AutosRecientes.Take(3))
+    @foreach (var auto in Model.AutosRecientes.Take(4))
     {
         <div class="auto-card" data-estado="Default" style="width: calc((100% - 160px) / 4); height: 360px; padding: 8px; left: calc(32px + @recientesIndex * (100% - 160px) / 4 + @recientesIndex * 32px); top: 1368px; position: absolute; border-radius: 8px; overflow: visible; flex-direction: column; justify-content: flex-start; align-items: flex-start; display: flex; cursor: pointer;" onclick="window.location.href='@Url.Page("/Producto", new { id = auto.Id })'">
             <div style="width: 100%; height: 260px; position: relative; overflow: hidden; border-radius: 4px;">
@@ -204,7 +204,7 @@
     </div>
 
     @{int guardadosIndex = 0;}
-    @foreach (var auto in Model.AutosGuardados.Take(3))
+    @foreach (var auto in Model.AutosGuardados.Take(4))
     {
         <div class="auto-card" data-estado="Default" style="width: calc((100% - 160px) / 4); height: 360px; padding: 8px; left: calc(32px + @guardadosIndex * (100% - 160px) / 4 + @guardadosIndex * 32px); top: 1864px; position: absolute; border-radius: 8px; overflow: visible; flex-direction: column; justify-content: flex-start; align-items: flex-start; display: flex; cursor: pointer;" onclick="window.location.href='@Url.Page("/Producto", new { id = auto.Id })'">
             <div style="width: 100%; height: 260px; position: relative; overflow: hidden; border-radius: 4px;">
@@ -263,7 +263,7 @@
     </div>
 
     @{int exploracionIndex = 0;}
-    @foreach (var auto in Model.AutosExploracion.Take(3))
+    @foreach (var auto in Model.AutosExploracion.Take(4))
     {
         <div class="auto-card" data-estado="Default" style="width: calc((100% - 160px) / 4); height: 360px; padding: 8px; left: calc(32px + @exploracionIndex * (100% - 160px) / 4 + @exploracionIndex * 32px); top: 2360px; position: absolute; border-radius: 8px; overflow: visible; flex-direction: column; justify-content: flex-start; align-items: flex-start; display: flex; cursor: pointer;" onclick="window.location.href='@Url.Page("/Producto", new { id = auto.Id })'">
             <div style="width: 100%; height: 260px; position: relative; overflow: hidden; border-radius: 4px;">

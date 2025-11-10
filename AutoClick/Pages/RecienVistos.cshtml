@@ -38,7 +38,7 @@
     <!-- Cars Grid -->
     @{
         int totalCars = Model.RecentlyViewedAutos.Count();
-        int columns = 3;
+        int columns = 4; // Cambiado de 3 a 4 para pantallas de 1728px o superiores
         int rows = (int)Math.Ceiling((double)totalCars / columns);
         int currentIndex = 0;
     }
