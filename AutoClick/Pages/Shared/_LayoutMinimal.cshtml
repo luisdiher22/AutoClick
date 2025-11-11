@@ -29,6 +29,10 @@
     <!-- Favoritos CSS -->
     <link href="~/css/favoritos.css" rel="stylesheet" />
     
+    <!-- Responsive Stylesheets -->
+    <link rel="stylesheet" href="~/css/responsive-mobile.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/css/responsive-tablet.css" asp-append-version="true" />
+    
     <!-- Modal Solicitud Anuncio CSS -->
     <link href="~/css/modal-solicitud-anuncio.css" rel="stylesheet" asp-append-version="true" />
     
@@ -72,13 +76,36 @@
     
     @await RenderSectionAsync("Styles", required: false)
     
+    <style>
+        /* Desktop display control (1024px+) */
+        @@media (min-width: 1024px) {
+            .header-responsive,
+            .footer-responsive {
+                display: none !important;
+            }
+            
+            .header-desktop,
+            .footer-desktop {
+                display: block !important;
+            }
+        }
+    </style>
+    
     <!-- Meta Tags -->
     <meta name="description" content="AutoClick.cr - Plataforma líder en Costa Rica para comprar y vender autos usados y nuevos. Encuentra tu auto ideal o anuncia el tuyo sin costo.">
     <meta name="keywords" content="autos, carros, Costa Rica, comprar auto, vender auto, autos usados">
 </head>
 <body data-user-email="@(User.Identity?.IsAuthenticated == true ? User.FindFirst(System.Security.Claims.ClaimTypes.Email)?.Value ?? User.FindFirst("Email")?.Value : "")">
-    <!-- Universal Header -->
-    @await Html.PartialAsync("_Header")
+    <!-- Headers (Desktop & Responsive) -->
+    <!-- Desktop Header (1024px+) -->
+    <div class="header-desktop">
+        @await Html.PartialAsync("_HeaderDesktop")
+    </div>
+    
+    <!-- Responsive Header (Mobile & Tablet) -->
+    <div class="header-responsive">
+        @await Html.PartialAsync("_HeaderResponsive")
+    </div>
     
     <div class="main-container">
         @RenderBody()

@@ -1,4 +1,4 @@
-Ôªø@page
+@page
 @model AnunciarMiAutoModel
 @{
     ViewData["Title"] = Model.IsEditMode ? "Editar Anuncio - AutoClick.cr" : "Anunciar Mi Auto - AutoClick.cr";
@@ -109,7 +109,7 @@
             <!-- Form Header -->
             <div class="form-header">
                 <h1>Anuncie su auto</h1>
-                <span class="section-indicator">Secci√≥n: <span id="current-section">1</span>/8</span>
+                <span class="section-indicator">SecciÛn: <span id="current-section">1</span>/8</span>
             </div>
             
             <!-- Form Container -->
@@ -120,28 +120,28 @@
                 <div class="form-nav-buttons">
                     <button type="button" class="btn-back" id="btn-back">
                         <div class="back-arrow"></div>
-                        <span>Atr√°s</span>
+                        <span>Atr·s</span>
                     </button>
                     <button type="button" class="btn-next" id="btn-next">
-                        <span>Siguiente secci√≥n</span>
+                        <span>Siguiente secciÛn</span>
                     </button>
                 </div>
                 
                 <!-- Form Sections Container -->
                 <div class="form-sections" id="form-sections">
                 
-                <!-- Section 1: Datos del Veh√≠culo -->
+                <!-- Section 1: Datos del VehÌculo -->
                 <div class="form-section active" data-section="1" id="seccion1">
                     <div style="width: 100%; height: 800px; position: relative; overflow: visible;">
                         @if (Model.IsEditMode)
                         {
                             <div style="left: 20px; top: -20px; position: absolute; background: rgba(34, 197, 94, 0.2); color: #22C55E; padding: 8px 16px; border-radius: 6px; font-size: 12px; font-family: Montserrat; font-weight: 600;">
-                                üîß EDITANDO ANUNCIO ID: @Model.Edit
+                                ?? EDITANDO ANUNCIO ID: @Model.Edit
                             </div>
                         }
-                        <div style="left: 20px; top: 10px; position: absolute; text-box-trim: trim-both; text-box-edge: cap alphabetic; color: rgba(255, 255, 255, 0.75); font-size: 18px; font-family: Montserrat; font-weight: 700; word-wrap: break-word">Datos del veh√≠culo</div>
+                        <div style="left: 20px; top: 10px; position: absolute; text-box-trim: trim-both; text-box-edge: cap alphabetic; color: rgba(255, 255, 255, 0.75); font-size: 18px; font-family: Montserrat; font-weight: 700; word-wrap: break-word">Datos del vehÌculo</div>
                         
-                        <!-- Primera fila: Marca, Modelo, A√±o, Placa -->
+                        <!-- Primera fila: Marca, Modelo, AÒo, Placa -->
                         <!-- Marca -->
                         <div data-asterizco="true" data-property-1="Default" style="width: 260px; height: 60px; left: 32px; top: 50px; position: absolute">
                             <select asp-for="Formulario.Marca" id="marca" required style="width: 260px; height: 42px; padding-left: 16px; padding-right: 16px; padding-top: 8px; padding-bottom: 8px; left: 0px; top: 18px; position: absolute; background: #02081C; border-radius: 4px; outline: 0.50px rgba(255, 255, 255, 0.50) solid; outline-offset: -0.50px; justify-content: space-between; align-items: center; display: inline-flex; color: rgba(255, 255, 255, 0.50); font-size: 14px; font-family: Montserrat; font-weight: 500; border: none;">
@@ -291,17 +291,17 @@
                             </select>
                         </div>
                         
-                        <!-- A√±o -->
+                        <!-- AÒo -->
                         <div data-asterizco="true" data-property-1="Default" style="width: 260px; height: 60px; left: 618px; top: 50px; position: absolute">
                             <select asp-for="Formulario.Ano" id="ano" required style="width: 260px; height: 42px; padding-left: 16px; padding-right: 16px; padding-top: 8px; padding-bottom: 8px; left: 0px; top: 18px; position: absolute; background: #02081C; border-radius: 4px; outline: 0.50px rgba(255, 255, 255, 0.50) solid; outline-offset: -0.50px; justify-content: space-between; align-items: center; display: inline-flex; color: rgba(255, 255, 255, 0.50); font-size: 14px; font-family: Montserrat; font-weight: 500; border: none;">
-                                <option value="">Elija el a√±o</option>
+                                <option value="">Elija el aÒo</option>
                                 @for(int year = DateTime.Now.Year; year >= 1990; year--)
                                 {
                                     <option value="@year">@year</option>
                                 }
                             </select>
                             <div style="left: 0px; top: 0px; position: absolute; justify-content: flex-start; align-items: center; gap: 4px; display: inline-flex">
-                                <div style="text-box-trim: trim-both; text-box-edge: cap alphabetic; color: white; font-size: 14px; font-family: Montserrat; font-weight: 500; word-wrap: break-word">A√±o</div>
+                                <div style="text-box-trim: trim-both; text-box-edge: cap alphabetic; color: white; font-size: 14px; font-family: Montserrat; font-weight: 500; word-wrap: break-word">AÒo</div>
                                 <div style="text-box-trim: trim-both; text-box-edge: cap alphabetic; color: #FF0000; font-size: 14px; font-family: Montserrat; font-weight: 500; word-wrap: break-word">*</div>
                             </div>
                         </div>
@@ -310,7 +310,7 @@
                         <div data-estado="Default" data-label2="true" style="width: 260px; height: 60px; left: 910px; top: 50px; position: absolute">
                             <input asp-for="Formulario.PlacaVehiculo" type="text" id="placa" placeholder="Introducir placa (opcional para autos nuevos)" style="width: 260px; height: 42px; padding-top: 8px; padding-bottom: 8px; padding-left: 16px; padding-right: 16px; left: 0px; top: 18px; position: absolute; background: #02081C; border-radius: 4px; outline: 0.50px rgba(255, 255, 255, 0.50) solid; outline-offset: -0.50px; justify-content: flex-start; align-items: center; gap: 8px; display: inline-flex; color: rgba(255, 255, 255, 0.50); font-size: 14px; font-family: Montserrat; font-weight: 500; border: none;" />
                             <div style="left: 0px; top: 0px; position: absolute; justify-content: flex-start; align-items: center; gap: 4px; display: inline-flex">
-                                <div style="text-box-trim: trim-both; text-box-edge: cap alphabetic; color: white; font-size: 14px; font-family: Montserrat; font-weight: 500; word-wrap: break-word">Placa del veh√≠culo</div>
+                                <div style="text-box-trim: trim-both; text-box-edge: cap alphabetic; color: white; font-size: 14px; font-family: Montserrat; font-weight: 500; word-wrap: break-word">Placa del vehÌculo</div>
                                 <div style="text-box-trim: trim-both; text-box-edge: cap alphabetic; color: rgba(255, 255, 255, 0.6); font-size: 14px; font-family: Montserrat; font-weight: 400; word-wrap: break-word">(opcional)</div>
                             </div>
                         </div>
@@ -337,20 +337,20 @@
                             </div>
                         </div>
                         
-                        <!-- Tercera fila: Carrocer√≠a, Combustible, Cilindrada -->
-                        <!-- Carrocer√≠a -->
+                        <!-- Tercera fila: CarrocerÌa, Combustible, Cilindrada -->
+                        <!-- CarrocerÌa -->
                         <div data-asterizco="true" data-property-1="Default" style="width: 260px; height: 60px; left: 32px; top: 230px; position: absolute">
                             <select asp-for="Formulario.Carroceria" id="carroceria" required style="width: 260px; height: 42px; padding-left: 16px; padding-right: 16px; padding-top: 8px; padding-bottom: 8px; left: 0px; top: 18px; position: absolute; background: #02081C; border-radius: 4px; outline: 0.50px rgba(255, 255, 255, 0.50) solid; outline-offset: -0.50px; justify-content: space-between; align-items: center; display: inline-flex; color: rgba(255, 255, 255, 0.50); font-size: 14px; font-family: Montserrat; font-weight: 500; border: none;">
-                                <option value="">Elija un tipo de carrocer√≠a</option>
-                                <option value="sedan">Sed√°n</option>
+                                <option value="">Elija un tipo de carrocerÌa</option>
+                                <option value="sedan">Sed·n</option>
                                 <option value="suv">SUV</option>
                                 <option value="hatchback">Hatchback</option>
                                 <option value="pickup">Pick-up</option>
-                                <option value="coupe">Coup√©</option>
+                                <option value="coupe">CoupÈ</option>
                                 <option value="convertible">Convertible</option>
                             </select>
                             <div style="left: 0px; top: 0px; position: absolute; justify-content: flex-start; align-items: center; gap: 4px; display: inline-flex">
-                                <div style="text-box-trim: trim-both; text-box-edge: cap alphabetic; color: white; font-size: 14px; font-family: Montserrat; font-weight: 500; word-wrap: break-word">Carrocer√≠a</div>
+                                <div style="text-box-trim: trim-both; text-box-edge: cap alphabetic; color: white; font-size: 14px; font-family: Montserrat; font-weight: 500; word-wrap: break-word">CarrocerÌa</div>
                                 <div style="text-box-trim: trim-both; text-box-edge: cap alphabetic; color: #FF0000; font-size: 14px; font-family: Montserrat; font-weight: 500; word-wrap: break-word">*</div>
                             </div>
                         </div>
@@ -360,9 +360,9 @@
                             <select asp-for="Formulario.Combustible" id="combustible" required style="width: 260px; height: 42px; padding-left: 16px; padding-right: 16px; padding-top: 8px; padding-bottom: 8px; left: 0px; top: 18px; position: absolute; background: #02081C; border-radius: 4px; outline: 0.50px rgba(255, 255, 255, 0.50) solid; outline-offset: -0.50px; justify-content: space-between; align-items: center; display: inline-flex; color: rgba(255, 255, 255, 0.50); font-size: 14px; font-family: Montserrat; font-weight: 500; border: none;">
                                 <option value="">Elija combustible</option>
                                 <option value="gasolina">Gasolina</option>
-                                <option value="diesel">Di√©sel</option>
-                                <option value="hibrido">H√≠brido</option>
-                                <option value="electrico">El√©ctrico</option>
+                                <option value="diesel">DiÈsel</option>
+                                <option value="hibrido">HÌbrido</option>
+                                <option value="electrico">ElÈctrico</option>
                             </select>
                             <div style="left: 0px; top: 0px; position: absolute; justify-content: flex-start; align-items: center; gap: 4px; display: inline-flex">
                                 <div style="text-box-trim: trim-both; text-box-edge: cap alphabetic; color: white; font-size: 14px; font-family: Montserrat; font-weight: 500; word-wrap: break-word">Combustible</div>
@@ -429,32 +429,32 @@
                             </div>
                         </div>
                         
-                        <!-- Quinta fila: Transmisi√≥n, Tracci√≥n, Kilometraje, Condici√≥n -->
-                        <!-- Transmisi√≥n -->
+                        <!-- Quinta fila: TransmisiÛn, TracciÛn, Kilometraje, CondiciÛn -->
+                        <!-- TransmisiÛn -->
                         <div data-asterizco="true" data-property-1="Default" style="width: 260px; height: 60px; left: 32px; top: 410px; position: absolute">
                             <select asp-for="Formulario.Transmision" id="transmision" required style="width: 260px; height: 42px; padding-left: 16px; padding-right: 16px; padding-top: 8px; padding-bottom: 8px; left: 0px; top: 18px; position: absolute; background: #02081C; border-radius: 4px; outline: 0.50px rgba(255, 255, 255, 0.50) solid; outline-offset: -0.50px; justify-content: space-between; align-items: center; display: inline-flex; color: rgba(255, 255, 255, 0.50); font-size: 14px; font-family: Montserrat; font-weight: 500; border: none;">
-                                <option value="">Elija transmisi√≥n</option>
+                                <option value="">Elija transmisiÛn</option>
                                 <option value="manual">Manual</option>
-                                <option value="automatica">Autom√°tica</option>
+                                <option value="automatica">Autom·tica</option>
                                 <option value="cvt">CVT</option>
                             </select>
                             <div style="left: 0px; top: 0px; position: absolute; justify-content: flex-start; align-items: center; gap: 4px; display: inline-flex">
-                                <div style="text-box-trim: trim-both; text-box-edge: cap alphabetic; color: white; font-size: 14px; font-family: Montserrat; font-weight: 500; word-wrap: break-word">Transmisi√≥n</div>
+                                <div style="text-box-trim: trim-both; text-box-edge: cap alphabetic; color: white; font-size: 14px; font-family: Montserrat; font-weight: 500; word-wrap: break-word">TransmisiÛn</div>
                                 <div style="text-box-trim: trim-both; text-box-edge: cap alphabetic; color: #FF0000; font-size: 14px; font-family: Montserrat; font-weight: 500; word-wrap: break-word">*</div>
                             </div>
                         </div>
                         
-                        <!-- Tracci√≥n -->
+                        <!-- TracciÛn -->
                         <div data-asterizco="true" data-property-1="Default" style="width: 260px; height: 60px; left: 325px; top: 410px; position: absolute">
                             <select asp-for="Formulario.Traccion" id="traccion" required style="width: 260px; height: 42px; padding-left: 16px; padding-right: 16px; padding-top: 8px; padding-bottom: 8px; left: 0px; top: 18px; position: absolute; background: #02081C; border-radius: 4px; outline: 0.50px rgba(255, 255, 255, 0.50) solid; outline-offset: -0.50px; justify-content: space-between; align-items: center; display: inline-flex; color: rgba(255, 255, 255, 0.50); font-size: 14px; font-family: Montserrat; font-weight: 500; border: none;">
-                                <option value="">Elija tracci√≥n</option>
+                                <option value="">Elija tracciÛn</option>
                                 <option value="delantera">Delantera</option>
                                 <option value="trasera">Trasera</option>
                                 <option value="integral">Integral</option>
                                 <option value="4x4">4x4</option>
                             </select>
                             <div style="left: 0px; top: 0px; position: absolute; justify-content: flex-start; align-items: center; gap: 4px; display: inline-flex">
-                                <div style="text-box-trim: trim-both; text-box-edge: cap alphabetic; color: white; font-size: 14px; font-family: Montserrat; font-weight: 500; word-wrap: break-word">Tracci√≥n</div>
+                                <div style="text-box-trim: trim-both; text-box-edge: cap alphabetic; color: white; font-size: 14px; font-family: Montserrat; font-weight: 500; word-wrap: break-word">TracciÛn</div>
                                 <div style="text-box-trim: trim-both; text-box-edge: cap alphabetic; color: #FF0000; font-size: 14px; font-family: Montserrat; font-weight: 500; word-wrap: break-word">*</div>
                             </div>
                         </div>
@@ -473,24 +473,24 @@
                             <div style="text-box-trim: trim-both; text-box-edge: cap alphabetic; text-align: center; color: white; font-size: 12px; font-family: Montserrat; font-weight: 500; word-wrap: break-word">Km</div>
                         </div>
                         
-                        <!-- Condici√≥n -->
+                        <!-- CondiciÛn -->
                         <div data-asterizco="true" data-property-1="Default" style="width: 260px; height: 60px; left: 910px; top: 410px; position: absolute">
                             <select asp-for="Formulario.Condicion" id="condicion" required style="width: 260px; height: 42px; padding-left: 16px; padding-right: 16px; padding-top: 8px; padding-bottom: 8px; left: 0px; top: 18px; position: absolute; background: #02081C; border-radius: 4px; outline: 0.50px rgba(255, 255, 255, 0.50) solid; outline-offset: -0.50px; justify-content: space-between; align-items: center; display: inline-flex; color: rgba(255, 255, 255, 0.50); font-size: 14px; font-family: Montserrat; font-weight: 500; border: none;">
-                                <option value="">Elija una condici√≥n</option>
+                                <option value="">Elija una condiciÛn</option>
                                 <option value="nuevo">Nuevo</option>
                                 <option value="usado">Usado</option>
                             </select>
                             <div style="left: 0px; top: 0px; position: absolute; justify-content: flex-start; align-items: center; gap: 4px; display: inline-flex">
-                                <div style="text-box-trim: trim-both; text-box-edge: cap alphabetic; color: white; font-size: 14px; font-family: Montserrat; font-weight: 500; word-wrap: break-word">Condici√≥n</div>
+                                <div style="text-box-trim: trim-both; text-box-edge: cap alphabetic; color: white; font-size: 14px; font-family: Montserrat; font-weight: 500; word-wrap: break-word">CondiciÛn</div>
                                 <div style="text-box-trim: trim-both; text-box-edge: cap alphabetic; color: #FF0000; font-size: 14px; font-family: Montserrat; font-weight: 500; word-wrap: break-word">*</div>
                             </div>
                         </div>
                         
-                        <!-- Descripci√≥n -->
+                        <!-- DescripciÛn -->
                         <div data-estado="Default" style="width: 1140px; height: 160px; left: 32px; top: 500px; position: absolute">
-                            <textarea asp-for="Formulario.Descripcion" id="descripcion" placeholder="Escribe descripci√≥n" required style="width: 1140px; height: 116px; padding-top: 16px; padding-bottom: 8px; padding-left: 16px; padding-right: 16px; left: 0px; top: 18px; position: absolute; background: #02081C; border-radius: 4px; outline: 0.50px rgba(255, 255, 255, 0.50) solid; outline-offset: -0.50px; justify-content: flex-start; align-items: flex-start; gap: 8px; display: inline-flex; color: rgba(255, 255, 255, 0.50); font-size: 14px; font-family: Montserrat; font-weight: 500; border: none; resize: none;"></textarea>
+                            <textarea asp-for="Formulario.Descripcion" id="descripcion" placeholder="Escribe descripciÛn" required style="width: 1140px; height: 116px; padding-top: 16px; padding-bottom: 8px; padding-left: 16px; padding-right: 16px; left: 0px; top: 18px; position: absolute; background: #02081C; border-radius: 4px; outline: 0.50px rgba(255, 255, 255, 0.50) solid; outline-offset: -0.50px; justify-content: flex-start; align-items: flex-start; gap: 8px; display: inline-flex; color: rgba(255, 255, 255, 0.50); font-size: 14px; font-family: Montserrat; font-weight: 500; border: none; resize: none;"></textarea>
                             <div style="left: 0px; top: 1px; position: absolute; justify-content: flex-start; align-items: center; gap: 4px; display: inline-flex">
-                                <div style="text-box-trim: trim-both; text-box-edge: cap alphabetic; color: white; font-size: 14px; font-family: Montserrat; font-weight: 500; word-wrap: break-word">Descripci√≥n detallada del veh√≠culo</div>
+                                <div style="text-box-trim: trim-both; text-box-edge: cap alphabetic; color: white; font-size: 14px; font-family: Montserrat; font-weight: 500; word-wrap: break-word">DescripciÛn detallada del vehÌculo</div>
                                 <div style="text-box-trim: trim-both; text-box-edge: cap alphabetic; color: #FF0000; font-size: 14px; font-family: Montserrat; font-weight: 500; word-wrap: break-word">*</div>
                             </div>
                         </div>
@@ -501,11 +501,11 @@
                 <!-- Section 2: Equipamiento -->
                 <div class="form-section" data-section="2" id="seccion2">
                     <div style="width: 100%; min-height: 800px; position: relative; padding: 20px;">
-                    <h2>Equipamiento del veh√≠culo</h2>
+                    <h2>Equipamiento del vehÌculo</h2>
                     <div class="equipment-grid">
                         <div class="equipment-item">
                             <input type="checkbox" id="faros-led" name="Formulario.ExtrasExterior" value="faros-led" @(Model.Formulario?.ExtrasExterior?.Contains("faros-led") == true ? "checked" : "")>
-                            <label for="faros-led">Faros LED / Xen√≥n / Hal√≥genos</label>
+                            <label for="faros-led">Faros LED / XenÛn / HalÛgenos</label>
                         </div>
                         <div class="equipment-item">
                             <input type="checkbox" id="luces-diurnas" name="Formulario.ExtrasExterior" value="luces-diurnas" @(Model.Formulario?.ExtrasExterior?.Contains("luces-diurnas") == true ? "checked" : "")>
@@ -513,7 +513,7 @@
                         </div>
                         <div class="equipment-item">
                             <input type="checkbox" id="luces-automaticas" name="Formulario.ExtrasExterior" value="luces-automaticas" @(Model.Formulario?.ExtrasExterior?.Contains("luces-automaticas") == true ? "checked" : "")>
-                            <label for="luces-automaticas">Luces autom√°ticas</label>
+                            <label for="luces-automaticas">Luces autom·ticas</label>
                         </div>
                         <div class="equipment-item">
                             <input type="checkbox" id="retrovisores-retractiles" name="Formulario.ExtrasExterior" value="retrovisores-retractiles" @(Model.Formulario?.ExtrasExterior?.Contains("retrovisores-retractiles") == true ? "checked" : "")>
@@ -525,11 +525,11 @@
                         </div>
                         <div class="equipment-item">
                             <input type="checkbox" id="camaras-parking" name="Formulario.ExtrasSeguridad" value="camaras-parking" @(Model.Formulario?.ExtrasSeguridad?.Contains("camaras-parking") == true ? "checked" : "")>
-                            <label for="camaras-parking">C√°maras de parking</label>
+                            <label for="camaras-parking">C·maras de parking</label>
                         </div>
                         <div class="equipment-item">
                             <input type="checkbox" id="aleron-trasero" name="Formulario.ExtrasExterior" value="aleron-trasero" @(Model.Formulario?.ExtrasExterior?.Contains("aleron-trasero") == true ? "checked" : "")>
-                            <label for="aleron-trasero">Aler√≥n trasero</label>
+                            <label for="aleron-trasero">AlerÛn trasero</label>
                         </div>
                         <div class="equipment-item">
                             <input type="checkbox" id="sensor-lluvia" name="Formulario.ExtrasExterior" value="sensor-lluvia" @(Model.Formulario?.ExtrasExterior?.Contains("sensor-lluvia") == true ? "checked" : "")>
@@ -541,7 +541,7 @@
                         </div>
                         <div class="equipment-item">
                             <input type="checkbox" id="techo-solar" name="Formulario.ExtrasExterior" value="techo-solar" @(Model.Formulario?.ExtrasExterior?.Contains("techo-solar") == true ? "checked" : "")>
-                            <label for="techo-solar">Techo solar / panor√°mico</label>
+                            <label for="techo-solar">Techo solar / panor·mico</label>
                         </div>
                         <div class="equipment-item">
                             <input type="checkbox" id="racks" name="Formulario.ExtrasExterior" value="racks" @(Model.Formulario?.ExtrasExterior?.Contains("racks") == true ? "checked" : "")>
@@ -565,7 +565,7 @@
                         </div>
                         <div class="equipment-item">
                             <input type="checkbox" id="asientos-electricos" name="Formulario.ExtrasInterior" value="asientos-electricos" @(Model.Formulario?.ExtrasInterior?.Contains("asientos-electricos") == true ? "checked" : "")>
-                            <label for="asientos-electricos">Asientos el√©ctricos</label>
+                            <label for="asientos-electricos">Asientos elÈctricos</label>
                         </div>
                         <div class="equipment-item">
                             <input type="checkbox" id="encendido-remoto" name="Formulario.ExtrasInterior" value="encendido-remoto" @(Model.Formulario?.ExtrasInterior?.Contains("encendido-remoto") == true ? "checked" : "")>
@@ -577,7 +577,7 @@
                         </div>
                         <div class="equipment-item">
                             <input type="checkbox" id="boton-arranque" name="Formulario.ExtrasInterior" value="boton-arranque" @(Model.Formulario?.ExtrasInterior?.Contains("boton-arranque") == true ? "checked" : "")>
-                            <label for="boton-arranque">Bot√≥n de arranque</label>
+                            <label for="boton-arranque">BotÛn de arranque</label>
                         </div>
                         <div class="equipment-item">
                             <input type="checkbox" id="llave-inteligente" name="Formulario.ExtrasInterior" value="llave-inteligente" @(Model.Formulario?.ExtrasInterior?.Contains("llave-inteligente") == true ? "checked" : "")>
@@ -585,19 +585,19 @@
                         </div>
                         <div class="equipment-item">
                             <input type="checkbox" id="volante-multifuncion" name="Formulario.ExtrasInterior" value="volante-multifuncion" @(Model.Formulario?.ExtrasInterior?.Contains("volante-multifuncion") == true ? "checked" : "")>
-                            <label for="volante-multifuncion">Volante multifunci√≥n</label>
+                            <label for="volante-multifuncion">Volante multifunciÛn</label>
                         </div>
                         <div class="equipment-item">
                             <input type="checkbox" id="volante-ajustable" name="Formulario.ExtrasInterior" value="volante-ajustable" @(Model.Formulario?.ExtrasInterior?.Contains("volante-ajustable") == true ? "checked" : "")>
-                            <label for="volante-ajustable">Volante ajustable el√©ctricamente</label>
+                            <label for="volante-ajustable">Volante ajustable elÈctricamente</label>
                         </div>
                         <div class="equipment-item">
                             <input type="checkbox" id="iluminacion-ambiental" name="Formulario.ExtrasInterior" value="iluminacion-ambiental" @(Model.Formulario?.ExtrasInterior?.Contains("iluminacion-ambiental") == true ? "checked" : "")>
-                            <label for="iluminacion-ambiental">Iluminaci√≥n ambiental</label>
+                            <label for="iluminacion-ambiental">IluminaciÛn ambiental</label>
                         </div>
                         <div class="equipment-item">
                             <input type="checkbox" id="cargador-inalambrico" name="Formulario.ExtrasMultimedia" value="cargador-inalambrico" @(Model.Formulario?.ExtrasMultimedia?.Contains("cargador-inalambrico") == true ? "checked" : "")>
-                            <label for="cargador-inalambrico">Cargador inal√°mbrico</label>
+                            <label for="cargador-inalambrico">Cargador inal·mbrico</label>
                         </div>
                         <div class="equipment-item">
                             <input type="checkbox" id="persianas-traseras" name="Formulario.ExtrasInterior" value="persianas-traseras" @(Model.Formulario?.ExtrasInterior?.Contains("persianas-traseras") == true ? "checked" : "")>
@@ -605,11 +605,11 @@
                         </div>
                         <div class="equipment-item">
                             <input type="checkbox" id="vidrios-electricos" name="Formulario.ExtrasInterior" value="vidrios-electricos" @(Model.Formulario?.ExtrasInterior?.Contains("vidrios-electricos") == true ? "checked" : "")>
-                            <label for="vidrios-electricos">Vidrios el√©ctricos</label>
+                            <label for="vidrios-electricos">Vidrios elÈctricos</label>
                         </div>
                         <div class="equipment-item">
                             <input type="checkbox" id="maletero-electrico" name="Formulario.ExtrasInterior" value="maletero-electrico" @(Model.Formulario?.ExtrasInterior?.Contains("maletero-electrico") == true ? "checked" : "")>
-                            <label for="maletero-electrico">Maletero el√©ctrico</label>
+                            <label for="maletero-electrico">Maletero elÈctrico</label>
                         </div>
                     </div>
 
@@ -617,7 +617,7 @@
                     <div class="equipment-grid">
                         <div class="equipment-item">
                             <input type="checkbox" id="pantalla-tactil" name="Formulario.ExtrasMultimedia" value="pantalla-tactil" @(Model.Formulario?.ExtrasMultimedia?.Contains("pantalla-tactil") == true ? "checked" : "")>
-                            <label for="pantalla-tactil">Pantalla t√°ctil multimedia</label>
+                            <label for="pantalla-tactil">Pantalla t·ctil multimedia</label>
                         </div>
                         <div class="equipment-item">
                             <input type="checkbox" id="android-carplay" name="Formulario.ExtrasMultimedia" value="android-carplay" @(Model.Formulario?.ExtrasMultimedia?.Contains("android-carplay") == true ? "checked" : "")>
@@ -625,7 +625,7 @@
                         </div>
                         <div class="equipment-item">
                             <input type="checkbox" id="navegacion-gps" name="Formulario.ExtrasMultimedia" value="navegacion-gps" @(Model.Formulario?.ExtrasMultimedia?.Contains("navegacion-gps") == true ? "checked" : "")>
-                            <label for="navegacion-gps">Navegaci√≥n GPS</label>
+                            <label for="navegacion-gps">NavegaciÛn GPS</label>
                         </div>
                         <div class="equipment-item">
                             <input type="checkbox" id="bluetooth-usb" name="Formulario.ExtrasMultimedia" value="bluetooth-usb" @(Model.Formulario?.ExtrasMultimedia?.Contains("bluetooth-usb") == true ? "checked" : "")>
@@ -641,7 +641,7 @@
                         </div>
                         <div class="equipment-item">
                             <input type="checkbox" id="cluster-digital" name="Formulario.ExtrasMultimedia" value="cluster-digital" @(Model.Formulario?.ExtrasMultimedia?.Contains("cluster-digital") == true ? "checked" : "")>
-                            <label for="cluster-digital">Cl√∫ster digital</label>
+                            <label for="cluster-digital">Cl˙ster digital</label>
                         </div>
                         <div class="equipment-item">
                             <input type="checkbox" id="wifi" name="Formulario.ExtrasMultimedia" value="wifi" @(Model.Formulario?.ExtrasMultimedia?.Contains("wifi") == true ? "checked" : "")>
@@ -657,7 +657,7 @@
                         </div>
                         <div class="equipment-item">
                             <input type="checkbox" id="tomacorrientes" name="Formulario.ExtrasMultimedia" value="tomacorrientes" @(Model.Formulario?.ExtrasMultimedia?.Contains("tomacorrientes") == true ? "checked" : "")>
-                            <label for="tomacorrientes">Tomacorriente 12V / USB-C / tomas dom√©sticas</label>
+                            <label for="tomacorrientes">Tomacorriente 12V / USB-C / tomas domÈsticas</label>
                         </div>
                     </div>
 
@@ -669,7 +669,7 @@
                         </div>
                         <div class="equipment-item">
                             <input type="checkbox" id="control-traccion" name="Formulario.ExtrasSeguridad" value="control-traccion" @(Model.Formulario?.ExtrasSeguridad?.Contains("control-traccion") == true ? "checked" : "")>
-                            <label for="control-traccion">Control de tracci√≥n</label>
+                            <label for="control-traccion">Control de tracciÛn</label>
                         </div>
                         <div class="equipment-item">
                             <input type="checkbox" id="control-estabilidad" name="Formulario.ExtrasSeguridad" value="control-estabilidad" @(Model.Formulario?.ExtrasSeguridad?.Contains("control-estabilidad") == true ? "checked" : "")>
@@ -681,15 +681,15 @@
                         </div>
                         <div class="equipment-item">
                             <input type="checkbox" id="freno-emergencia" name="Formulario.ExtrasSeguridad" value="freno-emergencia" @(Model.Formulario?.ExtrasSeguridad?.Contains("freno-emergencia") == true ? "checked" : "")>
-                            <label for="freno-emergencia">Freno autom√°tico de emergencia</label>
+                            <label for="freno-emergencia">Freno autom·tico de emergencia</label>
                         </div>
                         <div class="equipment-item">
                             <input type="checkbox" id="colision-frontal" name="Formulario.ExtrasSeguridad" value="colision-frontal" @(Model.Formulario?.ExtrasSeguridad?.Contains("colision-frontal") == true ? "checked" : "")>
-                            <label for="colision-frontal">Advertencia de colisi√≥n frontal</label>
+                            <label for="colision-frontal">Advertencia de colisiÛn frontal</label>
                         </div>
                         <div class="equipment-item">
                             <input type="checkbox" id="deteccion-peatones" name="Formulario.ExtrasSeguridad" value="deteccion-peatones" @(Model.Formulario?.ExtrasSeguridad?.Contains("deteccion-peatones") == true ? "checked" : "")>
-                            <label for="deteccion-peatones">Detecci√≥n de peatones / ciclistas</label>
+                            <label for="deteccion-peatones">DetecciÛn de peatones / ciclistas</label>
                         </div>
                         <div class="equipment-item">
                             <input type="checkbox" id="mantenimiento-carril" name="Formulario.ExtrasSeguridad" value="mantenimiento-carril" @(Model.Formulario?.ExtrasSeguridad?.Contains("mantenimiento-carril") == true ? "checked" : "")>
@@ -705,11 +705,11 @@
                         </div>
                         <div class="equipment-item">
                             <input type="checkbox" id="monitor-presion" name="Formulario.ExtrasSeguridad" value="monitor-presion" @(Model.Formulario?.ExtrasSeguridad?.Contains("monitor-presion") == true ? "checked" : "")>
-                            <label for="monitor-presion">Monitor de presi√≥n de neum√°ticos</label>
+                            <label for="monitor-presion">Monitor de presiÛn de neum·ticos</label>
                         </div>
                     </div>
 
-                    <h2>Desempe√±o</h2>
+                    <h2>DesempeÒo</h2>
                     <div class="equipment-grid">
                         <div class="equipment-item">
                             <input type="checkbox" id="modos-manejo" name="Formulario.ExtrasRendimiento" value="modos-manejo" @(Model.Formulario?.ExtrasRendimiento?.Contains("modos-manejo") == true ? "checked" : "")>
@@ -717,7 +717,7 @@
                         </div>
                         <div class="equipment-item">
                             <input type="checkbox" id="direccion-asistida" name="Formulario.ExtrasRendimiento" value="direccion-asistida" @(Model.Formulario?.ExtrasRendimiento?.Contains("direccion-asistida") == true ? "checked" : "")>
-                            <label for="direccion-asistida">Direcci√≥n asistida</label>
+                            <label for="direccion-asistida">DirecciÛn asistida</label>
                         </div>
                         <div class="equipment-item">
                             <input type="checkbox" id="turbo" name="Formulario.ExtrasRendimiento" value="turbo" @(Model.Formulario?.ExtrasRendimiento?.Contains("turbo") == true ? "checked" : "")>
@@ -729,7 +729,7 @@
                         </div>
                         <div class="equipment-item">
                             <input type="checkbox" id="suspension-adaptativa" name="Formulario.ExtrasRendimiento" value="suspension-adaptativa" @(Model.Formulario?.ExtrasRendimiento?.Contains("suspension-adaptativa") == true ? "checked" : "")>
-                            <label for="suspension-adaptativa">Suspensi√≥n adaptativa</label>
+                            <label for="suspension-adaptativa">SuspensiÛn adaptativa</label>
                         </div>
                         <div class="equipment-item">
                             <input type="checkbox" id="freno-regenerativo" name="Formulario.ExtrasRendimiento" value="freno-regenerativo" @(Model.Formulario?.ExtrasRendimiento?.Contains("freno-regenerativo") == true ? "checked" : "")>
@@ -759,32 +759,32 @@
                 </div>
             </div> <!-- Cierre del container -->
 
-                <!-- Section 3: Ubicaci√≥n -->
+                <!-- Section 3: UbicaciÛn -->
                 <div class="form-section" data-section="3" id="seccion3">
-                    <h2>Ubicaci√≥n</h2>
+                    <h2>UbicaciÛn</h2>
                     <div class="form-grid">
                         <div class="form-group">
                             <label for="provincia">Provincia <span class="required">*</span></label>
                             <select id="provincia" name="Formulario.Provincia" required onchange="updateCantones(this)">
                                 <option value="">Elige una provincia</option>
-                                <option value="San Jos√©">San Jos√©</option>
+                                <option value="San JosÈ">San JosÈ</option>
                                 <option value="Alajuela">Alajuela</option>
                                 <option value="Cartago">Cartago</option>
                                 <option value="Heredia">Heredia</option>
                                 <option value="Guanacaste">Guanacaste</option>
                                 <option value="Puntarenas">Puntarenas</option>
-                                <option value="Lim√≥n">Lim√≥n</option>
+                                <option value="LimÛn">LimÛn</option>
                             </select>
                         </div>
                         <div class="form-group">
-                            <label for="canton">Cant√≥n <span class="optional">(Opcional)</span></label>
+                            <label for="canton">CantÛn <span class="optional">(Opcional)</span></label>
                             <select id="canton" name="Formulario.Canton">
-                                <option value="">Elige un cant√≥n</option>
+                                <option value="">Elige un cantÛn</option>
                             </select>
                         </div>
                         <div class="form-group full-width">
-                            <label for="ubicacion-exacta">Ubicaci√≥n exacta del veh√≠culo <span class="optional">(Opcional)</span></label>
-                            <textarea id="ubicacion-exacta" name="Formulario.UbicacionExacta" placeholder="Escribe direcci√≥n exacta" rows="6"></textarea>
+                            <label for="ubicacion-exacta">UbicaciÛn exacta del vehÌculo <span class="optional">(Opcional)</span></label>
+                            <textarea id="ubicacion-exacta" name="Formulario.UbicacionExacta" placeholder="Escribe direcciÛn exacta" rows="6"></textarea>
                         </div>
                     </div>
                 </div>
@@ -798,32 +798,32 @@
                     
                     <div class="plan-options">
                         <div class="plan-option">
-                            <input type="radio" id="plan-instantaneo" name="Formulario.PlanVisibilidad" value="1" data-price="2500" data-plan-name="Posteo instant√°neo">
+                            <input type="radio" id="plan-instantaneo" name="Formulario.PlanVisibilidad" value="1" data-price="2500" data-plan-name="Posteo instant·neo">
                             <label for="plan-instantaneo" class="plan-card">
                                 <div class="plan-content">
-                                    <h3>Posteo instant√°neo</h3>
-                                    <p>Seleccione esta opci√≥n si desea que su anuncio se publique inmediatamente, sin necesidad de esperar nuestra aprobaci√≥n.</p>
+                                    <h3>Posteo instant·neo</h3>
+                                    <p>Seleccione esta opciÛn si desea que su anuncio se publique inmediatamente, sin necesidad de esperar nuestra aprobaciÛn.</p>
                                 </div>
                                 <div class="plan-price">
-                                    <span class="price">‚Ç°2500</span>
-                                    <span class="price-usd">‚âà($5)</span>
+                                    <span class="price">¢2500</span>
+                                    <span class="price-usd">ò($5)</span>
                                 </div>
                             </label>
                         </div>
 
                         <div class="plan-option">
-                            <input type="radio" id="plan-super" name="Formulario.PlanVisibilidad" value="2" data-price="9500" data-plan-name="S√∫per visible">
+                            <input type="radio" id="plan-super" name="Formulario.PlanVisibilidad" value="2" data-price="9500" data-plan-name="S˙per visible">
                             <label for="plan-super" class="plan-card">
                                 <div class="plan-content">
-                                    <h3>S√∫per visible <span class="plan-addon">+ posteo instant√°neo</span></h3>
-                                    <p>Su anuncio se mostrar√° como "Destacado" en la secci√≥n correspondiente, seg√∫n lo que los usuarios est√©n buscando.<br/>
-                                    Su anuncio aparecer√° de forma temporal en la p√°gina principal, dependiendo de cu√°ntos anuncios destacados haya en ese momento.<br/>
-                                    Podr√° subir 8 fotograf√≠as en vez de 5.<br/>
-                                    Su anuncio se publicar√° instant√°neamente.</p>
+                                    <h3>S˙per visible <span class="plan-addon">+ posteo instant·neo</span></h3>
+                                    <p>Su anuncio se mostrar· como "Destacado" en la secciÛn correspondiente, seg˙n lo que los usuarios estÈn buscando.<br/>
+                                    Su anuncio aparecer· de forma temporal en la p·gina principal, dependiendo de cu·ntos anuncios destacados haya en ese momento.<br/>
+                                    Podr· subir 8 fotografÌas en vez de 5.<br/>
+                                    Su anuncio se publicar· instant·neamente.</p>
                                 </div>
                                 <div class="plan-price">
-                                    <span class="price">‚Ç°9500</span>
-                                    <span class="price-usd">‚âà($19)</span>
+                                    <span class="price">¢9500</span>
+                                    <span class="price-usd">ò($19)</span>
                                 </div>
                             </label>
                         </div>
@@ -832,32 +832,32 @@
                             <input type="radio" id="plan-ultra" name="Formulario.PlanVisibilidad" value="3" data-price="12900" data-plan-name="Ultra visible">
                             <label for="plan-ultra" class="plan-card">
                                 <div class="plan-content">
-                                    <h3>Ultra visible <span class="plan-addon">+ posteo instant√°neo</span></h3>
-                                    <p>Su anuncio se mostrar√° como "Destacado" en la secci√≥n correspondiente, seg√∫n lo que los usuarios est√©n buscando.<br/>
-                                    Su anuncio aparecer√° de forma temporal en la p√°gina principal, dependiendo de cu√°ntos anuncios destacados haya en ese momento.<br/>
-                                    Podr√° subir 10 fotograf√≠as en vez de 5.<br/>
-                                    Podr√° subir un video de su veh√≠culo.<br/>
+                                    <h3>Ultra visible <span class="plan-addon">+ posteo instant·neo</span></h3>
+                                    <p>Su anuncio se mostrar· como "Destacado" en la secciÛn correspondiente, seg˙n lo que los usuarios estÈn buscando.<br/>
+                                    Su anuncio aparecer· de forma temporal en la p·gina principal, dependiendo de cu·ntos anuncios destacados haya en ese momento.<br/>
+                                    Podr· subir 10 fotografÌas en vez de 5.<br/>
+                                    Podr· subir un video de su vehÌculo.<br/>
                                     Posteamos su anuncio en nuestras redes sociales.<br/>
-                                    Su anuncio se publicar√° instant√°neamente.</p>
+                                    Su anuncio se publicar· instant·neamente.</p>
                                 </div>
                                 <div class="plan-price">
-                                    <span class="price">‚Ç°12900</span>
-                                    <span class="price-usd">‚âà($25)</span>
+                                    <span class="price">¢12900</span>
+                                    <span class="price-usd">ò($25)</span>
                                 </div>
                             </label>
                         </div>
 
                         <div class="plan-option">
-                            <input type="radio" id="plan-profesional" name="Formulario.PlanVisibilidad" value="4" data-price="47500" data-plan-name="Fotograf√≠a profesional">
+                            <input type="radio" id="plan-profesional" name="Formulario.PlanVisibilidad" value="4" data-price="47500" data-plan-name="FotografÌa profesional">
                             <label for="plan-profesional" class="plan-card">
                                 <div class="plan-content">
-                                    <h3>Fotograf√≠a profesional</h3>
-                                    <p>Todo lo inclu√≠do en el "Ultra visible".<br/>
-                                    Una sesi√≥n fotogr√°fica profesional de su veh√≠culo a domicilio dentro de la GAM.</p>
+                                    <h3>FotografÌa profesional</h3>
+                                    <p>Todo lo incluÌdo en el "Ultra visible".<br/>
+                                    Una sesiÛn fotogr·fica profesional de su vehÌculo a domicilio dentro de la GAM.</p>
                                 </div>
                                 <div class="plan-price">
-                                    <span class="price">‚Ç°47500</span>
-                                    <span class="price-usd">‚âà($95)</span>
+                                    <span class="price">¢47500</span>
+                                    <span class="price-usd">ò($95)</span>
                                 </div>
                             </label>
                         </div>
@@ -874,36 +874,36 @@
                     <div class="tags-grid">
                         @{
                             var tags = new[] {
-                                new { id = "version-americana", name = "Versi√≥n Americana", file = "Versi√≥n Americana.gif", price = "‚Ç°5000" },
-                                new { id = "unico-dueno", name = "√önico Due√±o", file = "√öNICO DUE√ëO.gif", price = "‚Ç°5000" },
-                                new { id = "full-extras", name = "Full Extras", file = "FULL EXTRAS-.gif", price = "‚Ç°5000" },
-                                new { id = "mantenimiento-agencia", name = "Mantenimiento de Agencia", file = "MANTENIMIENTO DE AGENCIA-.gif", price = "‚Ç°5000" },
-                                new { id = "perfecto-estado", name = "Perfecto Estado", file = "PERFECTO ESTADO.gif", price = "‚Ç°5000" },
-                                new { id = "al-dia", name = "Al D√≠a", file = "AL D√çA.gif", price = "‚Ç°5000" },
-                                new { id = "bajo-kilometraje", name = "Bajo Kilometraje", file = "BAJO KILOMETRAJE.gif", price = "‚Ç°5000" },
-                                new { id = "negociable", name = "Negociable", file = "NEGOCIABLE.gif", price = "‚Ç°5000" },
-                                new { id = "financiamiento-disponible", name = "Financiamiento Disponible", file = "FINANCIAMIENTO DISPONIBLE.gif", price = "‚Ç°5000" },
-                                new { id = "escucho-ofertas", name = "Escucho Ofertas", file = "ESCUCHO OFERTAS.gif", price = "‚Ç°5000" },
-                                new { id = "impecable", name = "Impecable", file = "IMPECABLE.gif", price = "‚Ç°5000" },
-                                new { id = "cero-detalles", name = "Cero Detalles", file = "CERO DETALLES.gif", price = "‚Ç°5000" },
-                                new { id = "poco-uso", name = "Poco Uso", file = "POCO USO.gif", price = "‚Ç°5000" },
-                                new { id = "registro-limpio", name = "Registro Limpio", file = "REGISTRO LIMPIO.gif", price = "‚Ç°5000" },
-                                new { id = "traspaso-incluido", name = "Traspaso Inclu√≠do", file = "TRASPASO INCLU√çDO.gif", price = "‚Ç°5000" },
-                                new { id = "recibo", name = "Recibo", file = "RECIBO.gif", price = "‚Ç°5000" },
-                                new { id = "vendo-o-cambio", name = "Vendo o Cambio", file = "VENDO O CAMBIO.gif", price = "‚Ç°5000" },
-                                new { id = "urge-vender", name = "Urge Vender", file = "URGE VENDER.gif", price = "‚Ç°5000" },
-                                new { id = "precio-especial", name = "Precio Especial", file = "PRECIO ESPECIAL.gif", price = "‚Ç°5000" },
-                                new { id = "oportunidad-unica", name = "Oportunidad √önica", file = "OPORTUNIDAD UNICA.gif", price = "‚Ç°5000" },
-                                new { id = "llame-ahora", name = "Llame Ahora", file = "LLAME AHORA.gif", price = "‚Ç°5000" },
-                                new { id = "unico-en-el-pais", name = "√önico en el Pa√≠s", file = "√öNICO EN EL PA√çS.gif", price = "‚Ç°5000" },
-                                new { id = "edicion-limitada", name = "Edici√≥n Limitada", file = "EDICI√ìN LIMITADA.gif", price = "‚Ç°5000" },
-                                new { id = "para-inscribir", name = "Para Inscribir", file = "PARA INSCRIBIR.gif", price = "‚Ç°5000" },
-                                new { id = "bajo-consumo", name = "Bajo Consumo", file = "BAJO CONSUMO.gif", price = "‚Ç°5000" },
-                                new { id = "garantia-extendida", name = "Garant√≠a Extendida", file = "GARANT√çA EXTENDIDA.gif", price = "‚Ç°5000" },
-                                new { id = "full-ppf", name = "Full PPF", file = "FULL PPF.gif", price = "‚Ç°5000" },
-                                new { id = "tratamiento-ceramico", name = "Tratamiento Cer√°mico", file = "TRATAMIENTO CER√ÅMICO.gif", price = "‚Ç°5000" },
-                                new { id = "taylor-made", name = "Taylor Made", file = "TAYLOR MADE.gif", price = "‚Ç°5000" },
-                                new { id = "cedo-deuda", name = "Cedo Deuda", file = "CEDO DEUDA.gif", price = "‚Ç°5000" }
+                                new { id = "version-americana", name = "VersiÛn Americana", file = "VersiÛn Americana.gif", price = "¢5000" },
+                                new { id = "unico-dueno", name = "⁄nico DueÒo", file = "⁄NICO DUE—O.gif", price = "¢5000" },
+                                new { id = "full-extras", name = "Full Extras", file = "FULL EXTRAS-.gif", price = "¢5000" },
+                                new { id = "mantenimiento-agencia", name = "Mantenimiento de Agencia", file = "MANTENIMIENTO DE AGENCIA-.gif", price = "¢5000" },
+                                new { id = "perfecto-estado", name = "Perfecto Estado", file = "PERFECTO ESTADO.gif", price = "¢5000" },
+                                new { id = "al-dia", name = "Al DÌa", file = "AL DÕA.gif", price = "¢5000" },
+                                new { id = "bajo-kilometraje", name = "Bajo Kilometraje", file = "BAJO KILOMETRAJE.gif", price = "¢5000" },
+                                new { id = "negociable", name = "Negociable", file = "NEGOCIABLE.gif", price = "¢5000" },
+                                new { id = "financiamiento-disponible", name = "Financiamiento Disponible", file = "FINANCIAMIENTO DISPONIBLE.gif", price = "¢5000" },
+                                new { id = "escucho-ofertas", name = "Escucho Ofertas", file = "ESCUCHO OFERTAS.gif", price = "¢5000" },
+                                new { id = "impecable", name = "Impecable", file = "IMPECABLE.gif", price = "¢5000" },
+                                new { id = "cero-detalles", name = "Cero Detalles", file = "CERO DETALLES.gif", price = "¢5000" },
+                                new { id = "poco-uso", name = "Poco Uso", file = "POCO USO.gif", price = "¢5000" },
+                                new { id = "registro-limpio", name = "Registro Limpio", file = "REGISTRO LIMPIO.gif", price = "¢5000" },
+                                new { id = "traspaso-incluido", name = "Traspaso IncluÌdo", file = "TRASPASO INCLUÕDO.gif", price = "¢5000" },
+                                new { id = "recibo", name = "Recibo", file = "RECIBO.gif", price = "¢5000" },
+                                new { id = "vendo-o-cambio", name = "Vendo o Cambio", file = "VENDO O CAMBIO.gif", price = "¢5000" },
+                                new { id = "urge-vender", name = "Urge Vender", file = "URGE VENDER.gif", price = "¢5000" },
+                                new { id = "precio-especial", name = "Precio Especial", file = "PRECIO ESPECIAL.gif", price = "¢5000" },
+                                new { id = "oportunidad-unica", name = "Oportunidad ⁄nica", file = "OPORTUNIDAD UNICA.gif", price = "¢5000" },
+                                new { id = "llame-ahora", name = "Llame Ahora", file = "LLAME AHORA.gif", price = "¢5000" },
+                                new { id = "unico-en-el-pais", name = "⁄nico en el PaÌs", file = "⁄NICO EN EL PAÕS.gif", price = "¢5000" },
+                                new { id = "edicion-limitada", name = "EdiciÛn Limitada", file = "EDICI”N LIMITADA.gif", price = "¢5000" },
+                                new { id = "para-inscribir", name = "Para Inscribir", file = "PARA INSCRIBIR.gif", price = "¢5000" },
+                                new { id = "bajo-consumo", name = "Bajo Consumo", file = "BAJO CONSUMO.gif", price = "¢5000" },
+                                new { id = "garantia-extendida", name = "GarantÌa Extendida", file = "GARANTÕA EXTENDIDA.gif", price = "¢5000" },
+                                new { id = "full-ppf", name = "Full PPF", file = "FULL PPF.gif", price = "¢5000" },
+                                new { id = "tratamiento-ceramico", name = "Tratamiento Cer·mico", file = "TRATAMIENTO CER¡MICO.gif", price = "¢5000" },
+                                new { id = "taylor-made", name = "Taylor Made", file = "TAYLOR MADE.gif", price = "¢5000" },
+                                new { id = "cedo-deuda", name = "Cedo Deuda", file = "CEDO DEUDA.gif", price = "¢5000" }
                             };
                         }
                         @foreach(var tag in tags)
@@ -927,26 +927,26 @@
                     </div>
                 </div>
 
-                <!-- Section 6: M√©todo de pago -->
+                <!-- Section 6: MÈtodo de pago -->
                 <div class="form-section" data-section="6" id="seccion6">
-                    <h2>Selecciona m√©todo de pago</h2>
+                    <h2>Selecciona mÈtodo de pago</h2>
                     
                     <div class="payment-tabs">
-                        <div class="payment-tab active" data-tab="tarjeta">Tarjeta de d√©bito/cr√©dito</div>
+                        <div class="payment-tab active" data-tab="tarjeta">Tarjeta de dÈbito/crÈdito</div>
                     </div>
 
                     <div class="payment-content">
                         <div class="payment-form">
                             <div class="form-group full-width">
-                                <label for="numero-tarjeta">N√∫mero de tarjeta <span class="required">*</span></label>
-                                <input type="text" id="numero-tarjeta" name="numero-tarjeta" placeholder="Introducir n√∫mero de tarjeta" required>
+                                <label for="numero-tarjeta">N˙mero de tarjeta <span class="required">*</span></label>
+                                <input type="text" id="numero-tarjeta" name="numero-tarjeta" placeholder="Introducir n˙mero de tarjeta" required>
                             </div>
                             <div class="form-group full-width">
                                 <label for="nombre-tarjeta">Nombre de la tarjeta <span class="required">*</span></label>
                                 <input type="text" id="nombre-tarjeta" name="nombre-tarjeta" placeholder="Introducir nombre de la tarjeta" required>
                             </div>
                             <div class="form-group">
-                                <label for="fecha-expiracion">Fecha de expiraci√≥n <span class="required">*</span></label>
+                                <label for="fecha-expiracion">Fecha de expiraciÛn <span class="required">*</span></label>
                                 <input type="text" id="fecha-expiracion" name="fecha-expiracion" placeholder="mm/aa" required>
                             </div>
                             <div class="form-group">
@@ -957,7 +957,7 @@
                             <div class="payment-options">
                                 <div class="payment-option">
                                     <input type="checkbox" id="acepto-terminos" name="acepto-terminos" required>
-                                    <label for="acepto-terminos">Acepto <a href="/TerminosCondiciones" target="_blank" class="terms-link">t√©rminos y condiciones</a> <span class="required">*</span></label>
+                                    <label for="acepto-terminos">Acepto <a href="/TerminosCondiciones" target="_blank" class="terms-link">tÈrminos y condiciones</a> <span class="required">*</span></label>
                                 </div>
                             </div>
                         </div>
@@ -969,27 +969,27 @@
                             <h3>Desglose de pago</h3>
                             <div class="summary-line" id="summary-plan">
                                 <span>Plan seleccionado</span>
-                                <span>‚Ç°0</span>
+                                <span>¢0</span>
                             </div>
                             <div class="summary-line" id="summary-tag">
-                                <span>Bander√≠n seleccionado</span>
-                                <span>‚Ç°0</span>
+                                <span>BanderÌn seleccionado</span>
+                                <span>¢0</span>
                             </div>
                             <div class="summary-line" id="summary-subtotal">
                                 <span>Subtotal</span>
-                                <span>‚Ç°0</span>
+                                <span>¢0</span>
                             </div>
                             <div class="summary-line" id="summary-iva">
                                 <span>IVA (13%)</span>
-                                <span>‚Ç°0</span>
+                                <span>¢0</span>
                             </div>
                             <div class="summary-line" id="summary-service">
                                 <span>Tarifa por servicio</span>
-                                <span>‚Ç°180</span>
+                                <span>¢180</span>
                             </div>
                             <div class="summary-total">
                                 <span>Total</span>
-                                <span class="total-amount">‚Ç°180</span>
+                                <span class="total-amount">¢180</span>
                             </div>
                         </div>
                     </div>
@@ -1000,12 +1000,12 @@
                     <h2>Subir archivos multimedia</h2>
                     
                     <div class="upload-info" style="background: rgba(255, 255, 255, 0.05); padding: 16px; border-radius: 8px; margin-bottom: 24px; border-left: 4px solid #00CC00;">
-                        <p style="color: rgba(255, 255, 255, 0.9); font-size: 14px; margin: 0 0 8px 0; font-weight: 600;">üí° Consejos para mejores fotos:</p>
+                        <p style="color: rgba(255, 255, 255, 0.9); font-size: 14px; margin: 0 0 8px 0; font-weight: 600;">?? Consejos para mejores fotos:</p>
                         <ul style="color: rgba(255, 255, 255, 0.7); font-size: 13px; margin: 0; padding-left: 20px;">
-                            <li>Use buena iluminaci√≥n natural</li>
-                            <li>Muestre el veh√≠culo desde diferentes √°ngulos</li>
+                            <li>Use buena iluminaciÛn natural</li>
+                            <li>Muestre el vehÌculo desde diferentes ·ngulos</li>
                             <li>Incluya fotos del interior y exterior</li>
-                            <li>Las im√°genes se ajustar√°n autom√°ticamente para mostrarse completas</li>
+                            <li>Las im·genes se ajustar·n autom·ticamente para mostrarse completas</li>
                         </ul>
                     </div>
                     
@@ -1016,15 +1016,15 @@
                         <div class="upload-area photos">
                             <div class="upload-placeholder">
                                 <div class="upload-icon"></div>
-                                <p>üì∏ Subir m√°ximo 10 fotos</p>
-                                <small style="color: rgba(255,255,255,0.6); font-size: 12px;">Haga clic o arrastre las im√°genes aqu√≠</small>
+                                <p>?? Subir m·ximo 10 fotos</p>
+                                <small style="color: rgba(255,255,255,0.6); font-size: 12px;">Haga clic o arrastre las im·genes aquÌ</small>
                             </div>
                         </div>
                         
                         <div class="upload-area video">
                             <div class="upload-placeholder">
                                 <div class="play-icon"></div>
-                                <p>üé¨ Subir 1 video</p>
+                                <p>?? Subir 1 video</p>
                                 <small style="color: rgba(255,255,255,0.6); font-size: 12px;">Formatos soportados: MP4, MOV, AVI</small>
                             </div>
                         </div>
@@ -1034,18 +1034,18 @@
                         <h3>Seleccionar imagen principal</h3>
                         <p style="color: rgba(255, 255, 255, 0.7); font-size: 14px; margin-bottom: 20px;">Haga clic en la imagen que desea que aparezca como principal en su anuncio</p>
                         <div class="uploaded-photos-grid">
-                            <!-- Las im√°genes se agregar√°n din√°micamente aqu√≠ -->
+                            <!-- Las im·genes se agregar·n din·micamente aquÌ -->
                         </div>
                     </div>
                 </div>
 
-                <!-- Section 8: Confirmaci√≥n -->
+                <!-- Section 8: ConfirmaciÛn -->
                 <div class="form-section" data-section="8" id="seccion8">
                     <div class="confirmation-content">
                         <div class="success-icon">
                             <div class="checkmark"></div>
                         </div>
-                        <h2>¬°Tu auto ha sido publicado!</h2>
+                        <h2>°Tu auto ha sido publicado!</h2>
                         
                         <div class="confirmation-actions">
                             <button type="button" class="btn-upgrade">
@@ -1070,14 +1070,14 @@
 
     <!-- How it works section -->
     <div class="how-it-works">
-        <h2>¬øComo funciona?</h2>
-        <p>Publicar su veh√≠culo es r√°pido, f√°cil y 100% en l√≠nea. Siga estos 3 simples pasos:</p>
+        <h2>øComo funciona?</h2>
+        <p>Publicar su vehÌculo es r·pido, f·cil y 100% en lÌnea. Siga estos 3 simples pasos:</p>
         
         <div class="steps">
             <div class="step">
                 <div class="step-icon"></div>
                 <h3>Paso 1</h3>
-                <p>Haga click en "Anunciar mi veh√≠culo"</p>
+                <p>Haga click en "Anunciar mi vehÌculo"</p>
             </div>
             <div class="step">
                 <div class="step-icon"></div>
@@ -1087,7 +1087,7 @@
             <div class="step">
                 <div class="step-icon"></div>
                 <h3>Paso 3</h3>
-                <p>Suba las mejores fotos de su veh√≠culo y ¬°LISTO!</p>
+                <p>Suba las mejores fotos de su vehÌculo y °LISTO!</p>
             </div>
         </div>
     </div>
@@ -1098,48 +1098,48 @@
         <div class="faq-list">
             <div class="faq-item" data-faq="1">
                 <div class="faq-question">
-                    <span>¬øHay alg√∫n costo por publicar?</span>
+                    <span>øHay alg˙n costo por publicar?</span>
                     <div class="faq-toggle"></div>
                 </div>
                 <div class="faq-answer">
                     <div>
-                        <p>La publicaci√≥n b√°sica es gratuita. Tambi√©n ofrecemos opciones de promoci√≥n pagada para que su anuncio tenga m√°s visibilidad.</p>
+                        <p>La publicaciÛn b·sica es gratuita. TambiÈn ofrecemos opciones de promociÛn pagada para que su anuncio tenga m·s visibilidad.</p>
                     </div>
                 </div>
             </div>
             
             <div class="faq-item" data-faq="2">
                 <div class="faq-question">
-                    <span>¬øPuedo editar los datos luego de publicar?</span>
+                    <span>øPuedo editar los datos luego de publicar?</span>
                     <div class="faq-toggle"></div>
                 </div>
                 <div class="faq-answer">
                     <div>
-                        <p>Claro. Usted puede modificar cualquier dato del anuncio (precio, descripci√≥n, fotos, etc.) desde su panel de usuario.</p>
+                        <p>Claro. Usted puede modificar cualquier dato del anuncio (precio, descripciÛn, fotos, etc.) desde su panel de usuario.</p>
                     </div>
                 </div>
             </div>
             
             <div class="faq-item" data-faq="3">
                 <div class="faq-question">
-                    <span>¬øMi informaci√≥n de contacto es p√∫blica?</span>
+                    <span>øMi informaciÛn de contacto es p˙blica?</span>
                     <div class="faq-toggle"></div>
                 </div>
                 <div class="faq-answer">
                     <div>
-                        <p>Solo mostramos la informaci√≥n necesaria para que los interesados le contacten. Su correo, datos personales y placa del veh√≠culo no se muestran p√∫blicamente.</p>
+                        <p>Solo mostramos la informaciÛn necesaria para que los interesados le contacten. Su correo, datos personales y placa del vehÌculo no se muestran p˙blicamente.</p>
                     </div>
                 </div>
             </div>
             
             <div class="faq-item" data-faq="4">
                 <div class="faq-question">
-                    <span>¬øPuedo guardar el formulario y continuar despu√©s?</span>
+                    <span>øPuedo guardar el formulario y continuar despuÈs?</span>
                     <div class="faq-toggle"></div>
                 </div>
                 <div class="faq-answer">
                     <div>
-                        <p>No. Si abandona el formulario antes de publicarlo, se perder√°n todos los datos.</p>
+                        <p>No. Si abandona el formulario antes de publicarlo, se perder·n todos los datos.</p>
                     </div>
                 </div>
             </div>
@@ -1153,5 +1153,3 @@
 </div>
 
 <!-- Footer -->
-<partial name="_Footer" />
-

@@ -1,0 +1,169 @@
+<!-- Header Responsive (Mobile & Tablet) -->
+<header class="header-responsive">
+    <div class="header-responsive-container">
+        <!-- Logo -->
+        <a asp-page="/Index" class="logo-responsive">
+            <img src="~/images/logos/autoclick-logo-hd.png" alt="AutoClick.cr" />
+        </a>
+        
+        <!-- Actions -->
+        <div class="header-responsive-actions">
+            <!-- Favorites Button -->
+            <a asp-page="/Guardados" class="favorites-btn-responsive" title="Mis Favoritos">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M12 21.35L10.55 20.03C5.4 15.36 2 12.28 2 8.5C2 5.42 4.42 3 7.5 3C9.24 3 10.91 3.81 12 5.09C13.09 3.81 14.76 3 16.5 3C19.58 3 22 5.42 22 8.5C22 12.28 18.6 15.36 13.45 20.04L12 21.35Z" stroke="white" stroke-width="2" fill="none"/>
+                </svg>
+            </a>
+            
+            <!-- Hamburger Menu Button -->
+            <button class="hamburger-btn" id="hamburgerBtn" aria-label="Menú">
+                <span></span>
+                <span></span>
+                <span></span>
+            </button>
+        </div>
+    </div>
+    
+    <!-- Menu Overlay -->
+    <div class="menu-overlay" id="menuOverlay">
+        <div class="menu-content">
+            <!-- Close Button -->
+            <button class="menu-close-btn" id="menuCloseBtn" aria-label="Cerrar menú">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M18 6L6 18M6 6L18 18" stroke="white" stroke-width="2" stroke-linecap="round"/>
+                </svg>
+            </button>
+            
+            <!-- User Info Section -->
+            @{
+                bool isUserLoggedIn = User.Identity?.IsAuthenticated == true;
+                string userName = User.Identity?.Name ?? User.FindFirst(System.Security.Claims.ClaimTypes.Name)?.Value ?? User.FindFirst("FullName")?.Value ?? "Usuario";
+                bool isAdmin = User.FindFirst("IsAdmin")?.Value == "true";
+            }
+            
+            @if (isUserLoggedIn)
+            {
+                <div class="menu-user-info">
+                    <svg width="40" height="40" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <circle cx="20" cy="20" r="19" stroke="white" stroke-width="2"/>
+                        <path d="M20 22C23.3137 22 26 19.3137 26 16C26 12.6863 23.3137 10 20 10C16.6863 10 14 12.6863 14 16C14 19.3137 16.6863 22 20 22Z" stroke="white" stroke-width="2"/>
+                        <path d="M10 34C10 27.3726 14.4772 22 20 22C25.5228 22 30 27.3726 30 34" stroke="white" stroke-width="2"/>
+                    </svg>
+                    <span class="menu-user-name">@userName</span>
+                </div>
+                
+                @if (isAdmin)
+                {
+                    <a asp-page="/Admin/Dashboard" class="menu-item menu-item-admin">
+                        <span>⚙️</span> Panel de administrador
+                    </a>
+                }
+                
+                <a asp-page="/MiPerfil" class="menu-item">Mi perfil</a>
+                <a asp-page="/MisAnuncios" class="menu-item">Mis anuncios</a>
+                <div class="menu-divider"></div>
+            }
+            else
+            {
+                <a asp-page="/Auth" class="menu-item menu-item-auth">Inicie sesión / Registro</a>
+                <div class="menu-divider"></div>
+            }
+            
+            <!-- Main Navigation -->
+            <a asp-page="/BusquedaAvanzada" class="menu-item menu-item-primary">Explorar autos</a>
+            
+            <!-- Anúnciese Section -->
+            <div class="menu-section">
+                <div class="menu-section-title">Anúnciese</div>
+                <a asp-page="/AnunciarMiAuto" class="menu-item menu-item-secondary">
+                    <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <circle cx="8" cy="8" r="6" stroke="currentColor" stroke-width="1.5"/>
+                    </svg>
+                    Anunciar mi auto
+                </a>
+                <a asp-page="/AnunciarEmpresa" class="menu-item menu-item-secondary">
+                    <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <circle cx="8" cy="8" r="6" stroke="currentColor" stroke-width="1.5"/>
+                    </svg>
+                    Anunciarme como agencia
+                </a>
+                <a asp-page="/AnunciarEmpresa" class="menu-item menu-item-secondary">
+                    <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <rect x="4" y="4" width="8" height="8" stroke="currentColor" stroke-width="1.5"/>
+                    </svg>
+                    Anunciar mi empresa
+                </a>
+            </div>
+            
+            <!-- Productos & Servicios Section -->
+            <div class="menu-section">
+                <div class="menu-section-title">Productos & Servicios</div>
+                <a asp-page="/PpfCeramico" class="menu-item menu-item-secondary">
+                    Rain-X - ¡Máxima visibilidad al conducir!
+                </a>
+                <a asp-page="/AnunciarEmpresa" class="menu-item menu-item-secondary">
+                    Espacio disponible - ¡Reserve ya!
+                </a>
+            </div>
+            
+            <!-- Financiamiento Section -->
+            <div class="menu-section">
+                <div class="menu-section-title">Financiamiento</div>
+                <a asp-page="/AnunciarEmpresa" class="menu-item menu-item-secondary">
+                    Espacio disponible - ¡Reserve ya!
+                </a>
+            </div>
+        </div>
+    </div>
+</header>
+
+<script>
+    // Hamburger Menu JavaScript
+    document.addEventListener('DOMContentLoaded', function() {
+        const hamburgerBtn = document.getElementById('hamburgerBtn');
+        const menuOverlay = document.getElementById('menuOverlay');
+        const menuCloseBtn = document.getElementById('menuCloseBtn');
+        
+        function openMenu() {
+            menuOverlay.classList.add('active');
+            document.body.style.overflow = 'hidden';
+            hamburgerBtn.classList.add('active');
+        }
+        
+        function closeMenu() {
+            menuOverlay.classList.remove('active');
+            document.body.style.overflow = '';
+            hamburgerBtn.classList.remove('active');
+        }
+        
+        if (hamburgerBtn) {
+            hamburgerBtn.addEventListener('click', function(e) {
+                e.stopPropagation();
+                if (menuOverlay.classList.contains('active')) {
+                    closeMenu();
+                } else {
+                    openMenu();
+                }
+            });
+        }
+        
+        if (menuCloseBtn) {
+            menuCloseBtn.addEventListener('click', closeMenu);
+        }
+        
+        // Close menu when clicking outside
+        if (menuOverlay) {
+            menuOverlay.addEventListener('click', function(e) {
+                if (e.target === menuOverlay) {
+                    closeMenu();
+                }
+            });
+        }
+        
+        // Close menu on menu item click
+        const menuItems = document.querySelectorAll('.menu-item');
+        menuItems.forEach(item => {
+            item.addEventListener('click', closeMenu);
+        });
+    });
+</script>

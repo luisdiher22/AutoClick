@@ -1,0 +1,436 @@
+/* ========================================
+   RESPONSIVE MOBILE STYLES
+   Breakpoint: 0px - 767px (Mobile devices)
+   ======================================== */
+
+@media (max-width: 767px) {
+    /* ====================================
+       DISPLAY CONTROL - HIDE DESKTOP
+       ==================================== */
+    .header-desktop,
+    .footer-desktop {
+        display: none !important;
+    }
+    
+    .header-responsive,
+    .footer-responsive {
+        display: block !important;
+    }
+    
+    /* ====================================
+       HEADER RESPONSIVE STYLES
+       ==================================== */
+    .header-responsive {
+        background: #02081C;
+        padding: 12px 20px;
+        position: sticky;
+        top: 0;
+        z-index: 1000;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+    }
+    
+    .header-responsive-container {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        max-width: 100%;
+    }
+    
+    .logo-responsive {
+        display: flex;
+        align-items: center;
+        height: 28px;
+    }
+    
+    .logo-responsive img {
+        height: 28px;
+        width: auto;
+        object-fit: contain;
+    }
+    
+    .header-responsive-actions {
+        display: flex;
+        align-items: center;
+        gap: 16px;
+    }
+    
+    .favorites-btn-responsive {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 40px;
+        height: 40px;
+        background: transparent;
+        border: none;
+        cursor: pointer;
+        transition: transform 0.2s ease;
+    }
+    
+    .favorites-btn-responsive:hover {
+        transform: scale(1.1);
+    }
+    
+    .favorites-btn-responsive svg {
+        width: 24px;
+        height: 24px;
+    }
+    
+    /* Hamburger Button */
+    .hamburger-btn {
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        width: 30px;
+        height: 24px;
+        background: transparent;
+        border: none;
+        cursor: pointer;
+        padding: 0;
+    }
+    
+    .hamburger-btn span {
+        display: block;
+        width: 100%;
+        height: 3px;
+        background: white;
+        border-radius: 2px;
+        transition: all 0.3s ease;
+    }
+    
+    .hamburger-btn.active span:nth-child(1) {
+        transform: translateY(10.5px) rotate(45deg);
+    }
+    
+    .hamburger-btn.active span:nth-child(2) {
+        opacity: 0;
+    }
+    
+    .hamburger-btn.active span:nth-child(3) {
+        transform: translateY(-10.5px) rotate(-45deg);
+    }
+    
+    /* Menu Overlay */
+    .menu-overlay {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0, 0, 0, 0.8);
+        z-index: 2000;
+        opacity: 0;
+        visibility: hidden;
+        transition: opacity 0.3s ease, visibility 0.3s ease;
+    }
+    
+    .menu-overlay.active {
+        opacity: 1;
+        visibility: visible;
+    }
+    
+    .menu-content {
+        position: absolute;
+        top: 0;
+        right: 0;
+        width: 80%;
+        max-width: 320px;
+        height: 100%;
+        background: #02081C;
+        overflow-y: auto;
+        padding: 20px;
+        transform: translateX(100%);
+        transition: transform 0.3s ease;
+    }
+    
+    .menu-overlay.active .menu-content {
+        transform: translateX(0);
+    }
+    
+    .menu-close-btn {
+        position: absolute;
+        top: 16px;
+        right: 16px;
+        background: transparent;
+        border: none;
+        cursor: pointer;
+        padding: 8px;
+        width: 40px;
+        height: 40px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+    
+    .menu-user-info {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 12px;
+        padding: 20px 0;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        margin-bottom: 16px;
+    }
+    
+    .menu-user-name {
+        color: white;
+        font-size: 18px;
+        font-weight: 600;
+        font-family: 'Montserrat', sans-serif;
+    }
+    
+    .menu-item {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        padding: 14px 16px;
+        color: white;
+        font-size: 16px;
+        font-family: 'Montserrat', sans-serif;
+        font-weight: 400;
+        text-decoration: none;
+        border-radius: 8px;
+        transition: background 0.2s ease;
+        margin-bottom: 8px;
+    }
+    
+    .menu-item:hover {
+        background: rgba(255, 255, 255, 0.1);
+        color: white;
+        text-decoration: none;
+    }
+    
+    .menu-item-primary {
+        background: linear-gradient(135deg, #030D2B, #02081C);
+        font-weight: 600;
+        margin-bottom: 16px;
+    }
+    
+    .menu-item-auth {
+        background: linear-gradient(135deg, #030D2B, #02081C);
+        font-weight: 500;
+        justify-content: center;
+    }
+    
+    .menu-item-admin {
+        background: linear-gradient(135deg, #FFD700, #FFA500);
+        color: #02081C;
+        font-weight: 600;
+    }
+    
+    .menu-item-secondary {
+        font-size: 14px;
+        padding-left: 32px;
+    }
+    
+    .menu-section {
+        margin-bottom: 24px;
+    }
+    
+    .menu-section-title {
+        color: rgba(255, 255, 255, 0.6);
+        font-size: 12px;
+        font-family: 'Montserrat', sans-serif;
+        font-weight: 600;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+        padding: 8px 16px;
+        margin-bottom: 8px;
+    }
+    
+    .menu-divider {
+        height: 1px;
+        background: rgba(255, 255, 255, 0.1);
+        margin: 16px 0;
+    }
+    
+    /* ====================================
+       FOOTER RESPONSIVE STYLES
+       ==================================== */
+    .footer-responsive {
+        background: #030D2B;
+        border-top: 0.5px solid rgba(255, 255, 255, 0.25);
+        padding: 32px 29px 11px;
+        width: 100%;
+    }
+    
+    .footer-responsive-container {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 29px;
+        max-width: 100%;
+    }
+    
+    .footer-logo {
+        display: flex;
+        justify-content: center;
+        width: 178.5px;
+        height: 28.326px;
+    }
+    
+    .footer-logo img {
+        width: 100%;
+        height: 100%;
+        object-fit: contain;
+    }
+    
+    .footer-social {
+        display: flex;
+        align-items: center;
+        gap: 18px;
+    }
+    
+    .social-icon {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 33px;
+        height: 33px;
+        transition: transform 0.2s ease;
+    }
+    
+    .social-icon:hover {
+        transform: scale(1.1);
+    }
+    
+    .footer-divider {
+        width: 222px;
+        height: 1px;
+        background: rgba(255, 255, 255, 0.25);
+    }
+    
+    .footer-title {
+        color: rgba(255, 255, 255, 0.5);
+        font-size: 24px;
+        font-family: 'Plus Jakarta Sans', sans-serif;
+        font-weight: 700;
+        text-align: center;
+    }
+    
+    .footer-links {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 8px;
+        width: 100%;
+    }
+    
+    .footer-link {
+        color: white;
+        font-size: 14px;
+        font-family: 'Montserrat', sans-serif;
+        font-weight: 500;
+        text-decoration: none;
+        text-align: center;
+        padding: 11px 0;
+        min-height: 36px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        transition: opacity 0.2s ease;
+    }
+    
+    .footer-link:hover {
+        opacity: 0.8;
+        color: white;
+        text-decoration: none;
+    }
+    
+    .footer-copyright {
+        display: flex;
+        align-items: center;
+        gap: 7.5px;
+        color: white;
+        font-size: 10.5px;
+        font-family: 'Montserrat', sans-serif;
+        font-weight: 300;
+        text-align: center;
+        padding-top: 20px;
+    }
+    
+    .copyleft-symbol {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 15px;
+        height: 15px;
+    }
+    
+    /* ====================================
+       MAIN CONTENT ADJUSTMENTS
+       ==================================== */
+    .main-container {
+        padding: 0;
+        width: 100%;
+        max-width: 100%;
+    }
+    
+    /* Ensure content doesn't overflow */
+    body {
+        overflow-x: hidden;
+    }
+    
+    * {
+        box-sizing: border-box;
+    }
+    
+    /* Adjust grid layouts to single column */
+    .car-grid,
+    .grid-container,
+    .results-grid {
+        grid-template-columns: 1fr !important;
+        gap: 16px !important;
+        padding: 16px !important;
+    }
+    
+    /* Card adjustments */
+    .car-card,
+    .card-item {
+        width: 100% !important;
+        max-width: 100% !important;
+    }
+    
+    /* Container padding adjustments */
+    .container,
+    .content-wrapper {
+        padding-left: 16px !important;
+        padding-right: 16px !important;
+    }
+    
+    /* Form adjustments */
+    .form-group,
+    .input-group {
+        width: 100% !important;
+    }
+    
+    /* Button adjustments */
+    .btn,
+    .button {
+        width: 100%;
+        font-size: 14px;
+        padding: 12px 16px;
+    }
+    
+    /* Typography adjustments */
+    h1 {
+        font-size: 24px !important;
+    }
+    
+    h2 {
+        font-size: 20px !important;
+    }
+    
+    h3 {
+        font-size: 18px !important;
+    }
+    
+    h4 {
+        font-size: 16px !important;
+    }
+    
+    /* Image adjustments */
+    img {
+        max-width: 100%;
+        height: auto;
+    }
+}

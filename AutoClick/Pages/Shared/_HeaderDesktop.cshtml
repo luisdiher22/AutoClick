@@ -1,0 +1,566 @@
+<!-- Universal Header -->
+<header class="universal-header">
+    <div class="header-container">
+        <!-- Logo Section -->
+        <div class="logo-section">
+            <a asp-page="/Index" class="logo-link" style="position: relative !important; left: 60px !important; top: -5px !important; padding: 0 20px !important; display: flex !important; align-items: center !important; height: 100% !important;">
+                <div class="logo-container" style="position: relative !important; width: 260px !important; height: 42px !important; overflow: hidden !important; display: block !important;">
+                    <img src="~/images/logos/autoclick-logo-hd.png" alt="AutoClick.cr" class="logo-image logo-main" style="position: absolute !important; top: 0 !important; left: 0 !important; height: 42px !important; width: auto !important; transform: translateX(0) !important; z-index: 2 !important; transition: transform 0.5s cubic-bezier(0.4, 0.0, 0.2, 1) !important; display: block !important;" />
+                    <img src="https://autoclickstorage.blob.core.windows.net/logos/LOGOS%20AUTOCLICK-06.png" alt="AutoClick.cr" class="logo-image logo-hover" style="position: absolute !important; top: 0 !important; left: 0 !important; height: 42px !important; width: auto !important; transform: translateX(-100%) !important; z-index: 1 !important; transition: transform 0.5s cubic-bezier(0.4, 0.0, 0.2, 1) !important; display: block !important;" />
+                </div>
+            </a>
+        </div>
+        
+        <!-- Navigation Section -->
+        <nav class="navigation-section">
+            <!-- Explorar Autos Button -->
+            <a asp-page="/BusquedaAvanzada" class="explorar-btn">
+                <span>Explorar autos</span>
+            </a>
+            
+            <!-- Navigation Items -->
+            <div class="nav-dropdown" data-dropdown="anunciese">
+                <button class="nav-item">
+                    <span>Anúnciese</span>
+                    <svg width="12" height="6" viewBox="0 0 12 6" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M1 1L6 5L11 1" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
+                </button>
+                <div class="dropdown-content dropdown-dark dropdown-anunciese" style="background: rgba(4, 17, 56, 0.95) !important; border-radius: 0 !important; border: none !important;">
+                    <a asp-page="/AnunciarMiAuto" class="dropdown-link dropdown-anuncio-item">
+                        <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg" class="dropdown-icon" style="width: 16px; height: 16px;">
+                            <path d="M14 2L8 8L2 2" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                            <path d="M14 14L8 8L2 14" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                            <circle cx="8" cy="8" r="6" stroke="white" stroke-width="1.5" fill="none"/>
+                        </svg>
+                        <span>Anunciar mi auto</span>
+                    </a>
+                    <a asp-page="/AnunciarEmpresa" class="dropdown-link dropdown-anuncio-item">
+                        <svg width="22" height="22" viewBox="0 0 22 22" fill="none" xmlns="http://www.w3.org/2000/svg" class="dropdown-icon" style="width: 22px; height: 22px;">
+                            <path d="M7 11L10 14L15 8" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                            <circle cx="11" cy="11" r="9" stroke="white" stroke-width="2" fill="none"/>
+                        </svg>
+                        <span>Anunciarme como agencia</span>
+                    </a>
+                    <a asp-page="/AnunciarEmpresa" class="dropdown-link dropdown-anuncio-item">
+                        <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg" class="dropdown-icon" style="width: 20px; height: 20px;">
+                            <rect x="3" y="3" width="14" height="14" rx="1" stroke="white" stroke-width="1.5" fill="none"/>
+                            <rect x="6" y="6" width="2" height="2" fill="white"/>
+                            <rect x="10" y="6" width="2" height="2" fill="white"/>
+                            <rect x="6" y="10" width="2" height="2" fill="white"/>
+                            <rect x="10" y="10" width="2" height="2" fill="white"/>
+                            <rect x="6" y="14" width="8" height="1" fill="white"/>
+                        </svg>
+                        <span>Anunciar mi empresa</span>
+                    </a>
+                </div>
+            </div>
+            
+            <div class="nav-dropdown" data-dropdown="productos">
+                <button class="nav-item">
+                    <span>Productos & Servicios</span>
+                    <svg width="12" height="6" viewBox="0 0 12 6" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M1 1L6 5L11 1" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
+                </button>
+                <div class="dropdown-content dropdown-dark dropdown-large" style="background: rgba(4, 17, 56, 0.95) !important; border-radius: 0 !important; border: none !important;">
+                    <div class="dropdown-columns">
+                        <div class="dropdown-column">
+                            <h4 class="dropdown-column-title">Productos</h4>
+                            <a asp-page="/PpfCeramico" class="dropdown-link dropdown-product">
+                                <img src="https://autoclickstorage.blob.core.windows.net/uploads/rainx-logo.png" alt="Rain-X" class="product-logo" />
+                                <span>¡Máxima visibilidad al conducir!</span>
+                            </a>
+                            <a asp-page="/AnunciarEmpresa" class="dropdown-link dropdown-reserve">
+                                Espacio disponible <span class="highlight">¡Reserve ya!</span>
+                            </a>
+                            <a asp-page="/AnunciarEmpresa" class="dropdown-link dropdown-reserve">
+                                Espacio disponible <span class="highlight">¡Reserve ya!</span>
+                            </a>
+                        </div>
+                        <div class="dropdown-divider-vertical"></div>
+                        <div class="dropdown-column">
+                            <h4 class="dropdown-column-title">Servicios</h4>
+                            <a asp-page="/AnunciarEmpresa" class="dropdown-link dropdown-reserve">
+                                Espacio disponible <span class="highlight">¡Reserve ya!</span>
+                            </a>
+                            <a asp-page="/AnunciarEmpresa" class="dropdown-link dropdown-reserve">
+                                Espacio disponible <span class="highlight">¡Reserve ya!</span>
+                            </a>
+                            <a asp-page="/AnunciarEmpresa" class="dropdown-link dropdown-reserve">
+                                Espacio disponible <span class="highlight">¡Reserve ya!</span>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="nav-dropdown" data-dropdown="financiamiento">
+                <button class="nav-item">
+                    <span>Financiamiento</span>
+                    <svg width="12" height="6" viewBox="0 0 12 6" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M1 1L6 5L11 1" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
+                </button>
+                <div class="dropdown-content dropdown-dark dropdown-horizontal" style="background: rgba(4, 17, 56, 0.95) !important; border-radius: 0 !important; border: none !important;">
+                    <a asp-page="/AnunciarEmpresa" class="dropdown-link dropdown-reserve">
+                        Espacio disponible <span class="highlight">¡Reserve ya!</span>
+                    </a>
+                    <a asp-page="/AnunciarEmpresa" class="dropdown-link dropdown-reserve">
+                        Espacio disponible <span class="highlight">¡Reserve ya!</span>
+                    </a>
+                    <a asp-page="/AnunciarEmpresa" class="dropdown-link dropdown-reserve">
+                        Espacio disponible <span class="highlight">¡Reserve ya!</span>
+                    </a>
+                </div>
+            </div>
+        </nav>
+        
+        <!-- Actions Section -->
+        <div class="actions-section">
+            <!-- Search Icon removed - was causing visual issues -->
+            
+            <!-- User Section -->
+            @{
+                bool isUserLoggedIn = User.Identity?.IsAuthenticated == true;
+                string userName = User.Identity?.Name ?? User.FindFirst(System.Security.Claims.ClaimTypes.Name)?.Value ?? User.FindFirst("FullName")?.Value ?? "Usuario";
+                string currentPage = ViewContext.RouteData.Values["page"]?.ToString() ?? "";
+                bool isAuthPage = currentPage.Contains("/Auth");
+            }
+            
+            <!-- Favorites Button -->
+            <a asp-page="/Guardados" class="favorites-btn" title="Mis Favoritos">
+                <img src="https://autoclickstorage.blob.core.windows.net/uploads/Component%20183.png" alt="Favoritos" class="favorites-icon" />
+            </a>
+            
+            @if (isUserLoggedIn)
+            {
+                var isAdmin = User.FindFirst("IsAdmin")?.Value == "true";
+                
+                <!-- Logged in user -->
+                <div class="user-section nav-dropdown" data-dropdown="user">
+                    <button class="user-name nav-item">
+                        <svg width="11" height="13" viewBox="0 0 11 13" fill="none" xmlns="http://www.w3.org/2000/svg" style="margin-right: 4px;">
+                            <path d="M5.33333 6.5C6.99238 6.5 8.33333 5.15905 8.33333 3.5C8.33333 1.84095 6.99238 0.5 5.33333 0.5C3.67428 0.5 2.33333 1.84095 2.33333 3.5C2.33333 5.15905 3.67428 6.5 5.33333 6.5Z" stroke="white" stroke-width="1" stroke-linecap="round" stroke-linejoin="round"/>
+                            <path d="M10.3333 12.5C10.3333 10.0147 8.08866 8 5.33333 8C2.578 8 0.333333 10.0147 0.333333 12.5" stroke="white" stroke-width="1" stroke-linecap="round" stroke-linejoin="round"/>
+                        </svg>
+                        <span>@userName</span>
+                    </button>
+                    <div class="user-dropdown dropdown-content dropdown-dark" id="userDropdown" style="background: rgba(4, 17, 56, 0.95) !important; border-radius: 0 !important; border: none !important;">
+                        @if (isAdmin)
+                        {
+                            <a asp-page="/Admin/Dashboard" class="user-menu-item dropdown-link">
+                                <span class="admin-icon">⚙️</span> Panel de administrador
+                            </a>
+                        }
+                        <a asp-page="/MiPerfil" class="user-menu-item dropdown-link">Mi perfil</a>
+                        <a asp-page="/AnunciarMiAuto" class="user-menu-item dropdown-link">Anunciar mi auto</a>
+                        <a asp-page="/MisAnuncios" class="user-menu-item dropdown-link">Mis anuncios</a>
+                    </div>
+                </div>
+            }
+            else if (!isAuthPage)
+            {
+                <!-- Not logged in - show login/register (hidden on auth page) -->
+                <div class="auth-section">
+                    <a asp-page="/Auth" class="login-register-btn">Inicie sesión/Registro</a>
+                </div>
+            }
+        </div>
+    </div>
+</header>
+
+<script>
+    // Simplified Header JavaScript - NO TIMEOUTS, NO LOOPS
+    document.addEventListener('DOMContentLoaded', function() {
+        initializeDropdowns();
+        initializeSearch();
+        initializeLogoHover();
+    });
+
+    function initializeLogoHover() {
+        const logoLink = document.querySelector('.logo-link');
+        const logoMain = document.querySelector('.logo-main');
+        const logoHover = document.querySelector('.logo-hover');
+        
+        if (logoLink && logoMain && logoHover) {
+            logoLink.addEventListener('mouseenter', function() {
+                logoMain.style.transform = 'translateX(-100%)';
+                logoHover.style.transform = 'translateX(0)';
+            });
+            
+            logoLink.addEventListener('mouseleave', function() {
+                logoMain.style.transform = 'translateX(0)';
+                logoHover.style.transform = 'translateX(-100%)';
+            });
+        }
+    }
+
+    function initializeDropdowns() {
+        const dropdowns = document.querySelectorAll('.nav-dropdown');
+        
+        dropdowns.forEach(dropdown => {
+            const button = dropdown.querySelector('.nav-item');
+            const content = dropdown.querySelector('.dropdown-content');
+            
+            if (button && content) {
+                // Mouse events for desktop
+                dropdown.addEventListener('mouseenter', () => {
+                    dropdown.classList.add('active');
+                });
+                
+                dropdown.addEventListener('mouseleave', () => {
+                    dropdown.classList.remove('active');
+                });
+                
+                // Click events for mobile/touch
+                button.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    
+                    // Close other dropdowns
+                    dropdowns.forEach(otherDropdown => {
+                        if (otherDropdown !== dropdown) {
+                            otherDropdown.classList.remove('active');
+                        }
+                    });
+                    
+                    // Toggle current dropdown
+                    dropdown.classList.toggle('active');
+                });
+            }
+        });
+        
+        // Close dropdowns when clicking outside
+        document.addEventListener('click', (e) => {
+            if (!e.target.closest('.nav-dropdown') && !e.target.closest('.auth-section')) {
+                dropdowns.forEach(dropdown => {
+                    dropdown.classList.remove('active');
+                });
+            }
+        });
+    }
+
+    function initializeSearch() {
+        const searchIcon = document.querySelector('.search-icon');
+        if (searchIcon) {
+            searchIcon.addEventListener('click', handleSearch);
+            searchIcon.style.cursor = 'pointer';
+        }
+    }
+
+    function toggleUserMenu() {
+        const userDropdown = document.querySelector('.user-section');
+        if (userDropdown) {
+            userDropdown.classList.toggle('active');
+        }
+    }
+
+    function handleLogout() {
+        if (confirm('¿Estás seguro que deseas cerrar sesión?')) {
+            window.location.href = '/Logout';
+        }
+    }
+
+    function handleSearch() {
+        window.location.href = '/BusquedaAvanzada';
+    }
+</script>
+
+@section Scripts {
+    <script>
+        // User dropdown functionality
+        document.addEventListener('DOMContentLoaded', function() {
+            const dropdownBtn = document.getElementById('userDropdownBtn');
+            const dropdownMenu = document.getElementById('userDropdownMenu');
+            
+            if (dropdownBtn && dropdownMenu) {
+                dropdownBtn.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    dropdownMenu.classList.toggle('show');
+                });
+                
+                // Close dropdown when clicking outside
+                document.addEventListener('click', function(e) {
+                    if (!dropdownBtn.contains(e.target) && !dropdownMenu.contains(e.target)) {
+                        dropdownMenu.classList.remove('show');
+                    }
+                });
+                
+                // Prevent dropdown from closing when clicking inside
+                dropdownMenu.addEventListener('click', function(e) {
+                    e.stopPropagation();
+                });
+            }
+        });
+        
+        function handleLogout() {
+            if (confirm('¿Estás seguro que deseas cerrar sesión?')) {
+                // Redirect to logout page
+                window.location.href = '/Logout';
+            }
+        }
+    </script>
+}
+
+@section Styles {
+    <style>
+        /* CRITICAL: Logo hover effect - Override all other styles */
+        .logo-section {
+            padding-left: 60px !important;
+            display: flex !important;
+            align-items: center !important;
+        }
+        
+        .logo-section .logo-container {
+            position: relative !important;
+            width: 148px !important;
+            height: 23.49px !important;
+            overflow: hidden !important;
+            display: block !important;
+        }
+
+        .logo-section .logo-container .logo-image {
+            width: 148px !important;
+            height: 23.49px !important;
+            position: absolute !important;
+            top: 0 !important;
+            left: 0 !important;
+            transition: transform 0.5s cubic-bezier(0.4, 0.0, 0.2, 1) !important;
+            object-fit: contain !important;
+            display: block !important;
+        }
+
+        /* Main logo - visible by default */
+        .logo-section .logo-container .logo-main {
+            transform: translateX(0) !important;
+            z-index: 2 !important;
+        }
+
+        /* Hover logo - hidden to the LEFT initially */
+        .logo-section .logo-container .logo-hover {
+            transform: translateX(-100%) !important;
+            z-index: 1 !important;
+        }
+
+        /* On hover: swap positions */
+        .logo-section .logo-link:hover .logo-container .logo-main {
+            transform: translateX(-100%) !important;
+        }
+
+        .logo-section .logo-link:hover .logo-container .logo-hover {
+            transform: translateX(0) !important;
+        }
+        
+        /* User Dropdown Styles */
+        .user-dropdown-container {
+            position: relative;
+        }
+        
+        .user-dropdown-btn {
+            background: none;
+            border: none;
+            color: white;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 8px 12px;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            font-size: 14px;
+            font-weight: 500;
+        }
+        
+        .user-dropdown-btn:hover {
+            background: rgba(255, 255, 255, 0.1);
+        }
+        
+        .user-avatar {
+            display: flex;
+            align-items: center;
+        }
+        
+        .dropdown-arrow {
+            transition: transform 0.2s ease;
+        }
+        
+        .user-dropdown-btn.active .dropdown-arrow {
+            transform: rotate(180deg);
+        }
+        
+        .user-dropdown-menu {
+            position: absolute;
+            top: 100%;
+            right: 0;
+            background: #ffffff;
+            border-radius: 12px;
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+            min-width: 320px;
+            opacity: 0;
+            visibility: hidden;
+            transform: translateY(-10px);
+            transition: all 0.2s ease;
+            z-index: 1000;
+            overflow: hidden;
+            margin-top: 8px;
+        }
+        
+        .user-dropdown-menu.show {
+            opacity: 1;
+            visibility: visible;
+            transform: translateY(0);
+        }
+        
+        .dropdown-header {
+            padding: 20px;
+            background: linear-gradient(135deg, #02081C, #030D2B);
+        }
+        
+        .user-info {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        
+        .user-avatar-large {
+            width: 48px;
+            height: 48px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .user-details {
+            flex: 1;
+        }
+        
+        .user-display-name {
+            color: #ffffff;
+            font-weight: 600;
+            font-size: 16px;
+            margin-bottom: 2px;
+        }
+        
+        .user-email {
+            color: #8A92B2;
+            font-size: 14px;
+        }
+        
+        .dropdown-divider {
+            height: 1px;
+            background: #E5E7EB;
+            margin: 0;
+        }
+        
+        .dropdown-section {
+            padding: 12px 0;
+        }
+        
+        .dropdown-item-large {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 12px 20px;
+            color: #374151;
+            text-decoration: none;
+            transition: background-color 0.2s ease;
+        }
+        
+        .dropdown-item-large:hover {
+            background: #F3F4F6;
+            color: #374151;
+            text-decoration: none;
+        }
+        
+        .item-icon {
+            font-size: 20px;
+            width: 24px;
+            text-align: center;
+        }
+        
+        .item-content {
+            flex: 1;
+        }
+        
+        .item-title {
+            font-weight: 500;
+            font-size: 14px;
+            margin-bottom: 2px;
+        }
+        
+        .item-description {
+            font-size: 12px;
+            color: #6B7280;
+        }
+        
+        .dropdown-item-simple {
+            display: block;
+            padding: 8px 20px;
+            color: #374151;
+            text-decoration: none;
+            font-size: 14px;
+            transition: background-color 0.2s ease;
+        }
+        
+        .dropdown-item-simple:hover {
+            background: #F3F4F6;
+            color: #374151;
+            text-decoration: none;
+        }
+        
+        .logout-btn {
+            width: 100%;
+            background: none;
+            border: none;
+            padding: 12px 20px;
+            color: #DC2626;
+            font-size: 14px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: background-color 0.2s ease;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .logout-btn:hover {
+            background: #FEF2F2;
+        }
+        
+        .logout-icon {
+            font-size: 16px;
+        }
+        
+        /* Admin Dashboard Link Styles */
+        .admin-link {
+            background: linear-gradient(135deg, #02081C, #030D2B) !important;
+            color: #ffffff !important;
+            font-weight: 600;
+        }
+        
+        .admin-link:hover {
+            background: linear-gradient(135deg, #030D2B, #04122D) !important;
+            color: #ffffff !important;
+        }
+        
+        .admin-icon {
+            margin-right: 8px;
+            font-size: 16px;
+        }
+        
+        /* Responsive adjustments */
+        @@media (max-width: 768px) {
+            .user-dropdown-menu {
+                right: -20px;
+                min-width: 280px;
+            }
+            
+            .user-name {
+                display: none;
+            }
+        }
+    </style>
+}

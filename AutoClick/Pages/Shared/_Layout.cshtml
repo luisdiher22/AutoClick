@@ -29,17 +29,36 @@
     <link rel="stylesheet" href="~/css/favoritos.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/AutoClick.styles.css" asp-append-version="true" />
     
+    <!-- Responsive Stylesheets -->
+    <link rel="stylesheet" href="~/css/responsive-mobile.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/css/responsive-tablet.css" asp-append-version="true" />
+    
     @await RenderSectionAsync("Styles", required: false)
     
     <!-- Modal CSS al final para mayor especificidad -->
     <link rel="stylesheet" href="~/css/modal-solicitud-anuncio.css" asp-append-version="true" />
+    
+    <style>
+        /* Desktop display control (1024px+) */
+        @@media (min-width: 1024px) {
+            .header-responsive,
+            .footer-responsive {
+                display: none !important;
+            }
+            
+            .header-desktop,
+            .footer-desktop {
+                display: block !important;
+            }
+        }
+    </style>
     
     <!-- Meta Tags -->
     <meta name="description" content="AutoClick.cr - Plataforma líder en Costa Rica para comprar y vender autos usados y nuevos. Encuentra tu auto ideal o anuncia el tuyo sin costo.">
     <meta name="keywords" content="autos, carros, Costa Rica, comprar auto, vender auto, autos usados">
 </head>
 <body data-user-email="@(User.Identity?.IsAuthenticated == true ? User.FindFirst(System.Security.Claims.ClaimTypes.Email)?.Value ?? User.FindFirst("Email")?.Value : "")">
-    <!-- Universal Header -->
+    <!-- Headers (Desktop & Responsive) -->
     @{
         string currentPage = ViewContext.RouteData.Values["page"]?.ToString() ?? "";
         bool isRegistroIndividuoPage = currentPage.Contains("/RegistroIndividuo");
@@ -47,14 +66,34 @@
 
     @if (!isRegistroIndividuoPage)
     {
-        @await Html.PartialAsync("_Header")
+        <!-- Desktop Header (1024px+) -->
+        <div class="header-desktop">
+            @await Html.PartialAsync("_HeaderDesktop")
+        </div>
+        
+        <!-- Responsive Header (Mobile & Tablet) -->
+        <div class="header-responsive">
+            @await Html.PartialAsync("_HeaderResponsive")
+        </div>
     }
     
     <div class="main-container @(isRegistroIndividuoPage ? "auth-page" : "")">
         @RenderBody()
     </div>
 
-    <!-- Footer will be included in the page content -->
+    <!-- Footers (Desktop & Responsive) -->
+    @if (!isRegistroIndividuoPage)
+    {
+        <!-- Desktop Footer (1024px+) -->
+        <div class="footer-desktop">
+            @await Html.PartialAsync("_FooterDesktop")
+        </div>
+        
+        <!-- Responsive Footer (Mobile & Tablet) -->
+        <div class="footer-responsive">
+            @await Html.PartialAsync("_FooterResponsive")
+        </div>
+    }
 
     <!-- Modal de Solicitud de Anuncio Publicitario -->
     <div id="modalSolicitudAnuncio" class="modal-solicitud-anuncio" style="display: none;">
