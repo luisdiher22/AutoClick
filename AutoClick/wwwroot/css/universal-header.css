@@ -39,7 +39,7 @@
     display: flex;
     align-items: center;
     justify-content: flex-start;
-    padding-left: 60px !important;
+    padding-left: 10px !important;
     flex-shrink: 0;
 }
 
@@ -108,19 +108,30 @@
 
 /* Explorar Autos Button */
 .explorar-btn {
-    color: white;
+    color: transparent;
     font-size: 16px;
     font-family: 'Montserrat', sans-serif;
     font-weight: 700;
     text-decoration: none;
-    padding: 8px 16px;
+    padding: 0;
     border-radius: 4px;
-    transition: background-color 0.3s ease;
+    background-image: url('/images/logos/EXPLORAR AUTOS_1.gif');
+    background-size: contain;
+    background-position: center;
+    background-repeat: no-repeat;
+    width: 140px;
+    height: 40px;
+    display: inline-block;
+    transition: opacity 0.3s ease;
+}
+
+.explorar-btn span {
+    display: none;
 }
 
 .explorar-btn:hover {
-    background: rgba(255, 255, 255, 0.1);
-    color: white;
+    opacity: 0.9;
+    color: transparent;
     text-decoration: none;
 }
 
@@ -178,15 +189,23 @@
     border: none !important;
     width: 0 !important;
     height: 0 !important;
+    margin: 0 !important;
 }
 
 .dropdown-toggle::after,
 .dropdown-toggle::before,
 button.dropdown-toggle::after,
-button.dropdown-toggle::before {
+button.dropdown-toggle::before,
+a.dropdown-toggle::after,
+a.dropdown-toggle::before,
+.nav-dropdown-container a::after,
+.nav-dropdown-container a::before {
     display: none !important;
     content: none !important;
     border: none !important;
+    width: 0 !important;
+    height: 0 !important;
+    margin: 0 !important;
 }
 
 /* Dropdown Content - BASE STYLE WITH DARK BACKGROUND */
@@ -635,7 +654,7 @@ button.dropdown-toggle::before {
     position: absolute;
     top: 100%;
     right: 0;
-    min-width: 250px;
+    min-width: 200px;
     opacity: 0;
     visibility: hidden;
     transform: translateY(-10px);
@@ -644,7 +663,7 @@ button.dropdown-toggle::before {
     overflow: hidden;
     margin-top: 0;
     background: rgba(4, 17, 56, 0.95) !important;
-    padding: 20px;
+    padding: 8px;
     border-radius: 0;
 }
 
@@ -661,7 +680,7 @@ button.dropdown-toggle::before {
     display: flex;
     align-items: center;
     gap: 8px;
-    padding: 12px 20px;
+    padding: 10px 16px 10px 8px;
     color: white !important;
     text-decoration: none;
     font-size: 16px;

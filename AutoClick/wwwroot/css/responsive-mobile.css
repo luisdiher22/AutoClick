@@ -251,6 +251,9 @@
         border-top: 0.5px solid rgba(255, 255, 255, 0.25);
         padding: 32px 29px 11px;
         width: 100%;
+        display: flex;
+        flex-direction: column;
+        min-height: 340px;
     }
     
     .footer-responsive-container {
@@ -259,6 +262,8 @@
         align-items: center;
         gap: 29px;
         max-width: 100%;
+        flex: 1;
+        justify-content: space-between;
     }
     
     .footer-logo {
@@ -345,7 +350,8 @@
         font-family: 'Montserrat', sans-serif;
         font-weight: 300;
         text-align: center;
-        padding-top: 20px;
+        margin-top: auto;
+        padding-bottom: 0;
     }
     
     .copyleft-symbol {

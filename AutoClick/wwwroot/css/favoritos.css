@@ -13,7 +13,7 @@
     justify-content: center;
     cursor: pointer;
     transition: all 0.2s ease;
-    z-index: 1000; /* Z-index muy alto para estar por encima del contenido */
+    z-index: 10; /* Z-index menor que el header (1000) para no superponerse */
     padding: 0;
     pointer-events: auto; /* Asegurar que el botón capture los clicks */
 }

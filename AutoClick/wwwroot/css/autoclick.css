@@ -100,8 +100,29 @@ body {
     cursor: pointer;
 }
 
+/* Hide all Bootstrap default dropdown arrows */
+.nav-dropdown-container .dropdown-toggle::after,
+.nav-dropdown-container .dropdown-toggle::before,
+.nav-dropdown-container button.dropdown-toggle::after,
+.nav-dropdown-container button.dropdown-toggle::before,
+.nav-dropdown-container a.dropdown-toggle::after,
+.nav-dropdown-container a.dropdown-toggle::before,
+.nav-dropdown .nav-item::after,
+.nav-dropdown .nav-item::before,
+.nav-dropdown button::after,
+.nav-dropdown button::before {
+    display: none !important;
+    content: none !important;
+    border: none !important;
+    width: 0 !important;
+    height: 0 !important;
+    margin: 0 !important;
+}
+
+/* Chevron is handled by universal-header.css - DO NOT DUPLICATE */
+/*
 .nav-dropdown::after {
-    content: '';
+    content: '' !important;
     width: 12px;
     height: 6px;
     background: white;
@@ -109,6 +130,7 @@ body {
     clip-path: polygon(0 0, 100% 0, 50% 100%);
     transition: transform 0.3s ease;
 }
+*/
 
 .nav-dropdown-container:hover .nav-dropdown::after {
     transform: rotate(180deg);
@@ -546,7 +568,7 @@ body {
 }
 
 .filters-container {
-    background: white;
+    background: #030D2B;
     border-radius: 8px;
     padding: 20px;
     box-shadow: 0 2px 8px rgba(0,0,0,0.1);
@@ -600,6 +622,15 @@ body {
     display: flex;
     flex-direction: column;
     gap: 8px;
+}
+
+/* Línea divisoria entre secciones de filtros */
+.filter-divider {
+    width: 100%;
+    height: 1px;
+    background: rgba(255, 255, 255, 0.25);
+    margin: 16px 0;
+    border: none;
 }
 
 .filter-label {
@@ -2800,7 +2831,7 @@ body {
 }
 
 .busqueda-filters-container {
-    background: rgba(255, 255, 255, 0.05);
+    background: #030D2B;
     border-radius: 8px;
     padding: 20px;
     border: 1px solid rgba(255, 255, 255, 0.1);
