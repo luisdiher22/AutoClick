@@ -1,11 +1,670 @@
-﻿@page "/"
+@page "/"
 @model IndexModel
 @{
     ViewData["Title"] = "AutoClick.cr - Compra y venta de autos en Costa Rica";
-    Layout = "~/Pages/Shared/_LayoutMinimal.cshtml";
 }
 
 <style>
+    /* ====================================
+       INDEX RESPONSIVE STYLES - MOBILE
+       ==================================== */
+    @@media (max-width: 767px) {
+        /* Override main container */
+        .index-main-container {
+            min-height: auto !important;
+            position: relative !important;
+            display: flex !important;
+            flex-direction: column !important;
+            overflow: visible !important;
+        }
+        
+        /* Hero section con máxima especificidad */
+        div.index-main-container > div.index-hero-section[data-property-1="1"] {
+            display: block !important;
+            position: relative !important;
+            width: 100% !important;
+            height: 400px !important;
+            margin: 0 !important;
+            padding: 0 !important;
+            border-radius: 0 !important;
+            left: 0 !important;
+            top: 0 !important;
+            right: auto !important;
+            bottom: auto !important;
+            transform: none !important;
+        }
+        
+        /* Hide ALL OTHER desktop absolute positioned sections */
+        .index-main-container > div[style*="position: absolute"]:not(.index-hero-section),
+        .index-main-container > a[style*="position: absolute"] {
+            display: none !important;
+        }
+        
+        .index-hero-section img {
+            width: 100% !important;
+            height: 100% !important;
+            object-fit: cover !important;
+            position: absolute !important;
+            left: 0 !important;
+            top: 0 !important;
+        }
+        
+        .index-hero-gradient {
+            display: block !important;
+            position: absolute !important;
+            width: 100% !important;
+            height: 100% !important;
+            left: 0 !important;
+            top: 0 !important;
+        }
+        
+        /* Ocultar búsqueda rápida en mobile */
+        .index-busqueda-rapida {
+            display: none !important;
+        }
+        
+        /* Botón "Anuncie su auto" - sobrescribir estilos inline */
+        .index-hero-section .index-hero-btn {
+            display: flex !important;
+            position: absolute !important;
+            bottom: 80px !important;
+            top: auto !important;
+            left: 50% !important;
+            right: auto !important;
+            transform: translateX(-50%) !important;
+            width: 274px !important;
+            height: 48px !important;
+            padding: 16px !important;
+            background: white !important;
+            border-radius: 4px !important;
+            justify-content: center !important;
+            align-items: center !important;
+            gap: 8px !important;
+            z-index: 10 !important;
+        }
+        
+        .index-hero-section .index-hero-btn-text {
+            color: #06174D !important;
+            font-size: 16px !important;
+            font-family: 'Montserrat', sans-serif !important;
+            font-weight: 700 !important;
+        }
+        
+        /* Texto del hero */
+        .index-hero-text {
+            display: block !important;
+            position: absolute !important;
+            width: 90% !important;
+            max-width: 320px !important;
+            left: 50% !important;
+            transform: translateX(-50%) !important;
+            top: 50% !important;
+            margin-top: -80px !important;
+            text-align: center !important;
+            color: white !important;
+            font-size: 20px !important;
+            font-family: 'Montserrat', sans-serif !important;
+            font-weight: 700 !important;
+            line-height: 1.3 !important;
+        }
+        
+        /* Show responsive sections */
+        .index-section-responsive {
+            display: block !important;
+            position: relative !important;
+            padding: 0 20px;
+            margin-top: 32px;
+        }
+        
+        /* Noticias section sin padding lateral */
+        .index-section-responsive:has(.index-noticias-container) {
+            padding: 0 20px !important;
+        }
+        
+        .index-section-responsive .index-noticias-container {
+            width: 100% !important;
+            padding: 0 !important;
+        }
+        
+        .index-section-divider {
+            display: block !important;
+            height: 1px;
+            background: rgba(255, 255, 255, 0.15);
+            margin: 24px 20px;
+        }
+        
+        /* Quitar subrayado de links en cards */
+        .index-card-small {
+            text-decoration: none !important;
+        }
+        
+        .index-card-small-title,
+        .index-card-small-price {
+            text-decoration: none !important;
+        }
+        
+        /* Botón "Ver más" extendido hacia arriba */
+        .index-card-ver-mas {
+            width: 139px !important;
+            height: 200px !important;
+            align-self: flex-start !important;
+            margin-top: 0 !important;
+        }
+        
+        .index-card-ver-mas-btn {
+            width: 100% !important;
+            height: 100% !important;
+            text-decoration: none !important;
+        }
+        
+        /* Contenedor de noticias sin padding lateral */
+        .index-noticias-container {
+            padding: 0 !important;
+            margin: 0 !important;
+        }
+        
+        /* Noticias - Primera grande con texto sobre imagen */
+        .index-noticia-grande {
+            position: relative !important;
+            width: 100% !important;
+            height: 200px !important;
+            border-radius: 8px !important;
+            overflow: hidden !important;
+            text-decoration: none !important;
+            display: block !important;
+            margin-bottom: 16px !important;
+        }
+        
+        .index-noticia-grande img {
+            width: 100% !important;
+            height: 100% !important;
+            object-fit: cover !important;
+        }
+        
+        .index-noticia-gradient {
+            position: absolute !important;
+            bottom: 0 !important;
+            left: 0 !important;
+            width: 100% !important;
+            padding: 12px 16px !important;
+            background: linear-gradient(to top, rgba(0,0,0,0.8) 25%, rgba(0,0,0,0)) !important;
+        }
+        
+        .index-noticia-grande .index-noticia-title {
+            color: white !important;
+            font-size: 16px !important;
+            font-family: 'Montserrat', sans-serif !important;
+            font-weight: 700 !important;
+            line-height: 1.3 !important;
+            margin: 0 !important;
+        }
+        
+        /* Noticias medianas - imagen pequeña a la izquierda, sin fondo */
+        .index-noticia-mediana {
+            display: flex !important;
+            gap: 12px !important;
+            margin-bottom: 16px !important;
+            text-decoration: none !important;
+            background: transparent !important;
+            padding: 0 !important;
+        }
+        
+        .index-noticia-mediana img {
+            width: 144px !important;
+            height: 64px !important;
+            object-fit: cover !important;
+            border-radius: 4px !important;
+            flex-shrink: 0 !important;
+        }
+        
+        .index-noticia-info {
+            flex: 1 !important;
+            display: flex !important;
+            flex-direction: column !important;
+            justify-content: center !important;
+        }
+        
+        .index-noticia-fecha {
+            color: rgba(255, 255, 255, 0.7) !important;
+            font-size: 12px !important;
+            font-family: 'Montserrat', sans-serif !important;
+            font-weight: 500 !important;
+            margin: 0 0 4px 0 !important;
+        }
+        
+        .index-noticia-mediana .index-noticia-title {
+            color: white !important;
+            font-size: 14px !important;
+            font-family: 'Montserrat', sans-serif !important;
+            font-weight: 700 !important;
+            line-height: 1.3 !important;
+            margin: 0 !important;
+            display: -webkit-box !important;
+            -webkit-line-clamp: 2 !important;
+            -webkit-box-orient: vertical !important;
+            overflow: hidden !important;
+        }
+    }
+    
+    /* ====================================
+       INDEX RESPONSIVE STYLES - TABLET
+       ==================================== */
+    @@media (min-width: 768px) and (max-width: 1023px) {
+        /* Override main container */
+        .index-main-container {
+            min-height: auto !important;
+            position: relative !important;
+            display: flex !important;
+            flex-direction: column !important;
+            overflow: visible !important;
+        }
+        
+        /* Hero section con máxima especificidad */
+        div.index-main-container > div.index-hero-section[data-property-1="1"] {
+            display: block !important;
+            position: relative !important;
+            width: 100% !important;
+            height: 500px !important;
+            margin: 0 !important;
+            padding: 0 !important;
+            border-radius: 0 !important;
+            left: 0 !important;
+            top: 0 !important;
+            right: auto !important;
+            bottom: auto !important;
+            transform: none !important;
+        }
+        
+        /* Hide ALL OTHER desktop absolute positioned sections */
+        .index-main-container > div[style*="position: absolute"]:not(.index-hero-section),
+        .index-main-container > a[style*="position: absolute"] {
+            display: none !important;
+        }
+        
+        .index-hero-section img {
+            width: 100% !important;
+            height: 100% !important;
+            object-fit: cover !important;
+            position: absolute !important;
+            left: 0 !important;
+            top: 0 !important;
+        }
+        
+        .index-hero-gradient {
+            display: block !important;
+            position: absolute !important;
+            width: 100% !important;
+            height: 100% !important;
+            left: 0 !important;
+            top: 0 !important;
+        }
+        
+        /* Ocultar búsqueda rápida en tablet */
+        .index-busqueda-rapida {
+            display: none !important;
+        }
+        
+        /* Botón "Anuncie su auto" - sobrescribir estilos inline */
+        .index-hero-section .index-hero-btn {
+            display: flex !important;
+            position: absolute !important;
+            bottom: 96px !important;
+            top: auto !important;
+            left: 50% !important;
+            right: auto !important;
+            transform: translateX(-50%) !important;
+            width: 320px !important;
+            height: 56px !important;
+            padding: 16px !important;
+            background: white !important;
+            border-radius: 4px !important;
+            justify-content: center !important;
+            align-items: center !important;
+            gap: 8px !important;
+            z-index: 10 !important;
+        }
+        
+        .index-hero-section .index-hero-btn-text {
+            color: #06174D !important;
+            font-size: 18px !important;
+            font-family: 'Montserrat', sans-serif !important;
+            font-weight: 700 !important;
+        }
+        
+        /* Texto del hero */
+        .index-hero-text {
+            display: block !important;
+            position: absolute !important;
+            width: 90% !important;
+            max-width: 450px !important;
+            left: 50% !important;
+            transform: translateX(-50%) !important;
+            top: 50% !important;
+            margin-top: -100px !important;
+            text-align: center !important;
+            color: white !important;
+            font-size: 24px !important;
+            font-family: 'Montserrat', sans-serif !important;
+            font-weight: 700 !important;
+            line-height: 1.3 !important;
+        }
+        
+        /* Show responsive sections */
+        .index-section-responsive {
+            display: block !important;
+            position: relative !important;
+            padding: 0 40px;
+            margin-top: 40px;
+        }
+        
+        /* Noticias section sin padding lateral */
+        .index-section-responsive:has(.index-noticias-container) {
+            padding: 0 40px !important;
+        }
+        
+        .index-section-responsive .index-noticias-container {
+            width: 100% !important;
+            padding: 0 !important;
+        }
+        
+        .index-section-divider {
+            display: block !important;
+            height: 1px;
+            background: rgba(255, 255, 255, 0.15);
+            margin: 32px 40px;
+        }
+        
+        /* Quitar subrayado de links en cards */
+        .index-card-small {
+            text-decoration: none !important;
+        }
+        
+        .index-card-small-title,
+        .index-card-small-price {
+            text-decoration: none !important;
+        }
+        
+        /* Botón "Ver más" extendido hacia arriba */
+        .index-card-ver-mas {
+            width: 150px !important;
+            height: 220px !important;
+            align-self: flex-start !important;
+            margin-top: 0 !important;
+        }
+        
+        .index-card-ver-mas-btn {
+            width: 100% !important;
+            height: 100% !important;
+            text-decoration: none !important;
+        }
+        
+        /* Contenedor de noticias sin padding lateral */
+        .index-noticias-container {
+            padding: 0 !important;
+            margin: 0 !important;
+        }
+        
+        /* Noticias - Primera grande con texto sobre imagen */
+        .index-noticia-grande {
+            position: relative !important;
+            width: 100% !important;
+            height: 280px !important;
+            border-radius: 8px !important;
+            overflow: hidden !important;
+            text-decoration: none !important;
+            display: block !important;
+            margin-bottom: 20px !important;
+        }
+        
+        .index-noticia-grande img {
+            width: 100% !important;
+            height: 100% !important;
+            object-fit: cover !important;
+        }
+        
+        .index-noticia-gradient {
+            position: absolute !important;
+            bottom: 0 !important;
+            left: 0 !important;
+            width: 100% !important;
+            padding: 16px 20px !important;
+            background: linear-gradient(to top, rgba(0,0,0,0.8) 25%, rgba(0,0,0,0)) !important;
+        }
+        
+        .index-noticia-grande .index-noticia-title {
+            color: white !important;
+            font-size: 18px !important;
+            font-family: 'Montserrat', sans-serif !important;
+            font-weight: 700 !important;
+            line-height: 1.3 !important;
+            margin: 0 !important;
+        }
+        
+        /* Noticias medianas - imagen pequeña a la izquierda, sin fondo */
+        .index-noticia-mediana {
+            display: flex !important;
+            gap: 16px !important;
+            margin-bottom: 20px !important;
+            text-decoration: none !important;
+            background: transparent !important;
+            padding: 0 !important;
+        }
+        
+        .index-noticia-mediana img {
+            width: 144px !important;
+            height: 64px !important;
+            object-fit: cover !important;
+            border-radius: 4px !important;
+            flex-shrink: 0 !important;
+        }
+        
+        .index-noticia-info {
+            flex: 1 !important;
+            display: flex !important;
+            flex-direction: column !important;
+            justify-content: center !important;
+        }
+        
+        .index-noticia-fecha {
+            color: rgba(255, 255, 255, 0.7) !important;
+            font-size: 13px !important;
+            font-family: 'Montserrat', sans-serif !important;
+            font-weight: 500 !important;
+            margin: 0 0 6px 0 !important;
+        }
+        
+        .index-noticia-mediana .index-noticia-title {
+            color: white !important;
+            font-size: 15px !important;
+            font-family: 'Montserrat', sans-serif !important;
+            font-weight: 700 !important;
+            line-height: 1.3 !important;
+            margin: 0 !important;
+            display: -webkit-box !important;
+            -webkit-line-clamp: 2 !important;
+            -webkit-box-orient: vertical !important;
+            overflow: hidden !important;
+        }
+    }
+
+    /* ====================================
+       ESTILOS COMUNES PARA RESPONSIVE
+       ==================================== */
+    
+    /* Cards sections */
+    .index-section-header {
+        width: 100%;
+        padding: 0 0 16px 0;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+    
+    .index-section-title {
+        color: white;
+        font-size: 20px;
+        font-family: 'Montserrat', sans-serif;
+        font-weight: 700;
+    }
+    
+    .index-cards-scroll-container {
+        width: 100%;
+        overflow-x: auto;
+        overflow-y: hidden;
+        -webkit-overflow-scrolling: touch;
+        scrollbar-width: none;
+        -ms-overflow-style: none;
+        padding: 0 0 16px 0;
+        margin: 0 -20px;
+        padding-left: 20px;
+        padding-right: 20px;
+    }
+    
+    .index-cards-scroll-container::-webkit-scrollbar {
+        display: none;
+    }
+    
+    .index-cards-scroll-wrapper {
+        display: flex;
+        gap: 16px;
+        width: max-content;
+    }
+    
+    .index-card-small {
+        flex-shrink: 0;
+        width: 226px;
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+        cursor: pointer;
+        position: relative;
+        text-decoration: none;
+    }
+    
+    .index-card-small-image {
+        width: 100%;
+        height: 136px;
+        border-radius: 2px;
+        overflow: hidden;
+        position: relative;
+    }
+    
+    .index-card-small-image img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+    }
+    
+    .index-card-banderin {
+        position: absolute;
+        top: -9px;
+        right: 4.15px;
+        width: 76.853px;
+        height: 75.999px;
+        z-index: 10;
+    }
+    
+    .index-card-banderin img {
+        width: 100%;
+        height: 100%;
+        object-fit: contain;
+    }
+    
+    .index-card-small-info {
+        display: flex;
+        flex-direction: column;
+        gap: 12px;
+        color: white;
+    }
+    
+    .index-card-small-title {
+        font-size: 14px;
+        font-family: 'Montserrat', sans-serif;
+        font-weight: 500;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        color: white;
+    }
+    
+    .index-card-small-price {
+        font-size: 16px;
+        font-family: 'Montserrat', sans-serif;
+        font-weight: 700;
+        color: white;
+    }
+    
+    .index-card-ver-mas {
+        flex-shrink: 0;
+        display: flex;
+        align-items: center;
+    }
+    
+    .index-card-ver-mas-btn {
+        background: rgba(255, 255, 255, 0.05);
+        border: 1px solid rgba(255, 255, 255, 0.25);
+        border-radius: 8px;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        gap: 16px;
+        cursor: pointer;
+        text-decoration: none;
+    }
+    
+    .index-card-ver-mas-icon {
+        width: 30px;
+        height: 30px;
+    }
+    
+    .index-card-ver-mas-text {
+        color: white;
+        font-size: 16px;
+        font-family: 'Montserrat', sans-serif;
+        font-weight: 600;
+        text-align: center;
+        line-height: 1.3;
+    }
+    
+    /* Marcas grid */
+    .index-marcas-grid {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 16px;
+        width: 100%;
+    }
+    
+    .index-marca-item {
+        aspect-ratio: 1;
+        background: rgba(3, 13, 43, 0.5);
+        border-radius: 4px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 24px;
+        text-decoration: none;
+        transition: all 0.3s ease;
+    }
+    
+    .index-marca-item:hover {
+        background: rgba(3, 13, 43, 0.8);
+        transform: scale(1.05);
+    }
+    
+    .index-marca-item img {
+        max-width: 80%;
+        max-height: 80%;
+        object-fit: contain;
+    }
+    
+    /* Noticias container */
+    .index-noticias-container {
+        width: 100%;
+        display: flex;
+        flex-direction: column;
+    }
+
     /* Estilos para las cards de autos */
     .auto-card {
         background: #02081C;
@@ -43,13 +702,13 @@
     }
 </style>
 
-<div style="width: 100%; min-height: 4100px; position: relative; background: #02081C; overflow: hidden">
+<div class="index-main-container" style="width: 100%; min-height: 4100px; position: relative; background: #02081C; overflow: hidden">
     <!-- Hero Image Section -->
-    <div data-property-1="1" style="width: calc(100% - 64px); height: 736px; left: 32px; top: 0px; position: absolute; overflow: hidden; border-radius: 12px">
+    <div data-property-1="1" class="index-hero-section" style="width: calc(100% - 64px); height: 736px; left: 32px; top: 0px; position: absolute; overflow: hidden; border-radius: 12px">
         <img style="width: 100%; height: 736px; left: 0px; top: 0px; position: absolute; object-fit: cover; object-position: center top; background: rgba(0, 0, 0, 0.3);" src="~/images/e032f5d0f2fa0108a989af4988eba3f7de835a51.jpg" />
-        <div style="width: 100%; height: 736px; left: 0px; top: 0px; position: absolute; background: linear-gradient(180deg, rgba(0, 0, 0, 0) 0%, rgba(0, 0, 0, 0.90) 100%); overflow: hidden">
+        <div class="index-hero-gradient" style="width: 100%; height: 736px; left: 0px; top: 0px; position: absolute; background: linear-gradient(180deg, rgba(0, 0, 0, 0) 0%, rgba(0, 0, 0, 0.90) 100%); overflow: hidden">
             <!-- Búsqueda rápida centrada -->
-            <div style="width: 624px; padding-left: 20px; padding-right: 20px; padding-top: 19px; padding-bottom: 19px; left: 50%; top: 266px; position: absolute; transform: translateX(-50%); background: rgba(0, 0, 0, 0.25); box-shadow: 5px 5px 6px rgba(0, 0, 0, 0.25); overflow: hidden; border-radius: 4px; outline: 1px white solid; outline-offset: -1px; backdrop-filter: blur(6px); flex-direction: column; justify-content: flex-start; align-items: center; gap: 32px; display: inline-flex">
+            <div class="index-busqueda-rapida" style="width: 624px; padding-left: 20px; padding-right: 20px; padding-top: 19px; padding-bottom: 19px; left: 50%; top: 266px; position: absolute; transform: translateX(-50%); background: rgba(0, 0, 0, 0.25); box-shadow: 5px 5px 6px rgba(0, 0, 0, 0.25); overflow: hidden; border-radius: 4px; outline: 1px white solid; outline-offset: -1px; backdrop-filter: blur(6px); flex-direction: column; justify-content: flex-start; align-items: center; gap: 32px; display: inline-flex">
             <div style="align-self: stretch; text-box-trim: trim-both; text-box-edge: cap alphabetic; text-align: center; color: white; font-size: 32px; font-family: Montserrat; font-weight: 700; word-wrap: break-word">Búsqueda rápida</div>
             <div data-property-1="Default" style="align-self: stretch; flex-direction: column; justify-content: flex-start; align-items: flex-start; gap: 16px; display: flex">
                 <div style="align-self: stretch; text-box-trim: trim-both; text-box-edge: cap alphabetic; color: white; font-size: 16px; font-family: Montserrat; font-weight: 500; word-wrap: break-word">¿Qué auto anda buscando?</div>
@@ -63,17 +722,263 @@
             </div>
             
             <!-- Botón Anuncie su auto ahora -->
-            <div data-estado="Default" style="padding: 16px; right: 64px; top: 626px; position: absolute; background: white; border-radius: 4px; justify-content: center; align-items: center; gap: 8px; display: inline-flex; cursor: pointer;" onclick="window.location.href='@Url.Page("/AnunciarMiAuto")'">
-                <div style="text-box-trim: trim-both; text-box-edge: cap alphabetic; color: #06174D; font-size: 20px; font-family: Montserrat; font-weight: 700; word-wrap: break-word">Anuncie su auto ahora</div>
-            </div>
+            <a href="@Url.Page("/AnunciarMiAuto")" class="index-hero-btn" style="padding: 16px; right: 64px; top: 626px; position: absolute; background: white; border-radius: 4px; justify-content: center; align-items: center; gap: 8px; display: inline-flex; cursor: pointer; text-decoration: none;">
+                <div class="index-hero-btn-text" style="text-box-trim: trim-both; text-box-edge: cap alphabetic; color: #06174D; font-size: 20px; font-family: Montserrat; font-weight: 700; word-wrap: break-word">Anuncie su auto ahora</div>
+            </a>
             
             <!-- Texto principal -->
-            <div style="width: 601px; left: 64px; top: 611px; position: absolute; text-box-trim: trim-both; text-box-edge: cap alphabetic; color: white; font-size: 32px; font-family: Montserrat; font-weight: 700; word-wrap: break-word; text-shadow: 2px 2px 2px rgba(0, 0, 0, 0.75)">¡En AutoClick.cr, usted puede anunciar su auto sin ningún costo!</div>
+            <div class="index-hero-text" style="width: 601px; left: 64px; top: 611px; position: absolute; text-box-trim: trim-both; text-box-edge: cap alphabetic; color: white; font-size: 32px; font-family: Montserrat; font-weight: 700; word-wrap: break-word; text-shadow: 2px 2px 2px rgba(0, 0, 0, 0.75)">¡En AutoClick.cr, usted puede anunciar su auto sin ningún costo!</div>
         </div>
     </div>
 
+    <!-- ==========================================
+         RESPONSIVE SECTIONS (Mobile & Tablet)
+         ========================================== -->
+    
+    <!-- Autos Destacados - Responsive -->
+    <div class="index-section-responsive" style="display: none;">
+        <div class="index-section-header">
+            <div class="index-section-title">Autos destacados</div>
+        </div>
+        <div class="index-cards-scroll-container">
+            <div class="index-cards-scroll-wrapper">
+                @{int respIndex = 0;}
+                @foreach (var auto in Model.AutosDestacados.Take(9))
+                {
+                    respIndex++;
+                    <a href="@Url.Page("/Producto", new { id = auto.Id })" class="index-card-small">
+                        <div class="index-card-small-image">
+                            <img src="@(string.IsNullOrEmpty(auto.ImagenPrincipal) ? "https://placehold.co/226x136" : auto.ImagenPrincipal)" alt="@auto.NombreCompleto" />
+                            @if (!string.IsNullOrEmpty(auto.BanderinVideoUrl) && Model.BanderinUrls.ContainsKey(auto.Id))
+                            {
+                                <div class="index-card-banderin">
+                                    <img src="@Model.BanderinUrls[auto.Id]" alt="Banderín" />
+                                </div>
+                            }
+                        </div>
+                        <div class="index-card-small-info">
+                            <div class="index-card-small-title">@auto.NombreCompleto</div>
+                            <div class="index-card-small-price">@auto.PrecioFormateado</div>
+                        </div>
+                    </a>
+                }
+                <div class="index-card-ver-mas">
+                    <a href="@Url.Page("/Destacados")" class="index-card-ver-mas-btn">
+                        <svg class="index-card-ver-mas-icon" viewBox="0 0 30 30" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M15 5L15 25M5 15L25 15" stroke="white" stroke-width="2" stroke-linecap="round"/>
+                        </svg>
+                        <div class="index-card-ver-mas-text">Ver más<br/>destacados</div>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="index-section-divider" style="display: none;"></div>
+
+    <!-- Recién Vistos - Responsive -->
+    <div class="index-section-responsive" style="display: none;">
+        <div class="index-section-header">
+            <div class="index-section-title">Recién vistos</div>
+        </div>
+        <div class="index-cards-scroll-container">
+            <div class="index-cards-scroll-wrapper">
+                @foreach (var auto in Model.AutosRecientes.Take(9))
+                {
+                    <a href="@Url.Page("/Producto", new { id = auto.Id })" class="index-card-small">
+                        <div class="index-card-small-image">
+                            <img src="@(string.IsNullOrEmpty(auto.ImagenPrincipal) ? "https://placehold.co/226x136" : auto.ImagenPrincipal)" alt="@auto.NombreCompleto" />
+                            @if (!string.IsNullOrEmpty(auto.BanderinVideoUrl) && Model.BanderinUrls.ContainsKey(auto.Id))
+                            {
+                                <div class="index-card-banderin">
+                                    <img src="@Model.BanderinUrls[auto.Id]" alt="Banderín" />
+                                </div>
+                            }
+                        </div>
+                        <div class="index-card-small-info">
+                            <div class="index-card-small-title">@auto.NombreCompleto</div>
+                            <div class="index-card-small-price">@auto.PrecioFormateado</div>
+                        </div>
+                    </a>
+                }
+                <div class="index-card-ver-mas">
+                    <a href="@Url.Page("/RecienVistos")" class="index-card-ver-mas-btn">
+                        <svg class="index-card-ver-mas-icon" viewBox="0 0 30 30" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M15 5L15 25M5 15L25 15" stroke="white" stroke-width="2" stroke-linecap="round"/>
+                        </svg>
+                        <div class="index-card-ver-mas-text">Ver más<br/>recién vistos</div>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="index-section-divider" style="display: none;"></div>
+
+    <!-- Autos Guardados - Responsive -->
+    <div class="index-section-responsive" style="display: none;">
+        <div class="index-section-header">
+            <div class="index-section-title">Autos guardados</div>
+        </div>
+        <div class="index-cards-scroll-container">
+            <div class="index-cards-scroll-wrapper">
+                @foreach (var auto in Model.AutosGuardados.Take(9))
+                {
+                    <a href="@Url.Page("/Producto", new { id = auto.Id })" class="index-card-small">
+                        <div class="index-card-small-image">
+                            <img src="@(string.IsNullOrEmpty(auto.ImagenPrincipal) ? "https://placehold.co/226x136" : auto.ImagenPrincipal)" alt="@auto.NombreCompleto" />
+                            @if (!string.IsNullOrEmpty(auto.BanderinVideoUrl) && Model.BanderinUrls.ContainsKey(auto.Id))
+                            {
+                                <div class="index-card-banderin">
+                                    <img src="@Model.BanderinUrls[auto.Id]" alt="Banderín" />
+                                </div>
+                            }
+                        </div>
+                        <div class="index-card-small-info">
+                            <div class="index-card-small-title">@auto.NombreCompleto</div>
+                            <div class="index-card-small-price">@auto.PrecioFormateado</div>
+                        </div>
+                    </a>
+                }
+                <div class="index-card-ver-mas">
+                    <a href="@Url.Page("/Guardados")" class="index-card-ver-mas-btn">
+                        <svg class="index-card-ver-mas-icon" viewBox="0 0 30 30" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M15 5L15 25M5 15L25 15" stroke="white" stroke-width="2" stroke-linecap="round"/>
+                        </svg>
+                        <div class="index-card-ver-mas-text">Ver<br/>guardados</div>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="index-section-divider" style="display: none;"></div>
+
+    <!-- Explorar Todos los Autos - Responsive -->
+    <div class="index-section-responsive" style="display: none;">
+        <div class="index-section-header">
+            <div class="index-section-title">Explorar todos los autos</div>
+        </div>
+        <div class="index-cards-scroll-container">
+            <div class="index-cards-scroll-wrapper">
+                @foreach (var auto in Model.AutosExploracion.Take(9))
+                {
+                    <a href="@Url.Page("/Producto", new { id = auto.Id })" class="index-card-small">
+                        <div class="index-card-small-image">
+                            <img src="@(string.IsNullOrEmpty(auto.ImagenPrincipal) ? "https://placehold.co/226x136" : auto.ImagenPrincipal)" alt="@auto.NombreCompleto" />
+                            @if (!string.IsNullOrEmpty(auto.BanderinVideoUrl) && Model.BanderinUrls.ContainsKey(auto.Id))
+                            {
+                                <div class="index-card-banderin">
+                                    <img src="@Model.BanderinUrls[auto.Id]" alt="Banderín" />
+                                </div>
+                            }
+                        </div>
+                        <div class="index-card-small-info">
+                            <div class="index-card-small-title">@auto.NombreCompleto</div>
+                            <div class="index-card-small-price">@auto.PrecioFormateado</div>
+                        </div>
+                    </a>
+                }
+                <div class="index-card-ver-mas">
+                    <a href="@Url.Page("/Explorar")" class="index-card-ver-mas-btn">
+                        <svg class="index-card-ver-mas-icon" viewBox="0 0 30 30" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M15 5L15 25M5 15L25 15" stroke="white" stroke-width="2" stroke-linecap="round"/>
+                        </svg>
+                        <div class="index-card-ver-mas-text">Ver todos<br/>los autos</div>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="index-section-divider" style="display: none;"></div>
+
+    <!-- Explorar por Marca - Responsive -->
+    <div class="index-section-responsive" style="display: none;">
+        <div class="index-section-header">
+            <div class="index-section-title">Explorar por marca</div>
+        </div>
+        <div class="index-marcas-grid">
+            <a href="/BusquedaAvanzada?marca=Lexus" class="index-marca-item">
+                <img src="https://autoclickstorage.blob.core.windows.net/logosfiltroautos/Lexus.png" alt="Lexus" />
+            </a>
+            <a href="/BusquedaAvanzada?marca=Toyota" class="index-marca-item">
+                <img src="https://autoclickstorage.blob.core.windows.net/logosfiltroautos/Toyota.png" alt="Toyota" />
+            </a>
+            <a href="/BusquedaAvanzada?marca=Kia" class="index-marca-item">
+                <img src="https://autoclickstorage.blob.core.windows.net/logosfiltroautos/KIA.png" alt="Kia" />
+            </a>
+            <a href="/BusquedaAvanzada?marca=Nissan" class="index-marca-item">
+                <img src="https://autoclickstorage.blob.core.windows.net/logosfiltroautos/NISSAN.png" alt="Nissan" />
+            </a>
+            <a href="/BusquedaAvanzada?marca=Mercedes-Benz" class="index-marca-item">
+                <img src="https://autoclickstorage.blob.core.windows.net/logosfiltroautos/Mercedes%20Benz.png" alt="Mercedes-Benz" />
+            </a>
+            <a href="/BusquedaAvanzada?marca=BMW" class="index-marca-item">
+                <img src="https://autoclickstorage.blob.core.windows.net/logosfiltroautos/BMW.png" alt="BMW" />
+            </a>
+            <a href="/BusquedaAvanzada?marca=Audi" class="index-marca-item">
+                <img src="https://autoclickstorage.blob.core.windows.net/logosfiltroautos/Audi.png" alt="Audi" />
+            </a>
+            <a href="/BusquedaAvanzada?marca=Porsche" class="index-marca-item">
+                <img src="https://autoclickstorage.blob.core.windows.net/logosfiltroautos/Porsche.png" alt="Porsche" />
+            </a>
+        </div>
+    </div>
+
+    <div class="index-section-divider" style="display: none;"></div>
+
+    <!-- Noticias - Responsive -->
+    <div class="index-section-responsive" style="display: none;">
+        <div class="index-section-header">
+            <div class="index-section-title">Noticias</div>
+        </div>
+        <div class="index-noticias-container">
+            <!-- Noticia Grande -->
+            <a href="https://autoclick.cr" target="_blank" rel="noopener noreferrer" class="index-noticia-grande">
+                <img src="https://images.unsplash.com/photo-1492144534655-ae79c964c9d7?w=800&h=600&fit=crop" alt="Noticia principal" />
+                <div class="index-noticia-gradient">
+                    <p class="index-noticia-title">Nace AutoClick.cr: su nuevo aliado para encontrar o vender carro en Costa Rica</p>
+                </div>
+            </a>
+
+            <!-- Noticia 1 -->
+            <a href="https://www.larepublica.net/seccion/motores" target="_blank" rel="noopener noreferrer" class="index-noticia-mediana">
+                <img src="https://images.unsplash.com/photo-1549317661-bd32c8ce0db2?w=300&h=200&fit=crop" alt="Noticia 1" />
+                <div class="index-noticia-info">
+                    <p class="index-noticia-fecha">13 de junio de 2025</p>
+                    <p class="index-noticia-title">Cambios fiscales para vehículos eléctricos en Costa Rica | La República</p>
+                </div>
+            </a>
+
+            <!-- Noticia 2 -->
+            <a href="https://www.linkedin.com/pulse/junio-2025-el-mercado-automotriz-de-costa-rica-muñoz-herrera-qwx6f/" target="_blank" rel="noopener noreferrer" class="index-noticia-mediana">
+                <img src="https://images.unsplash.com/photo-1503376780353-7e6692767b70?w=300&h=200&fit=crop" alt="Noticia 2" />
+                <div class="index-noticia-info">
+                    <p class="index-noticia-fecha">10 de julio de 2025</p>
+                    <p class="index-noticia-title">Costa Rica se convierte en epicentro de innovación automotriz con Expo Motriz 2025</p>
+                </div>
+            </a>
+
+            <!-- Noticia 3 -->
+            <a href="https://ameliarueda.com/noticia/23-anos-monopolio-inspeccion-tecnica-dos-empresas-apertura-servicio-noticias-costa-rica" target="_blank" rel="noopener noreferrer" class="index-noticia-mediana">
+                <img src="https://images.unsplash.com/photo-1486496146582-9ffcd0b2b2b7?w=300&h=200&fit=crop" alt="Noticia 3" />
+                <div class="index-noticia-info">
+                    <p class="index-noticia-fecha">23 de enero de 2025</p>
+                    <p class="index-noticia-title">Empresas seleccionadas para la inspección técnica vehicular a partir de julio de 2025</p>
+                </div>
+            </a>
+        </div>
+    </div>
+
+    <div class="index-section-divider" style="display: none;"></div>
+
+    <!-- END RESPONSIVE SECTIONS -->
+
+    <!-- ========================================== -->
+
     <!-- Sección Autos destacados -->
-    <div style="width: 100%; left: 0px; top: 816px; position: absolute; justify-content: flex-start; align-items: center; gap: 10px; display: inline-flex">
+    <div class="index-section-destacados-desktop" style="width: 100%; left: 0px; top: 816px; position: absolute; justify-content: flex-start; align-items: center; gap: 10px; display: inline-flex">
         <div style="width: 22px; height: 6px; position: relative; background: white; border-top-right-radius: 100px; border-bottom-right-radius: 100px"></div>
         <div style="width: calc(100% - 64px); padding-right: 32px; justify-content: space-between; align-items: center; display: flex">
             <div style="text-box-trim: trim-both; text-box-edge: cap alphabetic; color: white; font-size: 24px; font-family: Montserrat; font-weight: 700; word-wrap: break-word">Autos destacados</div>
@@ -376,7 +1281,7 @@
     <a href="https://autoclick.cr" target="_blank" rel="noopener noreferrer" 
        class="noticia-grande"
        style="width: calc(47% - 32px); height: 520px; left: 32px; top: 3266px; position: absolute; border-radius: 8px; overflow: hidden; display: flex; flex-direction: column; justify-content: flex-end; text-decoration: none; cursor: pointer;">
-        <img src="~/images/logos/WhatsApp Image 2025-11-06 at 8.14.43 AM.jpeg" 
+        <img src="https://images.unsplash.com/photo-1492144534655-ae79c964c9d7?w=800&h=600&fit=crop" 
              alt="Noticia principal" 
              style="position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; border-radius: 8px;" />
         <div style="position: relative; width: 100%; height: 74px; background: linear-gradient(to top, rgba(0,0,0,0.8) 25%, rgba(0,0,0,0)); padding: 12px 24px; display: flex; align-items: center; overflow: hidden;">
@@ -410,7 +1315,7 @@
     </a>
 
     <!-- Noticia 2 (Derecha Media) -->
-    <a href="https://www.instagram.com/autoclick.cr?igsh=NnBybGhkcG1iamZm&utm_source=qr" target="_blank" rel="noopener noreferrer"
+    <a href="https://www.linkedin.com/pulse/junio-2025-el-mercado-automotriz-de-costa-rica-muñoz-herrera-qwx6f/" target="_blank" rel="noopener noreferrer"
        class="noticia-mediana"
        style="width: calc(53% - 54px); left: calc(47% + 10px); top: 3434px; position: absolute; border: 0.5px solid rgba(255,255,255,0); border-radius: 4px; padding: 8px 10px; text-decoration: none; cursor: pointer;">
         <div style="display: flex; gap: 20px; height: 152px; align-items: center; width: 100%;">
@@ -422,18 +1327,18 @@
             <div style="display: flex; flex-direction: column; gap: 32px; flex: 1;">
                 <div style="padding: 0 0 0 16px; display: flex; align-items: center; gap: 8px;">
                     <p style="color: white; font-size: 14px; font-family: Montserrat; font-weight: 500; margin: 0; white-space: nowrap;">
-                        1 de enero de 2026
+                        10 de julio de 2025
                     </p>
                 </div>
                 <p style="color: white; font-size: 16px; font-family: Montserrat; font-weight: 700; line-height: normal; margin: 0; height: 54px; overflow: hidden; text-overflow: ellipsis;">
-                    Descubra la página de Instagram de AutoClick.cr
+                    Costa Rica se convierte en epicentro de innovación automotriz con Expo Motriz 2025
                 </p>
             </div>
         </div>
     </a>
 
     <!-- Noticia 3 (Derecha Inferior) -->
-    <a href="https://www.facebook.com/share/1FUk2xFAWP/?mibextid=wwXIfr" target="_blank" rel="noopener noreferrer"
+    <a href="https://ameliarueda.com/noticia/23-anos-monopolio-inspeccion-tecnica-dos-empresas-apertura-servicio-noticias-costa-rica" target="_blank" rel="noopener noreferrer"
        class="noticia-mediana"
        style="width: calc(53% - 54px); left: calc(47% + 10px); top: 3602px; position: absolute; border: 0.5px solid rgba(255,255,255,0); border-radius: 4px; padding: 8px 10px; text-decoration: none; cursor: pointer;">
         <div style="display: flex; gap: 20px; height: 152px; align-items: center; width: 100%;">
@@ -445,11 +1350,11 @@
             <div style="display: flex; flex-direction: column; gap: 32px; flex: 1;">
                 <div style="padding: 0 0 0 16px; display: flex; align-items: center; gap: 8px;">
                     <p style="color: white; font-size: 14px; font-family: Montserrat; font-weight: 500; margin: 0; white-space: nowrap;">
-                        1 de enero de 2026
+                        23 de enero de 2025
                     </p>
                 </div>
                 <p style="color: white; font-size: 16px; font-family: Montserrat; font-weight: 700; line-height: normal; margin: 0; height: 54px; overflow: hidden; text-overflow: ellipsis;">
-                    Descubra la página de Facebook de AutoClick.cr
+                    Empresas seleccionadas para la inspección técnica vehicular a partir de julio de 2025
                 </p>
             </div>
         </div>
@@ -457,9 +1362,4 @@
 
     <!-- Línea divisora después de Noticias -->
     <div style="width: calc(100% - 64px); height: 1px; background: rgba(255, 255, 255, 0.15); left: 32px; top: 3826px; position: absolute;"></div>
-
-    <!-- Footer -->
-    <div style="left: 0px; top: 3866px; position: absolute; width: 100%;">
-        <partial name="_Footer" />
-    </div>
 </div>

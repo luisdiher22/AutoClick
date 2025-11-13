@@ -1,0 +1,614 @@
+/* ========================================
+   INDEX PAGE RESPONSIVE STYLES
+   Mobile & Tablet specific styles for Index.cshtml
+   ======================================== */
+
+/* ====================================
+   MOBILE STYLES (0px - 767px)
+   ==================================== */
+@media (max-width: 767px) {
+    /* Override main container to flow naturally */
+    .index-main-container {
+        min-height: auto !important;
+        position: relative !important;
+        display: flex !important;
+        flex-direction: column !important;
+        overflow: visible !important;
+    }
+    
+    /* Hide ALL desktop absolute positioned sections */
+    .index-main-container > div[style*="position: absolute"],
+    .index-main-container > a[style*="position: absolute"] {
+        display: none !important;
+    }
+    
+    /* But show the hero section */
+    .index-hero-section {
+        display: block !important;
+    }
+    
+    /* Show responsive sections */
+    .index-section-responsive {
+        display: block !important;
+        position: relative !important;
+    }
+    
+    .index-section-divider {
+        display: block !important;
+        height: 1px;
+        background: rgba(255, 255, 255, 0.15);
+        margin: 24px 20px;
+    }
+    
+    /* Hero Section - Based on Figma design node-id=2631-37591 */
+    .index-hero-section {
+        position: relative !important;
+        width: 100% !important;
+        height: 400px !important;
+        margin-top: 0 !important;
+        border-radius: 0 !important;
+        left: 0 !important;
+        top: 0 !important;
+    }
+    
+    .index-hero-section img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        object-position: center 50%;
+    }
+    
+    .index-hero-gradient {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: linear-gradient(180deg, rgba(0, 0, 0, 0) 0%, rgba(0, 0, 0, 0.9) 100%);
+    }
+    
+    /* Botón "Anuncie su auto" centered at bottom */
+    .index-hero-btn {
+        position: absolute;
+        bottom: 24px;
+        left: 50%;
+        transform: translateX(-50%);
+        width: 274px;
+        height: 48px;
+        padding: 16px;
+        background: white;
+        border-radius: 4px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 8px;
+        cursor: pointer;
+        text-decoration: none;
+    }
+    
+    .index-hero-btn-text {
+        color: #06174D;
+        font-size: 16px;
+        font-family: 'Montserrat', sans-serif;
+        font-weight: 600;
+        white-space: nowrap;
+    }
+    
+    /* Texto principal del hero */
+    .index-hero-text {
+        position: absolute;
+        left: calc(50% - 145px);
+        top: 217px;
+        width: 290px;
+        color: white;
+        font-size: 16px;
+        font-family: 'Montserrat', sans-serif;
+        font-weight: 700;
+        text-shadow: 2px 2px 2px rgba(0, 0, 0, 0.75);
+        line-height: normal;
+    }
+    
+    /* Hide búsqueda rápida section on mobile */
+    .index-busqueda-rapida {
+        display: none !important;
+    }
+    
+    /* ====================================
+       CARDS SECTIONS - Horizontal Scroll
+       ==================================== */
+    
+    /* Section headers */
+    .index-section-header {
+        width: 100%;
+        padding: 24px 16px 16px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+    
+    .index-section-title {
+        color: white;
+        font-size: 20px;
+        font-family: 'Montserrat', sans-serif;
+        font-weight: 700;
+    }
+    
+    /* Horizontal scroll container */
+    .index-cards-scroll-container {
+        width: 100%;
+        overflow-x: auto;
+        overflow-y: hidden;
+        -webkit-overflow-scrolling: touch;
+        scrollbar-width: none; /* Firefox */
+        -ms-overflow-style: none; /* IE and Edge */
+        padding: 0 8px 16px 8px;
+    }
+    
+    .index-cards-scroll-container::-webkit-scrollbar {
+        display: none; /* Chrome, Safari */
+    }
+    
+    .index-cards-scroll-wrapper {
+        display: flex;
+        gap: 16px;
+        width: max-content;
+    }
+    
+    /* Card Small - Based on Figma design node-id=2130-25698 */
+    .index-card-small {
+        flex-shrink: 0;
+        width: 226px;
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+        cursor: pointer;
+        position: relative;
+    }
+    
+    .index-card-small-image {
+        width: 100%;
+        height: 136px;
+        border-radius: 2px;
+        overflow: hidden;
+        position: relative;
+    }
+    
+    .index-card-small-image img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        object-position: center 50%;
+    }
+    
+    /* Banderín position */
+    .index-card-banderin {
+        position: absolute;
+        top: -9px;
+        right: 4.15px;
+        width: 76.853px;
+        height: 75.999px;
+        z-index: 10;
+        pointer-events: none;
+    }
+    
+    .index-card-banderin img {
+        width: 116.85%;
+        height: 116.85%;
+        position: absolute;
+        left: -7.78%;
+        top: -8.43%;
+        max-width: none;
+    }
+    
+    .index-card-small-info {
+        display: flex;
+        flex-direction: column;
+        gap: 12px;
+        color: white;
+    }
+    
+    .index-card-small-title {
+        font-size: 14px;
+        font-family: 'Montserrat', sans-serif;
+        font-weight: 500;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        width: 214px;
+    }
+    
+    .index-card-small-price {
+        font-size: 16px;
+        font-family: 'Montserrat', sans-serif;
+        font-weight: 700;
+        white-space: nowrap;
+    }
+    
+    /* "Ver más" button at end of scroll */
+    .index-card-ver-mas {
+        flex-shrink: 0;
+        width: 139px;
+        display: flex;
+        flex-direction: column;
+        align-self: center;
+        margin-top: 13px;
+    }
+    
+    .index-card-ver-mas-btn {
+        background: rgba(255, 255, 255, 0.05);
+        border: 1px solid rgba(255, 255, 255, 0.25);
+        border-radius: 8px;
+        padding: 16px;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 16px;
+        cursor: pointer;
+        text-decoration: none;
+    }
+    
+    .index-card-ver-mas-icon {
+        width: 30px;
+        height: 30px;
+    }
+    
+    .index-card-ver-mas-text {
+        color: white;
+        font-size: 16px;
+        font-family: 'Montserrat', sans-serif;
+        font-weight: 700;
+        text-align: center;
+        line-height: 1.2;
+    }
+    
+    /* ====================================
+       EXPLORAR POR MARCA - 2 columns
+       ==================================== */
+    .index-marcas-grid {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 16px;
+        padding: 16px;
+        width: 100%;
+    }
+    
+    .index-marca-item {
+        aspect-ratio: 1;
+        background: rgba(255, 255, 255, 0.05);
+        border: 1px solid rgba(255, 255, 255, 0.15);
+        border-radius: 8px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+        transition: all 0.3s ease;
+    }
+    
+    .index-marca-item:hover {
+        background: rgba(255, 255, 255, 0.1);
+        transform: scale(1.02);
+    }
+    
+    .index-marca-item img {
+        max-width: 70%;
+        max-height: 70%;
+        object-fit: contain;
+    }
+    
+    /* ====================================
+       NOTICIAS SECTION - Stack Layout
+       ==================================== */
+    .index-noticias-container {
+        display: flex;
+        flex-direction: column;
+        gap: 16px;
+        padding: 16px;
+        width: 100%;
+    }
+    
+    /* Noticia grande (primera) */
+    .index-noticia-grande {
+        width: 100%;
+        display: flex;
+        flex-direction: column;
+        gap: 12px;
+        background: rgba(255, 255, 255, 0.02);
+        border-radius: 8px;
+        overflow: hidden;
+        text-decoration: none;
+        cursor: pointer;
+        transition: transform 0.3s ease;
+    }
+    
+    .index-noticia-grande:hover {
+        transform: scale(1.02);
+    }
+    
+    .index-noticia-grande-image {
+        width: 100%;
+        height: 200px;
+        overflow: hidden;
+    }
+    
+    .index-noticia-grande-image img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+    }
+    
+    .index-noticia-grande-content {
+        padding: 12px 16px 16px;
+        display: flex;
+        flex-direction: column;
+        gap: 12px;
+    }
+    
+    .index-noticia-fecha {
+        color: white;
+        font-size: 12px;
+        font-family: 'Montserrat', sans-serif;
+        font-weight: 500;
+        opacity: 0.7;
+    }
+    
+    .index-noticia-titulo {
+        color: white;
+        font-size: 16px;
+        font-family: 'Montserrat', sans-serif;
+        font-weight: 700;
+        line-height: 1.4;
+        display: -webkit-box;
+        -webkit-line-clamp: 3;
+        -webkit-box-orient: vertical;
+        overflow: hidden;
+    }
+    
+    /* Noticias medianas (resto) - stacked */
+    .index-noticia-mediana {
+        width: 100%;
+        display: flex;
+        gap: 12px;
+        background: rgba(255, 255, 255, 0.02);
+        border-radius: 8px;
+        padding: 12px;
+        text-decoration: none;
+        cursor: pointer;
+        transition: all 0.3s ease;
+    }
+    
+    .index-noticia-mediana:hover {
+        background: rgba(255, 255, 255, 0.05);
+        transform: translateX(5px);
+    }
+    
+    .index-noticia-mediana-image {
+        flex-shrink: 0;
+        width: 100px;
+        height: 80px;
+        border-radius: 4px;
+        overflow: hidden;
+    }
+    
+    .index-noticia-mediana-image img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+    }
+    
+    .index-noticia-mediana-content {
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+        justify-content: center;
+    }
+    
+    .index-noticia-mediana-titulo {
+        color: white;
+        font-size: 14px;
+        font-family: 'Montserrat', sans-serif;
+        font-weight: 700;
+        line-height: 1.3;
+        display: -webkit-box;
+        -webkit-line-clamp: 2;
+        -webkit-box-orient: vertical;
+        overflow: hidden;
+    }
+    
+    /* Dividers */
+    .index-section-divider {
+        width: calc(100% - 32px);
+        height: 1px;
+        background: rgba(255, 255, 255, 0.15);
+        margin: 32px auto;
+    }
+}
+
+/* ====================================
+   TABLET STYLES (768px - 1023px)
+   ==================================== */
+@media (min-width: 768px) and (max-width: 1023px) {
+    /* Override main container to flow naturally */
+    .index-main-container {
+        min-height: auto !important;
+        position: relative !important;
+        display: flex !important;
+        flex-direction: column !important;
+    }
+    
+    /* Hide ALL desktop absolute positioned sections */
+    .index-main-container > div[style*="position: absolute"],
+    .index-main-container > a[style*="position: absolute"] {
+        display: none !important;
+    }
+    
+    /* But show the hero section */
+    .index-hero-section {
+        display: block !important;
+    }
+    
+    /* Show responsive sections */
+    .index-section-responsive {
+        display: block !important;
+        position: relative !important;
+    }
+    
+    .index-section-divider {
+        display: block !important;
+        height: 1px;
+        background: rgba(255, 255, 255, 0.15);
+        margin: 32px 40px;
+    }
+    
+    /* Hero Section - Slightly taller for tablet */
+    .index-hero-section {
+        position: relative !important;
+        width: 100% !important;
+        height: 500px !important;
+        margin-top: 0 !important;
+        border-radius: 0 !important;
+        left: 0 !important;
+        top: 0 !important;
+    }
+    
+    .index-hero-section img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        object-position: center 50%;
+    }
+    
+    .index-hero-gradient {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: linear-gradient(180deg, rgba(0, 0, 0, 0) 0%, rgba(0, 0, 0, 0.9) 100%);
+    }
+    
+    .index-hero-btn {
+        position: absolute;
+        bottom: 32px;
+        left: 50%;
+        transform: translateX(-50%);
+        width: 320px;
+        height: 52px;
+        padding: 16px 24px;
+        background: white;
+        border-radius: 4px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 8px;
+        cursor: pointer;
+        text-decoration: none;
+    }
+    
+    .index-hero-btn-text {
+        color: #06174D;
+        font-size: 18px;
+        font-family: 'Montserrat', sans-serif;
+        font-weight: 600;
+    }
+    
+    .index-hero-text {
+        position: absolute;
+        left: calc(50% - 200px);
+        top: 280px;
+        width: 400px;
+        color: white;
+        font-size: 20px;
+        font-family: 'Montserrat', sans-serif;
+        font-weight: 700;
+        text-shadow: 2px 2px 2px rgba(0, 0, 0, 0.75);
+        line-height: 1.3;
+    }
+    
+    /* Hide búsqueda rápida on tablet too */
+    .index-busqueda-rapida {
+        display: none !important;
+    }
+    
+    /* Cards sections - same horizontal scroll but more cards visible */
+    .index-section-header {
+        padding: 32px 24px 20px;
+    }
+    
+    .index-section-title {
+        font-size: 24px;
+    }
+    
+    .index-cards-scroll-container {
+        padding: 0 16px 20px 16px;
+    }
+    
+    .index-cards-scroll-wrapper {
+        gap: 20px;
+    }
+    
+    .index-card-small {
+        width: 240px;
+    }
+    
+    .index-card-small-image {
+        height: 145px;
+    }
+    
+    .index-card-small-title {
+        font-size: 15px;
+        width: 224px;
+    }
+    
+    .index-card-small-price {
+        font-size: 17px;
+    }
+    
+    /* Marcas - same 2 columns, larger squares */
+    .index-marcas-grid {
+        grid-template-columns: 1fr 1fr;
+        gap: 24px;
+        padding: 24px;
+    }
+    
+    /* Noticias - same stack layout, larger elements */
+    .index-noticias-container {
+        gap: 20px;
+        padding: 24px;
+    }
+    
+    .index-noticia-grande-image {
+        height: 280px;
+    }
+    
+    .index-noticia-grande-content {
+        padding: 16px 20px 20px;
+        gap: 16px;
+    }
+    
+    .index-noticia-fecha {
+        font-size: 13px;
+    }
+    
+    .index-noticia-titulo {
+        font-size: 18px;
+    }
+    
+    .index-noticia-mediana {
+        gap: 16px;
+        padding: 16px;
+    }
+    
+    .index-noticia-mediana-image {
+        width: 140px;
+        height: 100px;
+    }
+    
+    .index-noticia-mediana-titulo {
+        font-size: 15px;
+    }
+    
+    .index-section-divider {
+        margin: 40px auto;
+    }
+}
