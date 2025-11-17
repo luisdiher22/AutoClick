@@ -271,7 +271,7 @@
         justify-content: space-between;
         padding: 19px;
         background: transparent;
-        border: 1px solid rgba(255, 255, 255, 0.25);
+        border: none;
         border-radius: 4.76px;
         color: white;
         font-size: 16.66px;
@@ -366,7 +366,7 @@
     .menu-divider {
         height: 1px;
         background: rgba(255, 255, 255, 0.1);
-        margin: 16px 0;
+        margin: 8px 0 12px 0;
     }
     
     /* ====================================

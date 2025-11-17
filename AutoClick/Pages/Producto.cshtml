@@ -203,11 +203,40 @@
                         <p class="producto-car-price">@Model.Vehicle?.PrecioEnCRC</p>
 
                         <div class="producto-payment-estimate">
-                            <p class="estimate-label">Cuota estimada</p>
+                            <p class="estimate-label">Cuota estimada:</p>
                             <p class="estimate-value">@Model.FormatPrice(Model.MonthlyPayment)/mes</p>
                         </div>
                     </div>
 
+                    <!-- Botones de contacto responsive (solo visible en mobile/tablet) -->
+                    @if (Model.Vehicle?.Propietario != null)
+                    {
+                        <div class="producto-contact-buttons-responsive">
+                            <button class="contact-call-btn-responsive" onclick="window.location.href='tel:@Model.Vehicle.Propietario.NumeroTelefono'">
+                                <svg width="18" height="18" viewBox="0 0 18 18" fill="none">
+                                    <path d="M3 3h2l1.5 4-1.5 1.5c1 2 2.5 3.5 4.5 4.5L11 11.5l4 1.5v2c0 1.1-.9 2-2 2C6.477 17 2 12.523 2 6c0-1.1.9-2 2-2z" stroke="currentColor" stroke-width="1.5"/>
+                                </svg>
+                                <span>Llamar</span>
+                            </button>
+
+                            <button class="contact-whatsapp-btn-responsive" onclick="window.open('https://wa.me/@(Model.Vehicle.Propietario.NumeroTelefono?.Replace("+", "").Replace("-", "").Replace(" ", ""))', '_blank')">
+                                <svg width="18" height="18" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                    <g clip-path="url(#clip0_card_resp)">
+                                        <path d="M14.5893 11.9223L14.5818 11.9848C12.7493 11.0715 12.5576 10.9498 12.3209 11.3048C12.1568 11.5506 11.6784 12.1081 11.5343 12.2731C11.3884 12.4356 11.2434 12.4481 10.9959 12.3356C10.7459 12.2106 9.94345 11.9481 8.99345 11.0981C8.25345 10.4356 7.75678 9.62315 7.61011 9.37315C7.36595 8.95148 7.87678 8.89148 8.34178 8.01148C8.42511 7.83648 8.38261 7.69898 8.32095 7.57482C8.25845 7.44982 7.76095 6.22482 7.55261 5.73648C7.35261 5.24982 7.14678 5.31148 6.99261 5.31148C6.51261 5.26982 6.16178 5.27648 5.85261 5.59815C4.50761 7.07648 4.84678 8.60148 5.99761 10.2231C8.25928 13.1831 9.46428 13.7281 11.6676 14.4848C12.2626 14.674 12.8051 14.6473 13.2343 14.5856C13.7126 14.5098 14.7068 13.9848 14.9143 13.3973C15.1268 12.8098 15.1268 12.3223 15.0643 12.2098C15.0026 12.0973 14.8393 12.0348 14.5893 11.9223Z" fill="white"/>
+                                        <path d="M17.1 2.87404C10.6925 -3.32013 0.0883333 1.17237 0.0841667 9.91071C0.0841667 11.6574 0.541667 13.3607 1.41333 14.8649L0 19.9999L5.27917 18.6232C11.8667 22.1815 19.9967 17.4565 20 9.91571C20 7.26904 18.9667 4.77821 17.0875 2.90654L17.1 2.87404ZM18.335 9.88821C18.33 16.249 11.3475 20.2215 5.825 16.9749L5.525 16.7965L2.4 17.609L3.2375 14.5715L3.03833 14.259C-0.398333 8.78821 3.55 1.63821 10.06 1.63821C12.2717 1.63821 14.3475 2.50071 15.9108 4.06321C17.4733 5.61237 18.335 7.68821 18.335 9.88821Z" fill="white"/>
+                                    </g>
+                                    <defs>
+                                        <clipPath id="clip0_card_resp">
+                                            <rect width="20" height="20" fill="white"/>
+                                        </clipPath>
+                                    </defs>
+                                </svg>
+                                <span>Mensaje</span>
+                            </button>
+                        </div>
+                    }
+
+                    <!-- Botones desktop (favoritos y compartir originales) -->
                     <div class="producto-actions">
                         <!-- Botón de favoritos -->
                         <button class="producto-favorite-btn" onclick="toggleFavorite(@Model.Vehicle?.Id)">
@@ -232,6 +261,29 @@
                             Solicitar pre-aprobación
                         </button>
                     </div>
+
+                    <!-- Iconos responsive (solo visible en mobile/tablet) -->
+                    <div class="producto-card-icons-responsive">
+                        <button class="icon-btn-responsive favorite-icon-btn-responsive" onclick="toggleFavorite(@Model.Vehicle?.Id)" title="Agregar a favoritos">
+                            <svg width="20" height="18" viewBox="0 0 22 19" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M19.5558 2.43875C17.6428 0.520415 14.5216 0.520415 12.596 2.43875L10.9976 4.04157L9.39927 2.43875C7.47368 0.520415 4.36505 0.520415 2.43947 2.43875C0.513888 4.35708 0.526474 7.487 2.43947 9.41794L4.03783 11.0208L10.9976 18L17.9575 11.0208L19.5558 9.41794C21.4814 7.487 21.4814 4.3697 19.5558 2.43875Z" stroke="white" stroke-width="2" stroke-miterlimit="10" stroke-linejoin="round"/>
+                            </svg>
+                        </button>
+
+                        <button class="icon-btn-responsive share-icon-btn-responsive" onclick="shareProduct()" title="Compartir">
+                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none">
+                                <path d="M18 8C19.6569 8 21 6.65685 21 5C21 3.34315 19.6569 2 18 2C16.3431 2 15 3.34315 15 5C15 6.65685 16.3431 8 18 8Z" stroke="white" stroke-width="2"/>
+                                <path d="M6 15C7.65685 15 9 13.6569 9 12C9 10.3431 7.65685 9 6 9C4.34315 9 3 10.3431 3 12C3 13.6569 4.34315 15 6 15Z" stroke="white" stroke-width="2"/>
+                                <path d="M18 22C19.6569 22 21 20.6569 21 19C21 17.3431 19.6569 16 18 16C16.3431 16 15 17.3431 15 19C15 20.6569 16.3431 22 18 22Z" stroke="white" stroke-width="2"/>
+                                <path d="M8.5 13.5L15.5 17.5M15.5 6.5L8.5 10.5" stroke="white" stroke-width="2"/>
+                            </svg>
+                        </button>
+                    </div>
+
+                    <!-- Botón de pre-aprobación responsive -->
+                    <button class="producto-preapproval-btn-responsive btn-primario" onclick="solicitarPreAprobacion()">
+                        Solicitar pre-aprobación
+                    </button>
                 </div>
 
                 <!-- Sistema de Tabs (Responsive Only) -->
