@@ -1,0 +1,673 @@
+/* ====================================
+   PRODUCTO RESPONSIVE STYLES
+   Mobile: ≤767px
+   Tablet: 768px - 1023px
+   SOLO afecta responsive, NO toca escritorio
+   ==================================== */
+
+/* ====================================
+   ESCRITORIO - Ocultar elementos responsive
+   ==================================== */
+@media (min-width: 1024px) {
+    .photo-counter,
+    .video-button,
+    .producto-tabs {
+        display: none !important;
+    }
+}
+
+/* ====================================
+   MOBILE STYLES (≤767px)
+   ==================================== */
+@media (max-width: 767px) {
+    /* Layout responsive con flexbox order */
+    .producto-content {
+        display: flex !important;
+        flex-direction: column !important;
+        gap: 0 !important;
+    }
+
+    /* 1. Galería primero - sin float, contenida en main-content */
+    .producto-gallery {
+        width: 100% !important;
+        margin: 0 !important;
+        padding: 0 !important;
+        order: 1 !important;
+        position: relative !important;
+        float: none !important;
+        clear: both !important;
+    }
+
+    .producto-main-image {
+        width: 100% !important;
+        min-height: 250px !important;
+        height: auto !important;
+        position: relative !important;
+        border-radius: 0 !important;
+        overflow: hidden;
+        display: flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+    }
+
+    .producto-main-image img {
+        width: 100% !important;
+        height: auto !important;
+        object-fit: contain !important;
+    }
+
+    /* Ocultar thumbnails en responsive */
+    .producto-thumbnails {
+        display: none !important;
+    }
+
+    /* Mantener botones de navegación visibles */
+    .gallery-nav-btn {
+        display: flex !important;
+    }
+
+    /* Contador de fotos - abajo derecha, icono pequeño */
+    .photo-counter {
+        position: absolute;
+        bottom: 8px;
+        right: 8px;
+        background: rgba(0, 0, 0, 0.5);
+        border-radius: 2.13px;
+        padding: 5px 6px;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        z-index: 10;
+    }
+
+    .photo-counter span {
+        color: white;
+        font-family: 'Montserrat', sans-serif;
+        font-size: 12px;
+        font-weight: 500;
+        line-height: normal;
+        white-space: nowrap;
+    }
+
+    .photo-counter img {
+        width: 12px !important;
+        height: 10px !important;
+    }
+
+    /* Botón de ver video - abajo izquierda */
+    .video-button {
+        position: absolute;
+        bottom: 8px;
+        left: 8px;
+        background: #7f7f7f;
+        border-radius: 2px;
+        padding: 8px;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        border: none;
+        cursor: pointer;
+        z-index: 10;
+    }
+
+    .video-button span {
+        color: white;
+        font-family: 'Montserrat', sans-serif;
+        font-size: 12px;
+        font-weight: 500;
+        line-height: normal;
+        white-space: nowrap;
+    }
+
+    .video-button img {
+        width: 12.979px;
+        height: 8.778px;
+    }
+
+    /* 2. Sidebar segundo (card) - ancho casi completo */
+    .producto-sidebar {
+        width: 100vw !important;
+        margin-left: calc(-50vw + 50%) !important;
+        padding: 0 !important;
+        order: 2 !important;
+    }
+
+    /* Ocultar anuncios publicitarios en responsive */
+    .producto-sidebar > div:last-child {
+        display: none !important;
+    }
+
+    /* Card del auto - márgenes de 16px a cada lado, centrada */
+    .producto-info-card {
+        width: calc(100% - 32px) !important;
+        margin: 16px auto !important;
+        padding: 20px !important;
+        box-sizing: border-box;
+    }
+
+    /* Tabs - márgenes de 16px, z-index para aparecer sobre calculadora */
+    .producto-tabs {
+        width: calc(100% - 32px) !important;
+        margin: 16px auto !important;
+        padding: 0 !important;
+        position: relative !important;
+        z-index: 10 !important;
+        background: transparent !important;
+        border-radius: 0 !important;
+        overflow: visible !important;
+    }
+
+    .producto-tabs-header {
+        padding: 0 !important;
+        display: flex;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        gap: 0;
+    }
+
+    .producto-tab-button {
+        flex: 1;
+        padding: 12px 16px;
+        background: transparent;
+        border: none;
+        color: rgba(255, 255, 255, 0.6);
+        font-family: 'Montserrat', sans-serif;
+        font-size: 14px;
+        font-weight: 500;
+        cursor: pointer;
+        border-bottom: 2px solid transparent;
+        transition: all 0.3s ease;
+    }
+
+    .producto-tab-button.active {
+        color: white;
+        border-bottom-color: #FFD700;
+    }
+
+    /* Tab content con animación suave hacia abajo */
+    .producto-tab-content {
+        display: none;
+        padding: 20px !important;
+        background: transparent !important;
+        opacity: 0;
+        transform: translateY(-10px);
+        transition: opacity 0.3s ease, transform 0.3s ease;
+    }
+
+    .producto-tab-content.active {
+        display: block;
+        opacity: 1;
+        transform: translateY(0);
+    }
+
+    /* Descripción en tab - texto gris */
+    .producto-tab-content .producto-description {
+        padding: 0 !important;
+        margin: 0 !important;
+    }
+
+    .producto-tab-content .producto-description h2 {
+        display: none;
+    }
+
+    .producto-tab-content .producto-description p {
+        color: rgba(255, 255, 255, 0.7) !important;
+        font-size: 14px;
+        line-height: 1.6;
+    }
+
+    /* Especificaciones en tab - mantener estilo escritorio */
+    .producto-tab-content .producto-specifications {
+        padding: 0 !important;
+        margin: 0 !important;
+    }
+
+    .producto-tab-content .producto-specifications h2 {
+        display: none;
+    }
+
+    .producto-tab-content .specifications-grid {
+        display: grid !important;
+        grid-template-columns: 1fr !important;
+        gap: 20px !important;
+    }
+
+    .producto-tab-content .spec-column {
+        width: 100% !important;
+        display: flex !important;
+        flex-direction: column !important;
+        gap: 16px !important;
+    }
+
+    .producto-tab-content .spec-item {
+        padding: 0 !important;
+        border: none !important;
+    }
+
+    .producto-tab-content .spec-item h3 {
+        font-size: 12px !important;
+        color: rgba(255, 255, 255, 0.6) !important;
+        margin-bottom: 4px !important;
+        font-weight: 600 !important;
+    }
+
+    .producto-tab-content .spec-item p {
+        font-size: 14px !important;
+        color: white !important;
+        font-weight: 400 !important;
+    }
+
+    /* Vendedor en tab */
+    .producto-tab-content .producto-seller-card {
+        padding: 0 !important;
+        margin: 0 !important;
+        background: transparent !important;
+        border: none !important;
+    }
+
+    .producto-tab-content .seller-card-title {
+        display: none;
+    }
+
+    /* 3. Main content tercero - después de tabs, ancho viewport para galería */
+    .producto-main-content {
+        width: 100vw !important;
+        margin-left: calc(-50vw + 50%) !important;
+        padding: 0 !important;
+        order: 3 !important;
+    }
+
+    /* Ocultar descripción y especificaciones de escritorio en responsive */
+    .producto-main-content > .producto-description,
+    .producto-main-content > .producto-specifications {
+        display: none !important;
+    }
+
+    /* Equipamiento - mismo ancho que card */
+    .producto-equipment {
+        width: calc(100% - 32px) !important;
+        margin: 16px auto !important;
+        padding: 20px !important;
+        box-sizing: border-box !important;
+    }
+
+    .producto-equipment h2 {
+        font-size: 20px !important;
+        margin-bottom: 16px !important;
+    }
+
+    .equipment-grid {
+        display: grid !important;
+        grid-template-columns: 1fr 1fr !important;
+        gap: 8px 16px !important;
+    }
+
+    .equipment-item {
+        padding: 0 !important;
+        margin: 0 !important;
+        list-style: none !important;
+    }
+
+    .equipment-item li {
+        font-size: 12px !important;
+        color: white !important;
+        padding-left: 16px !important;
+        position: relative;
+    }
+
+    .equipment-item li:before {
+        content: "•";
+        position: absolute;
+        left: 0;
+        color: #FFD700;
+    }
+
+    /* Calculadora, valor mercado y financiamiento - mismo ancho que card */
+    .producto-marchamo,
+    .producto-market-analysis,
+    .producto-financing {
+        width: calc(100% - 32px) !important;
+        margin: 16px auto !important;
+        padding: 20px !important;
+        box-sizing: border-box !important;
+    }
+
+    /* Ocultar elementos de sidebar que se mueven a tabs */
+    .producto-contact-card,
+    .producto-sidebar > .producto-seller-card {
+        display: none !important;
+    }
+
+    /* Breadcrumb responsive */
+    .producto-breadcrumb {
+        padding: 12px 20px !important;
+        font-size: 12px !important;
+    }
+}
+
+/* ====================================
+   TABLET STYLES (768px - 1023px)
+   ==================================== */
+@media (min-width: 768px) and (max-width: 1023px) {
+    /* Layout responsive con flexbox order */
+    .producto-content {
+        display: flex !important;
+        flex-direction: column !important;
+        gap: 0 !important;
+    }
+
+    /* 1. Galería primero - sin float, contenida en main-content */
+    .producto-gallery {
+        width: 100% !important;
+        margin: 0 !important;
+        padding: 0 !important;
+        order: 1 !important;
+        position: relative !important;
+        float: none !important;
+        clear: both !important;
+    }
+
+    .producto-main-image {
+        width: 100% !important;
+        min-height: 400px !important;
+        height: auto !important;
+        position: relative !important;
+        border-radius: 0 !important;
+        overflow: hidden;
+        display: flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+    }
+
+    .producto-main-image img {
+        width: 100% !important;
+        height: auto !important;
+        object-fit: contain !important;
+    }
+
+    /* Ocultar thumbnails en responsive */
+    .producto-thumbnails {
+        display: none !important;
+    }
+
+    /* Mantener botones de navegación visibles */
+    .gallery-nav-btn {
+        display: flex !important;
+    }
+
+    /* Contador de fotos - abajo derecha, icono pequeño */
+    .photo-counter {
+        position: absolute;
+        bottom: 12px;
+        right: 12px;
+        background: rgba(0, 0, 0, 0.5);
+        border-radius: 2.13px;
+        padding: 5px 6px;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        z-index: 10;
+    }
+
+    .photo-counter span {
+        color: white;
+        font-family: 'Montserrat', sans-serif;
+        font-size: 12px;
+        font-weight: 500;
+        line-height: normal;
+        white-space: nowrap;
+    }
+
+    .photo-counter img {
+        width: 14px !important;
+        height: 12px !important;
+    }
+
+    /* Botón de ver video - abajo izquierda */
+    .video-button {
+        position: absolute;
+        bottom: 12px;
+        left: 12px;
+        background: #7f7f7f;
+        border-radius: 2px;
+        padding: 8px;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        border: none;
+        cursor: pointer;
+        z-index: 10;
+    }
+
+    .video-button span {
+        color: white;
+        font-family: 'Montserrat', sans-serif;
+        font-size: 12px;
+        font-weight: 500;
+        line-height: normal;
+        white-space: nowrap;
+    }
+
+    .video-button img {
+        width: 12.979px;
+        height: 8.778px;
+    }
+
+    /* 2. Sidebar segundo (card) - ancho casi completo */
+    .producto-sidebar {
+        width: 100vw !important;
+        margin-left: calc(-50vw + 50%) !important;
+        padding: 0 !important;
+        order: 2 !important;
+    }
+
+    /* Ocultar anuncios publicitarios en responsive */
+    .producto-sidebar > div:last-child {
+        display: none !important;
+    }
+
+    /* Card del auto - márgenes de 24px a cada lado, centrada */
+    .producto-info-card {
+        width: calc(100% - 48px) !important;
+        margin: 24px auto !important;
+        padding: 24px !important;
+        box-sizing: border-box;
+    }
+
+    /* Tabs - márgenes de 24px, z-index para aparecer sobre calculadora */
+    .producto-tabs {
+        width: calc(100% - 48px) !important;
+        margin: 24px auto !important;
+        padding: 0 !important;
+        position: relative !important;
+        z-index: 10 !important;
+        background: transparent !important;
+        border-radius: 0 !important;
+        overflow: visible !important;
+    }
+
+    .producto-tabs-header {
+        padding: 0 !important;
+        display: flex;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        gap: 0;
+    }
+
+    .producto-tab-button {
+        flex: 1;
+        padding: 16px 20px;
+        background: transparent;
+        border: none;
+        color: rgba(255, 255, 255, 0.6);
+        font-family: 'Montserrat', sans-serif;
+        font-size: 16px;
+        font-weight: 500;
+        cursor: pointer;
+        border-bottom: 2px solid transparent;
+        transition: all 0.3s ease;
+    }
+
+    .producto-tab-button.active {
+        color: white;
+        border-bottom-color: #FFD700;
+    }
+
+    /* Tab content con animación suave hacia abajo */
+    .producto-tab-content {
+        display: none;
+        padding: 24px !important;
+        background: transparent !important;
+        opacity: 0;
+        transform: translateY(-10px);
+        transition: opacity 0.3s ease, transform 0.3s ease;
+    }
+
+    .producto-tab-content.active {
+        display: block;
+        opacity: 1;
+        transform: translateY(0);
+    }
+
+    /* Descripción en tab - texto gris */
+    .producto-tab-content .producto-description {
+        padding: 0 !important;
+        margin: 0 !important;
+    }
+
+    .producto-tab-content .producto-description h2 {
+        display: none;
+    }
+
+    .producto-tab-content .producto-description p {
+        color: rgba(255, 255, 255, 0.7) !important;
+        font-size: 16px;
+        line-height: 1.6;
+    }
+
+    /* Especificaciones en tab - mantener estilo escritorio */
+    .producto-tab-content .producto-specifications {
+        padding: 0 !important;
+        margin: 0 !important;
+    }
+
+    .producto-tab-content .producto-specifications h2 {
+        display: none;
+    }
+
+    .producto-tab-content .specifications-grid {
+        display: grid !important;
+        grid-template-columns: 1fr !important;
+        gap: 24px !important;
+    }
+
+    .producto-tab-content .spec-column {
+        width: 100% !important;
+        display: flex !important;
+        flex-direction: column !important;
+        gap: 20px !important;
+    }
+
+    .producto-tab-content .spec-item {
+        padding: 0 !important;
+        border: none !important;
+    }
+
+    .producto-tab-content .spec-item h3 {
+        font-size: 14px !important;
+        color: rgba(255, 255, 255, 0.6) !important;
+        margin-bottom: 6px !important;
+        font-weight: 600 !important;
+    }
+
+    .producto-tab-content .spec-item p {
+        font-size: 16px !important;
+        color: white !important;
+        font-weight: 400 !important;
+    }
+
+    /* Vendedor en tab */
+    .producto-tab-content .producto-seller-card {
+        padding: 0 !important;
+        margin: 0 !important;
+        background: transparent !important;
+        border: none !important;
+    }
+
+    .producto-tab-content .seller-card-title {
+        display: none;
+    }
+
+    /* 3. Main content tercero - después de tabs, ancho viewport para galería */
+    .producto-main-content {
+        width: 100vw !important;
+        margin-left: calc(-50vw + 50%) !important;
+        padding: 0 !important;
+        order: 3 !important;
+    }
+
+    /* Ocultar descripción y especificaciones de escritorio en responsive */
+    .producto-main-content > .producto-description,
+    .producto-main-content > .producto-specifications {
+        display: none !important;
+    }
+
+    /* Equipamiento - mismo ancho que card */
+    .producto-equipment {
+        width: calc(100% - 48px) !important;
+        margin: 24px auto !important;
+        padding: 24px !important;
+        box-sizing: border-box !important;
+    }
+
+    .producto-equipment h2 {
+        font-size: 24px !important;
+        margin-bottom: 20px !important;
+    }
+
+    .equipment-grid {
+        display: grid !important;
+        grid-template-columns: 1fr 1fr !important;
+        gap: 12px 20px !important;
+    }
+
+    .equipment-item {
+        padding: 0 !important;
+        margin: 0 !important;
+        list-style: none !important;
+    }
+
+    .equipment-item li {
+        font-size: 14px !important;
+        color: white !important;
+        padding-left: 20px !important;
+        position: relative;
+    }
+
+    .equipment-item li:before {
+        content: "•";
+        position: absolute;
+        left: 0;
+        color: #FFD700;
+    }
+
+    /* Calculadora, valor mercado y financiamiento - mismo ancho que card */
+    .producto-marchamo,
+    .producto-market-analysis,
+    .producto-financing {
+        width: calc(100% - 48px) !important;
+        margin: 24px auto !important;
+        padding: 24px !important;
+        box-sizing: border-box !important;
+    }
+
+    /* Ocultar elementos de sidebar que se mueven a tabs */
+    .producto-contact-card,
+    .producto-sidebar > .producto-seller-card {
+        display: none !important;
+    }
+
+    /* Breadcrumb responsive */
+    .producto-breadcrumb {
+        padding: 16px 24px !important;
+        font-size: 14px !important;
+    }
+}

@@ -37,6 +37,21 @@
                             <img src="@Model.Vehicle.ImagenPrincipal" alt="@Model.Vehicle.NombreCompleto" class="main-car-image" />
                         }
 
+                        <!-- Contador de fotos (responsive only) -->
+                        <div class="photo-counter">
+                            <span id="photoCounterText">1/@imageUrlsList.Count</span>
+                            <img src="~/images/icons/camera-icon.svg" alt="Camera" />
+                        </div>
+
+                        <!-- Botón de ver video (responsive only - descomentar cuando se agregue VideoUrl al modelo) -->
+                        @* @if (!string.IsNullOrEmpty(Model.Vehicle?.VideoUrl))
+                        {
+                            <button class="video-button" onclick="openVideoModal()">
+                                <img src="~/images/icons/play-icon.svg" alt="Play" />
+                                <span>Ver video</span>
+                            </button>
+                        } *@
+
                         <!-- Navigation Arrows -->
                         <button class="gallery-nav-btn prev-btn" onclick="navigateGallery(-1)">
                             <svg width="51" height="51" viewBox="0 0 51 51" fill="none">
@@ -216,6 +231,125 @@
                         <button class="producto-preapproval-btn btn-primario" onclick="solicitarPreAprobacion()">
                             Solicitar pre-aprobación
                         </button>
+                    </div>
+                </div>
+
+                <!-- Sistema de Tabs (Responsive Only) -->
+                <div class="producto-tabs">
+                    <div class="producto-tabs-header">
+                        <button class="producto-tab-button active" onclick="switchTab('descripcion')">
+                            Descripción
+                        </button>
+                        <button class="producto-tab-button" onclick="switchTab('especificaciones')">
+                            Especificaciones
+                        </button>
+                        <button class="producto-tab-button" onclick="switchTab('vendedor')">
+                            Vendedor
+                        </button>
+                    </div>
+
+                    <!-- Tab Content: Descripción -->
+                    <div id="tab-descripcion" class="producto-tab-content active">
+                        @if (Model.Vehicle != null)
+                        {
+                            <section class="producto-description">
+                                <p>@Model.Vehicle.Descripcion</p>
+                            </section>
+                        }
+                    </div>
+
+                    <!-- Tab Content: Especificaciones -->
+                    <div id="tab-especificaciones" class="producto-tab-content">
+                        @if (Model.Vehicle != null)
+                        {
+                            <section class="producto-specifications">
+                                <div class="specifications-grid">
+                                    <!-- Column 1 -->
+                                    <div class="spec-column">
+                                        <div class="spec-item">
+                                            <h3>Marca</h3>
+                                            <p>@(string.IsNullOrEmpty(Model.Vehicle.Marca) ? "" : char.ToUpper(Model.Vehicle.Marca[0]) + Model.Vehicle.Marca.Substring(1).ToLower())</p>
+                                        </div>
+                                        <div class="spec-item">
+                                            <h3>Modelo</h3>
+                                            <p>@(string.IsNullOrEmpty(Model.Vehicle.Modelo) ? "" : char.ToUpper(Model.Vehicle.Modelo[0]) + Model.Vehicle.Modelo.Substring(1).ToLower())</p>
+                                        </div>
+                                        <div class="spec-item">
+                                            <h3>Año</h3>
+                                            <p>@Model.Vehicle.Ano</p>
+                                        </div>
+                                        <div class="spec-item">
+                                            <h3>Kilometraje</h3>
+                                            <p>@Model.FormatKilometrage(Model.Vehicle.Kilometraje)</p>
+                                        </div>
+                                        <div class="spec-item">
+                                            <h3>Carrocería</h3>
+                                            <p>@(string.IsNullOrEmpty(Model.Vehicle.Carroceria) ? "" : char.ToUpper(Model.Vehicle.Carroceria[0]) + Model.Vehicle.Carroceria.Substring(1).ToLower())</p>
+                                        </div>
+                                        <div class="spec-item">
+                                            <h3>Número de puertas</h3>
+                                            <p>@Model.Vehicle.NumeroPuertas</p>
+                                        </div>
+                                        <div class="spec-item">
+                                            <h3>Motor</h3>
+                                            <p>@Model.Vehicle.Cilindrada</p>
+                                        </div>
+                                        <div class="spec-item">
+                                            <h3>Propulsión</h3>
+                                            <p>@(string.IsNullOrEmpty(Model.Vehicle.Combustible) ? "" : char.ToUpper(Model.Vehicle.Combustible[0]) + Model.Vehicle.Combustible.Substring(1).ToLower())</p>
+                                        </div>
+                                        <div class="spec-item">
+                                            <h3>Transmisión</h3>
+                                            <p>@(string.IsNullOrEmpty(Model.Vehicle.Transmision) ? "" : char.ToUpper(Model.Vehicle.Transmision[0]) + Model.Vehicle.Transmision.Substring(1).ToLower())</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </section>
+                        }
+                    </div>
+
+                    <!-- Tab Content: Vendedor -->
+                    <div id="tab-vendedor" class="producto-tab-content">
+                        @if (Model.Vehicle?.Propietario != null)
+                        {
+                            <div class="producto-seller-card">
+                                <p class="seller-business-name">@Model.Vehicle.Propietario.NombreAMostrar</p>
+
+                                <div class="seller-logo-placeholder">
+                                    <p>LOGO<br/>(SI TIENE)</p>
+                                </div>
+
+                                <div class="seller-contact-info">
+                                    @if (!string.IsNullOrEmpty(Model.Vehicle.Propietario.NumeroTelefono))
+                                    {
+                                        <div class="seller-info-row">
+                                            <svg width="18" height="18" viewBox="0 0 18 18" fill="none">
+                                                <path d="M3 3h2l1.5 4-1.5 1.5c1 2 2.5 3.5 4.5 4.5L11 11.5l4 1.5v2c0 1.1-.9 2-2 2C6.477 17 2 12.523 2 6c0-1.1.9-2 2-2z" stroke="white" stroke-width="1.5"/>
+                                            </svg>
+                                            <span>@Model.Vehicle.Propietario.NumeroTelefono</span>
+                                        </div>
+                                    }
+
+                                    @if (!string.IsNullOrEmpty(Model.Vehicle.UbicacionCompleta))
+                                    {
+                                        <div class="seller-info-row">
+                                            <svg width="14" height="17" viewBox="0 0 14 17" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                <path d="M6.58801 16.17C9.6369 13.034 12.6858 10.2259 12.6858 6.76199C12.6858 3.29806 9.95573 0.48999 6.58801 0.48999C3.22031 0.48999 0.490234 3.29806 0.490234 6.76199C0.490234 10.2259 3.53912 13.034 6.58801 16.17Z" stroke="white" stroke-width="0.98" stroke-linecap="round" stroke-linejoin="round"/>
+                                                <path d="M6.80668 8.3299C7.7689 8.3299 8.5489 7.54991 8.5489 6.58768C8.5489 5.62548 7.7689 4.84546 6.80668 4.84546C5.84445 4.84546 5.06445 5.62548 5.06445 6.58768C5.06445 7.54991 5.84445 8.3299 6.80668 8.3299Z" stroke="white" stroke-width="0.98" stroke-linecap="round" stroke-linejoin="round"/>
+                                            </svg>
+                                            <span>@Model.Vehicle.UbicacionCompleta</span>
+                                        </div>
+                                    }
+
+                                    <div class="seller-info-row">
+                                        <svg width="21" height="18" viewBox="0 0 21 18" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                            <path d="M0.980469 4.60054L3.79609 6.94686C3.98199 7.10182 4.21632 7.18665 4.45832 7.18665H16.1226C16.3646 7.18665 16.5989 7.10182 16.7848 6.94686L19.6005 4.60054M4.60102 10.8072H4.61137M15.9799 10.8072H15.9903M6.31887 0.97998H14.2621C15.0045 0.97998 15.6901 1.3778 16.0583 2.02241L19.0553 7.26702C19.4125 7.89224 19.6005 8.5998 19.6005 9.31998V15.4622C19.6005 16.0335 19.1373 16.4966 18.566 16.4966H17.5316C16.9603 16.4966 16.4971 16.0335 16.4971 15.4622V14.4278H4.0838V15.4622C4.0838 16.0335 3.62066 16.4966 3.04936 16.4966H2.01491C1.44361 16.4966 0.980469 16.0335 0.980469 15.4622V9.31998C0.980469 8.5998 1.16839 7.89224 1.52565 7.26702L4.52257 2.02241C4.89092 1.3778 5.57643 0.97998 6.31887 0.97998ZM5.11825 10.8072C5.11825 11.0928 4.88668 11.3244 4.60102 11.3244C4.31537 11.3244 4.0838 11.0928 4.0838 10.8072C4.0838 10.5216 4.31537 10.29 4.60102 10.29C4.88668 10.29 5.11825 10.5216 5.11825 10.8072ZM16.4971 10.8072C16.4971 11.0928 16.2655 11.3244 15.9799 11.3244C15.6943 11.3244 15.4627 11.0928 15.4627 10.8072C15.4627 10.5216 15.6943 10.29 15.9799 10.29C16.2655 10.29 16.4971 10.5216 16.4971 10.8072Z" stroke="white" stroke-width="1.96" stroke-linecap="round" stroke-linejoin="round"/>
+                                        </svg>
+                                        <span>(@Model.SellerCarCount de autos publicados)</span>
+                                    </div>
+                                </div>
+                            </div>
+                        }
                     </div>
                 </div>
 
@@ -534,12 +668,18 @@ document.addEventListener('DOMContentLoaded', function() {
     
     const mainImage = document.querySelector('.main-car-image');
     const thumbnails = document.querySelectorAll('.thumbnail-item');
+    const photoCounter = document.getElementById('photoCounterText');
     
     // Function to update main image
     window.updateMainImage = function(index) {
         if (index >= 0 && index < imageUrls.length) {
             currentImageIndex = index;
             mainImage.src = imageUrls[index];
+            
+            // Update photo counter
+            if (photoCounter) {
+                photoCounter.textContent = `${index + 1}/${imageUrls.length}`;
+            }
             
             // Update active thumbnail
             thumbnails.forEach((thumb, i) => {
@@ -573,6 +713,30 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     });
 });
+
+// Switch tabs function
+function switchTab(tabName) {
+    // Hide all tab contents
+    const allTabContents = document.querySelectorAll('.producto-tab-content');
+    allTabContents.forEach(content => {
+        content.classList.remove('active');
+    });
+    
+    // Remove active class from all buttons
+    const allTabButtons = document.querySelectorAll('.producto-tab-button');
+    allTabButtons.forEach(button => {
+        button.classList.remove('active');
+    });
+    
+    // Show selected tab content
+    const selectedTabContent = document.getElementById(`tab-${tabName}`);
+    if (selectedTabContent) {
+        selectedTabContent.classList.add('active');
+    }
+    
+    // Add active class to clicked button
+    event.target.classList.add('active');
+}
 
 // Function for pre-approval button
 function solicitarPreAprobacion() {
