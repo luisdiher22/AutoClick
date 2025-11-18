@@ -84,6 +84,10 @@ public class Auto
     [Display(Name = "Kilometraje")]
     public int Kilometraje { get; set; }
     
+    [MaxLength(10)]
+    [Display(Name = "Unidad de Kilometraje")]
+    public string UnidadKilometraje { get; set; } = "Km";
+    
     [Required]
     [MaxLength(30)]
     [Display(Name = "Condición")]

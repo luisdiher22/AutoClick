@@ -42,7 +42,7 @@
 
 .form-header {
     display: flex;
-    justify-content: space-between;
+    justify-content: flex-start;
     align-items: center;
     margin-bottom: 32px;
 }
@@ -53,13 +53,37 @@
     font-family: 'Montserrat', sans-serif;
     font-weight: 700;
     margin: 0;
+    display: flex;
+    align-items: center;
+    gap: 8px;
 }
 
 .section-indicator {
     color: rgba(255, 255, 255, 0.75);
-    font-size: 24px;
+    font-size: 18px;
     font-family: 'Montserrat', sans-serif;
-    font-weight: 700;
+    font-weight: 400;
+    white-space: nowrap;
+    display: inline;
+    background: none !important;
+    border: none !important;
+    outline: none !important;
+    box-shadow: none !important;
+    padding: 0 !important;
+    margin: 0 !important;
+}
+
+.section-indicator::before,
+.section-indicator::after {
+    content: none !important;
+    display: none !important;
+}
+
+.section-indicator span {
+    background: none !important;
+    border: none !important;
+    outline: none !important;
+    box-shadow: none !important;
 }
 
 .form-nav-buttons {
@@ -97,12 +121,12 @@
 }
 
 .back-arrow {
-    width: 14px;
-    height: 16.33px;
+    width: 12px;
+    height: 6px;
     background: white;
-    border: 2px solid white;
+    clip-path: polygon(0 0, 100% 0, 50% 100%);
     transform: rotate(90deg);
-    clip-path: polygon(0 50%, 100% 0, 100% 100%);
+    flex-shrink: 0;
 }
 
 .btn-next {
@@ -142,6 +166,7 @@
     overflow-y: auto;
     position: relative;
     z-index: 1;
+    background: #030D2B;
 }
 
 .form-section.active {
@@ -971,7 +996,9 @@ select#ano option {
     width: 103px;
     height: 102px;
     background: transparent;
-    border: 7px solid white;
+    background-size: contain;
+    background-position: center;
+    background-repeat: no-repeat;
     margin: 0 auto 40px;
     position: relative;
 }

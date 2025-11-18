@@ -127,6 +127,47 @@ const marcasModelos = {
     "Neta": ["V", "V Pro", "U", "U Pro", "X", "Aya", "S"]
 };
 
+// Price and kilometer formatting functions (must be global for oninput handlers)
+window.formatPrice = function(input) {
+    const divisaSelect = document.querySelector('#divisa');
+    const currencySymbol = divisaSelect && divisaSelect.value === 'USD' ? '$' : '₡';
+    
+    // Remove all non-digit characters except the currency symbol
+    let value = input.value.replace(/[^\d]/g, '');
+    
+    if (value) {
+        // Format with thousand separators using dots and prepend currency
+        const formattedNumber = parseInt(value).toLocaleString('es-CR', {
+            useGrouping: true,
+            minimumFractionDigits: 0,
+            maximumFractionDigits: 0
+        }).replace(/,/g, '.');
+        
+        input.value = currencySymbol + formattedNumber;
+    }
+};
+
+window.formatKilometer = function(input) {
+    // Get the raw number value
+    let value = input.value.replace(/[^\d]/g, '');
+    if (value) {
+        // Format with thousand separators using dots
+        input.value = parseInt(value).toLocaleString('es-CR', {
+            useGrouping: true,
+            minimumFractionDigits: 0,
+            maximumFractionDigits: 0
+        }).replace(/,/g, '.');
+    }
+};
+
+// Update price currency when divisa changes
+window.updatePriceCurrency = function() {
+    const precioInput = document.querySelector('#precio');
+    if (precioInput && precioInput.value) {
+        formatPrice(precioInput);
+    }
+};
+
 document.addEventListener('DOMContentLoaded', function() {
     // Form navigation state
     let currentSection = 1;
@@ -420,25 +461,6 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     }
 
-    // Price and kilometer formatting - No comma formatting for number inputs
-    window.formatPrice = function(input) {
-        // For number inputs, we don't format with commas as they cause parsing errors
-        // Just ensure only digits are allowed
-        let value = input.value.replace(/[^\d]/g, '');
-        if (value) {
-            input.value = value;
-        }
-    };
-
-    window.formatKilometer = function(input) {
-        // For number inputs, we don't format with commas as they cause parsing errors
-        // Just ensure only digits are allowed
-        let value = input.value.replace(/[^\d]/g, '');
-        if (value) {
-            input.value = value;
-        }
-    };
-
     async function validateCurrentSection() {
         const currentSectionElement = document.querySelector(`#seccion${currentSection}`);
         if (!currentSectionElement) {
@@ -511,25 +533,6 @@ document.addEventListener('DOMContentLoaded', function() {
         
         let isValid = true;
         
-            marca: !!marca,
-            modelo: !!modelo,
-            ano: !!ano,
-            carroceria: !!carroceria,
-            combustible: !!combustible,
-            cilindrada: !!cilindrada,
-            colorExterior: !!colorExterior,
-            colorInterior: !!colorInterior,
-            puertas: !!puertas,
-            pasajeros: !!pasajeros,
-            transmision: !!transmision,
-            traccion: !!traccion,
-            kilometraje: !!kilometraje,
-            condicion: !!condicion,
-            precio: !!precio,
-            descripcion: !!descripcion,
-            placa: !!placa
-        });
-        
         // Required field validations
         if (!marca || !marca.value) {
             if (marca) showFieldError(marca, 'La marca es requerida');
@@ -580,8 +583,8 @@ document.addEventListener('DOMContentLoaded', function() {
             isValid = false;
         } else {
             const kmValue = parseInt(kilometraje.value.replace(/\D/g, ''));
-            if (kmValue < 0 || kmValue > 999999) {
-                showFieldError(kilometraje, 'Ingrese un kilometraje vÃ¡lido');
+            if (kmValue < 0 || kmValue > 999999 || isNaN(kmValue)) {
+                showFieldError(kilometraje, 'Ingrese un kilometraje válido');
                 isValid = false;
             } else {
                 clearFieldError(kilometraje);
@@ -649,9 +652,10 @@ document.addEventListener('DOMContentLoaded', function() {
             if (precio) showFieldError(precio, 'El precio es requerido');
             isValid = false;
         } else {
-            const precioValue = parseFloat(precio.value.replace(/[,\s]/g, ''));
+            // Remove currency symbol and dots to get the numeric value
+            const precioValue = parseFloat(precio.value.replace(/[₡$.\s]/g, ''));
             if (precioValue <= 0 || isNaN(precioValue)) {
-                showFieldError(precio, 'Ingrese un precio vÃ¡lido');
+                showFieldError(precio, 'Ingrese un precio válido');
                 isValid = false;
             } else {
                 clearFieldError(precio);
@@ -664,7 +668,7 @@ document.addEventListener('DOMContentLoaded', function() {
             isValid = false;
         } else {
             if (descripcion.value.trim().length < 10) {
-                showFieldError(descripcion, 'La descripciÃ³n debe tener al menos 10 caracteres');
+                showFieldError(descripcion, 'La descripción debe tener al menos 10 caracteres');
                 isValid = false;
             } else {
                 clearFieldError(descripcion);
@@ -786,7 +790,7 @@ document.addEventListener('DOMContentLoaded', function() {
             left: 0px;
             bottom: -8px;
         `;
-        counter.textContent = `${currentLength}/${minLength} caracteres mÃ­nimos`;
+        counter.textContent = `${currentLength}/${minLength} caracteres mínimos`;
         
         // Insertar despuÃ©s del textarea
         textarea.parentNode.insertBefore(counter, textarea.nextSibling);
@@ -1425,14 +1429,6 @@ document.addEventListener('DOMContentLoaded', function() {
 
                 // Add error handler
                 video.addEventListener('error', function(e) {
-                        code: video.error?.code,
-                        message: video.error?.message,
-                        MEDIA_ERR_ABORTED: video.error?.MEDIA_ERR_ABORTED === 1 ? 'ABORTED' : false,
-                        MEDIA_ERR_NETWORK: video.error?.MEDIA_ERR_NETWORK === 2 ? 'NETWORK' : false,
-                        MEDIA_ERR_DECODE: video.error?.MEDIA_ERR_DECODE === 3 ? 'DECODE' : false,
-                        MEDIA_ERR_SRC_NOT_SUPPORTED: video.error?.MEDIA_ERR_SRC_NOT_SUPPORTED === 4 ? 'NOT_SUPPORTED' : false
-                    });
-
                     // Show fallback text
                     const container = video.closest('.tag-image');
                     if (container) {
