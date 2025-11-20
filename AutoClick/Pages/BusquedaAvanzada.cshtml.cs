@@ -115,6 +115,7 @@ namespace AutoClick.Pages
             // Crear consulta base optimizada con AsNoTracking desde el inicio
             var query = _context.Autos
                 .AsNoTracking()
+                .Include(a => a.Propietario) // Incluir datos del propietario para el modal
                 .Where(a => a.Activo && a.PlanVisibilidad > 0); // Solo autos activos y aprobados
 
             // Build applied filters list for UI

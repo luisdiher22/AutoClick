@@ -290,34 +290,39 @@
 
                                 <!-- Car Info Container with dark background -->
                                 <div class="busqueda-auto-card-info">
-                                    <!-- Top row: Title on left, Favorite+KM+Cuota column on right -->
+                                    <!-- Top row: Title only -->
                                     <div class="busqueda-auto-card-row-top">
                                         <div class="busqueda-auto-card-title">@auto.NombreCompleto</div>
-                                        
-                                        <!-- Right column: Favorito, Kilometraje, Cuota -->
-                                        <div class="busqueda-auto-card-right-column">
-                                            <!-- Botón de Favoritos -->
-                                            <button class="busqueda-favorite-btn favorite-btn" 
-                                                    data-auto-id="@auto.Id" 
-                                                    data-email-usuario="@(User.Identity?.IsAuthenticated == true ? User.FindFirst(System.Security.Claims.ClaimTypes.Email)?.Value ?? User.FindFirst("Email")?.Value : "")"
-                                                    title="Agregar a favoritos"
-                                                    type="button"
-                                                    onclick="event.preventDefault(); event.stopPropagation();">
-                                                <img src="https://autoclickstorage.blob.core.windows.net/uploads/Component%20183.png" 
-                                                     alt="Favorito" />
-                                            </button>
-                                            
+                                    </div>
+                                    
+                                    <!-- Middle row: Price on left, KM + Cuota on right -->
+                                    <div class="busqueda-auto-card-row-middle">
+                                        <div class="busqueda-auto-card-price">@auto.PrecioFormateado</div>
+                                        <div class="busqueda-auto-card-right-info">
                                             <div class="busqueda-auto-card-km">@auto.KilometrajeFormateado</div>
                                             <div class="busqueda-auto-card-cuota">Est. @auto.CuotaMensualEstimada</div>
                                         </div>
                                     </div>
-                                    
-                                    <!-- Middle row: Price -->
-                                    <div class="busqueda-auto-card-row-middle">
-                                        <div class="busqueda-auto-card-price">@auto.PrecioFormateado</div>
-                                    </div>
                                 </div>
                             </a>
+                            
+                            <!-- Botón de Favoritos fuera del link -->
+                            <button class="busqueda-favorite-btn favorite-btn" 
+                                    data-auto-id="@auto.Id" 
+                                    data-email-usuario="@(User.Identity?.IsAuthenticated == true ? User.FindFirst(System.Security.Claims.ClaimTypes.Email)?.Value ?? User.FindFirst("Email")?.Value : "")"
+                                    title="Agregar a favoritos"
+                                    type="button"
+                                    onclick="event.preventDefault(); event.stopPropagation();">
+                                <img src="https://autoclickstorage.blob.core.windows.net/uploads/Component%20183.png" 
+                                     alt="Favorito" />
+                            </button>
+                            
+                            <!-- Botón de Contactar Vendedor fuera del link con estilo btn-primario -->
+                            <button class="busqueda-contact-btn" 
+                                    onclick="event.preventDefault(); event.stopPropagation(); mostrarModalVendedor(@auto.Id, '@(auto.Propietario?.NombreCompleto ?? "")', '@(auto.Propietario?.NombreAMostrar ?? "")', '@(auto.Propietario?.NumeroTelefono ?? "")', '@(auto.UbicacionCompleta ?? "")', @(Model.Autos.Count(a => a.EmailPropietario == auto.EmailPropietario)))" 
+                                    type="button">
+                                Contactar vendedor
+                            </button>
                         </div>
                     }
                 </div>
@@ -371,6 +376,143 @@
         </div>
     </div>
 </div>
+
+<!-- Modal de Contactar Vendedor -->
+<div id="modalVendedor" class="modal-vendedor" style="display: none;">
+    <div class="modal-vendedor-content">
+        <button class="modal-vendedor-close" onclick="cerrarModalVendedor()">×</button>
+        <h3 class="modal-vendedor-title">Contactar al vendedor</h3>
+        <p class="modal-vendedor-name" id="modalVendedorNombre"></p>
+        
+        <button class="modal-vendedor-phone-btn" id="modalVendedorTelBtn" onclick="">
+            Llamar <span id="modalVendedorTel"></span>
+        </button>
+        
+        <button class="modal-vendedor-whatsapp-btn" id="modalVendedorWhatsAppBtn" onclick="">
+            <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <g clip-path="url(#clip0_modal)">
+                    <path d="M14.5893 11.9223L14.5818 11.9848C12.7493 11.0715 12.5576 10.9498 12.3209 11.3048C12.1568 11.5506 11.6784 12.1081 11.5343 12.2731C11.3884 12.4356 11.2434 12.4481 10.9959 12.3356C10.7459 12.2106 9.94345 11.9481 8.99345 11.0981C8.25345 10.4356 7.75678 9.62315 7.61011 9.37315C7.36595 8.95148 7.87678 8.89148 8.34178 8.01148C8.42511 7.83648 8.38261 7.69898 8.32095 7.57482C8.25845 7.44982 7.76095 6.22482 7.55261 5.73648C7.35261 5.24982 7.14678 5.31148 6.99261 5.31148C6.51261 5.26982 6.16178 5.27648 5.85261 5.59815C4.50761 7.07648 4.84678 8.60148 5.99761 10.2231C8.25928 13.1831 9.46428 13.7281 11.6676 14.4848C12.2626 14.674 12.8051 14.6473 13.2343 14.5856C13.7126 14.5098 14.7068 13.9848 14.9143 13.3973C15.1268 12.8098 15.1268 12.3223 15.0643 12.2098C15.0026 12.0973 14.8393 12.0348 14.5893 11.9223Z" fill="white"/>
+                    <path d="M17.1 2.87404C10.6925 -3.32013 0.0883333 1.17237 0.0841667 9.91071C0.0841667 11.6574 0.541667 13.3607 1.41333 14.8649L0 19.9999L5.27917 18.6232C11.8667 22.1815 19.9967 17.4565 20 9.91571C20 7.26904 18.9667 4.77821 17.0875 2.90654L17.1 2.87404ZM18.335 9.88821C18.33 16.249 11.3475 20.2215 5.825 16.9749L5.525 16.7965L2.4 17.609L3.2375 14.5715L3.03833 14.259C-0.398333 8.78821 3.55 1.63821 10.06 1.63821C12.2717 1.63821 14.3475 2.50071 15.9108 4.06321C17.4733 5.61237 18.335 7.68821 18.335 9.88821Z" fill="white"/>
+                </g>
+                <defs>
+                    <clipPath id="clip0_modal">
+                        <rect width="20" height="20" fill="white"/>
+                    </clipPath>
+                </defs>
+            </svg>
+            <span id="modalVendedorWhatsApp"></span>
+        </button>
+        
+        <div class="modal-vendedor-info">
+            <div class="modal-vendedor-info-row" id="modalVendedorTelInfo">
+                <svg width="18" height="18" viewBox="0 0 18 18" fill="none">
+                    <path d="M3 3h2l1.5 4-1.5 1.5c1 2 2.5 3.5 4.5 4.5L11 11.5l4 1.5v2c0 1.1-.9 2-2 2C6.477 17 2 12.523 2 6c0-1.1.9-2 2-2z" stroke="white" stroke-width="1.5"/>
+                </svg>
+                <span id="modalVendedorTelText"></span>
+            </div>
+            <div class="modal-vendedor-info-row" id="modalVendedorUbicacion">
+                <svg width="14" height="17" viewBox="0 0 14 17" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M6.58801 16.17C9.6369 13.034 12.6858 10.2259 12.6858 6.76199C12.6858 3.29806 9.95573 0.48999 6.58801 0.48999C3.22031 0.48999 0.490234 3.29806 0.490234 6.76199C0.490234 10.2259 3.53912 13.034 6.58801 16.17Z" stroke="white" stroke-width="0.98" stroke-linecap="round" stroke-linejoin="round"/>
+                    <path d="M6.80668 8.3299C7.7689 8.3299 8.5489 7.54991 8.5489 6.58768C8.5489 5.62548 7.7689 4.84546 6.80668 4.84546C5.84445 4.84546 5.06445 5.62548 5.06445 6.58768C5.06445 7.54991 5.84445 8.3299 6.80668 8.3299Z" stroke="white" stroke-width="0.98" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+                <span id="modalVendedorUbicacionText"></span>
+            </div>
+            <div class="modal-vendedor-info-row" id="modalVendedorAutos">
+                <svg width="21" height="18" viewBox="0 0 21 18" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M0.980469 4.60054L3.79609 6.94686C3.98199 7.10182 4.21632 7.18665 4.45832 7.18665H16.1226C16.3646 7.18665 16.5989 7.10182 16.7848 6.94686L19.6005 4.60054M4.60102 10.8072H4.61137M15.9799 10.8072H15.9903M6.31887 0.97998H14.2621C15.0045 0.97998 15.6901 1.3778 16.0583 2.02241L19.0553 7.26702C19.4125 7.89224 19.6005 8.5998 19.6005 9.31998V15.4622C19.6005 16.0335 19.1373 16.4966 18.566 16.4966H17.5316C16.9603 16.4966 16.4971 16.0335 16.4971 15.4622V14.4278H4.0838V15.4622C4.0838 16.0335 3.62066 16.4966 3.04936 16.4966H2.01491C1.44361 16.4966 0.980469 16.0335 0.980469 15.4622V9.31998C0.980469 8.5998 1.16839 7.89224 1.52565 7.26702L4.52257 2.02241C4.89092 1.3778 5.57643 0.97998 6.31887 0.97998ZM5.11825 10.8072C5.11825 11.0928 4.88668 11.3244 4.60102 11.3244C4.31537 11.3244 4.0838 11.0928 4.0838 10.8072C4.0838 10.5216 4.31537 10.29 4.60102 10.29C4.88668 10.29 5.11825 10.5216 5.11825 10.8072ZM16.4971 10.8072C16.4971 11.0928 16.2655 11.3244 15.9799 11.3244C15.6943 11.3244 15.4627 11.0928 15.4627 10.8072C15.4627 10.5216 15.6943 10.29 15.9799 10.29C16.2655 10.29 16.4971 10.5216 16.4971 10.8072Z" stroke="white" stroke-width="1.96" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+                <span id="modalVendedorAutosText"></span>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+function mostrarModalVendedor(autoId, nombreCompleto, nombreMostrar, telefono, ubicacion, cantidadAutos) {
+    console.log('=== MODAL DEBUG ===');
+    console.log('autoId:', autoId);
+    console.log('nombreCompleto:', nombreCompleto, 'Type:', typeof nombreCompleto, 'Length:', nombreCompleto ? nombreCompleto.length : 0);
+    console.log('nombreMostrar:', nombreMostrar, 'Type:', typeof nombreMostrar, 'Length:', nombreMostrar ? nombreMostrar.length : 0);
+    console.log('telefono:', telefono, 'Type:', typeof telefono, 'Length:', telefono ? telefono.length : 0);
+    console.log('ubicacion:', ubicacion);
+    console.log('cantidadAutos:', cantidadAutos);
+    console.log('==================');
+    
+    // Mostrar nombre del vendedor - usar nombreMostrar o nombreCompleto
+    const nombreElement = document.getElementById('modalVendedorNombre');
+    const nombreFinal = (nombreMostrar && nombreMostrar.trim() !== '') ? nombreMostrar : 
+                        (nombreCompleto && nombreCompleto.trim() !== '') ? nombreCompleto : 
+                        'Vendedor';
+    
+    console.log('Nombre final a mostrar:', nombreFinal);
+    nombreElement.textContent = nombreFinal;
+    nombreElement.style.display = 'block';
+    
+    // Configurar botón de teléfono
+    const telBtn = document.getElementById('modalVendedorTelBtn');
+    if (telefono && telefono.trim() !== '') {
+        console.log('Configurando botón de teléfono con:', telefono);
+        document.getElementById('modalVendedorTel').textContent = telefono;
+        telBtn.onclick = () => window.location.href = 'tel:' + telefono;
+        telBtn.style.display = 'flex';
+    } else {
+        console.log('Teléfono vacío, ocultando botón');
+        telBtn.style.display = 'none';
+    }
+    
+    // Configurar botón de WhatsApp
+    const whatsappBtn = document.getElementById('modalVendedorWhatsAppBtn');
+    if (telefono && telefono.trim() !== '') {
+        console.log('Configurando botón de WhatsApp con:', telefono);
+        document.getElementById('modalVendedorWhatsApp').textContent = telefono;
+        const telefonoLimpio = telefono.replace(/[^0-9]/g, '');
+        whatsappBtn.onclick = () => window.open('https://wa.me/' + telefonoLimpio, '_blank');
+        whatsappBtn.style.display = 'flex';
+    } else {
+        console.log('Teléfono vacío, ocultando botón WhatsApp');
+        whatsappBtn.style.display = 'none';
+    }
+    
+    // Mostrar información de teléfono en la sección de info
+    const telInfo = document.getElementById('modalVendedorTelInfo');
+    if (telefono && telefono.trim() !== '') {
+        document.getElementById('modalVendedorTelText').textContent = telefono;
+        telInfo.style.display = 'flex';
+    } else {
+        telInfo.style.display = 'none';
+    }
+    
+    // Mostrar ubicación
+    const ubicacionDiv = document.getElementById('modalVendedorUbicacion');
+    if (ubicacion && ubicacion.trim() !== '') {
+        document.getElementById('modalVendedorUbicacionText').textContent = ubicacion;
+        ubicacionDiv.style.display = 'flex';
+    } else {
+        ubicacionDiv.style.display = 'none';
+    }
+    
+    // Mostrar cantidad de autos
+    document.getElementById('modalVendedorAutosText').textContent = '(' + cantidadAutos + ' de autos publicados)';
+    document.getElementById('modalVendedorAutos').style.display = 'flex';
+    
+    // Mostrar el modal
+    document.getElementById('modalVendedor').style.display = 'flex';
+    console.log('Modal abierto');
+}
+
+function cerrarModalVendedor() {
+    document.getElementById('modalVendedor').style.display = 'none';
+}
+
+// Cerrar modal al hacer clic fuera
+document.addEventListener('DOMContentLoaded', function() {
+    document.getElementById('modalVendedor').addEventListener('click', function(e) {
+        if (e.target === this) {
+            cerrarModalVendedor();
+        }
+    });
+});
+</script>
 
 <script src="~/js/favoritos.js"></script>
 <script>

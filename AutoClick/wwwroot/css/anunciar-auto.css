@@ -45,6 +45,8 @@
     justify-content: flex-start;
     align-items: center;
     margin-bottom: 32px;
+    padding-bottom: 24px;
+    border-bottom: 0.5px solid rgba(255, 255, 255, 0.25);
 }
 
 .form-header h1 {
@@ -55,22 +57,27 @@
     margin: 0;
     display: flex;
     align-items: center;
+    justify-content: space-between;
     gap: 8px;
+    width: 100%;
 }
 
 .section-indicator {
     color: rgba(255, 255, 255, 0.75);
-    font-size: 18px;
+    font-size: 24px;
     font-family: 'Montserrat', sans-serif;
-    font-weight: 400;
+    font-weight: 700;
     white-space: nowrap;
-    display: inline;
+    display: flex;
+    align-items: center;
     background: none !important;
     border: none !important;
     outline: none !important;
     box-shadow: none !important;
     padding: 0 !important;
     margin: 0 !important;
+    margin-right: 120px !important;
+    word-wrap: break-word;
 }
 
 .section-indicator::before,
@@ -154,8 +161,6 @@
     width: 100%;
     min-height: 400px;
     position: relative;
-    background: rgba(255, 255, 255, 0.05); /* Temporal para debug */
-    border: 1px solid rgba(255, 255, 255, 0.2); /* Temporal para debug */
 }
 
 .form-section {
