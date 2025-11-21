@@ -203,6 +203,7 @@ namespace AutoClick.Migrations
                         .HasColumnType("int");
 
                     b.Property<string>("PlacaVehiculo")
+                        .IsRequired()
                         .HasMaxLength(20)
                         .HasColumnType("nvarchar(20)");
 

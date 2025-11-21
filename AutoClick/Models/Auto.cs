@@ -24,9 +24,10 @@ public class Auto
     [Display(Name = "Año")]
     public int Ano { get; set; }
     
+    [Required]
     [MaxLength(20)]
     [Display(Name = "Placa del Vehículo")]
-    public string? PlacaVehiculo { get; set; }
+    public string PlacaVehiculo { get; set; } = string.Empty;
     
     [Required]
     [Column(TypeName = "decimal(18,2)")]

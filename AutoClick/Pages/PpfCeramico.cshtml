@@ -1,322 +1,133 @@
 @page "/ppf-ceramico"
 @model AutoClick.Pages.PpfCeramicoModel
 @{
-    ViewData["Title"] = "PPF y Cerámico - AutoClick.cr";
+    ViewData["Title"] = "Rain-X - Máxima visibilidad al conducir - AutoClick.cr";
 }
 
 @section Styles {
     <link rel="stylesheet" href="~/css/ppf-ceramico.css" asp-append-version="true" />
 }
 
-<!-- Header removed - Using universal header -->
-    <div class="logo-container">
-        <img src="~/images/logo.png" alt="AutoClick.cr" style="height: 23px;" />
-    </div>
-    
-    <nav class="nav-menu">
-        <div>
-            <img src="~/images/costa-rica-flag.png" alt="Costa Rica" style="width: 67px; height: 31px;" />
-        </div>
-        <div class="nav-dropdown-container">
-            <a href="#" class="nav-item nav-dropdown">Anúnciese</a>
-            <div class="dropdown-menu">
-                <a asp-page="/AnunciarEmpresa" class="dropdown-item">Anuncie su empresa</a>
-            </div>
-        </div>
-        <div class="nav-dropdown-container">
-            <a href="#" class="nav-item nav-dropdown">Productos & Servicios</a>
-            <div class="dropdown-menu">
-                <a asp-page="/PpfCeramico" class="dropdown-item active">PPF y Cerámico</a>
-                <a asp-page="/RaloyDetailing" class="dropdown-item">Raloy - Detailing</a>
-            </div>
-        </div>
-        <div class="nav-dropdown-container">
-
-
-<!-- Hero Section -->
-<section class="hero-section">
-    <div class="hero-background">
-        <img src="https://placehold.co/1280x928" alt="PPF y Cerámico Background" class="hero-bg-image" />
-        <div class="hero-overlay"></div>
-        <div class="hero-content">
-            <div class="hero-text">
-                <h1 class="hero-title">Protección Premium para su Vehículo</h1>
-                <p class="hero-subtitle">PPF y Recubrimiento Cerámico de la más alta calidad</p>
-                <div class="hero-features">
-                    <div class="feature-item">
-                        <span class="feature-icon">✓</span>
-                        <span>Protección contra rayones y daños</span>
-                    </div>
-                    <div class="feature-item">
-                        <span class="feature-icon">✓</span>
-                        <span>Acabado brillante duradero</span>
-                    </div>
-                    <div class="feature-item">
-                        <span class="feature-icon">✓</span>
-                        <span>Fácil mantenimiento</span>
-                    </div>
-                </div>
-            </div>
-        </div>
+<!-- Hero Section with Rain-X Products -->
+<section class="rainx-hero-section">
+    <div class="rainx-hero-background">
+        <img src="~/images/rainx/8b1ce10d81dd5b4fb704f27a6e127a7079ca5cc7.png" alt="Rain-X Products" class="rainx-hero-image" />
     </div>
 </section>
 
-<!-- Products Gallery Section -->
-<section class="products-gallery">
-    <div class="products-container">
-        <!-- Main Logo -->
-        <div class="brand-logo-section">
-            <img src="https://placehold.co/494x62" alt="Brand Logo" class="main-brand-logo" />
-        </div>
+<!-- Rain-X Product Cycle Section -->
+<section class="rainx-cycle-section">
+    <div class="rainx-cycle-container">
+        <img src="~/images/rainx/cecd020b56835d280f03e4ca0cad4a478b5183cb.png" alt="Ciclo de Aplicación Rain-X" class="rainx-cycle-image" />
+    </div>
+</section>
+
+<!-- Stores Section - ¿Dónde comprar? -->
+<section class="rainx-stores-section">
+    <div class="rainx-stores-container">
+        <h2 class="rainx-stores-title">¿Dónde comprar?</h2>
         
-        <!-- Products Grid -->
-        <div class="products-grid">
-            <div class="product-card">
-                <img src="https://placehold.co/411x139" alt="PPF Producto 1" class="product-image" />
-                <div class="product-overlay">
-                    <h3 class="product-title">Paint Protection Film</h3>
-                    <p class="product-description">Protección invisible contra rayones y chips de pintura</p>
-                </div>
+        <div class="rainx-stores-grid">
+            <div class="store-logo-item">
+                <img src="~/images/rainx/b7513d6b3efe8cdf07f077e9b0495f285820ed4a.png" alt="El Rey" class="store-logo" />
             </div>
             
-            <div class="product-card">
-                <img src="https://placehold.co/414x144" alt="Cerámico Producto 1" class="product-image" />
-                <div class="product-overlay">
-                    <h3 class="product-title">Recubrimiento Cerámico</h3>
-                    <p class="product-description">Brillo duradero y protección contra elementos</p>
-                </div>
+            <div class="store-logo-item">
+                <img src="~/images/rainx/0001852_novex_600 1.png" alt="Novex" class="store-logo" />
             </div>
             
-            <div class="product-card">
-                <img src="https://placehold.co/334x145" alt="PPF Producto 2" class="product-image" />
-                <div class="product-overlay">
-                    <h3 class="product-title">PPF Premium</h3>
-                    <p class="product-description">La máxima protección para su inversión</p>
-                </div>
+            <div class="store-logo-item">
+                <img src="~/images/rainx/walmart-mexico-2 1.png" alt="Walmart" class="store-logo" />
             </div>
             
-            <div class="product-card">
-                <img src="https://placehold.co/404x111" alt="Cerámico Producto 2" class="product-image" />
-                <div class="product-overlay">
-                    <h3 class="product-title">Cerámico Profesional</h3>
-                    <p class="product-description">Aplicación profesional garantizada</p>
-                </div>
+            <div class="store-logo-item">
+                <img src="~/images/rainx/EPA 1.png" alt="EPA" class="store-logo" />
             </div>
             
-            <div class="product-card">
-                <img src="https://placehold.co/406x167" alt="Kit Completo" class="product-image" />
-                <div class="product-overlay">
-                    <h3 class="product-title">Kit Completo</h3>
-                    <p class="product-description">PPF + Cerámico para protección total</p>
-                </div>
+            <div class="store-logo-item">
+                <img src="~/images/rainx/logo_logo_400x110 1.png" alt="La Guaca" class="store-logo" />
             </div>
             
-            <div class="product-card">
-                <img src="https://placehold.co/412x122" alt="Mantenimiento" class="product-image" />
-                <div class="product-overlay">
-                    <h3 class="product-title">Kit de Mantenimiento</h3>
-                    <p class="product-description">Productos para el cuidado continuo</p>
-                </div>
+            <div class="store-logo-item">
+                <img src="~/images/rainx/Gigante-6 1.png" alt="Gigante" class="store-logo" />
             </div>
             
-            <div class="product-card">
-                <img src="https://placehold.co/411x100" alt="Accesorios" class="product-image" />
-                <div class="product-overlay">
-                    <h3 class="product-title">Accesorios Premium</h3>
-                    <p class="product-description">Herramientas profesionales de aplicación</p>
-                </div>
+            <div class="store-logo-item">
+                <img src="~/images/rainx/Logo-Supermercado-Compre-Bien.jpg+Grande.jpg 1.png" alt="Compre Bien" class="store-logo" />
             </div>
-        </div>
-        
-        <!-- Call to Action -->
-        <div class="cta-section">
-            <button class="cta-button" onclick="scrollToContact()">Solicitar Cotización</button>
-        </div>
-    </div>
-</section>
-
-<!-- Information Section -->
-<section class="info-section">
-    <div class="info-container">
-        <div class="info-grid">
-            <div class="info-card">
-                <div class="info-icon">🛡️</div>
-                <h3>Paint Protection Film (PPF)</h3>
-                <p>Película transparente de poliuretano que protege la pintura original de su vehículo contra rayones, chips de piedra, y daños causados por elementos externos.</p>
-                <ul class="info-features">
-                    <li>Protección invisible</li>
-                    <li>Autocuración de micro rayones</li>
-                    <li>Resistente a UV</li>
-                    <li>Garantía de 10 años</li>
-                </ul>
-            </div>
-            
-            <div class="info-card">
-                <div class="info-icon">✨</div>
-                <h3>Recubrimiento Cerámico</h3>
-                <p>Nanotecnología que crea una capa protectora permanente sobre la pintura, proporcionando brillo excepcional y protección duradera.</p>
-                <ul class="info-features">
-                    <li>Brillo profundo duradero</li>
-                    <li>Repelente al agua</li>
-                    <li>Fácil limpieza</li>
-                    <li>Garantía de 5 años</li>
-                </ul>
-            </div>
-            
-            <div class="info-card">
-                <div class="info-icon">🔧</div>
-                <h3>Instalación Profesional</h3>
-                <p>Nuestro equipo de técnicos certificados garantiza una aplicación perfecta utilizando las mejores técnicas y herramientas del mercado.</p>
-                <ul class="info-features">
-                    <li>Técnicos certificados</li>
-                    <li>Ambiente controlado</li>
-                    <li>Garantía de instalación</li>
-                    <li>Seguimiento post-venta</li>
-                </ul>
-            </div>
-        </div>
-    </div>
-</section>
-
-<!-- Contact Section -->
-<section class="contact-section" id="contact-form">
-    <div class="contact-container">
-        <div class="contact-content">
-            <h2 class="contact-title">¿Interesado en proteger su vehículo?</h2>
-            <p class="contact-subtitle">Solicite una cotización personalizada sin compromiso</p>
-            
-            @if (!string.IsNullOrEmpty(Model.ErrorMessage))
-            {
-                <div class="error-message">
-                    @Model.ErrorMessage
-                </div>
-            }
-            
-            @if (!string.IsNullOrEmpty(Model.SuccessMessage))
-            {
-                <div class="success-message">
-                    @Model.SuccessMessage
-                </div>
-            }
-            
-            <form method="post" class="contact-form">
-                <div class="form-row">
-                    <div class="form-group">
-                        <label asp-for="Nombre" class="form-label">Nombre completo</label>
-                        <input asp-for="Nombre" class="form-control" placeholder="Su nombre completo" />
-                        <span asp-validation-for="Nombre" class="validation-error"></span>
-                    </div>
-                    
-                    <div class="form-group">
-                        <label asp-for="Telefono" class="form-label">Teléfono</label>
-                        <input asp-for="Telefono" class="form-control" placeholder="Su número de teléfono" />
-                        <span asp-validation-for="Telefono" class="validation-error"></span>
-                    </div>
-                </div>
-                
-                <div class="form-row">
-                    <div class="form-group">
-                        <label asp-for="Email" class="form-label">Correo electrónico</label>
-                        <input asp-for="Email" type="email" class="form-control" placeholder="su@email.com" />
-                        <span asp-validation-for="Email" class="validation-error"></span>
-                    </div>
-                    
-                    <div class="form-group">
-                        <label asp-for="TipoVehiculo" class="form-label">Tipo de vehículo</label>
-                        <select asp-for="TipoVehiculo" class="form-control">
-                            <option value="">Seleccione el tipo</option>
-                            <option value="Sedan">Sedán</option>
-                            <option value="SUV">SUV</option>
-                            <option value="Coupe">Coupé</option>
-                            <option value="Hatchback">Hatchback</option>
-                            <option value="Pickup">Pick-up</option>
-                            <option value="Deportivo">Deportivo</option>
-                            <option value="Otro">Otro</option>
-                        </select>
-                        <span asp-validation-for="TipoVehiculo" class="validation-error"></span>
-                    </div>
-                </div>
-                
-                <div class="form-group">
-                    <label asp-for="ServicioInteres" class="form-label">Servicio de interés</label>
-                    <div class="checkbox-group">
-                        <label class="checkbox-item">
-                            <input type="checkbox" name="ServicioInteres" value="PPF" />
-                            <span class="checkmark"></span>
-                            Paint Protection Film (PPF)
-                        </label>
-                        <label class="checkbox-item">
-                            <input type="checkbox" name="ServicioInteres" value="Ceramico" />
-                            <span class="checkmark"></span>
-                            Recubrimiento Cerámico
-                        </label>
-                        <label class="checkbox-item">
-                            <input type="checkbox" name="ServicioInteres" value="Combo" />
-                            <span class="checkmark"></span>
-                            Combo PPF + Cerámico
-                        </label>
-                    </div>
-                </div>
-                
-                <div class="form-group">
-                    <label asp-for="Mensaje" class="form-label">Mensaje adicional (opcional)</label>
-                    <textarea asp-for="Mensaje" class="form-control" rows="4" placeholder="Cuéntenos sobre su vehículo o necesidades específicas..."></textarea>
-                    <span asp-validation-for="Mensaje" class="validation-error"></span>
-                </div>
-                
-                <button type="submit" class="submit-button">Solicitar Cotización</button>
-            </form>
         </div>
     </div>
 </section>
 
 <!-- FAQ Section -->
-<section class="faq-section">
-    <div class="faq-container">
-        <h2 class="faq-title">Preguntas frecuentes</h2>
+<section class="rainx-faq-section">
+    <div class="rainx-faq-container">
+        <h2 class="rainx-faq-title">Preguntas frecuentes</h2>
         
-        <div class="faq-list">
-            <div class="faq-item" data-faq="1">
-                <div class="faq-question">
-                    <span>¿Cuánto dura el efecto del repelente de agua Rain-X en el parabrisas?</span>
-                    <div class="faq-toggle"></div>
-                </div>
-                <div class="faq-answer">
+        <div class="rainx-faq-list">
+            <div class="rainx-faq-item">
+                <button class="rainx-faq-question" onclick="toggleFAQ(this)">
+                    <span class="rainx-faq-question-text">¿Cuánto dura el efecto del repelente de agua Rain-X en el parabrisas?</span>
+                    <svg class="rainx-faq-arrow" width="12" height="6" viewBox="0 0 12 6" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M1 1L6 5L11 1" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
+                </button>
+                <div class="rainx-faq-answer">
                     <p>El efecto del Rain-X en el parabrisas dura aproximadamente 3-6 meses dependiendo de las condiciones climáticas y la frecuencia de uso del vehículo. Para mantener la efectividad óptima, recomendamos reaplicar cada 3 meses.</p>
                 </div>
             </div>
             
-            <div class="faq-item" data-faq="2">
-                <div class="faq-question">
-                    <span>¿Se puede aplicar Rain-X en cualquier tipo de vidrio automotriz, incluidos los polarizados o laminados?</span>
-                    <div class="faq-toggle"></div>
-                </div>
-                <div class="faq-answer">
+            <div class="rainx-faq-item">
+                <button class="rainx-faq-question" onclick="toggleFAQ(this)">
+                    <span class="rainx-faq-question-text">¿Se puede aplicar Rain-X en cualquier tipo de vidrio automotriz, incluidos los polarizados o laminados?</span>
+                    <svg class="rainx-faq-arrow" width="12" height="6" viewBox="0 0 12 6" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M1 1L6 5L11 1" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
+                </button>
+                <div class="rainx-faq-answer">
                     <p>Sí, Rain-X es compatible con todos los tipos de vidrio automotriz, incluyendo vidrios polarizados y laminados. El producto no afecta las propiedades del vidrio ni interfiere con los sistemas de polarización.</p>
                 </div>
             </div>
             
-            <div class="faq-item" data-faq="3">
-                <div class="faq-question">
-                    <span>¿Rain-X ayuda también a mejorar la conducción nocturna?</span>
-                    <div class="faq-toggle"></div>
-                </div>
-                <div class="faq-answer">
+            <div class="rainx-faq-item">
+                <button class="rainx-faq-question" onclick="toggleFAQ(this)">
+                    <span class="rainx-faq-question-text">¿Rain-X ayuda también a mejorar la conducción nocturna?</span>
+                    <svg class="rainx-faq-arrow" width="12" height="6" viewBox="0 0 12 6" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M1 1L6 5L11 1" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
+                </button>
+                <div class="rainx-faq-answer">
                     <p>Sí, Rain-X mejora significativamente la visibilidad durante la conducción nocturna al hacer que las gotas de agua se deslicen más fácilmente del parabrisas, reduciendo los reflejos y mejorando la claridad visual en condiciones de lluvia.</p>
                 </div>
             </div>
         </div>
         
         <!-- Advertisement Banner -->
-        <div style="margin-top: 48px;">
-            @await Component.InvokeAsync("CarruselPublicidad", new { formato = "horizontal", seccion = "ppf-ceramico-footer" })
+        <div class="rainx-ad-banner">
+            @await Component.InvokeAsync("CarruselPublicidad", new { formato = "horizontal", seccion = "rainx-faq-footer" })
         </div>
     </div>
 </section>
 
-<!-- Footer -->
 @section Scripts {
-    <script src="~/js/ppf-ceramico.js" asp-append-version="true"></script>
+    <script>
+        function toggleFAQ(button) {
+            const faqItem = button.parentElement;
+            const answer = faqItem.querySelector('.rainx-faq-answer');
+            const arrow = button.querySelector('.rainx-faq-arrow');
+            
+            // Toggle active state
+            faqItem.classList.toggle('active');
+            
+            // Rotate arrow
+            if (faqItem.classList.contains('active')) {
+                arrow.style.transform = 'rotate(180deg)';
+                answer.style.maxHeight = answer.scrollHeight + 'px';
+            } else {
+                arrow.style.transform = 'rotate(0deg)';
+                answer.style.maxHeight = '0';
+            }
+        }
+    </script>
     <partial name="_ValidationScriptsPartial" />
 }
-

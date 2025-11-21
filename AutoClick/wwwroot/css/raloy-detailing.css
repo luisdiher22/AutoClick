@@ -67,14 +67,7 @@ body {
     color: var(--text-gray);
 }
 
-.nav-dropdown::after {
-    content: '';
-    width: 12px;
-    height: 6px;
-    background: white;
-    mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 12 6'%3E%3Cpath d='M1 1l5 4 5-4' stroke='white' stroke-width='2' fill='none'/%3E%3C/svg%3E") no-repeat;
-    -webkit-mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 12 6'%3E%3Cpath d='M1 1l5 4 5-4' stroke='white' stroke-width='2' fill='none'/%3E%3C/svg%3E") no-repeat;
-}
+/* Removed .nav-dropdown::after to prevent duplicate arrows - arrows are now handled by inline SVG in HTML */
 
 .header-actions {
     display: flex;
