@@ -32,8 +32,7 @@ public class SoporteService : ISoporteService
 
     public async Task<List<Reclamo>> GetReclamosPorFiltroAsync(string? tipoProblema = null, EstadoReclamo? estado = null, string? prioridad = null)
     {
-        var query = _context.Reclamos
-            .AsQueryable();
+        var query = _context.Reclamos.AsQueryable();
 
         if (!string.IsNullOrEmpty(tipoProblema))
             query = query.Where(r => r.TipoProblema == tipoProblema);
@@ -53,7 +52,6 @@ public class SoporteService : ISoporteService
     {
         var query = _context.Reclamos.AsQueryable();
 
-        // Aplicar filtros
         if (!string.IsNullOrEmpty(tipoProblema))
             query = query.Where(r => r.TipoProblema == tipoProblema);
 
@@ -63,10 +61,8 @@ public class SoporteService : ISoporteService
         if (!string.IsNullOrEmpty(prioridad))
             query = query.Where(r => r.Prioridad == prioridad);
 
-        // Contar total de registros
         var totalCount = await query.CountAsync();
 
-        // Aplicar ordenamiento y paginación
         var items = await query
             .OrderByDescending(r => r.FechaCreacion)
             .Skip((pagina - 1) * tamañoPagina)
@@ -78,8 +74,7 @@ public class SoporteService : ISoporteService
 
     public async Task<Reclamo?> GetReclamoByIdAsync(int id)
     {
-        return await _context.Reclamos
-            .FirstOrDefaultAsync(r => r.Id == id);
+        return await _context.Reclamos.FirstOrDefaultAsync(r => r.Id == id);
     }
 
     public async Task<int> CrearReclamoAsync(Reclamo reclamo)
@@ -93,9 +88,8 @@ public class SoporteService : ISoporteService
             await _context.SaveChangesAsync();
             return reclamo.Id;
         }
-        catch (Exception ex)
+        catch
         {
-            Console.WriteLine($"Error creando reclamo: {ex.Message}");
             return 0;
         }
     }
@@ -108,9 +102,8 @@ public class SoporteService : ISoporteService
             await _context.SaveChangesAsync();
             return true;
         }
-        catch (Exception ex)
+        catch
         {
-            Console.WriteLine($"Error actualizando reclamo: {ex.Message}");
             return false;
         }
     }
@@ -130,9 +123,8 @@ public class SoporteService : ISoporteService
             await _context.SaveChangesAsync();
             return true;
         }
-        catch (Exception ex)
+        catch
         {
-            Console.WriteLine($"Error respondiendo reclamo: {ex.Message}");
             return false;
         }
     }
@@ -148,9 +140,8 @@ public class SoporteService : ISoporteService
             await _context.SaveChangesAsync();
             return true;
         }
-        catch (Exception ex)
+        catch
         {
-            Console.WriteLine($"Error cambiando estado del reclamo: {ex.Message}");
             return false;
         }
     }
@@ -166,9 +157,8 @@ public class SoporteService : ISoporteService
             await _context.SaveChangesAsync();
             return true;
         }
-        catch (Exception ex)
+        catch
         {
-            Console.WriteLine($"Error cambiando prioridad del reclamo: {ex.Message}");
             return false;
         }
     }
@@ -194,8 +184,7 @@ public class SoporteService : ISoporteService
 
     public async Task<List<Mensaje>> GetMensajesPorFiltroAsync(string? tipoConsulta = null, EstadoMensaje? estado = null, string? prioridad = null)
     {
-        var query = _context.Mensajes
-            .AsQueryable();
+        var query = _context.Mensajes.AsQueryable();
 
         if (!string.IsNullOrEmpty(tipoConsulta))
             query = query.Where(m => m.TipoConsulta == tipoConsulta);
@@ -215,7 +204,6 @@ public class SoporteService : ISoporteService
     {
         var query = _context.Mensajes.AsQueryable();
 
-        // Aplicar filtros
         if (!string.IsNullOrEmpty(tipoConsulta))
             query = query.Where(m => m.TipoConsulta == tipoConsulta);
 
@@ -225,10 +213,8 @@ public class SoporteService : ISoporteService
         if (!string.IsNullOrEmpty(prioridad))
             query = query.Where(m => m.Prioridad == prioridad);
 
-        // Contar total de registros
         var totalCount = await query.CountAsync();
 
-        // Aplicar ordenamiento y paginación
         var items = await query
             .OrderByDescending(m => m.FechaCreacion)
             .Skip((pagina - 1) * tamañoPagina)
@@ -240,27 +226,19 @@ public class SoporteService : ISoporteService
 
     public async Task<Mensaje?> GetMensajeByIdAsync(int id)
     {
-        return await _context.Mensajes
-            .FirstOrDefaultAsync(m => m.Id == id);
+        return await _context.Mensajes.FirstOrDefaultAsync(m => m.Id == id);
     }
 
     public async Task<int> CrearMensajeAsync(Mensaje mensaje)
     {
         try
         {
-            // Validar datos antes de guardar
-            if (string.IsNullOrEmpty(mensaje.EmailCliente))
-                throw new ArgumentException("El email del cliente es requerido");
-            if (string.IsNullOrEmpty(mensaje.Nombre))
-                throw new ArgumentException("El nombre es requerido");
-            if (string.IsNullOrEmpty(mensaje.Apellidos))
-                throw new ArgumentException("Los apellidos son requeridos");
-            if (string.IsNullOrEmpty(mensaje.TipoConsulta))
-                throw new ArgumentException("El tipo de consulta es requerido");
-            if (string.IsNullOrEmpty(mensaje.ContenidoMensaje))
-                throw new ArgumentException("El contenido del mensaje es requerido");
-            if (string.IsNullOrEmpty(mensaje.Asunto))
-                throw new ArgumentException("El asunto es requerido");
+            if (string.IsNullOrEmpty(mensaje.EmailCliente)) throw new ArgumentException("El email del cliente es requerido");
+            if (string.IsNullOrEmpty(mensaje.Nombre)) throw new ArgumentException("El nombre es requerido");
+            if (string.IsNullOrEmpty(mensaje.Apellidos)) throw new ArgumentException("Los apellidos son requeridos");
+            if (string.IsNullOrEmpty(mensaje.TipoConsulta)) throw new ArgumentException("El tipo de consulta es requerido");
+            if (string.IsNullOrEmpty(mensaje.ContenidoMensaje)) throw new ArgumentException("El contenido del mensaje es requerido");
+            if (string.IsNullOrEmpty(mensaje.Asunto)) throw new ArgumentException("El asunto es requerido");
 
             mensaje.FechaCreacion = DateTime.UtcNow;
             mensaje.Estado = EstadoMensaje.NoLeido;
@@ -269,10 +247,8 @@ public class SoporteService : ISoporteService
             await _context.SaveChangesAsync();
             return mensaje.Id;
         }
-        catch (Exception ex)
+        catch
         {
-            Console.WriteLine($"Error creando mensaje: {ex}");
-            Console.WriteLine($"Inner Exception: {ex.InnerException?.Message}");
             return 0;
         }
     }
@@ -285,9 +261,8 @@ public class SoporteService : ISoporteService
             await _context.SaveChangesAsync();
             return true;
         }
-        catch (Exception ex)
+        catch
         {
-            Console.WriteLine($"Error actualizando mensaje: {ex.Message}");
             return false;
         }
     }
@@ -307,9 +282,8 @@ public class SoporteService : ISoporteService
             await _context.SaveChangesAsync();
             return true;
         }
-        catch (Exception ex)
+        catch
         {
-            Console.WriteLine($"Error respondiendo mensaje: {ex.Message}");
             return false;
         }
     }
@@ -325,9 +299,8 @@ public class SoporteService : ISoporteService
             await _context.SaveChangesAsync();
             return true;
         }
-        catch (Exception ex)
+        catch
         {
-            Console.WriteLine($"Error cambiando estado del mensaje: {ex.Message}");
             return false;
         }
     }
@@ -343,9 +316,8 @@ public class SoporteService : ISoporteService
             await _context.SaveChangesAsync();
             return true;
         }
-        catch (Exception ex)
+        catch
         {
-            Console.WriteLine($"Error cambiando prioridad del mensaje: {ex.Message}");
             return false;
         }
     }
@@ -356,14 +328,12 @@ public class SoporteService : ISoporteService
 
     public async Task<int> GetReclamosPendientesCountAsync()
     {
-        return await _context.Reclamos
-            .CountAsync(r => r.Estado == EstadoReclamo.Pendiente);
+        return await _context.Reclamos.CountAsync(r => r.Estado == EstadoReclamo.Pendiente);
     }
 
     public async Task<int> GetMensajesNoLeidosCountAsync()
     {
-        return await _context.Mensajes
-            .CountAsync(m => m.Estado == EstadoMensaje.NoLeido);
+        return await _context.Mensajes.CountAsync(m => m.Estado == EstadoMensaje.NoLeido);
     }
 
     public async Task<Dictionary<string, int>> GetEstadisticasReclamosAsync()
@@ -396,50 +366,16 @@ public class SoporteService : ISoporteService
 
     public async Task<List<string>> GetTiposProblemaAsync()
     {
-        // Obtener tipos únicos de problemas de la base de datos
-        var tiposFromDb = await _context.Reclamos
-            .Select(r => r.TipoProblema)
-            .Distinct()
-            .ToListAsync();
-
-        // Combinar con tipos predefinidos
-        var tiposPredefinidos = new List<string>
-        {
-            "Problemas Técnicos",
-            "Problemas con Anuncio", 
-            "Problemas con Pago",
-            "Problemas con Cuenta",
-            "Reportar Usuario",
-            "Solicitud Eliminación Cuenta",
-            "Otro"
-        };
-
-        var todosLosTipos = tiposPredefinidos.Union(tiposFromDb).Distinct().ToList();
-        return todosLosTipos;
+        var tiposFromDb = await _context.Reclamos.Select(r => r.TipoProblema).Distinct().ToListAsync();
+        var tiposPredefinidos = new List<string> { "Problemas Técnicos", "Problemas con Anuncio", "Problemas con Pago", "Problemas con Cuenta", "Reportar Usuario", "Solicitud Eliminación Cuenta", "Otro" };
+        return tiposPredefinidos.Union(tiposFromDb).Distinct().ToList();
     }
 
     public async Task<List<string>> GetTiposConsultaAsync()
     {
-        // Obtener tipos únicos de consultas de la base de datos
-        var tiposFromDb = await _context.Mensajes
-            .Select(m => m.TipoConsulta)
-            .Distinct()
-            .ToListAsync();
-
-        // Combinar con tipos predefinidos
-        var tiposPredefinidos = new List<string>
-        {
-            "Información General",
-            "Consulta Comercial",
-            "Soporte Técnico",
-            "Sugerencias",
-            "Colaboraciones",
-            "Publicidad",
-            "Otro"
-        };
-
-        var todosLosTipos = tiposPredefinidos.Union(tiposFromDb).Distinct().ToList();
-        return todosLosTipos;
+        var tiposFromDb = await _context.Mensajes.Select(m => m.TipoConsulta).Distinct().ToListAsync();
+        var tiposPredefinidos = new List<string> { "Información General", "Consulta Comercial", "Soporte Técnico", "Sugerencias", "Colaboraciones", "Publicidad", "Otro" };
+        return tiposPredefinidos.Union(tiposFromDb).Distinct().ToList();
     }
 
     public List<string> GetPrioridades()

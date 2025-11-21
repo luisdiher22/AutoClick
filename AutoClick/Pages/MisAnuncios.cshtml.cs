@@ -118,14 +118,12 @@ namespace AutoClick.Pages
 
         public async Task<IActionResult> OnPostDeleteAsync(int id)
         {
-            Console.WriteLine($"=== OnPostDeleteAsync called with ID: {id} ===");
-            Console.WriteLine($"Request method: {Request.Method}");
-            Console.WriteLine($"Content type: {Request.ContentType}");
+
             
             // Check if user is logged in (same authentication as OnGet)
             if (!User.Identity?.IsAuthenticated == true)
             {
-                Console.WriteLine("User not authenticated");
+
                 return new JsonResult(new { success = false, message = "Usuario no autenticado" });
             }
 
@@ -133,40 +131,40 @@ namespace AutoClick.Pages
                 ?? User.FindFirst("email")?.Value 
                 ?? User.FindFirst(System.Security.Claims.ClaimTypes.Name)?.Value;
                 
-            Console.WriteLine($"User email: {userEmail}");
+
                 
             if (string.IsNullOrEmpty(userEmail))
             {
-                Console.WriteLine("No valid user email found");
+
                 return new JsonResult(new { success = false, message = "Usuario no válido" });
             }
 
             try
             {
-                Console.WriteLine($"Looking for auto with ID: {id} and email: {userEmail}");
+
                 
                 // Find the auto and verify ownership
                 var auto = await _context.Autos.FirstOrDefaultAsync(a => a.Id == id && a.EmailPropietario == userEmail);
                 
                 if (auto == null)
                 {
-                    Console.WriteLine("Auto not found or user doesn't have permission");
+
                     return new JsonResult(new { success = false, message = "Anuncio no encontrado o sin permisos" });
                 }
                 
-                Console.WriteLine($"Auto found: {auto.NombreCompleto}");
+
 
                 // Delete the auto
-                Console.WriteLine("Deleting auto from database...");
+
                 _context.Autos.Remove(auto);
                 await _context.SaveChangesAsync();
                 
-                Console.WriteLine("Auto deleted successfully, returning JSON response");
+
                 return new JsonResult(new { success = true, message = "Anuncio eliminado exitosamente" });
             }
             catch (Exception ex)
             {
-                Console.WriteLine($"Error deleting auto: {ex.Message}");
+
                 return new JsonResult(new { success = false, message = "Error al eliminar el anuncio" });
             }
         }
@@ -221,7 +219,7 @@ namespace AutoClick.Pages
             catch (Exception ex)
             {
                 // Log error and show empty results
-                Console.WriteLine($"Error loading anuncios: {ex.Message}");
+
                 Anuncios = new List<AnuncioViewModel>();
                 TotalAnuncios = 0;
                 TotalPaginas = 0;
@@ -368,14 +366,14 @@ namespace AutoClick.Pages
 
         public async Task<IActionResult> OnPostAsync()
         {
-            Console.WriteLine("=== OnPostAsync (default) called ===");
+
             
             // Check if this is a delete request
             if (Request.Form.ContainsKey("action") && Request.Form["action"] == "delete")
             {
                 if (int.TryParse(Request.Form["id"], out int id))
                 {
-                    Console.WriteLine($"Processing delete for ID: {id}");
+
                     return await OnPostDeleteAsync(id);
                 }
             }

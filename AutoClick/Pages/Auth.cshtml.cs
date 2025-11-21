@@ -85,7 +85,7 @@ namespace AutoClick.Pages
             catch (Exception ex)
             {
                 // Log the error in a real application
-                System.Diagnostics.Debug.WriteLine($"Registration error: {ex.Message}");
+
                 ErrorMessage = "Ocurrió un error al procesar su solicitud. Intente nuevamente.";
                 return Page();
             }
@@ -151,7 +151,7 @@ namespace AutoClick.Pages
             catch (Exception ex)
             {
                 // Log the error in a real application
-                System.Diagnostics.Debug.WriteLine($"Login error: {ex.Message}");
+
                 ErrorMessage = "Ocurrió un error al iniciar sesión. Intente nuevamente.";
                 return Page();
             }

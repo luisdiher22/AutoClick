@@ -92,7 +92,7 @@ namespace AutoClick.Pages.Admin
             catch (Exception ex)
             {
                 ErrorMessage = "Error al cargar los datos del centro de soporte.";
-                Console.WriteLine($"Error en CentroSoporte OnGet: {ex.Message}");
+
                 return Page();
             }
         }
@@ -147,7 +147,7 @@ namespace AutoClick.Pages.Admin
             catch (Exception ex)
             {
                 ErrorMessage = "Error al procesar la respuesta.";
-                Console.WriteLine($"Error en CentroSoporte OnPostResponder: {ex.Message}");
+
                 await CargarDatosAsync();
                 return Page();
             }
@@ -190,7 +190,7 @@ namespace AutoClick.Pages.Admin
             catch (Exception ex)
             {
                 ErrorMessage = "Error al cambiar el estado.";
-                Console.WriteLine($"Error en CentroSoporte OnPostCambiarEstado: {ex.Message}");
+
                 await CargarDatosAsync();
                 return Page();
             }
@@ -258,7 +258,7 @@ namespace AutoClick.Pages.Admin
                 TotalPaginasReclamos = 1;
                 TotalPaginasMensajes = 1;
                 
-                Console.WriteLine($"Error al cargar datos: {ex.Message}");
+
             }
         }
 

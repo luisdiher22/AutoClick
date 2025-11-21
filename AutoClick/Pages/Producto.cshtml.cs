@@ -323,7 +323,7 @@ namespace AutoClick.Pages
             }
             catch (Exception ex)
             {
-                Console.WriteLine($"Error al crear solicitud de pre-aprobación: {ex.Message}");
+
                 return new JsonResult(new { success = false, message = "Ocurrió un error al procesar su solicitud. Por favor intente nuevamente." });
             }
         }

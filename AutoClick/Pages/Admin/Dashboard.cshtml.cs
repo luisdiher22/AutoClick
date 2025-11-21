@@ -87,7 +87,7 @@ namespace AutoClick.Pages.Admin
                 MensajesEstaSemana = 0;
                 
                 // Log del error
-                System.Diagnostics.Debug.WriteLine($"Error en Dashboard: {ex.Message}");
+
             }
 
             return Page();

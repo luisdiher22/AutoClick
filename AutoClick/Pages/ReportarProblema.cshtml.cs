@@ -101,7 +101,7 @@ namespace AutoClick.Pages
             catch (Exception ex)
             {
                 ErrorMessage = "Ocurrió un error al enviar su reporte. Por favor, inténtelo nuevamente.";
-                Console.WriteLine($"Error en ReportarProblema: {ex.Message}");
+
                 return Page();
             }
         }

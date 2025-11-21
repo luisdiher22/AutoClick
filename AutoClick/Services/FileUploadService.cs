@@ -24,62 +24,27 @@ public class FileUploadService : IFileUploadService
         _environment = environment;
         
         var connectionString = _configuration.GetConnectionString("AzureStorage");
-        var useAzureConfig = _configuration.GetValue<bool>("UseAzureStorage", false);
-        
-        Console.WriteLine($"=== FileUploadService Configuration ===");
-        Console.WriteLine($"UseAzureStorage config: {useAzureConfig}");
-        Console.WriteLine($"Connection string exists: {!string.IsNullOrEmpty(connectionString)}");
-        
-        // Solo usar Azure si está configurado para usarlo Y tiene connection string válido
-        _useAzureStorage = useAzureConfig && 
-                          !string.IsNullOrEmpty(connectionString) && 
-                          connectionString.Trim() != "";
-        
-        Console.WriteLine($"Final decision - Using Azure Storage: {_useAzureStorage}");
-        
-        if (_useAzureStorage)
+        if (!string.IsNullOrEmpty(connectionString))
         {
-            try
-            {
-                _blobServiceClient = new BlobServiceClient(connectionString);
-                Console.WriteLine("Azure Blob Service Client created successfully");
-            }
-            catch (Exception ex)
-            {
-                // Si falla la conexión a Azure, usar almacenamiento local
-                Console.WriteLine($"Failed to create Azure client, falling back to local: {ex.Message}");
-                _useAzureStorage = false;
-                _blobServiceClient = null;
-            }
+            _blobServiceClient = new BlobServiceClient(connectionString);
+            _useAzureStorage = true;
         }
         else
         {
-            Console.WriteLine("Using local storage");
+            _useAzureStorage = false;
         }
     }
 
     public async Task<string> UploadFileAsync(IFormFile file, string container = "autos")
     {
-        if (file == null || file.Length == 0)
-            throw new ArgumentException("No se proporcionó archivo válido");
-
-        var fileName = $"{Guid.NewGuid()}_{file.FileName}";
+        string fileName = Guid.NewGuid().ToString() + Path.GetExtension(file.FileName);
         
-        Console.WriteLine($"=== UploadFileAsync Debug ===");
-        Console.WriteLine($"File: {file.FileName}, Size: {file.Length} bytes");
-        Console.WriteLine($"Container: {container}");
-        Console.WriteLine($"Generated filename: {fileName}");
-        Console.WriteLine($"_useAzureStorage: {_useAzureStorage}");
-        Console.WriteLine($"_blobServiceClient != null: {_blobServiceClient != null}");
-
         if (_useAzureStorage && _blobServiceClient != null)
         {
-            Console.WriteLine("Taking Azure storage path");
             return await UploadToAzureAsync(file, fileName, container);
         }
         else
         {
-            Console.WriteLine("Taking local storage path");
             return await UploadToLocalAsync(file, fileName, container);
         }
     }

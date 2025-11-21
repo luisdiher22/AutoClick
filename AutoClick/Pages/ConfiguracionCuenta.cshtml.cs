@@ -270,12 +270,7 @@ namespace AutoClick.Pages
             }
             catch (Exception ex)
             {
-                Console.WriteLine($"Error general al cambiar email: {ex.Message}");
-                Console.WriteLine($"Stack trace: {ex.StackTrace}");
-                if (ex.InnerException != null)
-                {
-                    Console.WriteLine($"Inner exception: {ex.InnerException.Message}");
-                }
+
                 ModelState.AddModelError("", $"Ha ocurrido un error al cambiar el correo electrónico: {ex.Message}");
                 OnGet();
                 return Page();
@@ -358,8 +353,7 @@ namespace AutoClick.Pages
             }
             catch (Exception ex)
             {
-                Console.WriteLine($"EXCEPCIÓN: {ex.Message}");
-                Console.WriteLine($"Stack trace: {ex.StackTrace}");
+
                 ModelState.AddModelError("", $"Ha ocurrido un error al cambiar la contraseña: {ex.Message}");
                 OnGet();
                 return Page();

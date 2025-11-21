@@ -843,7 +843,8 @@
                     <h2 class="contact-title">Hablemos de cómo su marca puede brillar en AutoClick.cr</h2>
                 </div>
             
-            <div class="contact-form">
+            <div class="form-wrapper" style="display: flex; flex-direction: column; gap: 16px;">
+                <div class="contact-form">
                 <div class="form-header">
                     <h3>¡Queremos saber acerca de su empresa!</h3>
                 </div>
@@ -863,7 +864,7 @@
                     </div>
                 }
                 
-                <form method="post" class="empresa-form">
+                <form method="post" class="empresa-form" id="empresaForm">
                     <h4 class="form-section-title">Datos de contacto</h4>
                     
                     <div class="form-group">
@@ -923,10 +924,9 @@
                         <textarea asp-for="DescripcionEmpresa" class="form-control" rows="3" placeholder="Introducir texto"></textarea>
                         <span asp-validation-for="DescripcionEmpresa" class="validation-error"></span>
                     </div>
-                    
-                    <button type="submit" class="submit-button">Enviar</button>
                 </form>
             </div>
+            <button type="submit" form="empresaForm" class="submit-button">Enviar</button>
         </div>
     </div>
 </section>

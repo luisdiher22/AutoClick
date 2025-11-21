@@ -61,7 +61,7 @@ namespace AutoClick.Pages.Admin
             catch (Exception ex)
             {
                 ErrorMessage = "Error al cargar las solicitudes de pre-aprobación.";
-                Console.WriteLine($"Error en SolicitudesPreAprobaciones: {ex.Message}");
+
                 return Page();
             }
         }

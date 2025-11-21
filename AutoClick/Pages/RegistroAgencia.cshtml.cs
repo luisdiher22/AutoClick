@@ -156,7 +156,7 @@ namespace AutoClick.Pages
             catch (Exception ex)
             {
                 // Log del error en una aplicación real
-                System.Diagnostics.Debug.WriteLine($"Error en registro: {ex.Message}");
+
                 ErrorMessage = "Ocurrió un error al crear la cuenta. Intente nuevamente.";
                 return Page();
             }

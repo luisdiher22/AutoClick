@@ -106,7 +106,6 @@ namespace AutoClick.Pages
         {
             try
             {
-                Console.WriteLine("=== OnPostAsync called ===");
                 
                 if (!User.Identity?.IsAuthenticated == true)
                 {
@@ -122,11 +121,8 @@ namespace AutoClick.Pages
                     return RedirectToPage("/Auth");
                 }
 
-                Console.WriteLine($"User email: {userEmail}");
-                Console.WriteLine($"LogoFile1 is null: {LogoFile1 == null}");
                 if (LogoFile1 != null)
                 {
-                    Console.WriteLine($"LogoFile1 name: {LogoFile1.FileName}, size: {LogoFile1.Length}");
                 }
 
                 // Save profile data and handle file uploads in one transaction
@@ -138,8 +134,6 @@ namespace AutoClick.Pages
             }
             catch (Exception ex)
             {
-                Console.WriteLine($"Error saving profile: {ex.Message}");
-                Console.WriteLine($"Stack trace: {ex.StackTrace}");
                 ErrorMessage = $"Hubo un error al guardar el perfil: {ex.Message}";
                 return Page();
             }
@@ -157,7 +151,6 @@ namespace AutoClick.Pages
 
                 // Simulate newsletter subscription
                 await Task.Delay(500);
-                Console.WriteLine($"Newsletter subscription: {Email} at {DateTime.Now}");
 
                 StatusMessage = "¡Gracias por suscribirse! Recibirá las últimas noticias y promociones.";
                 Email = string.Empty;
@@ -166,7 +159,6 @@ namespace AutoClick.Pages
             }
             catch (Exception ex)
             {
-                Console.WriteLine($"Error in newsletter subscription: {ex.Message}");
                 ErrorMessage = "Hubo un error al procesar su suscripción. Por favor intente nuevamente.";
                 return Page();
             }
@@ -176,7 +168,6 @@ namespace AutoClick.Pages
         {
             try
             {
-                Console.WriteLine($"=== LoadProfileDataAsync called for {userEmail} ===");
                 
                 // Force reload from database without tracking
                 var usuario = await _context.Usuarios
@@ -185,7 +176,6 @@ namespace AutoClick.Pages
                     
                 if (usuario != null)
                 {
-                    Console.WriteLine($"Usuario found. LogoUrl in DB: '{usuario.LogoUrl ?? "(null)"}'");
                     
                     // Basic user information
                     NombreEmpresa = usuario.NombreAMostrar;
@@ -195,7 +185,6 @@ namespace AutoClick.Pages
                     WhatsApp = usuario.NumeroTelefono;
                     LogoUrl = usuario.LogoUrl;
                     
-                    Console.WriteLine($"LogoUrl loaded into model: '{LogoUrl ?? "(null)"}'");
                     
                     // Set some default values for demo - in a real app these would come from an extended user profile
                     CedulaJuridica = usuario.EsAgencia ? "3-008-4534245" : "";
@@ -205,12 +194,10 @@ namespace AutoClick.Pages
                 }
                 else
                 {
-                    Console.WriteLine("ERROR: Usuario not found in LoadProfileDataAsync");
                 }
             }
             catch (Exception ex)
             {
-                Console.WriteLine($"Error loading profile data: {ex.Message}");
                 // Set default values if loading fails
                 NombreEmpresa = "Mi Perfil";
                 NombreComercial = "Mi Perfil";
@@ -221,20 +208,17 @@ namespace AutoClick.Pages
         {
             try
             {
-                Console.WriteLine("=== SaveProfileAndFilesAsync called ===");
                 
                 // Get user from database
                 var usuario = await _context.Usuarios.FirstOrDefaultAsync(u => u.Email == userEmail);
                 if (usuario == null)
                 {
-                    Console.WriteLine("ERROR: Usuario not found");
                     return;
                 }
 
                 // 1. Upload logo to Azure if provided
                 if (LogoFile1 != null && LogoFile1.Length > 0)
                 {
-                    Console.WriteLine($"Uploading logo: {LogoFile1.FileName}, size: {LogoFile1.Length}");
                     
                     var connectionString = _configuration.GetConnectionString("AzureStorage");
                     if (!string.IsNullOrEmpty(connectionString))
@@ -245,7 +229,6 @@ namespace AutoClick.Pages
                         {
                             usuario.LogoUrl = logoUrl;
                             LogoUrl = logoUrl;
-                            Console.WriteLine($"Logo URL set on usuario: {logoUrl}");
                         }
                     }
                 }
@@ -278,13 +261,9 @@ namespace AutoClick.Pages
                 
                 // 4. Save all changes in one transaction
                 var changesSaved = await _context.SaveChangesAsync();
-                Console.WriteLine($"Changes saved count: {changesSaved}");
-                Console.WriteLine($"Profile saved for user: {usuario.Email}, LogoUrl: {usuario.LogoUrl ?? "(null)"}");
             }
             catch (Exception ex)
             {
-                Console.WriteLine($"Error saving profile and files: {ex.Message}");
-                Console.WriteLine($"Stack trace: {ex.StackTrace}");
                 throw;
             }
         }
@@ -293,29 +272,23 @@ namespace AutoClick.Pages
         {
             try
             {
-                Console.WriteLine("=== ProcessFileUploads called ===");
                 
                 var connectionString = _configuration.GetConnectionString("AzureStorage");
                 
                 if (string.IsNullOrEmpty(connectionString))
                 {
-                    Console.WriteLine("ERROR: Azure Storage connection string not found");
                     return;
                 }
-
-                Console.WriteLine("Azure Storage connection string found");
 
                 // Upload LogoFile1 to logosusuario container (this becomes the profile picture)
                 if (LogoFile1 != null && LogoFile1.Length > 0)
                 {
-                    Console.WriteLine($"Uploading logo: {LogoFile1.FileName}, size: {LogoFile1.Length}");
                     
                     var logoUrl = await UploadToAzureBlobAsync(LogoFile1, "logosusuario", "logo1");
                     
                     if (!string.IsNullOrEmpty(logoUrl))
                     {
                         LogoUrl = logoUrl;
-                        Console.WriteLine($"Logo URL set: {logoUrl}");
                         
                         // Update user's profile picture in database
                         var userEmail = User.FindFirst(System.Security.Claims.ClaimTypes.Email)?.Value 
@@ -327,37 +300,28 @@ namespace AutoClick.Pages
                             var usuario = await _context.Usuarios.FirstOrDefaultAsync(u => u.Email == userEmail);
                             if (usuario != null)
                             {
-                                Console.WriteLine($"Updating LogoUrl for user: {usuario.Email}");
                                 usuario.LogoUrl = logoUrl;
                                 await _context.SaveChangesAsync();
-                                Console.WriteLine($"Updated profile picture for user: {usuario.Email}");
                             }
                             else
                             {
-                                Console.WriteLine("ERROR: Usuario not found in database");
                             }
                         }
                         else
                         {
-                            Console.WriteLine("ERROR: User email not found");
                         }
                         
-                        Console.WriteLine($"Logo uploaded successfully: {logoUrl}");
                     }
                     else
                     {
-                        Console.WriteLine("ERROR: Logo upload failed - logoUrl is empty");
                     }
                 }
                 else
                 {
-                    Console.WriteLine("No logo file to upload");
                 }
             }
             catch (Exception ex)
             {
-                Console.WriteLine($"Error processing file uploads: {ex.Message}");
-                Console.WriteLine($"Stack trace: {ex.StackTrace}");
                 throw;
             }
         }
@@ -366,24 +330,19 @@ namespace AutoClick.Pages
         {
             try
             {
-                Console.WriteLine($"=== UploadToAzureBlobAsync called ===");
-                Console.WriteLine($"Container: {containerName}, Prefix: {prefix}, File: {file.FileName}");
                 
                 var connectionString = _configuration.GetConnectionString("AzureStorage");
                 
                 // Create BlobServiceClient
                 var blobServiceClient = new BlobServiceClient(connectionString);
-                Console.WriteLine("BlobServiceClient created");
                 
                 // Get container client (create if not exists)
                 var containerClient = blobServiceClient.GetBlobContainerClient(containerName);
                 await containerClient.CreateIfNotExistsAsync(PublicAccessType.Blob);
-                Console.WriteLine($"Container '{containerName}' ready");
                 
                 // Generate unique blob name
                 var fileName = $"{prefix}_{Guid.NewGuid()}{Path.GetExtension(file.FileName)}";
                 var blobClient = containerClient.GetBlobClient(fileName);
-                Console.WriteLine($"Blob name: {fileName}");
                 
                 // Set content type based on file extension
                 var blobHttpHeaders = new BlobHttpHeaders
@@ -394,24 +353,19 @@ namespace AutoClick.Pages
                 // Upload file
                 using (var stream = file.OpenReadStream())
                 {
-                    Console.WriteLine($"Uploading file, size: {stream.Length} bytes");
                     await blobClient.UploadAsync(stream, new BlobUploadOptions
                     {
                         HttpHeaders = blobHttpHeaders
                     });
-                    Console.WriteLine("Upload completed");
                 }
                 
                 // Return blob URL
                 var blobUrl = blobClient.Uri.ToString();
-                Console.WriteLine($"Blob URL: {blobUrl}");
                 
                 return blobUrl;
             }
             catch (Exception ex)
             {
-                Console.WriteLine($"Error uploading to Azure Blob: {ex.Message}");
-                Console.WriteLine($"Stack trace: {ex.StackTrace}");
                 return string.Empty;
             }
         }
@@ -449,12 +403,10 @@ namespace AutoClick.Pages
 
                     await _context.SaveChangesAsync();
                     
-                    Console.WriteLine($"Profile updated for user: {usuario.Email}");
                 }
             }
             catch (Exception ex)
             {
-                Console.WriteLine($"Error saving profile data: {ex.Message}");
                 throw;
             }
         }

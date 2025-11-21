@@ -106,7 +106,7 @@ namespace AutoClick.Pages
             catch (Exception ex)
             {
                 ErrorMessage = $"Ocurrió un error al enviar su consulta: {ex.Message}";
-                Console.WriteLine($"Error en Contactanos: {ex}");
+
                 return Page();
             }
         }

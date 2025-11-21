@@ -139,7 +139,7 @@ namespace AutoClick.Pages
             catch (Exception ex)
             {
                 // Log the error in a real application
-                System.Diagnostics.Debug.WriteLine($"Business inquiry error: {ex.Message}");
+
                 ErrorMessage = "Ocurrió un error interno. Por favor, intente nuevamente más tarde.";
                 return Page();
             }
