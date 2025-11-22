@@ -3,7 +3,7 @@
 @using AutoClick.Helpers
 @{
     ViewData["Title"] = $"{Model.Vehicle?.NombreCompleto} - AutoClick.cr";
-    
+
     // Prepare image URLs for gallery
     var imageUrlsList = Model.Vehicle?.ImagenesUrlsList ?? new List<string>();
     if (imageUrlsList.Count == 0 && !string.IsNullOrEmpty(Model.Vehicle?.ImagenPrincipal))
@@ -31,70 +31,72 @@
                 @if (Model.Vehicle != null)
                 {
                     <div class="producto-gallery">
-                    <div class="producto-main-image">
-                        @if (!string.IsNullOrEmpty(Model.Vehicle.ImagenPrincipal))
-                        {
-                            <img src="@Model.Vehicle.ImagenPrincipal" alt="@Model.Vehicle.NombreCompleto" class="main-car-image" />
-                        }
+                        <div class="producto-main-image">
+                            @if (!string.IsNullOrEmpty(Model.Vehicle.ImagenPrincipal))
+                            {
+                                <img src="@Model.Vehicle.ImagenPrincipal" alt="@Model.Vehicle.NombreCompleto"
+                                    class="main-car-image" />
+                            }
 
-                        <!-- Contador de fotos (responsive only) -->
-                        <div class="photo-counter">
-                            <span id="photoCounterText">1/@imageUrlsList.Count</span>
-                            <img src="~/images/icons/camera-icon.svg" alt="Camera" />
-                        </div>
+                            <!-- Contador de fotos (responsive only) -->
+                            <div class="photo-counter">
+                                <span id="photoCounterText">1/@imageUrlsList.Count</span>
+                                <img src="~/images/icons/camera-icon.svg" alt="Camera" />
+                            </div>
 
-                        <!-- Botón de ver video (responsive only - descomentar cuando se agregue VideoUrl al modelo) -->
-                        @* @if (!string.IsNullOrEmpty(Model.Vehicle?.VideoUrl))
+                            <!-- Botón de ver video (responsive only - descomentar cuando se agregue VideoUrl al modelo) -->
+                            @* @if (!string.IsNullOrEmpty(Model.Vehicle?.VideoUrl))
                         {
-                            <button class="video-button" onclick="openVideoModal()">
-                                <img src="~/images/icons/play-icon.svg" alt="Play" />
-                                <span>Ver video</span>
-                            </button>
+                        <button class="video-button" onclick="openVideoModal()">
+                        <img src="~/images/icons/play-icon.svg" alt="Play" />
+                        <span>Ver video</span>
+                        </button>
                         } *@
 
-                        <!-- Navigation Arrows -->
-                        <button class="gallery-nav-btn prev-btn" onclick="navigateGallery(-1)">
-                            <svg width="51" height="51" viewBox="0 0 51 51" fill="none">
-                                <circle cx="25.5" cy="25.5" r="25.5" fill="rgba(0, 0, 0, 0.6)"/>
-                                <path d="M28 18L21 25.5L28 33" stroke="white" stroke-width="2" stroke-linecap="round"/>
-                            </svg>
-                        </button>
-                        <button class="gallery-nav-btn next-btn" onclick="navigateGallery(1)">
-                            <svg width="51" height="51" viewBox="0 0 51 51" fill="none">
-                                <circle cx="25.5" cy="25.5" r="25.5" fill="rgba(0, 0, 0, 0.6)"/>
-                                <path d="M23 18L30 25.5L23 33" stroke="white" stroke-width="2" stroke-linecap="round"/>
-                            </svg>
-                        </button>
-                    </div>
-
-                    <!-- Thumbnail Gallery -->
-                    @if (imageUrlsList.Count > 0)
-                    {
-                        <div class="producto-thumbnails">
-                            @{
-                                var maxThumbnails = Math.Min(8, imageUrlsList.Count);
-                            }
-                            @for (int i = 0; i < maxThumbnails; i++)
-                            {
-                                <div class="thumbnail-item @(i == 0 ? "active" : "")" data-index="@i" onclick="selectThumbnail(@i)">
-                                    @if (i == 7 && imageUrlsList.Count > 8)
-                                    {
-                                        <img src="@imageUrlsList[i]" alt="Más imágenes" />
-                                        <div class="thumbnail-overlay">
-                                            <svg width="20" height="20" viewBox="0 0 20 20" fill="white">
-                                                <path d="M10 4V16M4 10H16" stroke="white" stroke-width="2" stroke-linecap="round"/>
-                                            </svg>
-                                        </div>
-                                    }
-                                    else
-                                    {
-                                        <img src="@imageUrlsList[i]" alt="@Model.Vehicle.NombreCompleto vista @(i + 1)" />
-                                    }
-                                </div>
-                            }
+                            <!-- Navigation Arrows -->
+                            <button class="gallery-nav-btn prev-btn" onclick="navigateGallery(-1)">
+                                <svg width="51" height="51" viewBox="0 0 51 51" fill="none">
+                                    <circle cx="25.5" cy="25.5" r="25.5" fill="rgba(0, 0, 0, 0.6)" />
+                                    <path d="M28 18L21 25.5L28 33" stroke="white" stroke-width="2" stroke-linecap="round" />
+                                </svg>
+                            </button>
+                            <button class="gallery-nav-btn next-btn" onclick="navigateGallery(1)">
+                                <svg width="51" height="51" viewBox="0 0 51 51" fill="none">
+                                    <circle cx="25.5" cy="25.5" r="25.5" fill="rgba(0, 0, 0, 0.6)" />
+                                    <path d="M23 18L30 25.5L23 33" stroke="white" stroke-width="2" stroke-linecap="round" />
+                                </svg>
+                            </button>
                         </div>
-                    }
-                </div>
+
+                        <!-- Thumbnail Gallery -->
+                        @if (imageUrlsList.Count > 0)
+                        {
+                            <div class="producto-thumbnails">
+                                @{
+                                    var maxThumbnails = Math.Min(8, imageUrlsList.Count);
+                                }
+                                @for (int i = 0; i < maxThumbnails; i++)
+                                {
+                                    <div class="thumbnail-item @(i == 0 ? "active" : "")" data-index="@i"
+                                        onclick="selectThumbnail(@i)">
+                                        @if (i == 7 && imageUrlsList.Count > 8)
+                                        {
+                                            <img src="@imageUrlsList[i]" alt="Más imágenes" />
+                                            <div class="thumbnail-overlay">
+                                                <svg width="20" height="20" viewBox="0 0 20 20" fill="white">
+                                                    <path d="M10 4V16M4 10H16" stroke="white" stroke-width="2" stroke-linecap="round" />
+                                                </svg>
+                                            </div>
+                                        }
+                                        else
+                                        {
+                                            <img src="@imageUrlsList[i]" alt="@Model.Vehicle.NombreCompleto vista @(i + 1)" />
+                                        }
+                                    </div>
+                                }
+                            </div>
+                        }
+                    </div>
                 }
 
                 <!-- Description Section -->
@@ -116,18 +118,22 @@
                             <div class="spec-column">
                                 <div class="spec-item">
                                     <h3>Marca</h3>
-                                    <p>@(string.IsNullOrEmpty(Model.Vehicle.Marca) ? "" : char.ToUpper(Model.Vehicle.Marca[0]) + Model.Vehicle.Marca.Substring(1).ToLower())</p>
+                                    <p>@(string.IsNullOrEmpty(Model.Vehicle.Marca) ? "" :
+                                             char.ToUpper(Model.Vehicle.Marca[0]) + Model.Vehicle.Marca.Substring(1).ToLower())
+                                    </p>
                                 </div>
                                 <div class="spec-item">
                                     <h3>Modelo</h3>
-                                    <p>@(string.IsNullOrEmpty(Model.Vehicle.Modelo) ? "" : char.ToUpper(Model.Vehicle.Modelo[0]) + Model.Vehicle.Modelo.Substring(1).ToLower())</p>
+                                    <p>@(string.IsNullOrEmpty(Model.Vehicle.Modelo) ? "" :
+                                             char.ToUpper(Model.Vehicle.Modelo[0]) + Model.Vehicle.Modelo.Substring(1).ToLower())
+                                    </p>
                                 </div>
                                 <div class="spec-item">
                                     <h3>Año</h3>
                                     <p>@Model.Vehicle.Ano</p>
                                 </div>
                             </div>
-                            
+
                             <!-- Column 2 -->
                             <div class="spec-column">
                                 <div class="spec-item">
@@ -136,14 +142,16 @@
                                 </div>
                                 <div class="spec-item">
                                     <h3>Carrocería</h3>
-                                    <p>@(string.IsNullOrEmpty(Model.Vehicle.Carroceria) ? "" : char.ToUpper(Model.Vehicle.Carroceria[0]) + Model.Vehicle.Carroceria.Substring(1).ToLower())</p>
+                                    <p>@(string.IsNullOrEmpty(Model.Vehicle.Carroceria) ? "" :
+                                             char.ToUpper(Model.Vehicle.Carroceria[0]) +
+                                             Model.Vehicle.Carroceria.Substring(1).ToLower())</p>
                                 </div>
                                 <div class="spec-item">
                                     <h3>Número de puertas</h3>
                                     <p>@Model.Vehicle.NumeroPuertas</p>
                                 </div>
                             </div>
-                            
+
                             <!-- Column 3 -->
                             <div class="spec-column">
                                 <div class="spec-item">
@@ -152,11 +160,15 @@
                                 </div>
                                 <div class="spec-item">
                                     <h3>Propulsión</h3>
-                                    <p>@(string.IsNullOrEmpty(Model.Vehicle.Combustible) ? "" : char.ToUpper(Model.Vehicle.Combustible[0]) + Model.Vehicle.Combustible.Substring(1).ToLower())</p>
+                                    <p>@(string.IsNullOrEmpty(Model.Vehicle.Combustible) ? "" :
+                                             char.ToUpper(Model.Vehicle.Combustible[0]) +
+                                             Model.Vehicle.Combustible.Substring(1).ToLower())</p>
                                 </div>
                                 <div class="spec-item">
                                     <h3>Transmisión</h3>
-                                    <p>@(string.IsNullOrEmpty(Model.Vehicle.Transmision) ? "" : char.ToUpper(Model.Vehicle.Transmision[0]) + Model.Vehicle.Transmision.Substring(1).ToLower())</p>
+                                    <p>@(string.IsNullOrEmpty(Model.Vehicle.Transmision) ? "" :
+                                             char.ToUpper(Model.Vehicle.Transmision[0]) +
+                                             Model.Vehicle.Transmision.Substring(1).ToLower())</p>
                                 </div>
                             </div>
                         </div>
@@ -212,22 +224,31 @@
                     @if (Model.Vehicle?.Propietario != null)
                     {
                         <div class="producto-contact-buttons-responsive">
-                            <button class="contact-call-btn-responsive" onclick="window.location.href='tel:@Model.Vehicle.Propietario.NumeroTelefono'">
+                            <button class="contact-call-btn-responsive"
+                                onclick="window.location.href='tel:@Model.Vehicle.Propietario.NumeroTelefono'">
                                 <svg width="18" height="18" viewBox="0 0 18 18" fill="none">
-                                    <path d="M3 3h2l1.5 4-1.5 1.5c1 2 2.5 3.5 4.5 4.5L11 11.5l4 1.5v2c0 1.1-.9 2-2 2C6.477 17 2 12.523 2 6c0-1.1.9-2 2-2z" stroke="currentColor" stroke-width="1.5"/>
+                                    <path
+                                        d="M3 3h2l1.5 4-1.5 1.5c1 2 2.5 3.5 4.5 4.5L11 11.5l4 1.5v2c0 1.1-.9 2-2 2C6.477 17 2 12.523 2 6c0-1.1.9-2 2-2z"
+                                        stroke="currentColor" stroke-width="1.5" />
                                 </svg>
                                 <span>Llamar</span>
                             </button>
 
-                            <button class="contact-whatsapp-btn-responsive" onclick="window.open('https://wa.me/@(Model.Vehicle.Propietario.NumeroTelefono?.Replace("+", "").Replace("-", "").Replace(" ", ""))', '_blank')">
-                                <svg width="18" height="18" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <button class="contact-whatsapp-btn-responsive"
+                                onclick="window.open('https://wa.me/@(Model.Vehicle.Propietario.NumeroTelefono?.Replace("+", "").Replace("-", "").Replace(" ", ""))', '_blank')">
+                                <svg width="18" height="18" viewBox="0 0 20 20" fill="none"
+                                    xmlns="http://www.w3.org/2000/svg">
                                     <g clip-path="url(#clip0_card_resp)">
-                                        <path d="M14.5893 11.9223L14.5818 11.9848C12.7493 11.0715 12.5576 10.9498 12.3209 11.3048C12.1568 11.5506 11.6784 12.1081 11.5343 12.2731C11.3884 12.4356 11.2434 12.4481 10.9959 12.3356C10.7459 12.2106 9.94345 11.9481 8.99345 11.0981C8.25345 10.4356 7.75678 9.62315 7.61011 9.37315C7.36595 8.95148 7.87678 8.89148 8.34178 8.01148C8.42511 7.83648 8.38261 7.69898 8.32095 7.57482C8.25845 7.44982 7.76095 6.22482 7.55261 5.73648C7.35261 5.24982 7.14678 5.31148 6.99261 5.31148C6.51261 5.26982 6.16178 5.27648 5.85261 5.59815C4.50761 7.07648 4.84678 8.60148 5.99761 10.2231C8.25928 13.1831 9.46428 13.7281 11.6676 14.4848C12.2626 14.674 12.8051 14.6473 13.2343 14.5856C13.7126 14.5098 14.7068 13.9848 14.9143 13.3973C15.1268 12.8098 15.1268 12.3223 15.0643 12.2098C15.0026 12.0973 14.8393 12.0348 14.5893 11.9223Z" fill="white"/>
-                                        <path d="M17.1 2.87404C10.6925 -3.32013 0.0883333 1.17237 0.0841667 9.91071C0.0841667 11.6574 0.541667 13.3607 1.41333 14.8649L0 19.9999L5.27917 18.6232C11.8667 22.1815 19.9967 17.4565 20 9.91571C20 7.26904 18.9667 4.77821 17.0875 2.90654L17.1 2.87404ZM18.335 9.88821C18.33 16.249 11.3475 20.2215 5.825 16.9749L5.525 16.7965L2.4 17.609L3.2375 14.5715L3.03833 14.259C-0.398333 8.78821 3.55 1.63821 10.06 1.63821C12.2717 1.63821 14.3475 2.50071 15.9108 4.06321C17.4733 5.61237 18.335 7.68821 18.335 9.88821Z" fill="white"/>
+                                        <path
+                                            d="M14.5893 11.9223L14.5818 11.9848C12.7493 11.0715 12.5576 10.9498 12.3209 11.3048C12.1568 11.5506 11.6784 12.1081 11.5343 12.2731C11.3884 12.4356 11.2434 12.4481 10.9959 12.3356C10.7459 12.2106 9.94345 11.9481 8.99345 11.0981C8.25345 10.4356 7.75678 9.62315 7.61011 9.37315C7.36595 8.95148 7.87678 8.89148 8.34178 8.01148C8.42511 7.83648 8.38261 7.69898 8.32095 7.57482C8.25845 7.44982 7.76095 6.22482 7.55261 5.73648C7.35261 5.24982 7.14678 5.31148 6.99261 5.31148C6.51261 5.26982 6.16178 5.27648 5.85261 5.59815C4.50761 7.07648 4.84678 8.60148 5.99761 10.2231C8.25928 13.1831 9.46428 13.7281 11.6676 14.4848C12.2626 14.674 12.8051 14.6473 13.2343 14.5856C13.7126 14.5098 14.7068 13.9848 14.9143 13.3973C15.1268 12.8098 15.1268 12.3223 15.0643 12.2098C15.0026 12.0973 14.8393 12.0348 14.5893 11.9223Z"
+                                            fill="white" />
+                                        <path
+                                            d="M17.1 2.87404C10.6925 -3.32013 0.0883333 1.17237 0.0841667 9.91071C0.0841667 11.6574 0.541667 13.3607 1.41333 14.8649L0 19.9999L5.27917 18.6232C11.8667 22.1815 19.9967 17.4565 20 9.91571C20 7.26904 18.9667 4.77821 17.0875 2.90654L17.1 2.87404ZM18.335 9.88821C18.33 16.249 11.3475 20.2215 5.825 16.9749L5.525 16.7965L2.4 17.609L3.2375 14.5715L3.03833 14.259C-0.398333 8.78821 3.55 1.63821 10.06 1.63821C12.2717 1.63821 14.3475 2.50071 15.9108 4.06321C17.4733 5.61237 18.335 7.68821 18.335 9.88821Z"
+                                            fill="white" />
                                     </g>
                                     <defs>
                                         <clipPath id="clip0_card_resp">
-                                            <rect width="20" height="20" fill="white"/>
+                                            <rect width="20" height="20" fill="white" />
                                         </clipPath>
                                     </defs>
                                 </svg>
@@ -240,8 +261,11 @@
                     <div class="producto-actions">
                         <!-- Botón de favoritos -->
                         <button class="producto-favorite-btn" onclick="toggleFavorite(@Model.Vehicle?.Id)">
-                            <svg width="22" height="19" viewBox="0 0 22 19" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                <path d="M19.5558 2.43875C17.6428 0.520415 14.5216 0.520415 12.596 2.43875L10.9976 4.04157L9.39927 2.43875C7.47368 0.520415 4.36505 0.520415 2.43947 2.43875C0.513888 4.35708 0.526474 7.487 2.43947 9.41794L4.03783 11.0208L10.9976 18L17.9575 11.0208L19.5558 9.41794C21.4814 7.487 21.4814 4.3697 19.5558 2.43875Z" stroke="white" stroke-width="2" stroke-miterlimit="10" stroke-linejoin="round"/>
+                            <svg width="22" height="19" viewBox="0 0 22 19" fill="none"
+                                xmlns="http://www.w3.org/2000/svg">
+                                <path
+                                    d="M19.5558 2.43875C17.6428 0.520415 14.5216 0.520415 12.596 2.43875L10.9976 4.04157L9.39927 2.43875C7.47368 0.520415 4.36505 0.520415 2.43947 2.43875C0.513888 4.35708 0.526474 7.487 2.43947 9.41794L4.03783 11.0208L10.9976 18L17.9575 11.0208L19.5558 9.41794C21.4814 7.487 21.4814 4.3697 19.5558 2.43875Z"
+                                    stroke="white" stroke-width="2" stroke-miterlimit="10" stroke-linejoin="round" />
                             </svg>
                             <span>Agregar a favoritos</span>
                         </button>
@@ -249,10 +273,16 @@
                         <!-- Botón de compartir -->
                         <button class="producto-share-btn" onclick="shareProduct()">
                             <svg width="18" height="18" viewBox="0 0 24 24" fill="none">
-                                <path d="M18 8C19.6569 8 21 6.65685 21 5C21 3.34315 19.6569 2 18 2C16.3431 2 15 3.34315 15 5C15 6.65685 16.3431 8 18 8Z" stroke="white" stroke-width="2"/>
-                                <path d="M6 15C7.65685 15 9 13.6569 9 12C9 10.3431 7.65685 9 6 9C4.34315 9 3 10.3431 3 12C3 13.6569 4.34315 15 6 15Z" stroke="white" stroke-width="2"/>
-                                <path d="M18 22C19.6569 22 21 20.6569 21 19C21 17.3431 19.6569 16 18 16C16.3431 16 15 17.3431 15 19C15 20.6569 16.3431 22 18 22Z" stroke="white" stroke-width="2"/>
-                                <path d="M8.5 13.5L15.5 17.5M15.5 6.5L8.5 10.5" stroke="white" stroke-width="2"/>
+                                <path
+                                    d="M18 8C19.6569 8 21 6.65685 21 5C21 3.34315 19.6569 2 18 2C16.3431 2 15 3.34315 15 5C15 6.65685 16.3431 8 18 8Z"
+                                    stroke="white" stroke-width="2" />
+                                <path
+                                    d="M6 15C7.65685 15 9 13.6569 9 12C9 10.3431 7.65685 9 6 9C4.34315 9 3 10.3431 3 12C3 13.6569 4.34315 15 6 15Z"
+                                    stroke="white" stroke-width="2" />
+                                <path
+                                    d="M18 22C19.6569 22 21 20.6569 21 19C21 17.3431 19.6569 16 18 16C16.3431 16 15 17.3431 15 19C15 20.6569 16.3431 22 18 22Z"
+                                    stroke="white" stroke-width="2" />
+                                <path d="M8.5 13.5L15.5 17.5M15.5 6.5L8.5 10.5" stroke="white" stroke-width="2" />
                             </svg>
                             <span>Compartir</span>
                         </button>
@@ -264,18 +294,29 @@
 
                     <!-- Iconos responsive (solo visible en mobile/tablet) -->
                     <div class="producto-card-icons-responsive">
-                        <button class="icon-btn-responsive favorite-icon-btn-responsive" onclick="toggleFavorite(@Model.Vehicle?.Id)" title="Agregar a favoritos">
-                            <svg width="20" height="18" viewBox="0 0 22 19" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                <path d="M19.5558 2.43875C17.6428 0.520415 14.5216 0.520415 12.596 2.43875L10.9976 4.04157L9.39927 2.43875C7.47368 0.520415 4.36505 0.520415 2.43947 2.43875C0.513888 4.35708 0.526474 7.487 2.43947 9.41794L4.03783 11.0208L10.9976 18L17.9575 11.0208L19.5558 9.41794C21.4814 7.487 21.4814 4.3697 19.5558 2.43875Z" stroke="white" stroke-width="2" stroke-miterlimit="10" stroke-linejoin="round"/>
+                        <button class="icon-btn-responsive favorite-icon-btn-responsive"
+                            onclick="toggleFavorite(@Model.Vehicle?.Id)" title="Agregar a favoritos">
+                            <svg width="20" height="18" viewBox="0 0 22 19" fill="none"
+                                xmlns="http://www.w3.org/2000/svg">
+                                <path
+                                    d="M19.5558 2.43875C17.6428 0.520415 14.5216 0.520415 12.596 2.43875L10.9976 4.04157L9.39927 2.43875C7.47368 0.520415 4.36505 0.520415 2.43947 2.43875C0.513888 4.35708 0.526474 7.487 2.43947 9.41794L4.03783 11.0208L10.9976 18L17.9575 11.0208L19.5558 9.41794C21.4814 7.487 21.4814 4.3697 19.5558 2.43875Z"
+                                    stroke="white" stroke-width="2" stroke-miterlimit="10" stroke-linejoin="round" />
                             </svg>
                         </button>
 
-                        <button class="icon-btn-responsive share-icon-btn-responsive" onclick="shareProduct()" title="Compartir">
+                        <button class="icon-btn-responsive share-icon-btn-responsive" onclick="shareProduct()"
+                            title="Compartir">
                             <svg width="18" height="18" viewBox="0 0 24 24" fill="none">
-                                <path d="M18 8C19.6569 8 21 6.65685 21 5C21 3.34315 19.6569 2 18 2C16.3431 2 15 3.34315 15 5C15 6.65685 16.3431 8 18 8Z" stroke="white" stroke-width="2"/>
-                                <path d="M6 15C7.65685 15 9 13.6569 9 12C9 10.3431 7.65685 9 6 9C4.34315 9 3 10.3431 3 12C3 13.6569 4.34315 15 6 15Z" stroke="white" stroke-width="2"/>
-                                <path d="M18 22C19.6569 22 21 20.6569 21 19C21 17.3431 19.6569 16 18 16C16.3431 16 15 17.3431 15 19C15 20.6569 16.3431 22 18 22Z" stroke="white" stroke-width="2"/>
-                                <path d="M8.5 13.5L15.5 17.5M15.5 6.5L8.5 10.5" stroke="white" stroke-width="2"/>
+                                <path
+                                    d="M18 8C19.6569 8 21 6.65685 21 5C21 3.34315 19.6569 2 18 2C16.3431 2 15 3.34315 15 5C15 6.65685 16.3431 8 18 8Z"
+                                    stroke="white" stroke-width="2" />
+                                <path
+                                    d="M6 15C7.65685 15 9 13.6569 9 12C9 10.3431 7.65685 9 6 9C4.34315 9 3 10.3431 3 12C3 13.6569 4.34315 15 6 15Z"
+                                    stroke="white" stroke-width="2" />
+                                <path
+                                    d="M18 22C19.6569 22 21 20.6569 21 19C21 17.3431 19.6569 16 18 16C16.3431 16 15 17.3431 15 19C15 20.6569 16.3431 22 18 22Z"
+                                    stroke="white" stroke-width="2" />
+                                <path d="M8.5 13.5L15.5 17.5M15.5 6.5L8.5 10.5" stroke="white" stroke-width="2" />
                             </svg>
                         </button>
                     </div>
@@ -320,11 +361,15 @@
                                     <div class="spec-column">
                                         <div class="spec-item">
                                             <h3>Marca</h3>
-                                            <p>@(string.IsNullOrEmpty(Model.Vehicle.Marca) ? "" : char.ToUpper(Model.Vehicle.Marca[0]) + Model.Vehicle.Marca.Substring(1).ToLower())</p>
+                                            <p>@(string.IsNullOrEmpty(Model.Vehicle.Marca) ? "" :
+                                                     char.ToUpper(Model.Vehicle.Marca[0]) +
+                                                     Model.Vehicle.Marca.Substring(1).ToLower())</p>
                                         </div>
                                         <div class="spec-item">
                                             <h3>Modelo</h3>
-                                            <p>@(string.IsNullOrEmpty(Model.Vehicle.Modelo) ? "" : char.ToUpper(Model.Vehicle.Modelo[0]) + Model.Vehicle.Modelo.Substring(1).ToLower())</p>
+                                            <p>@(string.IsNullOrEmpty(Model.Vehicle.Modelo) ? "" :
+                                                     char.ToUpper(Model.Vehicle.Modelo[0]) +
+                                                     Model.Vehicle.Modelo.Substring(1).ToLower())</p>
                                         </div>
                                         <div class="spec-item">
                                             <h3>Año</h3>
@@ -336,7 +381,9 @@
                                         </div>
                                         <div class="spec-item">
                                             <h3>Carrocería</h3>
-                                            <p>@(string.IsNullOrEmpty(Model.Vehicle.Carroceria) ? "" : char.ToUpper(Model.Vehicle.Carroceria[0]) + Model.Vehicle.Carroceria.Substring(1).ToLower())</p>
+                                            <p>@(string.IsNullOrEmpty(Model.Vehicle.Carroceria) ? "" :
+                                                     char.ToUpper(Model.Vehicle.Carroceria[0]) +
+                                                     Model.Vehicle.Carroceria.Substring(1).ToLower())</p>
                                         </div>
                                         <div class="spec-item">
                                             <h3>Número de puertas</h3>
@@ -348,11 +395,15 @@
                                         </div>
                                         <div class="spec-item">
                                             <h3>Propulsión</h3>
-                                            <p>@(string.IsNullOrEmpty(Model.Vehicle.Combustible) ? "" : char.ToUpper(Model.Vehicle.Combustible[0]) + Model.Vehicle.Combustible.Substring(1).ToLower())</p>
+                                            <p>@(string.IsNullOrEmpty(Model.Vehicle.Combustible) ? "" :
+                                                     char.ToUpper(Model.Vehicle.Combustible[0]) +
+                                                     Model.Vehicle.Combustible.Substring(1).ToLower())</p>
                                         </div>
                                         <div class="spec-item">
                                             <h3>Transmisión</h3>
-                                            <p>@(string.IsNullOrEmpty(Model.Vehicle.Transmision) ? "" : char.ToUpper(Model.Vehicle.Transmision[0]) + Model.Vehicle.Transmision.Substring(1).ToLower())</p>
+                                            <p>@(string.IsNullOrEmpty(Model.Vehicle.Transmision) ? "" :
+                                                     char.ToUpper(Model.Vehicle.Transmision[0]) +
+                                                     Model.Vehicle.Transmision.Substring(1).ToLower())</p>
                                         </div>
                                     </div>
                                 </div>
@@ -368,7 +419,7 @@
                                 <p class="seller-business-name">@Model.Vehicle.Propietario.NombreAMostrar</p>
 
                                 <div class="seller-logo-placeholder">
-                                    <p>LOGO<br/>(SI TIENE)</p>
+                                    <p>LOGO<br />(SI TIENE)</p>
                                 </div>
 
                                 <div class="seller-contact-info">
@@ -376,7 +427,9 @@
                                     {
                                         <div class="seller-info-row">
                                             <svg width="18" height="18" viewBox="0 0 18 18" fill="none">
-                                                <path d="M3 3h2l1.5 4-1.5 1.5c1 2 2.5 3.5 4.5 4.5L11 11.5l4 1.5v2c0 1.1-.9 2-2 2C6.477 17 2 12.523 2 6c0-1.1.9-2 2-2z" stroke="white" stroke-width="1.5"/>
+                                                <path
+                                                    d="M3 3h2l1.5 4-1.5 1.5c1 2 2.5 3.5 4.5 4.5L11 11.5l4 1.5v2c0 1.1-.9 2-2 2C6.477 17 2 12.523 2 6c0-1.1.9-2 2-2z"
+                                                    stroke="white" stroke-width="1.5" />
                                             </svg>
                                             <span>@Model.Vehicle.Propietario.NumeroTelefono</span>
                                         </div>
@@ -385,17 +438,28 @@
                                     @if (!string.IsNullOrEmpty(Model.Vehicle.UbicacionCompleta))
                                     {
                                         <div class="seller-info-row">
-                                            <svg width="14" height="17" viewBox="0 0 14 17" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                                <path d="M6.58801 16.17C9.6369 13.034 12.6858 10.2259 12.6858 6.76199C12.6858 3.29806 9.95573 0.48999 6.58801 0.48999C3.22031 0.48999 0.490234 3.29806 0.490234 6.76199C0.490234 10.2259 3.53912 13.034 6.58801 16.17Z" stroke="white" stroke-width="0.98" stroke-linecap="round" stroke-linejoin="round"/>
-                                                <path d="M6.80668 8.3299C7.7689 8.3299 8.5489 7.54991 8.5489 6.58768C8.5489 5.62548 7.7689 4.84546 6.80668 4.84546C5.84445 4.84546 5.06445 5.62548 5.06445 6.58768C5.06445 7.54991 5.84445 8.3299 6.80668 8.3299Z" stroke="white" stroke-width="0.98" stroke-linecap="round" stroke-linejoin="round"/>
+                                            <svg width="14" height="17" viewBox="0 0 14 17" fill="none"
+                                                xmlns="http://www.w3.org/2000/svg">
+                                                <path
+                                                    d="M6.58801 16.17C9.6369 13.034 12.6858 10.2259 12.6858 6.76199C12.6858 3.29806 9.95573 0.48999 6.58801 0.48999C3.22031 0.48999 0.490234 3.29806 0.490234 6.76199C0.490234 10.2259 3.53912 13.034 6.58801 16.17Z"
+                                                    stroke="white" stroke-width="0.98" stroke-linecap="round"
+                                                    stroke-linejoin="round" />
+                                                <path
+                                                    d="M6.80668 8.3299C7.7689 8.3299 8.5489 7.54991 8.5489 6.58768C8.5489 5.62548 7.7689 4.84546 6.80668 4.84546C5.84445 4.84546 5.06445 5.62548 5.06445 6.58768C5.06445 7.54991 5.84445 8.3299 6.80668 8.3299Z"
+                                                    stroke="white" stroke-width="0.98" stroke-linecap="round"
+                                                    stroke-linejoin="round" />
                                             </svg>
                                             <span>@Model.Vehicle.UbicacionCompleta</span>
                                         </div>
                                     }
 
                                     <div class="seller-info-row">
-                                        <svg width="21" height="18" viewBox="0 0 21 18" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                            <path d="M0.980469 4.60054L3.79609 6.94686C3.98199 7.10182 4.21632 7.18665 4.45832 7.18665H16.1226C16.3646 7.18665 16.5989 7.10182 16.7848 6.94686L19.6005 4.60054M4.60102 10.8072H4.61137M15.9799 10.8072H15.9903M6.31887 0.97998H14.2621C15.0045 0.97998 15.6901 1.3778 16.0583 2.02241L19.0553 7.26702C19.4125 7.89224 19.6005 8.5998 19.6005 9.31998V15.4622C19.6005 16.0335 19.1373 16.4966 18.566 16.4966H17.5316C16.9603 16.4966 16.4971 16.0335 16.4971 15.4622V14.4278H4.0838V15.4622C4.0838 16.0335 3.62066 16.4966 3.04936 16.4966H2.01491C1.44361 16.4966 0.980469 16.0335 0.980469 15.4622V9.31998C0.980469 8.5998 1.16839 7.89224 1.52565 7.26702L4.52257 2.02241C4.89092 1.3778 5.57643 0.97998 6.31887 0.97998ZM5.11825 10.8072C5.11825 11.0928 4.88668 11.3244 4.60102 11.3244C4.31537 11.3244 4.0838 11.0928 4.0838 10.8072C4.0838 10.5216 4.31537 10.29 4.60102 10.29C4.88668 10.29 5.11825 10.5216 5.11825 10.8072ZM16.4971 10.8072C16.4971 11.0928 16.2655 11.3244 15.9799 11.3244C15.6943 11.3244 15.4627 11.0928 15.4627 10.8072C15.4627 10.5216 15.6943 10.29 15.9799 10.29C16.2655 10.29 16.4971 10.5216 16.4971 10.8072Z" stroke="white" stroke-width="1.96" stroke-linecap="round" stroke-linejoin="round"/>
+                                        <svg width="21" height="18" viewBox="0 0 21 18" fill="none"
+                                            xmlns="http://www.w3.org/2000/svg">
+                                            <path
+                                                d="M0.980469 4.60054L3.79609 6.94686C3.98199 7.10182 4.21632 7.18665 4.45832 7.18665H16.1226C16.3646 7.18665 16.5989 7.10182 16.7848 6.94686L19.6005 4.60054M4.60102 10.8072H4.61137M15.9799 10.8072H15.9903M6.31887 0.97998H14.2621C15.0045 0.97998 15.6901 1.3778 16.0583 2.02241L19.0553 7.26702C19.4125 7.89224 19.6005 8.5998 19.6005 9.31998V15.4622C19.6005 16.0335 19.1373 16.4966 18.566 16.4966H17.5316C16.9603 16.4966 16.4971 16.0335 16.4971 15.4622V14.4278H4.0838V15.4622C4.0838 16.0335 3.62066 16.4966 3.04936 16.4966H2.01491C1.44361 16.4966 0.980469 16.0335 0.980469 15.4622V9.31998C0.980469 8.5998 1.16839 7.89224 1.52565 7.26702L4.52257 2.02241C4.89092 1.3778 5.57643 0.97998 6.31887 0.97998ZM5.11825 10.8072C5.11825 11.0928 4.88668 11.3244 4.60102 11.3244C4.31537 11.3244 4.0838 11.0928 4.0838 10.8072C4.0838 10.5216 4.31537 10.29 4.60102 10.29C4.88668 10.29 5.11825 10.5216 5.11825 10.8072ZM16.4971 10.8072C16.4971 11.0928 16.2655 11.3244 15.9799 11.3244C15.6943 11.3244 15.4627 11.0928 15.4627 10.8072C15.4627 10.5216 15.6943 10.29 15.9799 10.29C16.2655 10.29 16.4971 10.5216 16.4971 10.8072Z"
+                                                stroke="white" stroke-width="1.96" stroke-linecap="round"
+                                                stroke-linejoin="round" />
                                         </svg>
                                         <span>(@Model.SellerCarCount de autos publicados)</span>
                                     </div>
@@ -412,19 +476,25 @@
                     {
                         <p class="seller-name">@Model.Vehicle.Propietario.NombreCompleto</p>
 
-                        <button class="contact-phone-btn" onclick="window.location.href='tel:@Model.Vehicle.Propietario.NumeroTelefono'">
+                        <button class="contact-phone-btn"
+                            onclick="window.location.href='tel:@Model.Vehicle.Propietario.NumeroTelefono'">
                             Llamar @Model.Vehicle.Propietario.NumeroTelefono
                         </button>
 
-                        <button class="contact-whatsapp-btn" onclick="window.open('https://wa.me/@(Model.Vehicle.Propietario.NumeroTelefono?.Replace("+", "").Replace("-", "").Replace(" ", ""))', '_blank')">
+                        <button class="contact-whatsapp-btn"
+                            onclick="window.open('https://wa.me/@(Model.Vehicle.Propietario.NumeroTelefono?.Replace("+", "").Replace("-", "").Replace(" ", ""))', '_blank')">
                             <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
                                 <g clip-path="url(#clip0_4338_9793)">
-                                    <path d="M14.5893 11.9223L14.5818 11.9848C12.7493 11.0715 12.5576 10.9498 12.3209 11.3048C12.1568 11.5506 11.6784 12.1081 11.5343 12.2731C11.3884 12.4356 11.2434 12.4481 10.9959 12.3356C10.7459 12.2106 9.94345 11.9481 8.99345 11.0981C8.25345 10.4356 7.75678 9.62315 7.61011 9.37315C7.36595 8.95148 7.87678 8.89148 8.34178 8.01148C8.42511 7.83648 8.38261 7.69898 8.32095 7.57482C8.25845 7.44982 7.76095 6.22482 7.55261 5.73648C7.35261 5.24982 7.14678 5.31148 6.99261 5.31148C6.51261 5.26982 6.16178 5.27648 5.85261 5.59815C4.50761 7.07648 4.84678 8.60148 5.99761 10.2231C8.25928 13.1831 9.46428 13.7281 11.6676 14.4848C12.2626 14.674 12.8051 14.6473 13.2343 14.5856C13.7126 14.5098 14.7068 13.9848 14.9143 13.3973C15.1268 12.8098 15.1268 12.3223 15.0643 12.2098C15.0026 12.0973 14.8393 12.0348 14.5893 11.9223Z" fill="white"/>
-                                    <path d="M17.1 2.87404C10.6925 -3.32013 0.0883333 1.17237 0.0841667 9.91071C0.0841667 11.6574 0.541667 13.3607 1.41333 14.8649L0 19.9999L5.27917 18.6232C11.8667 22.1815 19.9967 17.4565 20 9.91571C20 7.26904 18.9667 4.77821 17.0875 2.90654L17.1 2.87404ZM18.335 9.88821C18.33 16.249 11.3475 20.2215 5.825 16.9749L5.525 16.7965L2.4 17.609L3.2375 14.5715L3.03833 14.259C-0.398333 8.78821 3.55 1.63821 10.06 1.63821C12.2717 1.63821 14.3475 2.50071 15.9108 4.06321C17.4733 5.61237 18.335 7.68821 18.335 9.88821Z" fill="white"/>
+                                    <path
+                                        d="M14.5893 11.9223L14.5818 11.9848C12.7493 11.0715 12.5576 10.9498 12.3209 11.3048C12.1568 11.5506 11.6784 12.1081 11.5343 12.2731C11.3884 12.4356 11.2434 12.4481 10.9959 12.3356C10.7459 12.2106 9.94345 11.9481 8.99345 11.0981C8.25345 10.4356 7.75678 9.62315 7.61011 9.37315C7.36595 8.95148 7.87678 8.89148 8.34178 8.01148C8.42511 7.83648 8.38261 7.69898 8.32095 7.57482C8.25845 7.44982 7.76095 6.22482 7.55261 5.73648C7.35261 5.24982 7.14678 5.31148 6.99261 5.31148C6.51261 5.26982 6.16178 5.27648 5.85261 5.59815C4.50761 7.07648 4.84678 8.60148 5.99761 10.2231C8.25928 13.1831 9.46428 13.7281 11.6676 14.4848C12.2626 14.674 12.8051 14.6473 13.2343 14.5856C13.7126 14.5098 14.7068 13.9848 14.9143 13.3973C15.1268 12.8098 15.1268 12.3223 15.0643 12.2098C15.0026 12.0973 14.8393 12.0348 14.5893 11.9223Z"
+                                        fill="white" />
+                                    <path
+                                        d="M17.1 2.87404C10.6925 -3.32013 0.0883333 1.17237 0.0841667 9.91071C0.0841667 11.6574 0.541667 13.3607 1.41333 14.8649L0 19.9999L5.27917 18.6232C11.8667 22.1815 19.9967 17.4565 20 9.91571C20 7.26904 18.9667 4.77821 17.0875 2.90654L17.1 2.87404ZM18.335 9.88821C18.33 16.249 11.3475 20.2215 5.825 16.9749L5.525 16.7965L2.4 17.609L3.2375 14.5715L3.03833 14.259C-0.398333 8.78821 3.55 1.63821 10.06 1.63821C12.2717 1.63821 14.3475 2.50071 15.9108 4.06321C17.4733 5.61237 18.335 7.68821 18.335 9.88821Z"
+                                        fill="white" />
                                 </g>
                                 <defs>
                                     <clipPath id="clip0_4338_9793">
-                                        <rect width="20" height="20" fill="white"/>
+                                        <rect width="20" height="20" fill="white" />
                                     </clipPath>
                                 </defs>
                             </svg>
@@ -441,7 +511,7 @@
                         <p class="seller-business-name">@Model.Vehicle.Propietario.NombreAMostrar</p>
 
                         <div class="seller-logo-placeholder">
-                            <p>LOGO<br/>(SI TIENE)</p>
+                            <p>LOGO<br />(SI TIENE)</p>
                         </div>
 
                         <div class="seller-contact-info">
@@ -449,7 +519,9 @@
                             {
                                 <div class="seller-info-row">
                                     <svg width="18" height="18" viewBox="0 0 18 18" fill="none">
-                                        <path d="M3 3h2l1.5 4-1.5 1.5c1 2 2.5 3.5 4.5 4.5L11 11.5l4 1.5v2c0 1.1-.9 2-2 2C6.477 17 2 12.523 2 6c0-1.1.9-2 2-2z" stroke="white" stroke-width="1.5"/>
+                                        <path
+                                            d="M3 3h2l1.5 4-1.5 1.5c1 2 2.5 3.5 4.5 4.5L11 11.5l4 1.5v2c0 1.1-.9 2-2 2C6.477 17 2 12.523 2 6c0-1.1.9-2 2-2z"
+                                            stroke="white" stroke-width="1.5" />
                                     </svg>
                                     <span>@Model.Vehicle.Propietario.NumeroTelefono</span>
                                 </div>
@@ -458,17 +530,25 @@
                             @if (!string.IsNullOrEmpty(Model.Vehicle.UbicacionCompleta))
                             {
                                 <div class="seller-info-row">
-                                    <svg width="14" height="17" viewBox="0 0 14 17" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                        <path d="M6.58801 16.17C9.6369 13.034 12.6858 10.2259 12.6858 6.76199C12.6858 3.29806 9.95573 0.48999 6.58801 0.48999C3.22031 0.48999 0.490234 3.29806 0.490234 6.76199C0.490234 10.2259 3.53912 13.034 6.58801 16.17Z" stroke="white" stroke-width="0.98" stroke-linecap="round" stroke-linejoin="round"/>
-                                        <path d="M6.80668 8.3299C7.7689 8.3299 8.5489 7.54991 8.5489 6.58768C8.5489 5.62548 7.7689 4.84546 6.80668 4.84546C5.84445 4.84546 5.06445 5.62548 5.06445 6.58768C5.06445 7.54991 5.84445 8.3299 6.80668 8.3299Z" stroke="white" stroke-width="0.98" stroke-linecap="round" stroke-linejoin="round"/>
+                                    <svg width="14" height="17" viewBox="0 0 14 17" fill="none"
+                                        xmlns="http://www.w3.org/2000/svg">
+                                        <path
+                                            d="M6.58801 16.17C9.6369 13.034 12.6858 10.2259 12.6858 6.76199C12.6858 3.29806 9.95573 0.48999 6.58801 0.48999C3.22031 0.48999 0.490234 3.29806 0.490234 6.76199C0.490234 10.2259 3.53912 13.034 6.58801 16.17Z"
+                                            stroke="white" stroke-width="0.98" stroke-linecap="round" stroke-linejoin="round" />
+                                        <path
+                                            d="M6.80668 8.3299C7.7689 8.3299 8.5489 7.54991 8.5489 6.58768C8.5489 5.62548 7.7689 4.84546 6.80668 4.84546C5.84445 4.84546 5.06445 5.62548 5.06445 6.58768C5.06445 7.54991 5.84445 8.3299 6.80668 8.3299Z"
+                                            stroke="white" stroke-width="0.98" stroke-linecap="round" stroke-linejoin="round" />
                                     </svg>
                                     <span>@Model.Vehicle.UbicacionCompleta</span>
                                 </div>
                             }
 
                             <div class="seller-info-row">
-                                <svg width="21" height="18" viewBox="0 0 21 18" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                    <path d="M0.980469 4.60054L3.79609 6.94686C3.98199 7.10182 4.21632 7.18665 4.45832 7.18665H16.1226C16.3646 7.18665 16.5989 7.10182 16.7848 6.94686L19.6005 4.60054M4.60102 10.8072H4.61137M15.9799 10.8072H15.9903M6.31887 0.97998H14.2621C15.0045 0.97998 15.6901 1.3778 16.0583 2.02241L19.0553 7.26702C19.4125 7.89224 19.6005 8.5998 19.6005 9.31998V15.4622C19.6005 16.0335 19.1373 16.4966 18.566 16.4966H17.5316C16.9603 16.4966 16.4971 16.0335 16.4971 15.4622V14.4278H4.0838V15.4622C4.0838 16.0335 3.62066 16.4966 3.04936 16.4966H2.01491C1.44361 16.4966 0.980469 16.0335 0.980469 15.4622V9.31998C0.980469 8.5998 1.16839 7.89224 1.52565 7.26702L4.52257 2.02241C4.89092 1.3778 5.57643 0.97998 6.31887 0.97998ZM5.11825 10.8072C5.11825 11.0928 4.88668 11.3244 4.60102 11.3244C4.31537 11.3244 4.0838 11.0928 4.0838 10.8072C4.0838 10.5216 4.31537 10.29 4.60102 10.29C4.88668 10.29 5.11825 10.5216 5.11825 10.8072ZM16.4971 10.8072C16.4971 11.0928 16.2655 11.3244 15.9799 11.3244C15.6943 11.3244 15.4627 11.0928 15.4627 10.8072C15.4627 10.5216 15.6943 10.29 15.9799 10.29C16.2655 10.29 16.4971 10.5216 16.4971 10.8072Z" stroke="white" stroke-width="1.96" stroke-linecap="round" stroke-linejoin="round"/>
+                                <svg width="21" height="18" viewBox="0 0 21 18" fill="none"
+                                    xmlns="http://www.w3.org/2000/svg">
+                                    <path
+                                        d="M0.980469 4.60054L3.79609 6.94686C3.98199 7.10182 4.21632 7.18665 4.45832 7.18665H16.1226C16.3646 7.18665 16.5989 7.10182 16.7848 6.94686L19.6005 4.60054M4.60102 10.8072H4.61137M15.9799 10.8072H15.9903M6.31887 0.97998H14.2621C15.0045 0.97998 15.6901 1.3778 16.0583 2.02241L19.0553 7.26702C19.4125 7.89224 19.6005 8.5998 19.6005 9.31998V15.4622C19.6005 16.0335 19.1373 16.4966 18.566 16.4966H17.5316C16.9603 16.4966 16.4971 16.0335 16.4971 15.4622V14.4278H4.0838V15.4622C4.0838 16.0335 3.62066 16.4966 3.04936 16.4966H2.01491C1.44361 16.4966 0.980469 16.0335 0.980469 15.4622V9.31998C0.980469 8.5998 1.16839 7.89224 1.52565 7.26702L4.52257 2.02241C4.89092 1.3778 5.57643 0.97998 6.31887 0.97998ZM5.11825 10.8072C5.11825 11.0928 4.88668 11.3244 4.60102 11.3244C4.31537 11.3244 4.0838 11.0928 4.0838 10.8072C4.0838 10.5216 4.31537 10.29 4.60102 10.29C4.88668 10.29 5.11825 10.5216 5.11825 10.8072ZM16.4971 10.8072C16.4971 11.0928 16.2655 11.3244 15.9799 11.3244C15.6943 11.3244 15.4627 11.0928 15.4627 10.8072C15.4627 10.5216 15.6943 10.29 15.9799 10.29C16.2655 10.29 16.4971 10.5216 16.4971 10.8072Z"
+                                        stroke="white" stroke-width="1.96" stroke-linecap="round" stroke-linejoin="round" />
                                 </svg>
                                 <span>(@Model.SellerCarCount de autos publicados)</span>
                             </div>
@@ -478,8 +558,10 @@
 
                 <!-- Espacios Publicitarios Verticales -->
                 <div style="display: flex; flex-direction: column; gap: 0; margin-top: 8px;">
-                    @await Component.InvokeAsync("CarruselPublicidad", new { formato = "cuadrado", seccion = "producto-sidebar-1" })
-                    @await Component.InvokeAsync("CarruselPublicidad", new { formato = "cuadrado", seccion = "producto-sidebar-2" })
+                    @await Component.InvokeAsync("CarruselPublicidad", new { formato = "cuadrado", seccion =
+                    "producto-sidebar-1" })
+                    @await Component.InvokeAsync("CarruselPublicidad", new { formato = "cuadrado", seccion =
+                    "producto-sidebar-2" })
                 </div>
             </div>
         </div>
@@ -493,9 +575,8 @@
                     <div class="marchamo-tari-header">
                         <div class="marchamo-tari-logo">
                             <!-- Logo TariFlash -->
-                            <img src="https://autoclickstorage.blob.core.windows.net/logos/tariflash-logo.png" 
-                                 alt="TariFlash" 
-                                 style="width: 100%; height: 100%; object-fit: contain;" />
+                            <img src="https://autoclickstorage.blob.core.windows.net/logos/tariflash-logo.png"
+                                alt="TariFlash" style="width: 100%; height: 100%; object-fit: contain;" />
                         </div>
                         <p class="marchamo-tari-subtitle">Calculadora de marchamo y traspaso</p>
                     </div>
@@ -522,7 +603,10 @@
                 </div>
 
                 <div class="marchamo-disclaimer">
-                    Autoclick.cr informa que los valores presentados en esta plataforma son únicamente estimaciones de referencia. El cálculo oficial del marchamo corresponde al Instituto Nacional de Seguros (INS) y el monto exacto de los gastos de traspaso debe ser determinado por un abogado autorizado. Autoclick.cr no se hace responsable por diferencias entre los valores estimados y los montos oficiales.
+                    Autoclick.cr informa que los valores presentados en esta plataforma son únicamente estimaciones de
+                    referencia. El cálculo oficial del marchamo corresponde al Instituto Nacional de Seguros (INS) y el
+                    monto exacto de los gastos de traspaso debe ser determinado por un abogado autorizado. Autoclick.cr no
+                    se hace responsable por diferencias entre los valores estimados y los montos oficiales.
                 </div>
             </section>
         }
@@ -532,15 +616,17 @@
         {
             <section class="producto-market-analysis">
                 <h2>Valor de mercado</h2>
-                
+
                 @if (!Model.ValorMercado.TieneDatos)
                 {
                     <!-- Sin datos disponibles -->
                     <div class="market-no-data">
                         <svg width="48" height="48" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                            <path d="M12 22C17.5228 22 22 17.5228 22 12C22 6.47715 17.5228 2 12 2C6.47715 2 2 6.47715 2 12C2 17.5228 6.47715 22 12 22Z" stroke="rgba(255, 255, 255, 0.3)" stroke-width="2"/>
-                            <path d="M12 8V12" stroke="rgba(255, 255, 255, 0.3)" stroke-width="2" stroke-linecap="round"/>
-                            <circle cx="12" cy="16" r="1" fill="rgba(255, 255, 255, 0.3)"/>
+                            <path
+                                d="M12 22C17.5228 22 22 17.5228 22 12C22 6.47715 17.5228 2 12 2C6.47715 2 2 6.47715 2 12C2 17.5228 6.47715 22 12 22Z"
+                                stroke="rgba(255, 255, 255, 0.3)" stroke-width="2" />
+                            <path d="M12 8V12" stroke="rgba(255, 255, 255, 0.3)" stroke-width="2" stroke-linecap="round" />
+                            <circle cx="12" cy="16" r="1" fill="rgba(255, 255, 255, 0.3)" />
                         </svg>
                         <p>@Model.ValorMercado.MensajeSinDatos</p>
                     </div>
@@ -588,14 +674,15 @@
                         <div class="market-range-bar">
                             <!-- Barra de rango completo -->
                             <div class="range-bar-background"></div>
-                            
+
                             <!-- Marcador del promedio -->
                             <div class="range-marker average-marker" style="left: 50%;">
                                 <div class="marker-line"></div>
                             </div>
-                            
+
                             <!-- Marcador del precio actual -->
-                            <div class="range-marker current-marker" style="left: @(Model.ValorMercado.PosicionEnRango)%; background-color: @Model.ValorMercado.ColorOferta;">
+                            <div class="range-marker current-marker"
+                                style="left: @(Model.ValorMercado.PosicionEnRango)%; background-color: @Model.ValorMercado.ColorOferta;">
                                 <div class="marker-dot"></div>
                                 <div class="marker-label">
                                     <span>Este auto</span>
@@ -605,7 +692,8 @@
                         </div>
 
                         <div class="market-chart-footer">
-                            <p>Basado en @Model.ValorMercado.CantidadRegistros @(Model.ValorMercado.CantidadRegistros == 1 ? "venta similar" : "ventas similares")</p>
+                            <p>Basado en @Model.ValorMercado.CantidadRegistros @(Model.ValorMercado.CantidadRegistros == 1 ?
+                        "venta similar" : "ventas similares")</p>
                         </div>
                     </div>
 
@@ -614,7 +702,8 @@
                         <div class="market-info-item">
                             <h4>Diferencia con el promedio</h4>
                             <p class="@(Model.ValorMercado.DiferenciaConPromedio < 0 ? "positive" : "negative")">
-                                @(Model.ValorMercado.DiferenciaConPromedio < 0 ? "-" : "+")₡@Model.FormatNumber(Math.Abs(Model.ValorMercado.DiferenciaConPromedio))
+                                @(Model.ValorMercado.DiferenciaConPromedio < 0 ? "-" :
+                                    "+")₡@Model.FormatNumber(Math.Abs(Model.ValorMercado.DiferenciaConPromedio))
                             </p>
                         </div>
                         <div class="market-info-item">
@@ -628,984 +717,1161 @@
 
         <!-- Financing Calculator Section -->
         <section class="producto-financing">
-            <h2>CALCULAR FINANCIAMIENTO</h2>
-            
-            <form method="get" class="financing-form">
-                <input type="hidden" name="id" value="@Model.Id" />
-                
-                <div class="financing-row">
-                    <div class="financing-field">
-                        <label for="currency">Moneda <span class="required-asterisk">*</span></label>
-                        <select name="currency" id="currency" class="financing-select">
-                            <option value="USD" selected="@(Model.Currency == "USD")">Dólar (USD)</option>
-                            <option value="CRC" selected="@(Model.Currency == "CRC")">Colones (CRC)</option>
-                        </select>
+            <div class="financing-calculator">
+                <div class="financing-header">
+                    <div class="financing-icon">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M12 1V23" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                            <path d="M17 5H9.5C8.57174 5 7.6815 5.36875 7.02513 6.02513C6.36875 6.6815 6 7.57174 6 8.5C6 9.42826 6.36875 10.3185 7.02513 10.9749C7.6815 11.6313 8.57174 12 9.5 12H14.5C15.4283 12 16.3185 12.3687 16.9749 13.0251C17.6313 13.6815 18 14.5717 18 15.5C18 16.4283 17.6313 17.3185 16.9749 17.9749C16.3185 18.6313 15.4283 19 14.5 19H6" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                        </svg>
                     </div>
-                    
-                    <div class="financing-field">
-                        <label for="vehiclePrice">Precio total del vehículo <span class="required-asterisk">*</span></label>
-                        <input type="text" name="vehiclePrice" id="vehiclePrice" value="@Model.FormatPrice(Model.VehiclePrice)" class="financing-input" readonly />
-                    </div>
+                    <h3>Calculadora de Financiamiento</h3>
                 </div>
-                
-                <div class="financing-row">
-                    <div class="financing-field">
-                        <label for="loanTerm">Plazo del préstamo <span class="required-asterisk">*</span></label>
-                        <select name="loanTerm" id="loanTerm" class="financing-select">
-                            <option value="84" selected="@(Model.LoanTerm == 84)">84 meses</option>
-                            <option value="72" selected="@(Model.LoanTerm == 72)">72 meses</option>
-                            <option value="60" selected="@(Model.LoanTerm == 60)">60 meses</option>
-                            <option value="48" selected="@(Model.LoanTerm == 48)">48 meses</option>
-                        </select>
-                    </div>
-                    
-                    <div class="financing-field">
-                        <label for="downPayment">Prima deseada</label>
-                        <input type="number" name="downPayment" id="downPayment" value="@Model.DownPayment" placeholder="Mínimo $10,000" class="financing-input" />
-                    </div>
-                </div>
-                
-                <div class="financing-row">
-                    <div class="financing-field">
-                        <label for="annualRate">Tasa anual</label>
-                        <input type="text" name="annualRate" id="annualRate" value="8.5%" class="financing-input" readonly />
-                    </div>
-                    
-                    <div class="financing-field">
-                        <label for="monthlyPayment"><strong>Cuota mensual estimada</strong></label>
-                        <input type="text" id="monthlyPayment" value="@Model.FormatPrice(Model.MonthlyPayment)" readonly class="financing-result" />
-                    </div>
-                </div>
-                
-                <button type="button" class="financing-submit-btn" onclick="solicitarPreAprobacion()">Solicitar pre-aprobación</button>
-            </form>
-        </section>
 
+                <form method="get" class="financing-form" id="financingForm"
+                      data-original-price="@Model.Vehicle.Precio.ToString(System.Globalization.CultureInfo.InvariantCulture)"
+                      data-original-currency="@Model.Vehicle.Divisa"
+                      data-exchange-rate="@PrecioHelper.ConvertirACRC(1, "USD").ToString(System.Globalization.CultureInfo.InvariantCulture)">
+                    
+                    <div class="financing-grid">
+                        <div class="financing-group">
+                            <label for="currency">Moneda <span class="required">*</span></label>
+                            <div class="select-wrapper">
+                                <select name="currency" id="currency" class="financing-select">
+                                    <option value="USD" selected="@(Model.Vehicle.Divisa == "USD")">Dólar (USD)</option>
+                                    <option value="CRC" selected="@(Model.Vehicle.Divisa == "CRC")">Colón (CRC)</option>
+                                </select>
+                                <svg class="select-arrow" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <path d="M6 9l6 6 6-6"/>
+                                </svg>
+                            </div>
+                        </div>
 
-        <!-- Similar Cars Section -->
-        <section class="producto-similar-cars">
-            <div class="similar-cars-header">
-                <h2>Vehículos similares</h2>
-                <a href="#" class="see-all-link">Ver todo</a>
-            </div>
-            
-            <div class="similar-cars-grid">
-                @foreach (var auto in Model.SimilarAutos)
-                {
-                    <div class="similar-car-card" onclick="window.location.href='@Url.Page("/Producto", new { id = auto.Id })'" style="cursor: pointer;">
-                        @if (!string.IsNullOrEmpty(auto.ImagenPrincipal))
-                        {
-                            <img src="@auto.ImagenPrincipal" alt="@auto.NombreCompleto" class="similar-car-image" style="object-fit: contain;" />
-                        }
-                        <div class="similar-car-info">
-                            <h3 class="similar-car-title">@auto.NombreCompleto</h3>
-                            <p class="similar-car-price">@auto.PrecioEnCRC</p>
+                        <div class="financing-group">
+                            <label>Precio total del vehículo <span class="required">*</span></label>
+                            <input type="text" name="vehiclePrice" id="vehiclePrice" 
+                                   value="@(Model.Vehicle.Divisa == "USD" ? Model.Vehicle.Precio.ToString("C0", new System.Globalization.CultureInfo("en-US")) : Model.Vehicle.Precio.ToString("C0", new System.Globalization.CultureInfo("es-CR")))" 
+                                   class="financing-input" readonly />
+                        </div>
+
+                        <div class="financing-group">
+                            <label for="loanTerm">Plazo del préstamo <span class="required">*</span></label>
+                            <div class="select-wrapper">
+                                <select name="loanTerm" id="loanTerm" class="financing-select">
+                                    <option value="12" selected="@(Model.LoanTerm == 12)">12 meses</option>
+                                    <option value="24" selected="@(Model.LoanTerm == 24)">24 meses</option>
+                                    <option value="36" selected="@(Model.LoanTerm == 36)">36 meses</option>
+                                    <option value="48" selected="@(Model.LoanTerm == 48)">48 meses</option>
+                                    <option value="60" selected="@(Model.LoanTerm == 60)">60 meses</option>
+                                    <option value="72" selected="@(Model.LoanTerm == 72)">72 meses</option>
+                                    <option value="84" selected="@(Model.LoanTerm == 84)">84 meses</option>
+                                </select>
+                                <svg class="select-arrow" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <path d="M6 9l6 6 6-6"/>
+                                </svg>
+                            </div>
+                        </div>
+
+                        <div class="financing-group">
+                            <label for="downPayment">Prima deseada</label>
+                            <input type="number" name="downPayment" id="downPayment" 
+                                   value="@Model.DownPayment" 
+                                   placeholder="Monto de prima" 
+                                   class="financing-input" />
+                        </div>
+
+                        <div class="financing-group">
+                            <label>Tasa anual</label>
+                            <input type="text" name="annualRate" id="annualRate" 
+                                   value="8.5%" 
+                                   class="financing-input" readonly />
+                        </div>
+
+                        <div class="financing-group">
+                            <label>Cuota mensual estimada</label>
+                            <input type="text" id="monthlyPayment" 
+                                   value="@(Model.Vehicle.Divisa == "USD" ? Model.MonthlyPayment.ToString("C2", new System.Globalization.CultureInfo("en-US")) : Model.MonthlyPayment.ToString("C2", new System.Globalization.CultureInfo("es-CR")))" 
+                                   readonly class="financing-input" />
                         </div>
                     </div>
-                }
+
+                    <p class="financing-disclaimer">* Cuota estimada sujeta a aprobación crediticia. No incluye seguros ni gastos de formalización.</p>
+
+                    <button type="button" class="btn-primario" onclick="solicitarPreAprobacion()">
+                        Solicitar Pre-aprobación
+                    </button>
+                </form>
             </div>
         </section>
-
-    </div>
-
-    <!-- Footer -->
-</div>
-
 <script>
-// Gallery navigation
-document.addEventListener('DOMContentLoaded', function() {
-    // Get all image URLs from the server
-    const imageUrls = @Html.Raw(Json.Serialize(imageUrlsList));
-    let currentImageIndex = 0;
-    
-    const mainImage = document.querySelector('.main-car-image');
-    const thumbnails = document.querySelectorAll('.thumbnail-item');
-    const photoCounter = document.getElementById('photoCounterText');
-    
-    // Function to update main image
-    window.updateMainImage = function(index) {
-        if (index >= 0 && index < imageUrls.length) {
-            currentImageIndex = index;
-            mainImage.src = imageUrls[index];
-            
-            // Update photo counter
-            if (photoCounter) {
-                photoCounter.textContent = `${index + 1}/${imageUrls.length}`;
+    // Gallery navigation
+    document.addEventListener('DOMContentLoaded', function () {
+        // Get all image URLs from the server
+        const imageUrls = @Html.Raw(Json.Serialize(imageUrlsList));
+        let currentImageIndex = 0;
+
+        const mainImage = document.querySelector('.main-car-image');
+        const thumbnails = document.querySelectorAll('.thumbnail-item');
+        const photoCounter = document.getElementById('photoCounterText');
+
+        // Function to update main image
+        window.updateMainImage = function (index) {
+            if (index >= 0 && index < imageUrls.length) {
+                currentImageIndex = index;
+                mainImage.src = imageUrls[index];
+
+                // Update photo counter
+                if (photoCounter) {
+                    photoCounter.textContent = `${index + 1}/${imageUrls.length}`;
+                }
+
+                // Update active thumbnail
+                thumbnails.forEach((thumb, i) => {
+                    thumb.classList.remove('active');
+                    if (i === index) {
+                        thumb.classList.add('active');
+                    }
+                });
             }
+        };
+
+        // Navigate gallery with arrows
+        window.navigateGallery = function (direction) {
+            const newIndex = currentImageIndex + direction;
+            if (newIndex >= 0 && newIndex < imageUrls.length) {
+                updateMainImage(newIndex);
+            }
+        };
+
+        // Select thumbnail
+        window.selectThumbnail = function (index) {
+            updateMainImage(index);
+        };
+
+        // Financing calculator logic
+        const financingForm = document.getElementById('financingForm');
+        if (financingForm) {
+            const originalPrice = parseFloat(financingForm.dataset.originalPrice);
+            const originalCurrency = financingForm.dataset.originalCurrency;
+            const exchangeRate = parseFloat(financingForm.dataset.exchangeRate); // USD to CRC rate
             
-            // Update active thumbnail
-            thumbnails.forEach((thumb, i) => {
-                thumb.classList.remove('active');
-                if (i === index) {
-                    thumb.classList.add('active');
+            const currencySelect = document.getElementById('currency');
+            const vehiclePriceInput = document.getElementById('vehiclePrice');
+            const loanTermSelect = document.getElementById('loanTerm');
+            const downPaymentInput = document.getElementById('downPayment');
+            const monthlyPaymentInput = document.getElementById('monthlyPayment');
+            
+            // Helper to format currency
+            const formatCurrency = (amount, currency) => {
+                const formatter = new Intl.NumberFormat('en-US', {
+                    style: 'currency',
+                    currency: currency,
+                    minimumFractionDigits: 0,
+                    maximumFractionDigits: 0,
+                });
+                
+                let formatted = formatter.format(amount);
+                if (currency === 'CRC') {
+                    return '₡' + amount.toLocaleString('es-CR', {minimumFractionDigits: 0, maximumFractionDigits: 0});
+                }
+                return formatted; // Defaults to $ for USD
+            };
+
+            const calculateValues = () => {
+                const selectedCurrency = currencySelect.value;
+                let currentPrice = originalPrice;
+
+                // Convert price if needed
+                if (originalCurrency !== selectedCurrency) {
+                    if (originalCurrency === 'USD' && selectedCurrency === 'CRC') {
+                        currentPrice = originalPrice * exchangeRate;
+                    } else if (originalCurrency === 'CRC' && selectedCurrency === 'USD') {
+                        currentPrice = originalPrice / exchangeRate;
+                    }
+                }
+
+                // Update Vehicle Price Display
+                vehiclePriceInput.value = formatCurrency(currentPrice, selectedCurrency);
+
+                // Calculate Monthly Payment
+                // Formula: P * (r * (1+r)^n) / ((1+r)^n - 1)
+                const downPayment = parseFloat(downPaymentInput.value) || 0;
+                const loanAmount = currentPrice - downPayment;
+                const annualRate = 0.085; // 8.5% fixed
+                const monthlyRate = annualRate / 12;
+                const months = parseInt(loanTermSelect.value);
+
+                let monthlyPayment = 0;
+                if (loanAmount > 0) {
+                    const factor = Math.pow(1 + monthlyRate, months);
+                    monthlyPayment = loanAmount * (monthlyRate * factor) / (factor - 1);
+                }
+
+                // Update Monthly Payment Display
+                monthlyPaymentInput.value = formatCurrency(monthlyPayment, selectedCurrency);
+            };
+
+            // Event Listeners
+            currencySelect.addEventListener('change', calculateValues);
+            loanTermSelect.addEventListener('change', calculateValues);
+            downPaymentInput.addEventListener('input', calculateValues);
+
+            // Initial calculation to ensure consistency
+            calculateValues();
+        }
+    });
+
+    // Switch tabs function
+    function switchTab(tabName) {
+        // Hide all tab contents
+        const allTabContents = document.querySelectorAll('.producto-tab-content');
+        allTabContents.forEach(content => {
+            content.classList.remove('active');
+        });
+
+        // Remove active class from all buttons
+        const allTabButtons = document.querySelectorAll('.producto-tab-button');
+        allTabButtons.forEach(button => {
+            button.classList.remove('active');
+        });
+
+        // Show selected tab content
+        const selectedTabContent = document.getElementById(`tab-${tabName}`);
+        if (selectedTabContent) {
+            selectedTabContent.classList.add('active');
+        }
+
+        // Add active class to clicked button
+        event.target.classList.add('active');
+    }
+
+    // Function for pre-approval button
+    function solicitarPreAprobacion() {
+        // Abrir el modal de pre-aprobación
+        document.getElementById('preAprobacionModal').style.display = 'flex';
+    }
+
+    function closePreAprobacionModal() {
+        document.getElementById('preAprobacionModal').style.display = 'none';
+        // Limpiar el formulario
+        document.getElementById('preAprobacionForm').reset();
+    }
+
+    // Funciones del modal de confirmación
+    function showConfirmationModal(isSuccess, title, message) {
+        const modal = document.getElementById('confirmationModal');
+        const icon = document.getElementById('confirmationIcon');
+        const iconText = document.getElementById('confirmationIconText');
+        const titleElement = document.getElementById('confirmationTitle');
+        const messageElement = document.getElementById('confirmationMessage');
+
+        if (isSuccess) {
+            icon.className = 'confirmation-icon success';
+            iconText.textContent = '✓';
+        } else {
+            icon.className = 'confirmation-icon error';
+            iconText.textContent = '✕';
+        }
+
+        titleElement.textContent = title;
+        messageElement.textContent = message;
+        modal.style.display = 'flex';
+    }
+
+    function closeConfirmationModal() {
+        document.getElementById('confirmationModal').style.display = 'none';
+    }
+
+    // Formatear teléfono en el modal de pre-aprobación
+    function initializeModalPhoneFormatting() {
+        const phoneInput = document.getElementById('telefono');
+
+        if (phoneInput) {
+            phoneInput.addEventListener('input', function (e) {
+                let value = e.target.value.replace(/\D/g, ''); // Remove non-digits
+
+                // Limit to 8 digits for Costa Rica
+                if (value.length > 8) {
+                    value = value.substring(0, 8);
+                }
+
+                // Format as XXXX-XXXX
+                if (value.length >= 4) {
+                    value = value.substring(0, 4) + '-' + value.substring(4);
+                }
+
+                e.target.value = value;
+            });
+        }
+    }
+
+    // Manejar el envío del formulario de pre-aprobación
+    document.addEventListener('DOMContentLoaded', function () {
+        // Inicializar formato de teléfono
+        initializeModalPhoneFormatting();
+
+        const form = document.getElementById('preAprobacionForm');
+
+        if (form) {
+            form.addEventListener('submit', async function (e) {
+                e.preventDefault();
+
+                // Validar email
+                const emailInput = document.getElementById('email');
+                const emailValue = emailInput.value.trim();
+
+                // Validación básica de email
+                if (!emailValue.includes('@@') || !emailValue.includes('.') || emailValue.indexOf('@@') > emailValue.lastIndexOf('.')) {
+                    showConfirmationModal(false, 'Error de Validación', 'Por favor, ingrese un correo electrónico válido.');
+                    return;
+                }
+
+                const submitBtn = document.getElementById('submitPreAprobacion');
+                const originalText = submitBtn.textContent;
+                submitBtn.disabled = true;
+                submitBtn.textContent = 'Enviando...';
+
+                const formData = new FormData(form);
+
+                try {
+                    const response = await fetch('?handler=SolicitarPreAprobacion', {
+                        method: 'POST',
+                        body: formData,
+                        headers: {
+                            'RequestVerificationToken': document.querySelector('input[name="__RequestVerificationToken"]').value
+                        }
+                    });
+
+                    const result = await response.json();
+
+                    if (result.success) {
+                        closePreAprobacionModal();
+                        showConfirmationModal(true, '¡Solicitud Enviada!', result.message);
+                    } else {
+                        showConfirmationModal(false, 'Error', result.message);
+                    }
+                } catch (error) {
+                    showConfirmationModal(false, 'Error', 'Ocurrió un error al procesar su solicitud. Por favor intente nuevamente.');
+                } finally {
+                    submitBtn.disabled = false;
+                    submitBtn.textContent = originalText;
                 }
             });
         }
-    };
-    
-    // Navigate gallery with arrows
-    window.navigateGallery = function(direction) {
-        const newIndex = currentImageIndex + direction;
-        if (newIndex >= 0 && newIndex < imageUrls.length) {
-            updateMainImage(newIndex);
+    });
+
+    // Share product function
+    function shareProduct() {
+        if (navigator.share) {
+            navigator.share({
+                title: '@Html.Raw((Model.Vehicle?.NombreCompleto ?? "Vehículo").Replace("'", "\\'"))',
+                text: 'Mira este vehículo en AutoClick.cr',
+                url: window.location.href
+            }).catch(err => console.log('Error sharing:', err));
+        } else {
+            // Fallback: copy URL to clipboard
+            navigator.clipboard.writeText(window.location.href);
+            alert('Enlace copiado al portapapeles');
         }
-    };
-    
-    // Select thumbnail
-    window.selectThumbnail = function(index) {
-        updateMainImage(index);
-    };
-    
-    // Financing calculator auto-update (excluding readonly fields)
-    const financingInputs = document.querySelectorAll('.financing-input:not([readonly]), .financing-select');
-    financingInputs.forEach(input => {
-        input.addEventListener('change', function() {
-            // Auto-submit form to recalculate
-            this.closest('form').submit();
-        });
-    });
-});
-
-// Switch tabs function
-function switchTab(tabName) {
-    // Hide all tab contents
-    const allTabContents = document.querySelectorAll('.producto-tab-content');
-    allTabContents.forEach(content => {
-        content.classList.remove('active');
-    });
-    
-    // Remove active class from all buttons
-    const allTabButtons = document.querySelectorAll('.producto-tab-button');
-    allTabButtons.forEach(button => {
-        button.classList.remove('active');
-    });
-    
-    // Show selected tab content
-    const selectedTabContent = document.getElementById(`tab-${tabName}`);
-    if (selectedTabContent) {
-        selectedTabContent.classList.add('active');
     }
-    
-    // Add active class to clicked button
-    event.target.classList.add('active');
-}
 
-// Function for pre-approval button
-function solicitarPreAprobacion() {
-    // Abrir el modal de pre-aprobación
-    document.getElementById('preAprobacionModal').style.display = 'flex';
-}
+    // Toggle favorite function
+    function toggleFavorite(vehicleId) {
+        const favoriteBtn = document.querySelector('.producto-favorite-btn');
 
-function closePreAprobacionModal() {
-    document.getElementById('preAprobacionModal').style.display = 'none';
-    // Limpiar el formulario
-    document.getElementById('preAprobacionForm').reset();
-}
+        if (favoriteBtn) {
+            // Toggle active class
+            favoriteBtn.classList.toggle('active');
 
-// Funciones del modal de confirmación
-function showConfirmationModal(isSuccess, title, message) {
-    const modal = document.getElementById('confirmationModal');
-    const icon = document.getElementById('confirmationIcon');
-    const iconText = document.getElementById('confirmationIconText');
-    const titleElement = document.getElementById('confirmationTitle');
-    const messageElement = document.getElementById('confirmationMessage');
-    
-    if (isSuccess) {
-        icon.className = 'confirmation-icon success';
-        iconText.textContent = '✓';
-    } else {
-        icon.className = 'confirmation-icon error';
-        iconText.textContent = '✕';
-    }
-    
-    titleElement.textContent = title;
-    messageElement.textContent = message;
-    modal.style.display = 'flex';
-}
+            // Cambiar texto según el estado
+            const isActive = favoriteBtn.classList.contains('active');
+            const textSpan = favoriteBtn.querySelector('span');
 
-function closeConfirmationModal() {
-    document.getElementById('confirmationModal').style.display = 'none';
-}
-
-// Formatear teléfono en el modal de pre-aprobación
-function initializeModalPhoneFormatting() {
-    const phoneInput = document.getElementById('telefono');
-    
-    if (phoneInput) {
-        phoneInput.addEventListener('input', function(e) {
-            let value = e.target.value.replace(/\D/g, ''); // Remove non-digits
-            
-            // Limit to 8 digits for Costa Rica
-            if (value.length > 8) {
-                value = value.substring(0, 8);
+            if (textSpan) {
+                textSpan.textContent = isActive ? 'Agregado a favoritos' : 'Agregar a favoritos';
             }
-            
-            // Format as XXXX-XXXX
-            if (value.length >= 4) {
-                value = value.substring(0, 4) + '-' + value.substring(4);
-            }
-            
-            e.target.value = value;
-        });
-    }
-}
 
-// Manejar el envío del formulario de pre-aprobación
-document.addEventListener('DOMContentLoaded', function() {
-    // Inicializar formato de teléfono
-    initializeModalPhoneFormatting();
-    
-    const form = document.getElementById('preAprobacionForm');
-    
-    if (form) {
-        form.addEventListener('submit', async function(e) {
-            e.preventDefault();
-            
-            // Validar email
-            const emailInput = document.getElementById('email');
-            const emailValue = emailInput.value.trim();
-            
-            // Validación básica de email
-            if (!emailValue.includes('@@') || !emailValue.includes('.') || emailValue.indexOf('@@') > emailValue.lastIndexOf('.')) {
-                showConfirmationModal(false, 'Error de Validación', 'Por favor, ingrese un correo electrónico válido.');
-                return;
-            }
-            
-            const submitBtn = document.getElementById('submitPreAprobacion');
-            const originalText = submitBtn.textContent;
-            submitBtn.disabled = true;
-            submitBtn.textContent = 'Enviando...';
-            
-            const formData = new FormData(form);
-            
-            try {
-                const response = await fetch('?handler=SolicitarPreAprobacion', {
-                    method: 'POST',
-                    body: formData,
-                    headers: {
-                        'RequestVerificationToken': document.querySelector('input[name="__RequestVerificationToken"]').value
-                    }
-                });
-                
-                const result = await response.json();
-                
-                if (result.success) {
-                    closePreAprobacionModal();
-                    showConfirmationModal(true, '¡Solicitud Enviada!', result.message);
-                } else {
-                    showConfirmationModal(false, 'Error', result.message);
-                }
-            } catch (error) {
-                showConfirmationModal(false, 'Error', 'Ocurrió un error al procesar su solicitud. Por favor intente nuevamente.');
-            } finally {
-                submitBtn.disabled = false;
-                submitBtn.textContent = originalText;
-            }
-        });
-    }
-});
-
-// Share product function
-function shareProduct() {
-    if (navigator.share) {
-        navigator.share({
-            title: '@Html.Raw((Model.Vehicle?.NombreCompleto ?? "Vehículo").Replace("'", "\\'"))',
-            text: 'Mira este vehículo en AutoClick.cr',
-            url: window.location.href
-        }).catch(err => console.log('Error sharing:', err));
-    } else {
-        // Fallback: copy URL to clipboard
-        navigator.clipboard.writeText(window.location.href);
-        alert('Enlace copiado al portapapeles');
-    }
-}
-
-// Toggle favorite function
-function toggleFavorite(vehicleId) {
-    const favoriteBtn = document.querySelector('.producto-favorite-btn');
-    
-    if (favoriteBtn) {
-        // Toggle active class
-        favoriteBtn.classList.toggle('active');
-        
-        // Cambiar texto según el estado
-        const isActive = favoriteBtn.classList.contains('active');
-        const textSpan = favoriteBtn.querySelector('span');
-        
-        if (textSpan) {
-            textSpan.textContent = isActive ? 'Agregado a favoritos' : 'Agregar a favoritos';
+            // Aquí puedes agregar la lógica para guardar en la base de datos
+            console.log('Toggle favorite for vehicle:', vehicleId, 'Active:', isActive);
+            // Add your API call here
         }
-        
-        // Aquí puedes agregar la lógica para guardar en la base de datos
-        console.log('Toggle favorite for vehicle:', vehicleId, 'Active:', isActive);
-        // Add your API call here
     }
-}
 </script>
 
 <style>
-/* Botón Primario - Figma Style */
-.btn-primario {
-    background: white;
-    color: #06174D;
-    padding: 16px;
-    border-radius: 4px;
-    font-family: 'Montserrat', sans-serif;
-    font-weight: 700;
-    font-size: 16px;
-    border: none;
-    cursor: pointer;
-    width: 100%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 8px;
-}
-
-.btn-primario:hover {
-    background: #f5f5f5;
-}
-
-/* Espaciado entre secciones */
-.producto-specifications {
-    margin-bottom: 48px;
-}
-
-.producto-marchamo {
-    margin-top: 24px;
-}
-
-/* Marchamo Calculator - TariFlash Design */
-.marchamo-tari-content {
-    background: #F7F7F7;
-    border: 0.694px solid rgba(255, 255, 255, 0.25);
-    border-radius: 5.555px;
-    padding: 32px;
-    display: flex;
-    flex-direction: column;
-    gap: 24px;
-    align-items: center;
-}
-
-.marchamo-tari-header {
-    display: flex;
-    flex-direction: column;
-    gap: 6px;
-    align-items: center;
-    justify-content: center;
-}
-
-.marchamo-tari-logo {
-    width: 255px;
-    height: 48px;
-}
-
-.marchamo-tari-subtitle {
-    font-family: 'Montserrat', sans-serif;
-    font-weight: 500;
-    font-style: italic;
-    font-size: 12.75px;
-    color: rgba(0, 0, 0, 0.5);
-    margin: 0;
-    white-space: nowrap;
-}
-
-.marchamo-tari-car-title {
-    font-family: 'Montserrat', sans-serif;
-    font-weight: 700;
-    font-size: 20px;
-    color: rgba(0, 0, 0, 0.5);
-    margin: 0;
-    width: 100%;
-    min-width: 100%;
-}
-
-.marchamo-tari-section {
-    width: 100%;
-    border-radius: 1.389px;
-    position: relative;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    text-align: center;
-    overflow: hidden;
-}
-
-.marchamo-tari-section-top {
-    height: 109.716px;
-    border-top: 0.694px solid rgba(0, 0, 0, 0.25);
-    border-bottom: 0.694px solid rgba(0, 0, 0, 0.25);
-}
-
-.marchamo-tari-section-bottom {
-    height: 98.606px;
-    border-bottom: 0.694px solid rgba(0, 0, 0, 0.25);
-}
-
-.marchamo-tari-title-orange-1,
-.marchamo-tari-title-orange-2 {
-    font-family: 'Montserrat', sans-serif;
-    font-weight: 700;
-    font-size: 20px;
-    margin: 0 0 16px 0;
-    white-space: nowrap;
-}
-
-.marchamo-tari-title-orange-1 {
-    color: #FF8500;
-}
-
-.marchamo-tari-title-orange-2 {
-    color: #FF8400;
-}
-
-.marchamo-tari-disponible {
-    font-family: 'Montserrat', sans-serif;
-    font-weight: 700;
-    font-size: 24px;
-    color: rgba(0, 0, 0, 0.75);
-    margin: 0;
-    white-space: nowrap;
-}
-
-.marchamo-tari-footer {
-    width: 100%;
-    display: flex;
-    justify-content: flex-end;
-    align-items: center;
-    gap: 11.111px;
-}
-
-.marchamo-tari-powered {
-    font-family: 'Montserrat', sans-serif;
-    font-weight: 600;
-    font-size: 14px;
-    color: rgba(0, 0, 0, 0.5);
-    margin: 0;
-    white-space: nowrap;
-}
-
-.marchamo-disclaimer {
-    background: rgba(255, 255, 255, 0.05);
-    border: 1px solid rgba(255, 255, 255, 0.1);
-    border-radius: 4px;
-    padding: 16px;
-    margin-top: 16px;
-    color: rgba(255, 255, 255, 0.7);
-    font-size: 12px;
-    line-height: 1.6;
-}
-
-/* Market Value Analysis Styles */
-.producto-market-analysis {
-    background: rgba(3, 13, 43, 0.6);
-    border: 1px solid rgba(255, 255, 255, 0.1);
-    border-radius: 12px;
-    padding: 32px;
-    margin-top: 32px;
-    margin-bottom: 32px;
-}
-
-.producto-market-analysis h2 {
-    color: white;
-    font-size: 24px;
-    font-weight: 700;
-    margin-bottom: 24px;
-    font-family: 'Montserrat', sans-serif;
-}
-
-/* Sin datos */
-.market-no-data {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    padding: 48px 24px;
-    text-align: center;
-}
-
-.market-no-data svg {
-    margin-bottom: 16px;
-    opacity: 0.5;
-}
-
-.market-no-data p {
-    color: rgba(255, 255, 255, 0.6);
-    font-size: 16px;
-    line-height: 1.6;
-    max-width: 600px;
-}
-
-/* Badge de clasificación */
-.market-badge-container {
-    display: flex;
-    align-items: center;
-    gap: 16px;
-    margin-bottom: 32px;
-    flex-wrap: wrap;
-}
-
-.market-badge {
-    padding: 8px 20px;
-    border-radius: 24px;
-    color: white;
-    font-weight: 700;
-    font-size: 16px;
-    font-family: 'Montserrat', sans-serif;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
-}
-
-.market-comparison {
-    color: rgba(255, 255, 255, 0.8);
-    font-size: 14px;
-    margin: 0;
-}
-
-/* Gráfico de rango */
-.market-chart {
-    background: rgba(255, 255, 255, 0.05);
-    border: 1px solid rgba(255, 255, 255, 0.1);
-    border-radius: 8px;
-    padding: 24px;
-    margin-bottom: 24px;
-}
-
-.market-chart-header {
-    display: flex;
-    justify-content: space-between;
-    margin-bottom: 24px;
-    gap: 16px;
-    flex-wrap: wrap;
-}
-
-.chart-label {
-    display: flex;
-    flex-direction: column;
-    gap: 4px;
-}
-
-.label-title {
-    color: rgba(255, 255, 255, 0.5);
-    font-size: 12px;
-    text-transform: uppercase;
-    letter-spacing: 0.5px;
-}
-
-.label-value {
-    color: white;
-    font-size: 18px;
-    font-weight: 600;
-}
-
-/* Barra de rango */
-.market-range-bar {
-    position: relative;
-    height: 60px;
-    margin: 32px 0;
-}
-
-.range-bar-background {
-    position: absolute;
-    top: 50%;
-    transform: translateY(-50%);
-    width: 100%;
-    height: 8px;
-    background: linear-gradient(90deg, 
-        rgba(147, 51, 234, 0.3) 0%,
-        rgba(34, 197, 94, 0.3) 50%,
-        rgba(239, 68, 68, 0.3) 100%
-    );
-    border-radius: 4px;
-}
-
-.range-marker {
-    position: absolute;
-    top: 50%;
-    transform: translate(-50%, -50%);
-}
-
-.average-marker .marker-line {
-    width: 2px;
-    height: 40px;
-    background: rgba(255, 255, 255, 0.5);
-    border-radius: 1px;
-}
-
-.current-marker {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    z-index: 2;
-}
-
-.marker-dot {
-    width: 20px;
-    height: 20px;
-    border-radius: 50%;
-    background: inherit;
-    border: 3px solid white;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
-}
-
-.marker-label {
-    position: absolute;
-    top: -60px;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    white-space: nowrap;
-    background: rgba(0, 0, 0, 0.8);
-    padding: 8px 12px;
-    border-radius: 6px;
-    border: 1px solid rgba(255, 255, 255, 0.2);
-}
-
-.marker-label span:first-child {
-    color: rgba(255, 255, 255, 0.7);
-    font-size: 11px;
-    text-transform: uppercase;
-    letter-spacing: 0.5px;
-}
-
-.marker-price {
-    color: white;
-    font-weight: 700;
-    font-size: 14px;
-}
-
-.market-chart-footer {
-    text-align: center;
-    margin-top: 16px;
-}
-
-.market-chart-footer p {
-    color: rgba(255, 255, 255, 0.5);
-    font-size: 13px;
-    margin: 0;
-}
-
-/* Grid de información */
-.market-info-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-    gap: 16px;
-}
-
-.market-info-item {
-    background: rgba(255, 255, 255, 0.05);
-    border: 1px solid rgba(255, 255, 255, 0.1);
-    border-radius: 8px;
-    padding: 16px;
-}
-
-.market-info-item h4 {
-    color: rgba(255, 255, 255, 0.6);
-    font-size: 13px;
-    font-weight: 500;
-    margin: 0 0 8px 0;
-    text-transform: uppercase;
-    letter-spacing: 0.5px;
-}
-
-.market-info-item p {
-    color: white;
-    font-size: 20px;
-    font-weight: 700;
-    margin: 0;
-}
-
-.market-info-item p.positive {
-    color: #22C55E;
-}
-
-.market-info-item p.negative {
-    color: #EF4444;
-}
-
-/* Responsive */
-@@media (max-width: 768px) {
-    .producto-market-analysis {
-        padding: 20px;
+    /* Financing Calculator Styles */
+    .producto-financing {
+        margin-bottom: 32px;
     }
 
-    .market-badge-container {
+    .financing-calculator {
+        background: rgba(3, 13, 43, 0.6);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        border-radius: 12px;
+        padding: 32px;
+    }
+
+    .financing-header {
+        display: flex;
+        align-items: center;
+        gap: 16px;
+        margin-bottom: 32px;
+    }
+
+    .financing-icon {
+        width: 48px;
+        height: 48px;
+        background: rgba(255, 255, 255, 0.1);
+        border-radius: 12px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .financing-header h3 {
+        color: white;
+        font-family: 'Montserrat', sans-serif;
+        font-weight: 700;
+        font-size: 24px;
+        margin: 0;
+        text-transform: uppercase;
+    }
+
+    .financing-grid {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 20px 24px;
+        margin-bottom: 24px;
+    }
+
+    .financing-group {
+        display: flex;
         flex-direction: column;
-        align-items: flex-start;
+        gap: 8px;
+    }
+
+    .financing-group label {
+        color: rgba(255, 255, 255, 0.9);
+        font-size: 14px;
+        font-family: 'Montserrat', sans-serif;
+        font-weight: 500;
+    }
+
+    .financing-group label .required {
+        color: #ff0000;
+    }
+
+    .financing-input, .financing-select {
+        background: rgba(0, 0, 0, 0.3);
+        border: 1px solid rgba(255, 255, 255, 0.2);
+        border-radius: 8px;
+        padding: 14px 16px;
+        color: white;
+        font-family: 'Montserrat', sans-serif;
+        font-size: 16px;
+        width: 100%;
+        box-sizing: border-box;
+    }
+
+    .financing-input:focus, .financing-select:focus {
+        outline: none;
+        border-color: rgba(255, 255, 255, 0.4);
+    }
+
+    .select-wrapper {
+        position: relative;
+    }
+
+    .select-arrow {
+        position: absolute;
+        right: 16px;
+        top: 50%;
+        transform: translateY(-50%);
+        pointer-events: none;
+        color: rgba(255, 255, 255, 0.5);
+    }
+
+    .financing-select {
+        appearance: none;
+        cursor: pointer;
+        padding-right: 40px;
+    }
+
+    .financing-disclaimer {
+        color: rgba(255, 255, 255, 0.5);
+        font-size: 12px;
+        margin: 0 0 24px 0;
+        line-height: 1.5;
+    }
+
+    /* Responsive */
+    @media (max-width: 768px) {
+        .financing-grid {
+            grid-template-columns: 1fr;
+        }
+    }
+
+    /* Botón Primario - Figma Style */
+    .btn-primario {
+        background: white;
+        color: #06174D;
+        padding: 16px;
+        border-radius: 4px;
+        font-family: 'Montserrat', sans-serif;
+        font-weight: 700;
+        font-size: 16px;
+        border: none;
+        cursor: pointer;
+        width: 100%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 8px;
+    }
+
+    .btn-primario:hover {
+        background: #f5f5f5;
+    }
+
+    /* Espaciado entre secciones */
+    .producto-specifications {
+        margin-bottom: 48px;
+    }
+
+    .producto-marchamo {
+        margin-top: 24px;
+    }
+
+    /* Marchamo Calculator - TariFlash Design */
+    .marchamo-tari-content {
+        background: #F7F7F7;
+        border: 0.694px solid rgba(255, 255, 255, 0.25);
+        border-radius: 5.555px;
+        padding: 32px;
+        display: flex;
+        flex-direction: column;
+        gap: 24px;
+        align-items: center;
+    }
+
+    .marchamo-tari-header {
+        display: flex;
+        flex-direction: column;
+        gap: 6px;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .marchamo-tari-logo {
+        width: 255px;
+        height: 48px;
+    }
+
+    .marchamo-tari-subtitle {
+        font-family: 'Montserrat', sans-serif;
+        font-weight: 500;
+        font-style: italic;
+        font-size: 12.75px;
+        color: rgba(0, 0, 0, 0.5);
+        margin: 0;
+        white-space: nowrap;
+    }
+
+    .marchamo-tari-car-title {
+        font-family: 'Montserrat', sans-serif;
+        font-weight: 700;
+        font-size: 20px;
+        color: rgba(0, 0, 0, 0.5);
+        margin: 0;
+        width: 100%;
+        min-width: 100%;
+    }
+
+    .marchamo-tari-section {
+        width: 100%;
+        border-radius: 1.389px;
+        position: relative;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        text-align: center;
+        overflow: hidden;
+    }
+
+    .marchamo-tari-section-top {
+        height: 109.716px;
+        border-top: 0.694px solid rgba(0, 0, 0, 0.25);
+        border-bottom: 0.694px solid rgba(0, 0, 0, 0.25);
+    }
+
+    .marchamo-tari-section-bottom {
+        height: 98.606px;
+        border-bottom: 0.694px solid rgba(0, 0, 0, 0.25);
+    }
+
+    .marchamo-tari-title-orange-1,
+    .marchamo-tari-title-orange-2 {
+        font-family: 'Montserrat', sans-serif;
+        font-weight: 700;
+        font-size: 20px;
+        margin: 0 0 16px 0;
+        white-space: nowrap;
+    }
+
+    .marchamo-tari-title-orange-1 {
+        color: #FF8500;
+    }
+
+    .marchamo-tari-title-orange-2 {
+        color: #FF8400;
+    }
+
+    .marchamo-tari-disponible {
+        font-family: 'Montserrat', sans-serif;
+        font-weight: 700;
+        font-size: 24px;
+        color: rgba(0, 0, 0, 0.75);
+        margin: 0;
+        white-space: nowrap;
+    }
+
+    .marchamo-tari-footer {
+        width: 100%;
+        display: flex;
+        justify-content: flex-end;
+        align-items: center;
+        gap: 11.111px;
+    }
+
+    .marchamo-tari-powered {
+        font-family: 'Montserrat', sans-serif;
+        font-weight: 600;
+        font-size: 14px;
+        color: rgba(0, 0, 0, 0.5);
+        margin: 0;
+        white-space: nowrap;
+    }
+
+    .marchamo-disclaimer {
+        background: rgba(255, 255, 255, 0.05);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        border-radius: 4px;
+        padding: 16px;
+        margin-top: 16px;
+        color: rgba(255, 255, 255, 0.7);
+        font-size: 12px;
+        line-height: 1.6;
+    }
+
+    /* Market Value Analysis Styles */
+    .producto-market-analysis {
+        background: rgba(3, 13, 43, 0.6);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        border-radius: 12px;
+        padding: 32px;
+        margin-top: 32px;
+        margin-bottom: 32px;
+    }
+
+    .producto-market-analysis h2 {
+        color: white;
+        font-size: 24px;
+        font-weight: 700;
+        margin-bottom: 24px;
+        font-family: 'Montserrat', sans-serif;
+    }
+
+    /* Sin datos */
+    .market-no-data {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        padding: 48px 24px;
+        text-align: center;
+    }
+
+    .market-no-data svg {
+        margin-bottom: 16px;
+        opacity: 0.5;
+    }
+
+    .market-no-data p {
+        color: rgba(255, 255, 255, 0.6);
+        font-size: 16px;
+        line-height: 1.6;
+        max-width: 600px;
+    }
+
+    /* Badge de clasificación */
+    .market-badge-container {
+        display: flex;
+        align-items: center;
+        gap: 16px;
+        margin-bottom: 32px;
+        flex-wrap: wrap;
+    }
+
+    .market-badge {
+        padding: 8px 20px;
+        border-radius: 24px;
+        color: white;
+        font-weight: 700;
+        font-size: 16px;
+        font-family: 'Montserrat', sans-serif;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+    }
+
+    .market-comparison {
+        color: rgba(255, 255, 255, 0.8);
+        font-size: 14px;
+        margin: 0;
+    }
+
+    /* Gráfico de rango */
+    .market-chart {
+        background: rgba(255, 255, 255, 0.05);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        border-radius: 8px;
+        padding: 24px;
+        margin-bottom: 24px;
     }
 
     .market-chart-header {
+        display: flex;
+        justify-content: space-between;
+        margin-bottom: 24px;
+        gap: 16px;
+        flex-wrap: wrap;
+    }
+
+    .chart-label {
+        display: flex;
         flex-direction: column;
-        gap: 12px;
+        gap: 4px;
+    }
+
+    .label-title {
+        color: rgba(255, 255, 255, 0.5);
+        font-size: 12px;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+    }
+
+    .label-value {
+        color: white;
+        font-size: 18px;
+        font-weight: 600;
+    }
+
+    /* Barra de rango */
+    .market-range-bar {
+        position: relative;
+        height: 60px;
+        margin: 32px 0;
+    }
+
+    .range-bar-background {
+        position: absolute;
+        top: 50%;
+        transform: translateY(-50%);
+        width: 100%;
+        height: 8px;
+        background: linear-gradient(90deg,
+                rgba(147, 51, 234, 0.3) 0%,
+                rgba(34, 197, 94, 0.3) 50%,
+                rgba(239, 68, 68, 0.3) 100%);
+        border-radius: 4px;
+    }
+
+    .range-marker {
+        position: absolute;
+        top: 50%;
+        transform: translate(-50%, -50%);
+    }
+
+    .average-marker .marker-line {
+        width: 2px;
+        height: 40px;
+        background: rgba(255, 255, 255, 0.5);
+        border-radius: 1px;
+    }
+
+    .current-marker {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        z-index: 2;
+    }
+
+    .marker-dot {
+        width: 20px;
+        height: 20px;
+        border-radius: 50%;
+        background: inherit;
+        border: 3px solid white;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
     }
 
     .marker-label {
+        position: absolute;
+        top: -60px;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        white-space: nowrap;
+        background: rgba(0, 0, 0, 0.8);
+        padding: 8px 12px;
+        border-radius: 6px;
+        border: 1px solid rgba(255, 255, 255, 0.2);
+    }
+
+    .marker-label span:first-child {
+        color: rgba(255, 255, 255, 0.7);
         font-size: 11px;
-        padding: 6px 10px;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
     }
 
     .marker-price {
-        font-size: 12px;
+        color: white;
+        font-weight: 700;
+        font-size: 14px;
     }
-}
 
-/* Estilos del Modal de Pre-Aprobación */
-.modal-overlay {
-    display: none;
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background: rgba(0, 0, 0, 0.7);
-    z-index: 9999;
-    justify-content: center;
-    align-items: center;
-    padding: 20px;
-}
+    .market-chart-footer {
+        text-align: center;
+        margin-top: 16px;
+    }
 
-.modal-content {
-    background: #030D2B;
-    border-radius: 12px;
-    max-width: 500px;
-    width: 100%;
-    max-height: 90vh;
-    overflow-y: auto;
-    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
-}
+    .market-chart-footer p {
+        color: rgba(255, 255, 255, 0.5);
+        font-size: 13px;
+        margin: 0;
+    }
 
-.modal-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 24px;
-    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-}
+    /* Grid de información */
+    .market-info-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+        gap: 16px;
+    }
 
-.modal-header h3 {
-    margin: 0;
-    color: white;
-    font-family: 'Montserrat', sans-serif;
-    font-weight: 700;
-    font-size: 20px;
-}
+    .market-info-item {
+        background: rgba(255, 255, 255, 0.05);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        border-radius: 8px;
+        padding: 16px;
+    }
 
-.modal-close {
-    background: none;
-    border: none;
-    font-size: 28px;
-    color: rgba(255, 255, 255, 0.7);
-    cursor: pointer;
-    width: 32px;
-    height: 32px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    padding: 0;
-    line-height: 1;
-}
+    .market-info-item h4 {
+        color: rgba(255, 255, 255, 0.6);
+        font-size: 13px;
+        font-weight: 500;
+        margin: 0 0 8px 0;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+    }
 
-.modal-close:hover {
-    color: white;
-}
+    .market-info-item p {
+        color: white;
+        font-size: 20px;
+        font-weight: 700;
+        margin: 0;
+    }
 
-.modal-info-message {
-    padding: 20px 24px;
-    background: rgba(255, 255, 255, 0.05);
-    border-left: 4px solid #FFD700;
-    margin: 0 24px 20px 24px;
-    border-radius: 4px;
-}
+    .market-info-item p.positive {
+        color: #22C55E;
+    }
 
-.modal-info-message p {
-    margin: 0;
-    color: white;
-    font-family: 'Montserrat', sans-serif;
-    font-size: 14px;
-    line-height: 1.6;
-}
+    .market-info-item p.negative {
+        color: #EF4444;
+    }
 
-.modal-info-message strong {
-    display: block;
-    margin-bottom: 8px;
-    font-size: 15px;
-    color: #FFD700;
-}
+    /* Responsive */
+    @@media (max-width: 768px) {
+        .producto-market-analysis {
+            padding: 20px;
+        }
 
-.modal-form {
-    padding: 0 24px 24px 24px;
-}
+        .market-badge-container {
+            flex-direction: column;
+            align-items: flex-start;
+        }
 
-.form-group {
-    margin-bottom: 20px;
-}
+        .market-chart-header {
+            flex-direction: column;
+            gap: 12px;
+        }
 
-.form-group label {
-    display: block;
-    margin-bottom: 8px;
-    color: white;
-    font-family: 'Montserrat', sans-serif;
-    font-weight: 600;
-    font-size: 14px;
-}
+        .marker-label {
+            font-size: 11px;
+            padding: 6px 10px;
+        }
 
-.form-group .required {
-    color: #ff0000;
-}
+        .marker-price {
+            font-size: 12px;
+        }
+    }
 
-.form-input {
-    width: 100%;
-    height: 44px;
-    padding: 8px 16px;
-    background: #02081C;
-    border: 0.5px solid rgba(255, 255, 255, 0.5);
-    border-radius: 4px;
-    color: white;
-    font-size: 14px;
-    font-family: 'Montserrat', sans-serif;
-    font-weight: 500;
-    transition: border-color 0.3s ease;
-    box-sizing: border-box;
-}
+    /* Estilos del Modal de Pre-Aprobación */
+    .modal-overlay {
+        display: none;
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0, 0, 0, 0.7);
+        z-index: 9999;
+        justify-content: center;
+        align-items: center;
+        padding: 20px;
+    }
 
-.form-input:focus {
-    outline: none;
-    border-color: #FF931E;
-}
+    .modal-content {
+        background: #030D2B;
+        border-radius: 12px;
+        max-width: 500px;
+        width: 100%;
+        max-height: 90vh;
+        overflow-y: auto;
+        box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+    }
 
-.form-input::placeholder {
-    color: rgba(255, 255, 255, 0.5);
-}
+    .modal-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 24px;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    }
 
-.modal-actions {
-    display: flex;
-    gap: 12px;
-    margin-top: 24px;
-}
+    .modal-header h3 {
+        margin: 0;
+        color: white;
+        font-family: 'Montserrat', sans-serif;
+        font-weight: 700;
+        font-size: 20px;
+    }
 
-.btn-primary {
-    flex: 1;
-    padding: 14px 24px;
-    background: white;
-    color: #030D2B;
-    border: none;
-    border-radius: 4px;
-    font-family: 'Montserrat', sans-serif;
-    font-weight: 700;
-    font-size: 15px;
-    cursor: pointer;
-    transition: all 0.2s;
-}
+    .modal-close {
+        background: none;
+        border: none;
+        font-size: 28px;
+        color: rgba(255, 255, 255, 0.7);
+        cursor: pointer;
+        width: 32px;
+        height: 32px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 0;
+        line-height: 1;
+    }
 
-.btn-primary:hover {
-    background: #f5f5f5;
-    transform: translateY(-1px);
-}
+    .modal-close:hover {
+        color: white;
+    }
 
-.btn-primary:disabled {
-    background: rgba(255, 255, 255, 0.3);
-    color: rgba(255, 255, 255, 0.5);
-    cursor: not-allowed;
-}
+    .modal-info-message {
+        padding: 20px 24px;
+        background: rgba(255, 255, 255, 0.05);
+        border-left: 4px solid #FFD700;
+        margin: 0 24px 20px 24px;
+        border-radius: 4px;
+    }
 
-.btn-secondary {
-    flex: 1;
-    padding: 14px 24px;
-    background: transparent;
-    color: white;
-    border: 1px solid rgba(255, 255, 255, 0.3);
-    border-radius: 4px;
-    font-family: 'Montserrat', sans-serif;
-    font-weight: 600;
-    font-size: 15px;
-    cursor: pointer;
-    transition: all 0.2s;
-}
+    .modal-info-message p {
+        margin: 0;
+        color: white;
+        font-family: 'Montserrat', sans-serif;
+        font-size: 14px;
+        line-height: 1.6;
+    }
 
-.btn-secondary:hover {
-    background: rgba(255, 255, 255, 0.1);
-    border-color: rgba(255, 255, 255, 0.5);
-}
+    .modal-info-message strong {
+        display: block;
+        margin-bottom: 8px;
+        font-size: 15px;
+        color: #FFD700;
+    }
 
-/* Modal de Confirmación */
-.confirmation-modal {
-    display: none;
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background: rgba(0, 0, 0, 0.7);
-    z-index: 10000;
-    justify-content: center;
-    align-items: center;
-    padding: 20px;
-}
+    .modal-form {
+        padding: 0 24px 24px 24px;
+    }
 
-.confirmation-content {
-    background: #030D2B;
-    border-radius: 12px;
-    max-width: 400px;
-    width: 100%;
-    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
-    text-align: center;
-    padding: 32px 24px 24px 24px;
-}
+    .form-group {
+        margin-bottom: 20px;
+    }
 
-.confirmation-icon {
-    width: 60px;
-    height: 60px;
-    margin: 0 auto 20px;
-    border-radius: 50%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 32px;
-}
+    .form-group label {
+        display: block;
+        margin-bottom: 8px;
+        color: white;
+        font-family: 'Montserrat', sans-serif;
+        font-weight: 600;
+        font-size: 14px;
+    }
 
-.confirmation-icon.success {
-    background: rgba(0, 204, 0, 0.2);
-    color: #00CC00;
-}
+    .form-group .required {
+        color: #ff0000;
+    }
 
-.confirmation-icon.error {
-    background: rgba(255, 0, 0, 0.2);
-    color: #ff0000;
-}
+    .form-input {
+        width: 100%;
+        height: 44px;
+        padding: 8px 16px;
+        background: #02081C;
+        border: 0.5px solid rgba(255, 255, 255, 0.5);
+        border-radius: 4px;
+        color: white;
+        font-size: 14px;
+        font-family: 'Montserrat', sans-serif;
+        font-weight: 500;
+        transition: border-color 0.3s ease;
+        box-sizing: border-box;
+    }
 
-.confirmation-title {
-    color: white;
-    font-family: 'Montserrat', sans-serif;
-    font-weight: 700;
-    font-size: 20px;
-    margin: 0 0 12px 0;
-}
+    .form-input:focus {
+        outline: none;
+        border-color: #FF931E;
+    }
 
-.confirmation-message {
-    color: rgba(255, 255, 255, 0.8);
-    font-family: 'Montserrat', sans-serif;
-    font-size: 14px;
-    line-height: 1.6;
-    margin: 0 0 24px 0;
-}
+    .form-input::placeholder {
+        color: rgba(255, 255, 255, 0.5);
+    }
 
-.confirmation-button {
-    width: 100%;
-    padding: 14px 24px;
-    background: white;
-    color: #030D2B;
-    border: none;
-    border-radius: 4px;
-    font-family: 'Montserrat', sans-serif;
-    font-weight: 700;
-    font-size: 15px;
-    cursor: pointer;
-    transition: all 0.2s;
-}
+    .modal-actions {
+        display: flex;
+        gap: 12px;
+        margin-top: 24px;
+    }
 
-.confirmation-button:hover {
-    background: #f5f5f5;
-}
+    .btn-primary {
+        flex: 1;
+        padding: 14px 24px;
+        background: white;
+        color: #030D2B;
+        border: none;
+        border-radius: 4px;
+        font-family: 'Montserrat', sans-serif;
+        font-weight: 700;
+        font-size: 15px;
+        cursor: pointer;
+        transition: all 0.2s;
+    }
+
+    .btn-primary:hover {
+        background: #f5f5f5;
+        transform: translateY(-1px);
+    }
+
+    .btn-primary:disabled {
+        background: rgba(255, 255, 255, 0.3);
+        color: rgba(255, 255, 255, 0.5);
+        cursor: not-allowed;
+    }
+
+    .btn-secondary {
+        flex: 1;
+        padding: 14px 24px;
+        background: transparent;
+        color: white;
+        border: 1px solid rgba(255, 255, 255, 0.3);
+        border-radius: 4px;
+        font-family: 'Montserrat', sans-serif;
+        font-weight: 600;
+        font-size: 15px;
+        cursor: pointer;
+        transition: all 0.2s;
+    }
+
+    .btn-secondary:hover {
+        background: rgba(255, 255, 255, 0.1);
+        border-color: rgba(255, 255, 255, 0.5);
+    }
+
+    /* Modal de Confirmación */
+    .confirmation-modal {
+        display: none;
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0, 0, 0, 0.7);
+        z-index: 10000;
+        justify-content: center;
+        align-items: center;
+        padding: 20px;
+    }
+
+    .confirmation-content {
+        background: #030D2B;
+        border-radius: 12px;
+        max-width: 400px;
+        width: 100%;
+        box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+        text-align: center;
+        padding: 32px 24px 24px 24px;
+    }
+
+    .confirmation-icon {
+        width: 60px;
+        height: 60px;
+        margin: 0 auto 20px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 32px;
+    }
+
+    .confirmation-icon.success {
+        background: rgba(0, 204, 0, 0.2);
+        color: #00CC00;
+    }
+
+    .confirmation-icon.error {
+        background: rgba(255, 0, 0, 0.2);
+        color: #ff0000;
+    }
+
+    .confirmation-title {
+        color: white;
+        font-family: 'Montserrat', sans-serif;
+        font-weight: 700;
+        font-size: 20px;
+        margin: 0 0 12px 0;
+    }
+
+    .confirmation-message {
+        color: rgba(255, 255, 255, 0.8);
+        font-family: 'Montserrat', sans-serif;
+        font-size: 14px;
+        line-height: 1.6;
+        margin: 0 0 24px 0;
+    }
+
+    .confirmation-button {
+        width: 100%;
+        padding: 14px 24px;
+        background: white;
+        color: #030D2B;
+        border: none;
+        border-radius: 4px;
+        font-family: 'Montserrat', sans-serif;
+        font-weight: 700;
+        font-size: 15px;
+        cursor: pointer;
+        transition: all 0.2s;
+    }
+
+    .confirmation-button:hover {
+        background: #f5f5f5;
+    }
 </style>
 
 <!-- Modal de Pre-Aprobación -->
@@ -1615,11 +1881,12 @@ function toggleFavorite(vehicleId) {
             <h3>Solicitar Pre-Aprobación</h3>
             <button type="button" class="modal-close" onclick="closePreAprobacionModal()">&times;</button>
         </div>
-        
+
         <div class="modal-info-message">
             <p>
-                <strong>¡Gracias por su interés!</strong> 
-                Por el momento no contamos con alianzas bancarias, pero estamos trabajando para ofrecerle las mejores opciones de financiamiento. 
+                <strong>¡Gracias por su interés!</strong>
+                Por el momento no contamos con alianzas bancarias, pero estamos trabajando para ofrecerle las mejores
+                opciones de financiamiento.
                 Regístrese ahora y lo contactaremos cuando tengamos una alianza disponible.
             </p>
         </div>
@@ -1627,27 +1894,31 @@ function toggleFavorite(vehicleId) {
         <form id="preAprobacionForm" class="modal-form">
             @Html.AntiForgeryToken()
             <input type="hidden" id="autoIdInput" name="autoId" value="@(Model.Vehicle?.Id ?? 0)" />
-            
+
             <div class="form-group">
                 <label for="nombre">Nombre <span class="required">*</span></label>
-                <input type="text" id="nombre" name="nombre" class="form-input" placeholder="Introduzca su nombre" required />
+                <input type="text" id="nombre" name="nombre" class="form-input" placeholder="Introduzca su nombre"
+                    required />
             </div>
-            
+
             <div class="form-group">
                 <label for="apellidos">Apellidos <span class="required">*</span></label>
-                <input type="text" id="apellidos" name="apellidos" class="form-input" placeholder="Introduzca sus apellidos" required />
+                <input type="text" id="apellidos" name="apellidos" class="form-input"
+                    placeholder="Introduzca sus apellidos" required />
             </div>
-            
+
             <div class="form-group">
                 <label for="telefono">Teléfono <span class="required">*</span></label>
-                <input type="tel" id="telefono" name="telefono" class="form-input" placeholder="0000-0000" maxlength="9" required />
+                <input type="tel" id="telefono" name="telefono" class="form-input" placeholder="0000-0000" maxlength="9"
+                    required />
             </div>
-            
+
             <div class="form-group">
                 <label for="email">Correo electrónico <span class="required">*</span></label>
-                <input type="email" id="email" name="email" class="form-input" placeholder="ejemplo@correo.com" required />
+                <input type="email" id="email" name="email" class="form-input" placeholder="ejemplo@correo.com"
+                    required />
             </div>
-            
+
             <div class="modal-actions">
                 <button type="submit" class="btn-primary" id="submitPreAprobacion">Enviar Solicitud</button>
                 <button type="button" class="btn-secondary" onclick="closePreAprobacionModal()">Cancelar</button>
