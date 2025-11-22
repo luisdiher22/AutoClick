@@ -331,6 +331,7 @@
     
     .menu-user-section {
         padding: 19px;
+        padding-left: 0px;
     }
     
     .menu-auth-section {

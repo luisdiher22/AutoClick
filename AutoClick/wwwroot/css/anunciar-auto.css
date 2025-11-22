@@ -67,7 +67,7 @@
     font-size: 24px;
     font-family: 'Montserrat', sans-serif;
     font-weight: 700;
-    white-space: nowrap;
+    white-space: pre;
     display: flex;
     align-items: center;
     background: none !important;
@@ -111,6 +111,16 @@
 #seccion4 + .form-nav-buttons,
 #seccion4 ~ .form-nav-buttons {
     bottom: -50px; /* Mover botones más abajo cuando se muestra sección 4 */
+}
+
+/* Bajar botones en secciones 2, 5, 6 */
+#seccion2 + .form-nav-buttons,
+#seccion2 ~ .form-nav-buttons,
+#seccion5 + .form-nav-buttons,
+#seccion5 ~ .form-nav-buttons,
+#seccion6 + .form-nav-buttons,
+#seccion6 ~ .form-nav-buttons {
+    bottom: -150px;
 }
 
 .btn-back {
@@ -215,6 +225,11 @@
     flex-direction: column;
     gap: 8px;
     position: relative;
+}
+
+/* Mayor separación en sección 6 */
+#seccion6 .form-group {
+    margin-bottom: 20px;
 }
 
 .form-group.full-width {
@@ -680,6 +695,12 @@ select#ano option {
     cursor: pointer;
 }
 
+/* Checkbox más pequeño en sección 6 específicamente */
+#seccion6 .payment-option input[type="checkbox"] {
+    width: 18px;
+    height: 18px;
+}
+
 .payment-option label {
     color: white;
     font-size: 16px;
@@ -696,12 +717,23 @@ select#ano option {
     border-radius: 8px;
     padding: 32px;
     position: relative;
+    margin-top: -60px;
+}
+
+/* Ocultar toggle en desktop */
+.payment-summary-toggle {
+    display: none;
+}
+
+/* Mostrar detalles en desktop */
+.payment-summary-details {
+    display: block;
 }
 
 .summary-header {
     width: 175px;
     height: 95px;
-    background: rgba(255, 255, 255, 0.05);
+    background: transparent;
     border-radius: 4px;
     display: flex;
     align-items: center;
@@ -1438,6 +1470,16 @@ select#ano option {
     background: rgba(255, 255, 255, 0.2);
 }
 
+/* Ocultar líneas divisoras de sección en escritorio */
+#seccion2 > div[style*="height: 1px"][style*="margin-top: 32px"],
+#seccion3 > div[style*="height: 1px"][style*="margin-top: 32px"],
+#seccion4 > div[style*="height: 1px"][style*="margin-top: 32px"],
+#seccion5 > div[style*="height: 1px"][style*="margin-top: 32px"],
+#seccion6 > div[style*="height: 1px"][style*="margin-top: 32px"],
+#seccion7 > div[style*="height: 1px"][style*="margin-top: 32px"] {
+    display: none !important;
+}
+
 /* Responsive Design */
 @media (max-width: 1280px) {
     .form-container {
@@ -1455,7 +1497,362 @@ select#ano option {
     }
 }
 
-@media (max-width: 768px) {
+/* Tablet: 768px - 1023px */
+@media (max-width: 1023px) and (min-width: 768px) {
+    .anunciar-container {
+        margin-top: 60px;
+    }
+    
+    .form-container {
+        width: calc(100% - 48px);
+        max-width: 720px;
+        margin: 24px auto 0;
+        padding: 32px 24px;
+        min-height: auto;
+    }
+    
+    /* Hacer que el form sea flexbox para controlar el orden */
+    form {
+        display: flex;
+        flex-direction: column;
+    }
+    
+    /* Los botones al final */
+    .form-nav-buttons {
+        order: 2;
+        position: relative !important;
+        bottom: auto !important;
+        right: auto !important;
+        margin-top: 8px;
+        flex-direction: row;
+        gap: 8px;
+        z-index: 1;
+    }
+    
+    /* El contenedor de secciones antes de los botones */
+    .form-sections {
+        order: 1;
+    }
+    
+    .btn-back {
+        width: auto;
+        min-width: 90px;
+        flex: 0 0 auto;
+        order: 1;
+        padding: 12px 16px;
+        font-size: 14px;
+    }
+    
+    .btn-next {
+        flex: 1;
+        order: 2;
+    }
+    
+    .form-header {
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+    }
+    
+    .form-header h1 {
+        font-size: 22px;
+        flex-direction: column;
+        align-items: center;
+        gap: 8px;
+        justify-content: center;
+    }
+    
+    .section-indicator {
+        font-size: 18px;
+        margin-right: 0 !important;
+        display: block;
+        width: 100%;
+        text-align: center;
+    }
+    
+    /* Sección 1: Campos en columna para tablet */
+    #seccion1 > div {
+        height: auto !important;
+        padding-bottom: 20px;
+    }
+    
+    #seccion1 [data-asterizco="true"],
+    #seccion1 > div > div[style*="position: absolute"] {
+        position: relative !important;
+        left: auto !important;
+        top: auto !important;
+        width: 100% !important;
+        max-width: 100%;
+        margin-bottom: 24px;
+        display: block !important;
+    }
+    
+    /* Campos en la misma línea: Año (left: 618px) y Placa (left: 910px) */
+    body #seccion1 > div > div[style*="left: 618px"][style*="top: 60px"] {
+        width: 35% !important;
+        display: inline-block !important;
+        margin-right: 3% !important;
+        vertical-align: top !important;
+    }
+    
+    body #seccion1 > div > div[style*="left: 910px"][style*="top: 60px"] {
+        width: 62% !important;
+        display: inline-block !important;
+        margin-right: 0 !important;
+        vertical-align: top !important;
+    }
+    
+    /* Campos en la misma línea: Precio (left: 32px) y Divisa (left: 242px) */
+    body #seccion1 > div > div[style*="left: 32px"][style*="top: 160px"] {
+        width: 72% !important;
+        display: inline-block !important;
+        margin-right: 3% !important;
+        vertical-align: top !important;
+    }
+    
+    body #seccion1 > div > div[style*="left: 242px"][style*="top: 160px"] {
+        width: 25% !important;
+        display: inline-block !important;
+        margin-right: 0 !important;
+        vertical-align: top !important;
+    }
+    
+    /* Campos en la misma línea: Kilometraje (left: 618px) y Unidad (left: 840px) */
+    body #seccion1 > div > div[style*="left: 618px"][style*="top: 460px"] {
+        width: 76% !important;
+        display: inline-block !important;
+        margin-right: 3% !important;
+        vertical-align: top !important;
+    }
+    
+    body #seccion1 > div > div[style*="left: 840px"][style*="top: 460px"] {
+        width: 21% !important;
+        display: inline-block !important;
+        margin-right: 0 !important;
+        vertical-align: top !important;
+    }
+    
+    #seccion1 select,
+    #seccion1 input[type="text"],
+    #seccion1 input[type="number"],
+    #seccion1 textarea {
+        width: 100% !important;
+        max-width: 100%;
+        position: relative !important;
+        left: auto !important;
+        top: 18px !important;
+    }
+    
+    /* Ocultar líneas divisorias en responsive */
+    #seccion1 > div > div[style*="border: 0.5px"],
+    #seccion1 > div > div[style*="top: 535px"],
+    #seccion1 .divider-middle {
+        display: none !important;
+    }
+    
+    #seccion1 > div > div[style*="Datos del vehículo"] {
+        position: relative !important;
+        left: 0 !important;
+        top: 0 !important;
+        margin-bottom: 32px;
+        font-size: 18px !important;
+        text-align: center;
+    }
+    
+    /* Checkboxes más pequeños en sección 2 para tablet */
+    #seccion2 .equipment-item input[type="checkbox"] {
+        width: 14px !important;
+        height: 14px !important;
+        min-width: 14px !important;
+        min-height: 14px !important;
+    }
+    
+    #seccion1 > div > div[style*="EDITANDO ANUNCIO"] {
+        position: relative !important;
+        left: 0 !important;
+        top: 0 !important;
+        margin-bottom: 16px;
+        text-align: center;
+    }
+    
+    /* Espacio para descripción con contador y validación en tablet */
+    #seccion1 > div > div[style*="top: 560px"] {
+        margin-bottom: 80px !important;
+    }
+    
+    #seccion1 #descripcion {
+        margin-bottom: 50px !important;
+    }
+    
+    /* Ocultar validación en línea - se mostrará en el mensaje general */
+    #seccion1 .field-validation-error,
+    #seccion1 span[data-valmsg-for="Formulario.Descripcion"],
+    #seccion1 #descripcion ~ .field-error,
+    #descripcion + .field-error,
+    [data-estado="Default"] .field-error {
+        display: none !important;
+    }
+    
+    .form-grid {
+        grid-template-columns: 1fr;
+    }
+    
+    .tags-grid {
+        grid-template-columns: repeat(3, 1fr);
+        max-height: none;
+        overflow-y: visible;
+    }
+    
+    .photo-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+    
+    /* Ocultar toggle en tablet */
+    .payment-summary-toggle {
+        display: none !important;
+    }
+    
+    /* Mostrar detalles normales en tablet */
+    .payment-summary-details {
+        display: block !important;
+        max-height: none !important;
+        overflow: visible !important;
+    }
+}
+
+/* Mobile: menos de 768px */
+@media (max-width: 767px) {
+    /* Ajustes generales para móvil */
+    .anunciar-container {
+        margin-top: 20px;
+    }
+    
+    /* Ocultar líneas divisoras en móvil */
+    #seccion1 .divider-middle,
+    #seccion1 > div > div[style*="top: 535px"] {
+        display: none !important;
+    }
+    
+    /* Arreglar términos y condiciones en móvil - siempre visibles */
+    .payment-options {
+        width: 100%;
+        overflow: visible;
+        display: block !important;
+        opacity: 1 !important;
+        visibility: visible !important;
+        margin-top: 24px;
+        margin-bottom: 32px;
+    }
+    
+    .payment-option {
+        width: 100%;
+        padding: 16px 0;
+        display: flex !important;
+        align-items: center;
+        gap: 16px;
+        opacity: 1 !important;
+        visibility: visible !important;
+    }
+    
+    .payment-option input[type="checkbox"] {
+        width: 24px !important;
+        height: 24px !important;
+        flex-shrink: 0;
+    }
+    
+    .payment-option label {
+        flex: 1;
+        word-wrap: break-word;
+        overflow-wrap: break-word;
+        line-height: 1.5;
+        font-size: 14px;
+    }
+    
+    .payment-form {
+        margin-bottom: 40px;
+    }
+    
+    /* Quitar la card: sin bordes, sin fondo especial */
+    .form-container {
+        width: 100%;
+        margin: 0;
+        padding: 16px;
+        padding-bottom: 60px;
+        min-height: auto;
+        background: transparent !important;
+        border: none !important;
+        border-radius: 0 !important;
+        backdrop-filter: none !important;
+    }
+    
+    /* Hacer que el form sea flexbox para controlar el orden */
+    form {
+        display: flex;
+        flex-direction: column;
+    }
+    
+    /* Los botones al final */
+    .form-nav-buttons {
+        order: 2;
+        position: relative !important;
+        bottom: auto !important;
+        right: auto !important;
+        margin-top: 8px;
+        flex-direction: row;
+        gap: 8px;
+        z-index: 1;
+    }
+    
+    /* El contenedor de secciones antes de los botones */
+    .form-sections {
+        order: 1;
+    }
+    
+    .btn-back {
+        width: auto;
+        min-width: 90px;
+        flex: 0 0 auto;
+        order: 1;
+        padding: 12px 16px;
+        font-size: 14px;
+    }
+    
+    .btn-next {
+        flex: 1;
+        order: 2;
+    }
+    
+    /* Fondo oscuro para form-section en móvil */
+    .form-section {
+        background: #02081C !important;
+        padding: 20px 16px;
+    }
+    
+    /* Centrar título y sección */
+    .form-header {
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+        border-bottom: 0.5px solid rgba(255, 255, 255, 0.15);
+    }
+    
+    .form-header h1 {
+        font-size: 20px;
+        flex-direction: column;
+        align-items: center;
+        gap: 8px;
+        justify-content: center;
+        width: 100%;
+    }
+    
+    .section-indicator {
+        font-size: 16px;
+        margin-right: 0 !important;
+        display: block;
+        width: 100%;
+        text-align: center;
+    }
+    
     .form-grid {
         grid-template-columns: 1fr;
     }
@@ -1464,22 +1861,285 @@ select#ano option {
         flex-direction: column;
     }
     
+    .payment-form {
+        order: 1;
+    }
+    
     .payment-summary {
-        width: 100%;
+        width: calc(100% + 32px);
+        margin-left: -16px;
+        margin-right: -16px;
         height: auto;
+        padding-left: 16px;
+        padding-right: 16px;
+        position: relative;
+        z-index: 1;
+        order: 2;
+    }
+    
+    /* Desplegable de desglose de pago en móvil */
+    .payment-summary-toggle {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 16px 20px;
+        background: transparent;
+        border: none;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.25);
+        border-radius: 0;
+        cursor: pointer;
+        margin-top: 0;
+        margin-bottom: 0;
+        transition: all 0.3s;
+    }
+    
+    .payment-summary-toggle:hover {
+        background: transparent;
+    }
+    
+    .payment-summary-toggle .price-display {
+        display: flex;
+        align-items: baseline;
+        gap: 8px;
+    }
+    
+    .payment-summary-toggle .price-display span:first-child {
+        color: white;
+        font-size: 20px;
+        font-family: 'Montserrat', sans-serif;
+        font-weight: 700;
+    }
+    
+    .payment-summary-toggle .price-display span:last-child {
+        color: rgba(255, 255, 255, 0.5);
+        font-size: 14px;
+        font-family: 'Montserrat', sans-serif;
+        font-weight: 500;
+        text-transform: lowercase;
+    }
+    
+    .payment-summary-toggle .toggle-arrow {
+        width: 20px;
+        height: 20px;
+        transition: transform 0.3s;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+    
+    .payment-summary-toggle .toggle-arrow svg {
+        fill: none;
+        stroke: white;
+        stroke-width: 2;
+    }
+    
+    .payment-summary-toggle.active .toggle-arrow {
+        transform: rotate(180deg);
+    }
+    
+    .payment-summary-details {
+        max-height: 0;
+        overflow: hidden;
+        transition: max-height 0.3s ease-out;
+        padding-top: 0;
+    }
+    
+    .payment-summary-details.expanded {
+        max-height: 800px;
+        padding-top: 24px;
     }
     
     .steps {
         flex-direction: column;
         gap: 40px;
+        align-items: center;
+    }
+    
+    .step {
+        text-align: center;
+        max-width: 300px;
+    }
+    
+    .how-it-works {
+        text-align: center;
+    }
+    
+    .how-it-works h2,
+    .how-it-works p {
+        text-align: center;
+    }
+    
+    /* Checkboxes más pequeños en sección 2 */
+    #seccion2 .equipment-item input[type="checkbox"] {
+        width: 14px !important;
+        height: 14px !important;
+        min-width: 14px !important;
+        min-height: 14px !important;
+        flex-shrink: 0;
+        margin-top: 2px;
+    }
+    
+    #seccion2 .equipment-item label {
+        font-size: 13px;
+        line-height: 1.4;
+        word-break: break-word;
+        overflow-wrap: break-word;
+        flex: 1;
+    }
+    
+    #seccion2 .equipment-item {
+        padding: 10px 8px;
+        min-width: 0;
+        align-items: flex-start !important;
+        display: flex !important;
+        gap: 8px !important;
+    }
+    
+    #seccion2 .equipment-grid {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 8px;
+    }
+    
+    #seccion2 h2 {
+        font-size: 16px;
     }
     
     .tags-grid {
         grid-template-columns: repeat(2, 1fr);
+        max-height: none;
+        overflow-y: visible;
+    }
+    
+    /* Fondo oscuro para banderines en móvil */
+    #seccion5 .tag-card {
+        background: #030D2B !important;
     }
     
     .photo-grid {
         grid-template-columns: repeat(2, 1fr);
     }
+    
+    /* Sección 1: Datos del vehículo - Campos en columna */
+    #seccion1 > div {
+        height: auto !important;
+        padding-bottom: 0px;
+    }
+    
+    /* Reorganizar campos en columna para responsive */
+    #seccion1 [data-asterizco="true"],
+    #seccion1 > div > div[style*="position: absolute"] {
+        position: relative !important;
+        left: auto !important;
+        top: auto !important;
+        width: 100% !important;
+        margin-bottom: 24px;
+        display: block !important;
+    }
+    
+    /* Campos en la misma línea: Año (left: 618px) y Placa (left: 910px) */
+    body #seccion1 > div > div[style*="left: 618px"][style*="top: 60px"] {
+        width: 36% !important;
+        display: inline-block !important;
+        margin-right: 2% !important;
+        vertical-align: top !important;
+        margin-bottom: 24px !important;
+    }
+    
+    body #seccion1 > div > div[style*="left: 910px"][style*="top: 60px"] {
+        width: 62% !important;
+        display: inline-block !important;
+        margin-right: 0 !important;
+        vertical-align: top !important;
+        margin-bottom: 24px !important;
+    }
+    
+    /* Campos en la misma línea: Precio (left: 32px) y Divisa (left: 242px) */
+    body #seccion1 > div > div[style*="left: 32px"][style*="top: 160px"] {
+        width: 73% !important;
+        display: inline-block !important;
+        margin-right: 2% !important;
+        vertical-align: top !important;
+        margin-bottom: 24px !important;
+    }
+    
+    body #seccion1 > div > div[style*="left: 242px"][style*="top: 160px"] {
+        width: 25% !important;
+        display: inline-block !important;
+        margin-right: 0 !important;
+        vertical-align: top !important;
+        margin-bottom: 24px !important;
+    }
+    
+    /* Campos en la misma línea: Kilometraje (left: 618px) y Unidad (left: 840px) */
+    body #seccion1 > div > div[style*="left: 618px"][style*="top: 460px"] {
+        width: 77% !important;
+        display: inline-block !important;
+        margin-right: 2% !important;
+        vertical-align: top !important;
+        margin-bottom: 24px !important;
+    }
+    
+    body #seccion1 > div > div[style*="left: 840px"][style*="top: 460px"] {
+        width: 21% !important;
+        display: inline-block !important;
+        margin-right: 0 !important;
+        vertical-align: top !important;
+        margin-bottom: 24px !important;
+    }
+    
+    #seccion1 select,
+    #seccion1 input[type="text"],
+    #seccion1 input[type="number"],
+    #seccion1 textarea {
+        width: 100% !important;
+        position: relative !important;
+        left: auto !important;
+        top: 18px !important;
+    }
+    
+    /* Ocultar líneas divisorias en responsive */
+    #seccion1 > div > div[style*="border: 0.5px"],
+    #seccion1 > div > div[style*="top: 535px"] {
+        display: none !important;
+    }
+    
+    /* Título de sección centrado */
+    #seccion1 > div > div[style*="Datos del vehículo"] {
+        position: relative !important;
+        left: 0 !important;
+        top: 0 !important;
+        margin-bottom: 32px;
+        font-size: 16px !important;
+        text-align: center;
+    }
+    
+    /* Mensaje de edición */
+    #seccion1 > div > div[style*="EDITANDO ANUNCIO"] {
+        position: relative !important;
+        left: 0 !important;
+        top: 0 !important;
+        margin-bottom: 16px;
+        text-align: center;
+    }
+    
+    /* Espacio para descripción con contador y validación */
+    #seccion1 > div > div[style*="top: 560px"] {
+        margin-bottom: 70px !important;
+    }
+    
+    #seccion1 #descripcion {
+        margin-bottom: 45px !important;
+    }
+    
+    /* Ocultar validación en línea - se mostrará en el mensaje general */
+    #seccion1 .field-validation-error,
+    #seccion1 span[data-valmsg-for="Formulario.Descripcion"],
+    #seccion1 #descripcion ~ .field-error,
+    #descripcion + .field-error,
+    [data-estado="Default"] .field-error {
+        display: none !important;
+    }
 }
+
 
