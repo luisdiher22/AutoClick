@@ -450,7 +450,7 @@ document.addEventListener('DOMContentLoaded', function() {
             indicator.textContent = currentSection;
         }
         
-        // Update section indicator in header
+        // Update section indicator in header - add space before /8
         const headerIndicator = document.querySelector('.section-indicator span');
         if (headerIndicator) {
             headerIndicator.textContent = currentSection;
@@ -1120,7 +1120,7 @@ document.addEventListener('DOMContentLoaded', function() {
             color: ${currentLength >= minLength ? '#4CAF50' : '#FF9800'};
             position: absolute;
             left: 0px;
-            bottom: -8px;
+            bottom: -30px;
         `;
         counter.textContent = `${currentLength}/${minLength} caracteres mínimos`;
         
@@ -2022,4 +2022,44 @@ if (document.readyState === 'loading') {
     });
 } else {
     initializeFAQ();
+}
+
+// Toggle para el desglose de pago en móvil
+function togglePaymentSummary() {
+    const toggle = document.querySelector('.payment-summary-toggle');
+    const details = document.querySelector('.payment-summary-details');
+    
+    if (toggle && details) {
+        toggle.classList.toggle('active');
+        details.classList.toggle('expanded');
+    }
+}
+
+// Sincronizar el precio en el toggle móvil con el precio total
+function updateMobileTotalDisplay() {
+    const totalAmount = document.querySelector('.total-amount');
+    const totalAmountMobile = document.querySelector('.total-amount-mobile');
+    
+    if (totalAmount && totalAmountMobile) {
+        totalAmountMobile.textContent = totalAmount.textContent;
+    }
+}
+
+// Observar cambios en el precio total para actualizar el toggle móvil
+if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', function() {
+        const totalAmount = document.querySelector('.total-amount');
+        if (totalAmount) {
+            const observer = new MutationObserver(updateMobileTotalDisplay);
+            observer.observe(totalAmount, { childList: true, characterData: true, subtree: true });
+            updateMobileTotalDisplay(); // Actualizar inicial
+        }
+    });
+} else {
+    const totalAmount = document.querySelector('.total-amount');
+    if (totalAmount) {
+        const observer = new MutationObserver(updateMobileTotalDisplay);
+        observer.observe(totalAmount, { childList: true, characterData: true, subtree: true });
+        updateMobileTotalDisplay(); // Actualizar inicial
+    }
 }
