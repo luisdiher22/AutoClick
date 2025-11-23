@@ -28,7 +28,7 @@ namespace AutoClick.Pages
 
         [BindProperty]
         public string? Edit { get; set; }
-        
+
         [BindProperty]
         public List<IFormFile>? Fotos { get; set; }
 
@@ -50,7 +50,7 @@ namespace AutoClick.Pages
         {
             // Force UTF-8 encoding
             Response.ContentType = "text/html; charset=utf-8";
-            
+
             Edit = edit;
             if (!string.IsNullOrEmpty(edit) && int.TryParse(edit, out int id))
             {
@@ -64,20 +64,20 @@ namespace AutoClick.Pages
 
         public async Task<IActionResult> OnPostAsync()
         {
-            
+
             // Si no hay handler específico, usar el método general
             if (!Request.Form.ContainsKey("handler"))
             {
                 return Page();
             }
-            
+
             var handler = Request.Form["handler"].ToString();
-            
+
             if (handler.Equals("Finalizar", StringComparison.OrdinalIgnoreCase))
             {
                 return await OnPostFinalizarAsync();
             }
-            
+
             return Page();
         }
 
@@ -86,7 +86,7 @@ namespace AutoClick.Pages
         // ya que las placas pueden estar duplicadas en la base de datos
         public IActionResult OnGetVerificarPlaca(string placa, string? editId)
         {
-            
+
             // Siempre retornar que la placa no existe (no validar duplicados)
             return new JsonResult(new { existe = false });
         }
@@ -95,7 +95,30 @@ namespace AutoClick.Pages
         {
             try
             {
-                
+                // Fix: Manually parse Price and Mileage to handle formatting (e.g. "$25.000" or "25.000")
+                // This bypasses the model binding which fails on formatted strings
+                if (Request.Form.ContainsKey("Formulario.Precio"))
+                {
+                    var precioStr = Request.Form["Formulario.Precio"].ToString();
+                    // Remove currency symbols, dots (thousands separator), and whitespace
+                    var cleanPrecio = System.Text.RegularExpressions.Regex.Replace(precioStr, @"[^\d]", "");
+                    if (decimal.TryParse(cleanPrecio, out decimal precio))
+                    {
+                        Formulario.Precio = precio;
+                    }
+                }
+
+                if (Request.Form.ContainsKey("Formulario.Kilometraje"))
+                {
+                    var kmStr = Request.Form["Formulario.Kilometraje"].ToString();
+                    // Remove non-digits
+                    var cleanKm = System.Text.RegularExpressions.Regex.Replace(kmStr, @"[^\d]", "");
+                    if (int.TryParse(cleanKm, out int km))
+                    {
+                        Formulario.Kilometraje = km;
+                    }
+                }
+
                 if (Fotos != null)
                 {
                     foreach (var foto in Fotos)
@@ -105,9 +128,9 @@ namespace AutoClick.Pages
                 else
                 {
                 }
-                
+
                 var userEmail = User?.Identity?.Name;
-                
+
                 // Verificar que el usuario esté autenticado
                 if (string.IsNullOrEmpty(userEmail))
                 {
@@ -137,23 +160,23 @@ namespace AutoClick.Pages
 
         private async Task<Auto> CrearAutoAsync(string userEmail)
         {
-            
+
             // Procesar imágenes primero
             var imagenesUrls = new List<string>();
             string? imagenPrincipal = null;
-            
+
             if (Fotos != null && Fotos.Any())
             {
-                
+
                 try
                 {
                     // Subir todas las imágenes
                     var uploadedUrls = await _fileUploadService.UploadFilesAsync(Fotos, "autos");
                     imagenesUrls = uploadedUrls;
-                    
+
                     // La primera imagen será la principal
                     imagenPrincipal = imagenesUrls.FirstOrDefault();
-                    
+
                 }
                 catch (Exception ex)
                 {
@@ -164,7 +187,7 @@ namespace AutoClick.Pages
             {
             }
 
-            
+
             var auto = new Auto
             {
                 // Información básica del vehículo
@@ -174,16 +197,16 @@ namespace AutoClick.Pages
                 PlacaVehiculo = Formulario.PlacaVehiculo,
                 Precio = Formulario.Precio,
                 Divisa = Formulario.Divisa,
-                
+
                 // Especificaciones técnicas
                 Carroceria = Formulario.Carroceria,
                 Combustible = Formulario.Combustible,
                 Cilindrada = Formulario.Cilindrada,
-                
+
                 // Colores
                 ColorExterior = Formulario.ColorExterior,
                 ColorInterior = Formulario.ColorInterior,
-                
+
                 // Características físicas
                 NumeroPuertas = Formulario.NumeroPuertas,
                 NumeroPasajeros = Formulario.NumeroPasajeros,
@@ -191,7 +214,7 @@ namespace AutoClick.Pages
                 Traccion = Formulario.Traccion,
                 Kilometraje = Formulario.Kilometraje,
                 Condicion = Formulario.Condicion,
-                
+
                 // Extras
                 ExtrasExterior = Formulario.ExtrasExterior,
                 ExtrasInterior = Formulario.ExtrasInterior,
@@ -199,24 +222,24 @@ namespace AutoClick.Pages
                 ExtrasSeguridad = Formulario.ExtrasSeguridad,
                 ExtrasRendimiento = Formulario.ExtrasRendimiento,
                 ExtrasAntiRobo = Formulario.ExtrasAntiRobo,
-                
+
                 // Ubicación
                 Provincia = Formulario.Provincia,
                 Canton = Formulario.Canton,
                 UbicacionExacta = Formulario.UbicacionExacta,
-                
+
                 // Descripción
                 Descripcion = Formulario.Descripcion,
-                
+
                 // Configuración del anuncio
                 PlanVisibilidad = Formulario.PlanVisibilidad,
                 BanderinAdquirido = Formulario.BanderinAdquirido,
-                
+
                 // Multimedia - usar las URLs subidas
                 ImagenesUrls = System.Text.Json.JsonSerializer.Serialize(imagenesUrls),
                 VideosUrls = Formulario.VideosUrls ?? "[]",
                 ImagenPrincipal = imagenPrincipal ?? "",
-                
+
                 // Metadatos
                 EmailPropietario = userEmail,
                 FechaCreacion = DateTime.Now,
@@ -233,7 +256,7 @@ namespace AutoClick.Pages
             {
                 throw new Exception("Error al guardar en la base de datos. Por favor, intenta de nuevo.", ex);
             }
-            
+
             return auto;
         }
 
@@ -245,31 +268,31 @@ namespace AutoClick.Pages
                 throw new InvalidOperationException("Auto no encontrado");
             }
 
-            
+
             // Procesar nuevas imágenes si se proporcionaron
             if (Fotos != null && Fotos.Any())
             {
-                
+
                 try
                 {
                     // Subir nuevas imágenes
                     var newImageUrls = await _fileUploadService.UploadFilesAsync(Fotos, "autos");
-                    
+
                     // Obtener imágenes existentes
                     var existingImages = auto.ImagenesUrlsList;
-                    
+
                     // Agregar las nuevas imágenes a las existentes
                     existingImages.AddRange(newImageUrls);
-                    
+
                     // Actualizar las URLs de imágenes
                     auto.ImagenesUrls = System.Text.Json.JsonSerializer.Serialize(existingImages);
-                    
+
                     // Si no hay imagen principal, usar la primera nueva
                     if (string.IsNullOrEmpty(auto.ImagenPrincipal))
                     {
                         auto.ImagenPrincipal = newImageUrls.FirstOrDefault() ?? "";
                     }
-                    
+
                 }
                 catch (Exception ex)
                 {
@@ -283,16 +306,16 @@ namespace AutoClick.Pages
             auto.PlacaVehiculo = Formulario.PlacaVehiculo;
             auto.Precio = Formulario.Precio;
             auto.Divisa = Formulario.Divisa;
-            
+
             // Especificaciones técnicas
             auto.Carroceria = Formulario.Carroceria;
             auto.Combustible = Formulario.Combustible;
             auto.Cilindrada = Formulario.Cilindrada;
-            
+
             // Colores
             auto.ColorExterior = Formulario.ColorExterior;
             auto.ColorInterior = Formulario.ColorInterior;
-            
+
             // Características físicas
             auto.NumeroPuertas = Formulario.NumeroPuertas;
             auto.NumeroPasajeros = Formulario.NumeroPasajeros;
@@ -300,7 +323,7 @@ namespace AutoClick.Pages
             auto.Traccion = Formulario.Traccion;
             auto.Kilometraje = Formulario.Kilometraje;
             auto.Condicion = Formulario.Condicion;
-            
+
             // Extras
             auto.ExtrasExterior = Formulario.ExtrasExterior;
             auto.ExtrasInterior = Formulario.ExtrasInterior;
@@ -308,19 +331,19 @@ namespace AutoClick.Pages
             auto.ExtrasSeguridad = Formulario.ExtrasSeguridad;
             auto.ExtrasRendimiento = Formulario.ExtrasRendimiento;
             auto.ExtrasAntiRobo = Formulario.ExtrasAntiRobo;
-            
+
             // Ubicación
             auto.Provincia = Formulario.Provincia;
             auto.Canton = Formulario.Canton;
             auto.UbicacionExacta = Formulario.UbicacionExacta;
-            
+
             // Descripción
             auto.Descripcion = Formulario.Descripcion;
-            
+
             // Configuración del anuncio
             auto.PlanVisibilidad = Formulario.PlanVisibilidad;
             auto.BanderinAdquirido = Formulario.BanderinAdquirido;
-            
+
             // No sobreescribir multimedia si no se proporcionaron nuevos archivos
             if (Formulario.Fotos == null || !Formulario.Fotos.Any())
             {
@@ -330,12 +353,12 @@ namespace AutoClick.Pages
                     auto.VideosUrls = Formulario.VideosUrls;
                 }
             }
-            
+
             // Metadatos
             auto.FechaActualizacion = DateTime.Now;
 
             await _context.SaveChangesAsync();
-            
+
             return auto;
         }
 
@@ -346,7 +369,7 @@ namespace AutoClick.Pages
         /// </summary>
         private void SerializarExtrasFromForm()
         {
-            
+
             // Lista de todas las propiedades de extras que deben ser serializadas
             var extrasProperties = new Dictionary<string, string>
             {
@@ -362,17 +385,17 @@ namespace AutoClick.Pages
             {
                 var propertyKey = kvp.Key;
                 var propertyName = kvp.Value;
-                
-                
+
+
                 if (Request.Form.ContainsKey(propertyKey))
                 {
                     // Obtener todos los valores seleccionados para este grupo de checkboxes
                     var selectedValues = Request.Form[propertyKey].ToList();
-                    
-                    
+
+
                     // Serializar a JSON
                     var jsonString = JsonSerializer.Serialize(selectedValues);
-                    
+
                     // Asignar al modelo usando reflection o switch
                     AsignarExtraAlFormulario(propertyName, jsonString);
                 }
@@ -383,7 +406,7 @@ namespace AutoClick.Pages
                     AsignarExtraAlFormulario(propertyName, emptyJson);
                 }
             }
-            
+
         }
 
         private void AsignarExtraAlFormulario(string propertyName, string jsonValue)
