@@ -912,7 +912,40 @@
             };
 
             // Event Listeners
-            currencySelect.addEventListener('change', calculateValues);
+            // Track previous currency to handle down payment conversion
+            let lastCurrency = currencySelect.value;
+
+            currencySelect.addEventListener('change', () => {
+                const selectedCurrency = currencySelect.value;
+                console.log('Currency changed from', lastCurrency, 'to', selectedCurrency);
+                console.log('Exchange Rate:', exchangeRate);
+                
+                // Convert down payment if currency changed
+                if (lastCurrency !== selectedCurrency) {
+                    // Get raw value and remove any non-numeric chars just in case, though type="number" helps
+                    const currentDownPayment = parseFloat(downPaymentInput.value) || 0;
+                    console.log('Current Down Payment:', currentDownPayment);
+                    
+                    if (currentDownPayment > 0 && exchangeRate > 0) {
+                        let newDownPayment = currentDownPayment;
+                        if (lastCurrency === 'USD' && selectedCurrency === 'CRC') {
+                            newDownPayment = currentDownPayment * exchangeRate;
+                        } else if (lastCurrency === 'CRC' && selectedCurrency === 'USD') {
+                            newDownPayment = currentDownPayment / exchangeRate;
+                        }
+                        
+                        console.log('New Down Payment (Calculated):', newDownPayment);
+                        
+                        // Update input with rounded value
+                        downPaymentInput.value = Math.round(newDownPayment);
+                    }
+                    
+                    lastCurrency = selectedCurrency;
+                }
+                
+                calculateValues();
+            });
+
             loanTermSelect.addEventListener('change', calculateValues);
             downPaymentInput.addEventListener('input', calculateValues);
 
@@ -1098,7 +1131,7 @@
     }
 </script>
 
-<style>
+<style type="text/css">
     /* Financing Calculator Styles */
     .producto-financing {
         margin-bottom: 32px;
@@ -1165,7 +1198,10 @@
         background: rgba(0, 0, 0, 0.3);
         border: 1px solid rgba(255, 255, 255, 0.2);
         border-radius: 8px;
-        padding: 14px 16px;
+        padding: 0 16px;
+        height: 54px;
+        display: flex;
+        align-items: center;
         color: white;
         font-family: 'Montserrat', sans-serif;
         font-size: 16px;
@@ -1205,7 +1241,7 @@
     }
 
     /* Responsive */
-    @media (max-width: 768px) {
+    @@media (max-width: 768px) {
         .financing-grid {
             grid-template-columns: 1fr;
         }
