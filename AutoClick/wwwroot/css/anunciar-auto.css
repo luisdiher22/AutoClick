@@ -113,6 +113,11 @@
     bottom: -50px; /* Mover botones más abajo cuando se muestra sección 4 */
 }
 
+/* Aumentar altura mínima de sección 2 para que línea divisora esté entre contenido y botones */
+#seccion2 {
+    min-height: 1300px;
+}
+
 /* Bajar botones en secciones 2, 5, 6 */
 #seccion2 + .form-nav-buttons,
 #seccion2 ~ .form-nav-buttons,
@@ -912,28 +917,18 @@ select#ano option {
     height: 115px;
     margin: 0 auto 40px;
     position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
 .checkmark {
-    width: 95.83px;
-    height: 95.83px;
-    border: 8.75px solid #67E500;
-    border-radius: 50%;
-    position: relative;
-    margin: 9.58px;
-}
-
-.checkmark::after {
-    content: '';
-    position: absolute;
-    left: 40.73px;
-    top: 45.52px;
-    width: 33.54px;
-    height: 23.96px;
-    border: 8.75px solid #67E500;
-    border-top: none;
-    border-right: none;
-    transform: rotate(-45deg);
+    width: 100%;
+    height: 100%;
+    background-image: url('https://autoclickstorage.blob.core.windows.net/uploads/check-completado.png');
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: center;
 }
 
 .confirmation-content h2 {
@@ -958,17 +953,18 @@ select#ano option {
 .btn-edit {
     display: flex;
     align-items: center;
-    gap: 16px;
-    padding: 16px;
+    gap: 12px;
+    padding: 16px 24px;
     border-radius: 4px;
     font-size: 16px;
     font-family: 'Montserrat', sans-serif;
-    font-weight: 500;
+    font-weight: 600;
     text-decoration: none;
     cursor: pointer;
     transition: all 0.3s;
     width: 100%;
     justify-content: center;
+    text-align: center;
 }
 
 .btn-upgrade {
@@ -1602,51 +1598,47 @@ select#ano option {
         vertical-align: top !important;
     }
     
-    /* Campos en la misma línea: Precio (left: 32px) y Divisa (left: 242px) */
-    body #seccion1 > div > div[style*="left: 32px"][style*="top: 160px"] {
-        width: 72% !important;
-        display: inline-block !important;
-        margin-right: 3% !important;
-        vertical-align: top !important;
+    /* TODOS los campos en columna - 1 por línea */
+    #seccion1 [data-asterizco="true"],
+    #seccion1 > div > div[style*="position: absolute"] {
+        position: relative !important;
+        left: auto !important;
+        top: auto !important;
+        width: 100% !important;
+        margin-bottom: 24px !important;
+        display: block !important;
     }
     
-    body #seccion1 > div > div[style*="left: 242px"][style*="top: 160px"] {
-        width: 25% !important;
-        display: inline-block !important;
-        margin-right: 0 !important;
-        vertical-align: top !important;
-    }
-    
-    /* Campos en la misma línea: Kilometraje (left: 618px) y Unidad (left: 840px) */
-    body #seccion1 > div > div[style*="left: 618px"][style*="top: 460px"] {
-        width: 76% !important;
-        display: inline-block !important;
-        margin-right: 3% !important;
-        vertical-align: top !important;
-    }
-    
-    body #seccion1 > div > div[style*="left: 840px"][style*="top: 460px"] {
-        width: 21% !important;
-        display: inline-block !important;
-        margin-right: 0 !important;
-        vertical-align: top !important;
-    }
-    
+    /* Kilometraje y Unidad en la misma fila (top: 460px) */
     #seccion1 select,
     #seccion1 input[type="text"],
     #seccion1 input[type="number"],
     #seccion1 textarea {
         width: 100% !important;
-        max-width: 100%;
+        max-width: 100% !important;
         position: relative !important;
         left: auto !important;
         top: 18px !important;
+        box-sizing: border-box !important;
+        padding: 8px !important;
+        margin: 0 !important;
+    }
+
+    #seccion1 select {
+        overflow: hidden !important;
+        text-overflow: ellipsis !important;
     }
     
-    /* Ocultar líneas divisorias en responsive */
-    #seccion1 > div > div[style*="border: 0.5px"],
+    /* Ocultar líneas divisorias en responsive - ocultar TODAS */
+    #seccion1 > div > div[style*="top: 135px"],
+    #seccion1 > div > div[style*="top: 235px"],
+    #seccion1 > div > div[style*="top: 335px"],
+    #seccion1 > div > div[style*="top: 435px"],
     #seccion1 > div > div[style*="top: 535px"],
-    #seccion1 .divider-middle {
+    #seccion1 .divider-middle,
+    #seccion1 .divider-bottom,
+    #seccion1 > div > div[style*="bottom: 120px"],
+    #seccion2 > div > div[style*="bottom: 180px"] {
         display: none !important;
     }
     
@@ -1729,7 +1721,8 @@ select#ano option {
     
     /* Ocultar líneas divisoras en móvil */
     #seccion1 .divider-middle,
-    #seccion1 > div > div[style*="top: 535px"] {
+    #seccion1 > div > div[style*="top: 535px"],
+    #seccion1 .divider-bottom {
         display: none !important;
     }
     
@@ -2026,7 +2019,7 @@ select#ano option {
         padding-bottom: 0px;
     }
     
-    /* Reorganizar campos en columna para responsive */
+    /* Reorganizar campos en columna para responsive - TODOS en columna */
     #seccion1 [data-asterizco="true"],
     #seccion1 > div > div[style*="position: absolute"] {
         position: relative !important;
@@ -2037,70 +2030,35 @@ select#ano option {
         display: block !important;
     }
     
-    /* Campos en la misma línea: Año (left: 618px) y Placa (left: 910px) */
-    body #seccion1 > div > div[style*="left: 618px"][style*="top: 60px"] {
-        width: 36% !important;
-        display: inline-block !important;
-        margin-right: 2% !important;
-        vertical-align: top !important;
-        margin-bottom: 24px !important;
-    }
-    
-    body #seccion1 > div > div[style*="left: 910px"][style*="top: 60px"] {
-        width: 62% !important;
-        display: inline-block !important;
-        margin-right: 0 !important;
-        vertical-align: top !important;
-        margin-bottom: 24px !important;
-    }
-    
-    /* Campos en la misma línea: Precio (left: 32px) y Divisa (left: 242px) */
-    body #seccion1 > div > div[style*="left: 32px"][style*="top: 160px"] {
-        width: 73% !important;
-        display: inline-block !important;
-        margin-right: 2% !important;
-        vertical-align: top !important;
-        margin-bottom: 24px !important;
-    }
-    
-    body #seccion1 > div > div[style*="left: 242px"][style*="top: 160px"] {
-        width: 25% !important;
-        display: inline-block !important;
-        margin-right: 0 !important;
-        vertical-align: top !important;
-        margin-bottom: 24px !important;
-    }
-    
-    /* Campos en la misma línea: Kilometraje (left: 618px) y Unidad (left: 840px) */
-    body #seccion1 > div > div[style*="left: 618px"][style*="top: 460px"] {
-        width: 77% !important;
-        display: inline-block !important;
-        margin-right: 2% !important;
-        vertical-align: top !important;
-        margin-bottom: 24px !important;
-    }
-    
-    body #seccion1 > div > div[style*="left: 840px"][style*="top: 460px"] {
-        width: 21% !important;
-        display: inline-block !important;
-        margin-right: 0 !important;
-        vertical-align: top !important;
-        margin-bottom: 24px !important;
-    }
-    
     #seccion1 select,
     #seccion1 input[type="text"],
     #seccion1 input[type="number"],
     #seccion1 textarea {
         width: 100% !important;
+        max-width: 100% !important;
         position: relative !important;
         left: auto !important;
         top: 18px !important;
+        box-sizing: border-box !important;
+        padding: 8px !important;
+        margin: 0 !important;
+    }
+
+    #seccion1 select {
+        overflow: hidden !important;
+        text-overflow: ellipsis !important;
     }
     
-    /* Ocultar líneas divisorias en responsive */
-    #seccion1 > div > div[style*="border: 0.5px"],
-    #seccion1 > div > div[style*="top: 535px"] {
+    /* Ocultar líneas divisorias en móvil - ocultar TODAS */
+    #seccion1 > div > div[style*="top: 135px"],
+    #seccion1 > div > div[style*="top: 235px"],
+    #seccion1 > div > div[style*="top: 335px"],
+    #seccion1 > div > div[style*="top: 435px"],
+    #seccion1 > div > div[style*="top: 535px"],
+    #seccion1 .divider-middle,
+    #seccion1 .divider-bottom,
+    #seccion1 > div > div[style*="bottom: 120px"],
+    #seccion2 > div > div[style*="bottom: 180px"] {
         display: none !important;
     }
     
@@ -2126,6 +2084,85 @@ select#ano option {
     /* Espacio para descripción con contador y validación */
     #seccion1 > div > div[style*="top: 560px"] {
         margin-bottom: 70px !important;
+    }
+    
+    /* Sección 7: Upload section unificado en móvil */
+    #seccion7 .upload-section {
+        display: block !important;
+        gap: 0 !important;
+    }
+    
+    #seccion7 .upload-area {
+        width: 100% !important;
+        height: 180px !important;
+        background: #030D2B !important;
+        border: 0.5px solid rgba(255, 255, 255, 0.5) !important;
+        border-style: solid !important;
+        border-radius: 4px !important;
+        padding: 32px 20px !important;
+        display: flex !important;
+        flex-direction: column !important;
+        align-items: center !important;
+        justify-content: center !important;
+        margin-bottom: 0 !important;
+    }
+    
+    /* Ocultar el segundo upload area (video) en móvil */
+    #seccion7 .upload-area.video {
+        display: none !important;
+    }
+    
+    #seccion7 .upload-icon,
+    #seccion7 .play-icon {
+        width: 42px !important;
+        height: 40px !important;
+        margin-bottom: 16px !important;
+        background-image: url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNDIiIGhlaWdodD0iNDAiIHZpZXdCb3g9IjAgMCA0MiA0MCIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPHBhdGggZD0iTTEwLjA0OTEgMTQuMjc5M1YxMi4xNjM3QzEwLjA0OTEgNi4zMjE3OCAxNC43ODUgMS41ODU5NCAyMC42MjY5IDEuNTg1OTRDMjYuNDY4OCAxLjU4NTk0IDMxLjIwNDcgNi4zMjE3OCAzMS4yMDQ3IDEyLjE2MzdWMTQuMjc5M0MzNS44NzgyIDE0LjI3OTMgMzkuNjY2OSAxOC4wNjggMzkuNjY2OSAyMi43NDE1QzM5LjY2NjkgMjUuODczOCAzNy45NjUyIDI4LjY4MjggMzUuNDM1OCAzMC4xNDU5TTEwLjA0OTEgMTQuMjc5M0M1LjM3NTU4IDE0LjI3OTMgMS41ODY5MSAxOC4wNjggMS41ODY5MSAyMi43NDE1QzEuNTg2OTEgMjUuODczOCAzLjI4ODY3IDI4LjY4MjggNS44MTgwMyAzMC4xNDU5TTEwLjA0OTEgMTQuMjc5M0MxMC45NjQ5IDE0LjI3OTMgMTEuODQ2NiAxNC40MjQ4IDEyLjY3MjYgMTQuNjkzN00yMC42MjY5IDE4LjUxMDRWMzcuNTUwNE0yMC42MjY5IDE4LjUxMDRMMjYuOTczNiAyNC44NTcxTTIwLjYyNjkgMTguNTEwNEwxNC4yODAyIDI0Ljg1NzEiIHN0cm9rZT0id2hpdGUiIHN0cm9rZS13aWR0aD0iMy4xNzMzMyIgc3Ryb2tlLWxpbmVjYXA9InJvdW5kIiBzdHJva2UtbGluZWpvaW49InJvdW5kIi8+Cjwvc3ZnPg==') !important;
+        background-size: contain !important;
+        background-repeat: no-repeat !important;
+        background-position: center !important;
+        background-color: transparent !important;
+        clip-path: none !important;
+    }
+    
+    #seccion7 .upload-placeholder p {
+        font-size: 14px !important;
+        font-weight: 700 !important;
+        margin-bottom: 6px !important;
+        color: white !important;
+        text-align: center !important;
+        visibility: hidden !important;
+        position: relative !important;
+    }
+    
+    #seccion7 .upload-placeholder p::after {
+        content: "Presione para subir fotografías" !important;
+        visibility: visible !important;
+        position: absolute !important;
+        left: 50% !important;
+        top: 0 !important;
+        transform: translateX(-50%) !important;
+        white-space: nowrap !important;
+    }
+    
+    #seccion7 .upload-placeholder small {
+        font-size: 14px !important;
+        font-weight: 500 !important;
+        color: white !important;
+        display: block !important;
+        text-align: center !important;
+        visibility: hidden !important;
+        position: relative !important;
+    }
+    
+    #seccion7 .upload-placeholder small::after {
+        content: "Suba como máximo 10 fotos y 1 video" !important;
+        visibility: visible !important;
+        position: absolute !important;
+        left: 50% !important;
+        top: 0 !important;
+        transform: translateX(-50%) !important;
+        white-space: nowrap !important;
     }
     
     #seccion1 #descripcion {

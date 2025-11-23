@@ -489,6 +489,7 @@ document.addEventListener('DOMContentLoaded', function () {
             const fieldName = field.name || field.id;
             const fieldValue = field.value ? field.value.trim() : '';
 
+            // Verificar si el campo está vacío
             if (!fieldValue) {
                 showFieldError(field, 'Este campo es requerido');
                 isValid = false;
@@ -498,7 +499,19 @@ document.addEventListener('DOMContentLoaded', function () {
                 if (label && !missingFields.includes(label)) {
                     missingFields.push(label);
                 }
-            } else {
+            } 
+            // Verificación especial para descripción: debe tener al menos 10 caracteres
+            else if (field.id === 'descripcion' && fieldValue.length < 10) {
+                showFieldError(field, 'La descripción debe tener al menos 10 caracteres');
+                isValid = false;
+
+                // Agregar al modal como campo faltante
+                const label = 'Descripción detallada del vehículo (mínimo 10 caracteres)';
+                if (!missingFields.includes(label)) {
+                    missingFields.push(label);
+                }
+            } 
+            else {
                 clearFieldError(field);
             }
         });
@@ -691,13 +704,11 @@ document.addEventListener('DOMContentLoaded', function () {
         if (!descripcion || !descripcion.value.trim()) {
             if (descripcion) showFieldError(descripcion, 'La descripción del vehículo es requerida');
             isValid = false;
+        } else if (descripcion.value.trim().length < 10) {
+            showFieldError(descripcion, 'La descripción debe tener al menos 10 caracteres');
+            isValid = false;
         } else {
-            if (descripcion.value.trim().length < 10) {
-                showFieldError(descripcion, 'La descripción debe tener al menos 10 caracteres');
-                isValid = false;
-            } else {
-                clearFieldError(descripcion);
-            }
+            clearFieldError(descripcion);
         }
 
         // NOTA: La validación de placa duplicada ha sido removida
@@ -971,7 +982,7 @@ document.addEventListener('DOMContentLoaded', function () {
                     photoCard.innerHTML = `
                         <div class="photo-preview">
                             <img src="${e.target.result}" alt="Foto ${index + 1}">
-                            <button class="remove-photo-btn" data-index="${index}" style="
+                            <button type="button" class="remove-photo-btn" data-index="${index}" style="
                                 position: absolute;
                                 top: 5px;
                                 right: 5px;
@@ -1020,11 +1031,9 @@ document.addEventListener('DOMContentLoaded', function () {
                     const removeBtn = photoCard.querySelector('.remove-photo-btn');
                     removeBtn.addEventListener('click', function (e) {
                         e.stopPropagation();
-                        if (confirm('¿Está seguro de eliminar esta foto?')) {
-                            uploadedFiles.splice(index, 1);
-                            updatePhotoOrderSection();
-                            updateUploadAreaText();
-                        }
+                        uploadedFiles.splice(index, 1);
+                        updatePhotoOrderSection();
+                        updateUploadAreaText();
                     });
 
                     uploadedGrid.appendChild(photoCard);

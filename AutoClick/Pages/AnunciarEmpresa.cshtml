@@ -26,7 +26,9 @@
         
         /* Breadcrumb Styles */
         .breadcrumb-section {
-            padding: 24px 32px 0 32px;
+            position: relative;
+            z-index: 10;
+            padding: 8px 32px 8px 32px;
             background: #02081C;
         }
         
@@ -34,6 +36,7 @@
             display: flex;
             align-items: center;
             gap: 8px;
+            margin-bottom: 0;
         }
         
         .breadcrumb-item {
@@ -102,6 +105,7 @@
             width: 100%;
             padding: 0 40px;
             gap: 80px;
+            flex-wrap: wrap;
         }
         
         .hero-left {
@@ -112,6 +116,13 @@
         .hero-right {
             flex: 1;
             max-width: 600px;
+        }
+
+        /* Botón en desktop aparece después de hero-left */
+        .cta-button {
+            position: absolute;
+            left: 40px;
+            top: calc(50% + 140px);
         }
         
         .hero-title {
@@ -306,7 +317,7 @@
         .contact-section {
             position: relative;
             width: 100%;
-            height: 764px;
+            height: 920px;
             overflow: hidden;
         }
         
@@ -361,7 +372,9 @@
         /* Form Styles */
         .contact-form {
             width: 505px;
-            height: 637px;
+            min-height: 637px;
+            max-height: 800px;
+            height: auto;
             background: #030D2B;
             border-radius: 4px;
             border: 1px solid rgba(255, 255, 255, 0.25);
@@ -606,6 +619,103 @@
         
         /* Responsive Design */
         @@media (max-width: 1024px) {
+            .breadcrumb-section {
+                padding: 4px 24px 0 24px;
+            }
+
+            .breadcrumb-nav {
+                padding-top: 4px;
+                margin-bottom: 0;
+            }
+
+            .hero-section {
+                position: relative;
+                height: auto;
+                min-height: 700px;
+                padding: 0;
+                margin-top: 0;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+            }
+            
+            .hero-background {
+                position: absolute;
+                top: 0;
+                left: 0;
+                width: 100%;
+                height: 100%;
+            }
+            
+            .hero-bg-image {
+                width: 100%;
+                height: 100%;
+                object-fit: cover;
+                object-position: center;
+            }
+            
+            .hero-overlay {
+                position: absolute;
+                top: 0;
+                left: 0;
+                width: 100%;
+                height: 100%;
+            }
+
+            .hero-content {
+                position: relative;
+                z-index: 2;
+                transform: none;
+                gap: 24px;
+                padding: 60px 24px;
+                flex-direction: column;
+                align-items: flex-start;
+                max-width: 100%;
+                width: 100%;
+            }
+            
+            .hero-left,
+            .hero-right {
+                max-width: 100%;
+                width: 100%;
+            }
+            
+            .hero-title {
+                font-size: 24px;
+                margin-bottom: 12px;
+            }
+            
+            .hero-subtitle {
+                font-size: 20px;
+                margin-bottom: 20px;
+            }
+            
+            .benefit-item {
+                gap: 12px;
+            }
+            
+            .benefit-icon {
+                width: 35px;
+                height: 35px;
+            }
+            
+            .benefit-icon::before {
+                font-size: 20px;
+            }
+            
+            .benefit-text {
+                font-size: 16px;
+            }
+            
+            .cta-button {
+                position: static;
+                top: auto;
+                left: auto;
+                width: 100%;
+                max-width: 389px;
+                margin: 16px auto 0;
+            }
+            
             .services-grid {
                 flex-direction: column;
                 gap: 40px;
@@ -615,30 +725,156 @@
                 flex-direction: column;
                 padding: 20px;
                 gap: 20px;
+                position: static;
+                align-items: center;
+            }
+
+            .contact-text {
+                display: none;
+            }
+
+            .contact-bg-image,
+            .contact-overlay {
+                display: none;
+            }
+
+            .contact-section {
+                background: #02081C;
+                height: auto;
             }
             
             .contact-form {
-                width: 100%;
-                max-width: 505px;
+                width: 98%;
+                max-width: none;
+                background: transparent;
+                border: none;
+                height: auto;
+                max-height: none;
+                overflow: visible;
                 margin: 0 auto;
+                padding: 24px 12px;
             }
             
             .brands-container {
                 gap: 20px;
             }
+
+            .desktop-only {
+                display: none;
+            }
         }
         
         @@media (max-width: 768px) {
+            .breadcrumb-section {
+                padding: 2px 16px 0 16px;
+            }
+
+            .breadcrumb-nav {
+                padding-top: 2px;
+                margin-bottom: 0;
+            }
+
+            .hero-section {
+                position: relative;
+                height: auto;
+                min-height: 650px;
+                padding: 0;
+                margin-top: 0;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+            }
+            
+            .hero-background {
+                position: absolute;
+                top: 0;
+                left: 0;
+                width: 100%;
+                height: 100%;
+            }
+            
+            .hero-bg-image {
+                width: 100%;
+                height: 100%;
+                object-fit: cover;
+                object-position: center;
+            }
+            
+            .hero-overlay {
+                position: absolute;
+                top: 0;
+                left: 0;
+                width: 100%;
+                height: 100%;
+            }
+
+            .hero-content {
+                position: relative;
+                z-index: 2;
+                transform: none;
+                gap: 20px;
+                padding: 50px 16px;
+                flex-direction: column;
+                align-items: flex-start;
+                max-width: 100%;
+                width: 100%;
+            }
+
+            .hero-left,
+            .hero-right {
+                max-width: 100%;
+                width: 100%;
+            }
+
+            .hero-right {
+                order: -1;
+            }
+            
             .hero-title {
-                font-size: 28px;
+                font-size: 22px;
+                margin-bottom: 12px;
             }
             
             .hero-subtitle {
-                font-size: 24px;
+                font-size: 18px;
+                margin-bottom: 16px;
+            }
+            
+            .benefit-item {
+                gap: 10px;
+            }
+            
+            .benefit-icon {
+                width: 32px;
+                height: 32px;
+            }
+            
+            .benefit-icon::before {
+                font-size: 18px;
             }
             
             .benefit-text {
-                font-size: 18px;
+                font-size: 15px;
+            }
+
+            .cta-button {
+                position: static;
+                top: auto;
+                left: auto;
+                width: 100%;
+                max-width: 389px;
+                margin: 16px auto 0;
+            }
+
+            .brands-container {
+                flex-wrap: nowrap;
+                gap: 16px;
+                padding: 0 16px;
+            }
+
+            .brand-logo {
+                max-width: 30%;
+                max-height: 120px;
             }
             
             .services-title,
@@ -648,6 +884,18 @@
             
             .contact-title {
                 font-size: 28px;
+            }
+
+            .contact-form {
+                width: 98%;
+                max-width: none;
+                background: transparent;
+                border: none;
+                padding: 24px 12px;
+            }
+
+            .desktop-only {
+                display: none;
             }
         }
 
@@ -755,7 +1003,6 @@
                     ¡AutoClick.cr es el lugar ideal para <span class="text-orange">impulsar</span> su negocio!
                 </h1>
                 <h2 class="hero-subtitle">¿Por qué elegirnos?</h2>
-                <button class="cta-button" onclick="scrollToForm()">Anunciar mi empresa</button>
             </div>
             
             <div class="hero-right">
@@ -778,6 +1025,8 @@
                     </div>
                 </div>
             </div>
+
+            <button class="cta-button" onclick="scrollToForm()">Anunciar mi empresa</button>
         </div>
     </section>
 
@@ -789,9 +1038,9 @@
             <div class="service-item">
                 <h3 class="service-title">Exposición Comercial Premium</h3>
                 <div class="service-description">
-                    <p>• Espacios publicitarios estratégicos en el sitio (home, listado,<br/>blog).</p>
+                    <p>• Espacios publicitarios estratégicos en el sitio (home, listado,<br class="desktop-only"/>blog).</p>
                     <p>• Perfil público personalizado con logo, descripción y contacto.</p>
-                    <p>• Vitrina de productos o servicios asociados al mundo<br/>automotriz.</p>
+                    <p>• Vitrina de productos o servicios asociados al mundo<br class="desktop-only"/>automotriz.</p>
                 </div>
             </div>
             <div class="service-item">
