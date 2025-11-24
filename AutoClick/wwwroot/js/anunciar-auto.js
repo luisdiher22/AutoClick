@@ -147,6 +147,25 @@ window.formatPrice = function (input) {
     }
 };
 
+window.formatValorFiscal = function (input) {
+    const divisaSelect = document.querySelector('#divisa');
+    const currencySymbol = divisaSelect && divisaSelect.value === 'USD' ? '$' : '₡';
+
+    // Remove all non-digit characters except the currency symbol
+    let value = input.value.replace(/[^\d]/g, '');
+
+    if (value) {
+        // Format with thousand separators using dots and prepend currency
+        const formattedNumber = parseInt(value).toLocaleString('es-CR', {
+            useGrouping: true,
+            minimumFractionDigits: 0,
+            maximumFractionDigits: 0
+        }).replace(/,/g, '.');
+
+        input.value = currencySymbol + formattedNumber;
+    }
+};
+
 window.formatKilometer = function (input) {
     // Get the raw number value
     let value = input.value.replace(/[^\d]/g, '');
@@ -499,7 +518,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 if (label && !missingFields.includes(label)) {
                     missingFields.push(label);
                 }
-            } 
+            }
             // Verificación especial para descripción: debe tener al menos 10 caracteres
             else if (field.id === 'descripcion' && fieldValue.length < 10) {
                 showFieldError(field, 'La descripción debe tener al menos 10 caracteres');
@@ -510,7 +529,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 if (!missingFields.includes(label)) {
                     missingFields.push(label);
                 }
-            } 
+            }
             else {
                 clearFieldError(field);
             }
@@ -568,6 +587,7 @@ document.addEventListener('DOMContentLoaded', function () {
         const traccion = document.querySelector('#traccion');
         const condicion = document.querySelector('#condicion');
         const placa = document.querySelector('#placa');
+        const valorFiscal = document.querySelector('#valor-fiscal');
 
         let isValid = true;
 
@@ -598,6 +618,21 @@ document.addEventListener('DOMContentLoaded', function () {
                 isValid = false;
             } else {
                 clearFieldError(ano);
+            }
+        }
+
+        // Valor Fiscal validation
+        if (!valorFiscal || !valorFiscal.value) {
+            if (valorFiscal) showFieldError(valorFiscal, 'El valor fiscal es requerido');
+            isValid = false;
+        } else {
+            // Remove currency symbol and dots to get the numeric value
+            const vfValue = parseFloat(valorFiscal.value.replace(/[₡$.\s]/g, ''));
+            if (vfValue <= 0 || isNaN(vfValue)) {
+                showFieldError(valorFiscal, 'Ingrese un valor fiscal válido');
+                isValid = false;
+            } else {
+                clearFieldError(valorFiscal);
             }
         }
 

@@ -119,6 +119,17 @@ namespace AutoClick.Pages
                     }
                 }
 
+                if (Request.Form.ContainsKey("Formulario.ValorFiscal"))
+                {
+                    var vfStr = Request.Form["Formulario.ValorFiscal"].ToString();
+                    // Remove currency symbols, dots (thousands separator), and whitespace
+                    var cleanVf = System.Text.RegularExpressions.Regex.Replace(vfStr, @"[^\d]", "");
+                    if (decimal.TryParse(cleanVf, out decimal valorFiscal))
+                    {
+                        Formulario.ValorFiscal = valorFiscal;
+                    }
+                }
+
                 if (Fotos != null)
                 {
                     foreach (var foto in Fotos)
@@ -197,6 +208,7 @@ namespace AutoClick.Pages
                 PlacaVehiculo = Formulario.PlacaVehiculo,
                 Precio = Formulario.Precio,
                 Divisa = Formulario.Divisa,
+                ValorFiscal = Formulario.ValorFiscal,
 
                 // Especificaciones técnicas
                 Carroceria = Formulario.Carroceria,
@@ -306,6 +318,7 @@ namespace AutoClick.Pages
             auto.PlacaVehiculo = Formulario.PlacaVehiculo;
             auto.Precio = Formulario.Precio;
             auto.Divisa = Formulario.Divisa;
+            auto.ValorFiscal = Formulario.ValorFiscal;
 
             // Especificaciones técnicas
             auto.Carroceria = Formulario.Carroceria;

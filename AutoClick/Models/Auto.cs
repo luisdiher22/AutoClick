@@ -7,215 +7,221 @@ public class Auto
 {
     [Key]
     public int Id { get; set; }
-    
+
     // Información básica del vehículo
     [Required]
     [MaxLength(50)]
     [Display(Name = "Marca")]
     public string Marca { get; set; } = string.Empty;
-    
+
     [Required]
     [MaxLength(100)]
     [Display(Name = "Modelo")]
     public string Modelo { get; set; } = string.Empty;
-    
+
     [Required]
     [Range(1900, 2030)]
     [Display(Name = "Año")]
     public int Ano { get; set; }
-    
+
     [Required]
     [MaxLength(20)]
     [Display(Name = "Placa del Vehículo")]
     public string PlacaVehiculo { get; set; } = string.Empty;
-    
+
     [Required]
     [Column(TypeName = "decimal(18,2)")]
     [Range(0, double.MaxValue)]
     [Display(Name = "Precio")]
     public decimal Precio { get; set; }
-    
+
     [Required]
     [MaxLength(5)]
     [Display(Name = "Divisa")]
     public string Divisa { get; set; } = "CRC";
-    
+
+    [Required]
+    [Column(TypeName = "decimal(18,2)")]
+    [Range(0, double.MaxValue)]
+    [Display(Name = "Valor Fiscal")]
+    public decimal ValorFiscal { get; set; }
+
     // Especificaciones técnicas
     [Required]
     [MaxLength(50)]
     [Display(Name = "Carrocería")]
     public string Carroceria { get; set; } = string.Empty;
-    
+
     [Required]
     [MaxLength(30)]
     [Display(Name = "Combustible")]
     public string Combustible { get; set; } = string.Empty;
-    
+
     [MaxLength(20)]
     [Display(Name = "Cilindrada")]
     public string Cilindrada { get; set; } = string.Empty;
-    
+
     // Colores
     [MaxLength(30)]
     [Display(Name = "Color Exterior")]
     public string ColorExterior { get; set; } = string.Empty;
-    
+
     [MaxLength(30)]
     [Display(Name = "Color Interior")]
     public string ColorInterior { get; set; } = string.Empty;
-    
+
     // Características físicas
     [Range(2, 6)]
     [Display(Name = "Número de Puertas")]
     public int NumeroPuertas { get; set; }
-    
+
     [Range(1, 50)]
     [Display(Name = "Número de Pasajeros")]
     public int NumeroPasajeros { get; set; }
-    
+
     [MaxLength(30)]
     [Display(Name = "Transmisión")]
     public string Transmision { get; set; } = string.Empty;
-    
+
     [MaxLength(30)]
     [Display(Name = "Tracción")]
     public string Traccion { get; set; } = string.Empty;
-    
+
     [Range(0, int.MaxValue)]
     [Display(Name = "Kilometraje")]
     public int Kilometraje { get; set; }
-    
+
     [MaxLength(10)]
     [Display(Name = "Unidad de Kilometraje")]
     public string UnidadKilometraje { get; set; } = "Km";
-    
+
     [Required]
     [MaxLength(30)]
     [Display(Name = "Condición")]
     public string Condicion { get; set; } = string.Empty;
-    
+
     // Extras (almacenados como JSON strings)
     [Column(TypeName = "TEXT")]
     [Display(Name = "Extras Exterior")]
     public string ExtrasExterior { get; set; } = "[]"; // JSON array
-    
+
     [Column(TypeName = "TEXT")]
     [Display(Name = "Extras Interior")]
     public string ExtrasInterior { get; set; } = "[]"; // JSON array
-    
+
     [Column(TypeName = "TEXT")]
     [Display(Name = "Extras Multimedia")]
     public string ExtrasMultimedia { get; set; } = "[]"; // JSON array
-    
+
     [Column(TypeName = "TEXT")]
     [Display(Name = "Extras Seguridad")]
     public string ExtrasSeguridad { get; set; } = "[]"; // JSON array
-    
+
     [Column(TypeName = "TEXT")]
     [Display(Name = "Extras Rendimiento")]
     public string ExtrasRendimiento { get; set; } = "[]"; // JSON array
-    
+
     [Column(TypeName = "TEXT")]
     [Display(Name = "Extras Anti-robo")]
     public string ExtrasAntiRobo { get; set; } = "[]"; // JSON array
-    
+
     // Ubicación
     [Required]
     [MaxLength(50)]
     [Display(Name = "Provincia")]
     public string Provincia { get; set; } = string.Empty;
-    
+
     [MaxLength(50)]
     [Display(Name = "Cantón")]
     public string? Canton { get; set; }
-    
+
     [MaxLength(200)]
     [Display(Name = "Ubicación Exacta")]
     public string UbicacionExacta { get; set; } = string.Empty;
-    
+
     // Descripción del vehículo
     [Column(TypeName = "TEXT")]
     [Display(Name = "Descripción")]
     public string Descripcion { get; set; } = string.Empty;
-    
+
     // Configuración del anuncio
     [Required]
     [Range(0, 5)]
     [Display(Name = "Plan de Visibilidad")]
     public int PlanVisibilidad { get; set; } = 0; // 0 = Pendiente de aprobación, 1+ = Aprobado/Pagado
-    
+
     [Range(0, 10)]
     [Display(Name = "Banderín Adquirido")]
     public int BanderinAdquirido { get; set; } = 0;
-    
+
     // Multimedia Storage - Referencias a archivos en blob storage
     [Column(TypeName = "TEXT")]
     [Display(Name = "URLs de Imágenes")]
     public string ImagenesUrls { get; set; } = "[]"; // JSON array de URLs
-    
+
     [Column(TypeName = "TEXT")]
     [Display(Name = "URLs de Videos")]
     public string VideosUrls { get; set; } = "[]"; // JSON array de URLs
-    
+
     [MaxLength(500)]
     [Display(Name = "Imagen Principal")]
     public string ImagenPrincipal { get; set; } = string.Empty;
-    
+
     // Relación con Usuario propietario
     [Required]
     [MaxLength(150)]
     [Display(Name = "Email del Propietario")]
     public string EmailPropietario { get; set; } = string.Empty;
-    
+
     // Fechas de auditoría
     [Display(Name = "Fecha de Creación")]
     public DateTime FechaCreacion { get; set; } = DateTime.UtcNow;
-    
+
     [Display(Name = "Fecha de Actualización")]
     public DateTime FechaActualizacion { get; set; } = DateTime.UtcNow;
-    
+
     [Display(Name = "Activo")]
     public bool Activo { get; set; } = true;
-    
+
     [MaxLength(20)]
     [Display(Name = "Estado Agenda Fotografía")]
     public string EstadoAgendaFotografia { get; set; } = "Sin agendar"; // "Sin agendar" o "Agendado"
-    
+
     // Navigation property
     [ForeignKey("EmailPropietario")]
     public virtual Usuario? Propietario { get; set; }
-    
+
     // Propiedades computadas para facilitar el uso
     [NotMapped]
     [Display(Name = "Nombre Completo")]
     public string NombreCompleto => $"{Ano} {ToTitleCase(Marca)} {ToTitleCase(Modelo)}";
-    
+
     [NotMapped]
     [Display(Name = "Ubicación Completa")]
-    public string UbicacionCompleta => 
-        !string.IsNullOrEmpty(UbicacionExacta) ? 
-        $"{UbicacionExacta}, {(!string.IsNullOrEmpty(Canton) ? Canton + ", " : "")}{Provincia}" : 
+    public string UbicacionCompleta =>
+        !string.IsNullOrEmpty(UbicacionExacta) ?
+        $"{UbicacionExacta}, {(!string.IsNullOrEmpty(Canton) ? Canton + ", " : "")}{Provincia}" :
         $"{(!string.IsNullOrEmpty(Canton) ? Canton + ", " : "")}{Provincia}";
-    
+
     [NotMapped]
     [Display(Name = "Precio Formateado")]
-    public string PrecioFormateado => 
+    public string PrecioFormateado =>
         Divisa == "USD" ? $"${Precio:N0}" : $"₡{Precio:N0}";
-    
+
     [NotMapped]
     [Display(Name = "Precio en CRC")]
-    public string PrecioEnCRC => 
+    public string PrecioEnCRC =>
         AutoClick.Helpers.PrecioHelper.FormatearPrecioEnCRC(Precio, Divisa);
-    
+
     [NotMapped]
     [Display(Name = "Cuota Mensual Estimada")]
-    public string CuotaMensualEstimada => 
+    public string CuotaMensualEstimada =>
         AutoClick.Helpers.PrecioHelper.FormatearCuotaMensual(Precio, Divisa);
-    
+
     [NotMapped]
     [Display(Name = "Kilometraje Formateado")]
     public string KilometrajeFormateado => $"{Kilometraje:N0} km";
-    
+
     // Métodos helper para manejar los arrays JSON
     [NotMapped]
     public List<string> ExtrasExteriorList
@@ -223,66 +229,66 @@ public class Auto
         get => SafeJsonDeserialize(ExtrasExterior);
         set => ExtrasExterior = System.Text.Json.JsonSerializer.Serialize(value);
     }
-    
+
     [NotMapped]
     public List<string> ExtrasInteriorList
     {
         get => SafeJsonDeserialize(ExtrasInterior);
         set => ExtrasInterior = System.Text.Json.JsonSerializer.Serialize(value);
     }
-    
+
     [NotMapped]
     public List<string> ExtrasMultimediaList
     {
         get => SafeJsonDeserialize(ExtrasMultimedia);
         set => ExtrasMultimedia = System.Text.Json.JsonSerializer.Serialize(value);
     }
-    
+
     [NotMapped]
     public List<string> ExtrasSeguridadList
     {
         get => SafeJsonDeserialize(ExtrasSeguridad);
         set => ExtrasSeguridad = System.Text.Json.JsonSerializer.Serialize(value);
     }
-    
+
     [NotMapped]
     public List<string> ExtrasRendimientoList
     {
         get => SafeJsonDeserialize(ExtrasRendimiento);
         set => ExtrasRendimiento = System.Text.Json.JsonSerializer.Serialize(value);
     }
-    
+
     [NotMapped]
     public List<string> ExtrasAntiRoboList
     {
         get => SafeJsonDeserialize(ExtrasAntiRobo);
         set => ExtrasAntiRobo = System.Text.Json.JsonSerializer.Serialize(value);
     }
-    
+
     [NotMapped]
     public List<string> ImagenesUrlsList
     {
         get => SafeJsonDeserialize(ImagenesUrls);
         set => ImagenesUrls = System.Text.Json.JsonSerializer.Serialize(value);
     }
-    
+
     [NotMapped]
     public List<string> VideosUrlsList
     {
         get => SafeJsonDeserialize(VideosUrls);
         set => VideosUrls = System.Text.Json.JsonSerializer.Serialize(value);
     }
-    
+
     // Helper method for safe JSON deserialization
     private List<string> SafeJsonDeserialize(string jsonString)
     {
         if (string.IsNullOrWhiteSpace(jsonString))
             return new List<string>();
-            
+
         // Si no comienza con '[' no es un array JSON válido
         if (!jsonString.Trim().StartsWith('['))
             return new List<string>();
-            
+
         try
         {
             return System.Text.Json.JsonSerializer.Deserialize<List<string>>(jsonString) ?? new List<string>();
@@ -293,7 +299,7 @@ public class Auto
             return new List<string>();
         }
     }
-    
+
     // Helper method for title case formatting
     private string ToTitleCase(string input)
     {
@@ -348,13 +354,13 @@ public class Auto
 
             if (!tagFiles.ContainsKey(BanderinAdquirido))
                 return null;
-                
+
             // Simplemente devolver el nombre del archivo
             // La URL completa se manejará en el PageModel usando BanderinesService
             return tagFiles[BanderinAdquirido];
         }
     }
-    
+
     // Propiedad para recibir archivos del formulario (no se mapea a BD)
     [NotMapped]
     [Display(Name = "Fotos del Vehículo")]
