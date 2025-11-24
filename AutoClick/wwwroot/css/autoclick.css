@@ -4894,6 +4894,13 @@ body {
     background-size: 12px;
 }
 
+/* Estilos para las opciones del select */
+.financing-select option {
+    background: #02081C;
+    color: white;
+    padding: 8px;
+}
+
 .financing-input:focus,
 .financing-select:focus {
     outline: none;

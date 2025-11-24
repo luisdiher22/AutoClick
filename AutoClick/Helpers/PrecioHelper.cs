@@ -12,6 +12,11 @@ namespace AutoClick.Helpers
         private static decimal _tasaCacheada = 510m; // Tasa por defecto
         
         /// <summary>
+        /// Obtiene la tasa de cambio actual USD a CRC
+        /// </summary>
+        public static decimal TasaCambio => _tasaCacheada;
+        
+        /// <summary>
         /// Inicializa el helper con el servicio de tasa de cambio
         /// Debe ser llamado al inicio de la aplicación
         /// </summary>

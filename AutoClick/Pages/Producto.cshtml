@@ -731,7 +731,7 @@
                 <form method="get" class="financing-form" id="financingForm"
                       data-original-price="@Model.Vehicle.Precio.ToString(System.Globalization.CultureInfo.InvariantCulture)"
                       data-original-currency="@Model.Vehicle.Divisa"
-                      data-exchange-rate="@PrecioHelper.ConvertirACRC(1, "USD").ToString(System.Globalization.CultureInfo.InvariantCulture)">
+                      data-exchange-rate="@PrecioHelper.TasaCambio.ToString(System.Globalization.CultureInfo.InvariantCulture)">
                     
                     <div class="financing-grid">
                         <div class="financing-group">
@@ -885,8 +885,10 @@
                 if (originalCurrency !== selectedCurrency) {
                     if (originalCurrency === 'USD' && selectedCurrency === 'CRC') {
                         currentPrice = originalPrice * exchangeRate;
+                        console.log('Converting USD to CRC:', originalPrice, '*', exchangeRate, '=', currentPrice);
                     } else if (originalCurrency === 'CRC' && selectedCurrency === 'USD') {
                         currentPrice = originalPrice / exchangeRate;
+                        console.log('Converting CRC to USD:', originalPrice, '/', exchangeRate, '=', currentPrice);
                     }
                 }
 

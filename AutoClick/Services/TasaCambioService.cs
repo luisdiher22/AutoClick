@@ -99,13 +99,19 @@ namespace AutoClick.Services
                         var rates = data["rates"];
                         if (rates.TryGetProperty("CRC", out var crcRate))
                         {
-                            if (decimal.TryParse(crcRate.GetDecimal().ToString(), 
-                                System.Globalization.NumberStyles.Any, 
-                                System.Globalization.CultureInfo.InvariantCulture, out var tasa))
+                            // Obtener el valor directamente como decimal
+                            var tasa = crcRate.GetDecimal();
+                            
+                            // Validar que la tasa esté en un rango razonable (400-600 CRC por USD)
+                            if (tasa >= 400 && tasa <= 700)
                             {
-                                // La API devuelve la tasa directa USD -> CRC
                                 _logger.LogInformation($"Tasa obtenida de exchangerate-api: {tasa} CRC por USD");
                                 return tasa;
+                            }
+                            else
+                            {
+                                _logger.LogWarning($"Tasa fuera de rango razonable: {tasa}, usando tasa de respaldo");
+                                return TASA_RESPALDO;
                             }
                         }
                     }

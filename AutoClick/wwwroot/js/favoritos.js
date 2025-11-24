@@ -4,7 +4,7 @@
 // URLs de los iconos
 const ICON_URLS = {
     empty: 'https://autoclickstorage.blob.core.windows.net/uploads/Component%20183.png',
-    filled: 'https://autoclickstorage.blob.core.windows.net/uploads/CORAZON.png'
+    filled: '/images/icons/CORAZONLLENO.svg'
 };
 
 // Cache de favoritos del usuario (se carga una vez y se actualiza localmente)
@@ -30,7 +30,8 @@ async function initializeFavoritos(emailUsuario = null) {
 
 // Actualizar todos los botones de favoritos en la página
 function updateAllFavoriteButtons() {
-    document.querySelectorAll('.favorite-btn').forEach(btn => {
+    // Seleccionar tanto .favorite-btn como .favorite-btn-inline
+    document.querySelectorAll('.favorite-btn, .favorite-btn-inline').forEach(btn => {
         const autoId = parseInt(btn.getAttribute('data-auto-id'));
         const img = btn.querySelector('img');
         
@@ -68,8 +69,8 @@ async function toggleFavorito(autoId, emailUsuario = null) {
                 userFavorites.delete(autoId);
             }
             
-            // Actualizar todos los botones con este autoId
-            document.querySelectorAll(`.favorite-btn[data-auto-id="${autoId}"]`).forEach(btn => {
+            // Actualizar todos los botones con este autoId (tanto .favorite-btn como .favorite-btn-inline)
+            document.querySelectorAll(`.favorite-btn[data-auto-id="${autoId}"], .favorite-btn-inline[data-auto-id="${autoId}"]`).forEach(btn => {
                 const img = btn.querySelector('img');
                 if (data.isFavorite) {
                     img.src = ICON_URLS.filled;
@@ -99,9 +100,9 @@ function showFavoriteNotification(isFavorite) {
     // Puedes implementar una notificación toast aquí si lo deseas
 }
 
-// Event listener para los botones de favoritos
+// Event listener para los botones de favoritos (tanto .favorite-btn como .favorite-btn-inline)
 document.addEventListener('click', async function(e) {
-    const favoriteBtn = e.target.closest('.favorite-btn');
+    const favoriteBtn = e.target.closest('.favorite-btn, .favorite-btn-inline');
     if (favoriteBtn) {
         // Prevenir cualquier comportamiento por defecto y propagación
         e.preventDefault();

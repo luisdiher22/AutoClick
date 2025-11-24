@@ -40,11 +40,10 @@ public class Auto
     [Display(Name = "Divisa")]
     public string Divisa { get; set; } = "CRC";
 
-    [Required]
     [Column(TypeName = "decimal(18,2)")]
     [Range(0, double.MaxValue)]
     [Display(Name = "Valor Fiscal")]
-    public decimal ValorFiscal { get; set; }
+    public decimal? ValorFiscal { get; set; }
 
     // Especificaciones técnicas
     [Required]

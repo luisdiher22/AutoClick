@@ -621,11 +621,8 @@ document.addEventListener('DOMContentLoaded', function () {
             }
         }
 
-        // Valor Fiscal validation
-        if (!valorFiscal || !valorFiscal.value) {
-            if (valorFiscal) showFieldError(valorFiscal, 'El valor fiscal es requerido');
-            isValid = false;
-        } else {
+        // Valor Fiscal validation (opcional)
+        if (valorFiscal && valorFiscal.value) {
             // Remove currency symbol and dots to get the numeric value
             const vfValue = parseFloat(valorFiscal.value.replace(/[₡$.\s]/g, ''));
             if (vfValue <= 0 || isNaN(vfValue)) {
@@ -634,6 +631,8 @@ document.addEventListener('DOMContentLoaded', function () {
             } else {
                 clearFieldError(valorFiscal);
             }
+        } else {
+            if (valorFiscal) clearFieldError(valorFiscal);
         }
 
         if (!carroceria || !carroceria.value) {
