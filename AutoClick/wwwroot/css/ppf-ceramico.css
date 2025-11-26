@@ -47,6 +47,16 @@ body {
     object-position: center;
 }
 
+/* Mostrar solo imagen desktop por defecto */
+.rainx-hero-tablet,
+.rainx-hero-mobile {
+    display: none;
+}
+
+.rainx-hero-desktop {
+    display: block;
+}
+
 /* Rain-X Cycle Section */
 .rainx-cycle-section {
     width: 100%;
@@ -216,34 +226,38 @@ body {
 
 /* Responsive Design */
 @media (max-width: 1024px) {
+    /* Cambiar a imagen tablet */
+    .rainx-hero-desktop {
+        display: none;
+    }
+    
+    .rainx-hero-tablet {
+        display: block;
+    }
+    
+    .rainx-hero-mobile {
+        display: none;
+    }
+    
     .rainx-hero-section {
-        height: 600px;
+        height: auto;
+        min-height: auto;
+        padding-top: 80px;
     }
     
     .rainx-hero-background {
-        height: 100%;
+        height: auto;
     }
     
     .rainx-hero-image {
         width: 100%;
-        height: 100%;
-        object-fit: cover;
+        height: auto;
+        object-fit: contain;
         object-position: center;
     }
     
     .rainx-cycle-section {
-        padding: 40px 0;
-    }
-    
-    .rainx-cycle-container {
-        padding: 0 24px;
-    }
-    
-    .rainx-cycle-image {
-        width: 100%;
-        height: auto;
-        object-fit: contain;
-        object-position: center;
+        display: none;
     }
     
     .rainx-stores-grid {
@@ -258,18 +272,34 @@ body {
 }
 
 @media (max-width: 768px) {
+    /* Usar imagen tablet también en móvil */
+    .rainx-hero-desktop {
+        display: none;
+    }
+    
+    .rainx-hero-tablet {
+        display: block;
+    }
+    
+    .rainx-hero-mobile {
+        display: none;
+    }
+    
     .rainx-hero-section {
-        height: 500px;
+        height: auto;
+        min-height: auto;
+        padding-top: 80px;
+        margin-bottom: 40px;
     }
     
     .rainx-hero-background {
-        height: 100%;
+        height: auto;
     }
     
     .rainx-hero-image {
         width: 100%;
-        height: 100%;
-        object-fit: cover;
+        height: auto;
+        object-fit: contain;
         object-position: center;
     }
     
@@ -295,17 +325,20 @@ body {
 
 @media (max-width: 480px) {
     .rainx-hero-section {
-        height: 400px;
+        height: auto;
+        min-height: auto;
+        padding-top: 80px;
+        margin-bottom: 40px;
     }
     
     .rainx-hero-background {
-        height: 100%;
+        height: auto;
     }
     
     .rainx-hero-image {
         width: 100%;
-        height: 100%;
-        object-fit: cover;
+        height: auto;
+        object-fit: contain;
         object-position: center;
     }
     

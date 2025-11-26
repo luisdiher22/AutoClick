@@ -44,7 +44,8 @@
             {
                 <!-- Auth Section (No logueado - aparece primero) -->
                 <div class="menu-auth-section">
-                    <a asp-page="/Auth" class="menu-item menu-item-auth">Inicie sesión / Registro</a>
+                    <a href="/Auth" class="menu-item menu-item-login">Iniciar sesión</a>
+                    <a href="/Auth" class="menu-item menu-item-register" onclick="event.preventDefault(); window.location.href='/Auth';">Registrarse</a>
                 </div>
             }
             
@@ -168,7 +169,7 @@
                 
                 <!-- Logout Button -->
                 <div class="menu-logout-section">
-                    <a asp-page="/Auth/Logout" class="menu-logout-btn">Cerrar sesión</a>
+                    <a href="/Logout" class="menu-logout-btn">Cerrar sesión</a>
                 </div>
             }
         </div>

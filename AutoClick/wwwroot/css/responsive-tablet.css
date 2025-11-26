@@ -242,16 +242,38 @@
         background: rgba(255, 255, 255, 0.08);
     }
     
-    .menu-item-auth {
-        background: transparent;
-        border: 1px solid rgba(255, 255, 255, 0.25);
-        font-weight: 500;
+    /* Botón Iniciar sesión - Blanco con texto oscuro */
+    .menu-item-login {
+        background: white;
+        color: #06174D;
+        font-weight: 600;
+        font-size: 16px;
         justify-content: center;
+        border-radius: 4px;
+        padding: 16px;
+        margin-bottom: 8px;
     }
     
-    .menu-item-auth:hover,
-    .menu-item-auth:active {
-        background: rgba(255, 255, 255, 0.08);
+    .menu-item-login:hover,
+    .menu-item-login:active {
+        background: rgba(255, 255, 255, 0.9);
+    }
+    
+    /* Botón Registrarse - Fondo oscuro con borde blanco */
+    .menu-item-register {
+        background: #06174D;
+        color: white;
+        border: 1px solid rgba(255, 255, 255, 0.75);
+        font-weight: 600;
+        font-size: 16px;
+        justify-content: center;
+        border-radius: 4px;
+        padding: 16px;
+    }
+    
+    .menu-item-register:hover,
+    .menu-item-register:active {
+        background: rgba(6, 23, 77, 0.9);
     }
     
     .menu-item-secondary {

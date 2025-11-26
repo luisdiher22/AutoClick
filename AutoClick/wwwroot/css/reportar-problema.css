@@ -265,6 +265,47 @@
 }
 
 /* Responsive Design */
+/* Tablet */
+@media (min-width: 768px) and (max-width: 1023px) {
+    .reportar-problema-container {
+        padding: 20px 10px;
+    }
+
+    .form-panel {
+        max-width: 100%;
+        margin: 0 10px;
+        background: transparent !important;
+        border: none !important;
+        border-radius: 0 !important;
+    }
+
+    .panel-title {
+        font-size: 20px;
+    }
+
+    .section-header h2 {
+        font-size: 18px;
+    }
+
+    .form-row {
+        flex-direction: column;
+        gap: 0;
+    }
+
+    .form-group {
+        margin-bottom: 16px;
+    }
+
+    .reportar-form {
+        padding: 16px;
+    }
+
+    .submit-btn {
+        max-width: 100%;
+    }
+}
+
+/* Mobile */
 @media (max-width: 768px) {
     .reportar-problema-container {
         padding: 20px 10px;
@@ -273,6 +314,9 @@
     .form-panel {
         max-width: 100%;
         margin: 0 10px;
+        background: transparent !important;
+        border: none !important;
+        border-radius: 0 !important;
     }
 
     .panel-title {

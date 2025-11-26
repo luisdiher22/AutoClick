@@ -19,6 +19,7 @@
     align-items: center;
     justify-content: center;
     padding: 20px;
+    padding-bottom: 60px;
 }
 
 .auth-content {
@@ -172,7 +173,7 @@
     width: 60px;
     height: 60px;
     border-radius: 8px;
-    display: flex;
+    display: none;
     align-items: center;
     justify-content: center;
     flex-shrink: 0;
@@ -580,6 +581,10 @@
 }
 
 @media (max-width: 1024px) {
+    .auth-main {
+        padding-bottom: 80px;
+    }
+    
     .auth-content {
         flex-direction: column;
         gap: 30px;
@@ -608,6 +613,7 @@
 @media (max-width: 768px) {
     .auth-main {
         padding: 20px 15px;
+        padding-bottom: 80px;
         min-height: calc(100vh - 80px);
     }
     
@@ -628,7 +634,7 @@
     }
     
     .type-content {
-        text-align: center;
+        text-align: left;
     }
     
     .type-title {
