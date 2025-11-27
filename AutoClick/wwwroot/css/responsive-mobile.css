@@ -129,6 +129,11 @@
         background: rgba(255, 255, 255, 0.25);
         border: 1px solid rgba(255, 255, 255, 0.25);
     }
+
+    .menu-btn:active {
+        background: transparent;
+        border: 1px solid rgba(255, 255, 255, 0.6);
+    }
     
     .menu-btn .menu-icon {
         width: 23.86px;
@@ -235,6 +240,24 @@
         font-weight: 700;
         font-size: 19.04px;
         margin-bottom: 8px;
+    }
+    
+    .menu-item-with-icon {
+        position: relative;
+        padding-left: 32px;
+    }
+    
+    .menu-item-with-icon::before {
+        content: '';
+        position: absolute;
+        left: 0;
+        top: 50%;
+        transform: translateY(-50%);
+        width: 22px;
+        height: 6px;
+        background: white;
+        border-top-right-radius: 100px;
+        border-bottom-right-radius: 100px;
     }
     
     .menu-item-primary:hover,
@@ -347,7 +370,7 @@
     }
     
     .menu-item-reserve .highlight {
-        color: #FFD700;
+        color: #FF931E;
         font-weight: 600;
     }
     

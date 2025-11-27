@@ -435,9 +435,12 @@ document.addEventListener('keydown', function(e) {
 // Auto-focus on email input when page loads
 window.addEventListener('load', function() {
     const emailInput = document.getElementById('loginEmail');
-    if (emailInput && !emailInput.value) {
+    // Solo auto-focus si la intención explícita es login (hash o query param)
+    const urlParams = new URLSearchParams(window.location.search);
+    const shouldFocusLogin = (location.hash === '#login') || (urlParams.get('mode') === 'login');
+    if (shouldFocusLogin && emailInput && !emailInput.value) {
         setTimeout(() => {
             emailInput.focus();
-        }, 500);
+        }, 300);
     }
 });

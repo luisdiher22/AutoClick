@@ -218,6 +218,9 @@ document.addEventListener('DOMContentLoaded', function () {
 
             // Add only ONE event listener
             nextBtn.addEventListener('click', handleNextClick);
+
+        // Listener para resize - actualizar clase tablet cuando cambia tamaño
+        window.addEventListener('resize', updateNavigationButtons);
         }
 
         if (backBtn) {
@@ -479,6 +482,7 @@ document.addEventListener('DOMContentLoaded', function () {
     function updateNavigationButtons() {
         const nextBtn = document.querySelector('#btn-next');
         const backBtn = document.querySelector('#btn-back');
+        const navButtons = document.querySelector('.form-nav-buttons');
 
         if (backBtn) {
             backBtn.style.display = currentSection === 1 ? 'none' : 'flex';
@@ -489,6 +493,16 @@ document.addEventListener('DOMContentLoaded', function () {
                 nextBtn.textContent = 'Publicar anuncio';
             } else {
                 nextBtn.textContent = 'Siguiente sección';
+            }
+        }
+
+        // Detectar tablet + sección 1 para aplicar estilo específico
+        if (navButtons) {
+            const isTablet = window.matchMedia('(min-width: 768px) and (max-width: 1023px)').matches;
+            if (isTablet && currentSection === 1) {
+                navButtons.classList.add('section-1-tablet');
+            } else {
+                navButtons.classList.remove('section-1-tablet');
             }
         }
     }

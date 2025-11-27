@@ -1541,21 +1541,25 @@ select#ano option {
         order: 1;
     }
     
-    /* Botones en sección 1: siguiente ocupa todo el ancho */
-    #seccion1 + .form-nav-buttons {
-        display: flex;
+    /* Botones cuando sección 1 está activa en tablet: siguiente ocupa todo el ancho */
+    .form-nav-buttons.section-1-tablet {
+        display: block !important;
         gap: 0 !important;
-        padding: 0 16px !important;
         margin: 0 !important;
+        padding: 0 !important;
+        position: static !important;
+        bottom: auto !important;
+        right: auto !important;
+        width: 100% !important;
     }
-    
-    #seccion1 + .form-nav-buttons .btn-next {
-        flex: 1 !important;
+
+    .form-nav-buttons.section-1-tablet .btn-next {
+        display: block !important;
         width: 100% !important;
         margin: 0 !important;
     }
-    
-    #seccion1 + .form-nav-buttons .btn-back {
+
+    .form-nav-buttons.section-1-tablet .btn-back {
         display: none !important;
     }
     

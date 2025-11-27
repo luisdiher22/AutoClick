@@ -37,7 +37,7 @@
         display: block !important;
         height: 1px;
         background: rgba(255, 255, 255, 0.15);
-        margin: 24px 20px;
+        margin: 16px 16px 16px 0 !important;
     }
     
     /* Hero Section - Based on Figma design node-id=2631-37591 */
@@ -120,7 +120,7 @@
     /* Section headers */
     .index-section-header {
         width: 100%;
-        padding: 24px 16px 16px;
+        padding: 16px 0 12px 0 !important;
         display: flex;
         justify-content: space-between;
         align-items: center;
@@ -133,16 +133,33 @@
         font-weight: 700;
         position: relative;
         width: 100%;
-        display: block;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding-left: 32px;
+        padding-right: 16px;
+    }
+    
+    .index-section-title::before {
+        content: '';
+        position: absolute;
+        left: 0;
+        top: 50%;
+        transform: translateY(-50%);
+        width: 22px;
+        height: 6px;
+        background: white;
+        border-top-right-radius: 100px;
+        border-bottom-right-radius: 100px;
     }
     
     .index-section-title .swipe-hint {
         color: rgba(255, 255, 255, 0.6);
         font-size: 14px;
         font-weight: 400;
-        float: right;
         font-family: 'Montserrat', sans-serif;
         letter-spacing: 0.5px;
+        flex-shrink: 0;
     }
     
     /* Horizontal scroll container */
@@ -153,7 +170,7 @@
         -webkit-overflow-scrolling: touch;
         scrollbar-width: none; /* Firefox */
         -ms-overflow-style: none; /* IE and Edge */
-        padding: 0 8px 16px 8px;
+        padding: 0 0 16px 0;
     }
     
     .index-cards-scroll-container::-webkit-scrollbar {
@@ -164,6 +181,7 @@
         display: flex;
         gap: 16px;
         width: max-content;
+        padding-left: 0;
     }
     
     /* Card Small - Based on Figma design node-id=2130-25698 */
@@ -175,6 +193,14 @@
         gap: 8px;
         cursor: pointer;
         position: relative;
+    }
+
+    .index-card-small:first-child {
+        margin-left: 16px;
+    }
+    
+    .index-card-small:last-child {
+        margin-right: 0;
     }
     
     .index-card-small-image {
@@ -280,7 +306,7 @@
         display: grid;
         grid-template-columns: 1fr 1fr;
         gap: 16px;
-        padding: 16px;
+        padding: 0 16px 0 16px;
         width: 100%;
     }
     
@@ -314,7 +340,7 @@
         display: flex;
         flex-direction: column;
         gap: 16px;
-        padding: 16px;
+        padding: 0 16px 0 0;
         width: 100%;
     }
     
@@ -544,26 +570,48 @@
     
     /* Cards sections - same horizontal scroll but more cards visible */
     .index-section-header {
-        padding: 32px 24px 20px;
+        padding: 20px 0 16px 0 !important;
     }
     
     .index-section-title {
         font-size: 24px;
         width: 100%;
-        display: block;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding-left: 32px;
+        padding-right: 16px;
+        position: relative;
+    }
+    
+    .index-section-title::before {
+        content: '';
+        position: absolute;
+        left: 0;
+        top: 50%;
+        transform: translateY(-50%);
+        width: 22px;
+        height: 6px;
+        background: white;
+        border-top-right-radius: 100px;
+        border-bottom-right-radius: 100px;
     }
     
     .index-section-title .swipe-hint {
         color: rgba(255, 255, 255, 0.6);
         font-size: 16px;
         font-weight: 400;
-        float: right;
         font-family: 'Montserrat', sans-serif;
         letter-spacing: 0.5px;
+        flex-shrink: 0;
     }
     
     .index-cards-scroll-container {
-        padding: 0 16px 20px 16px;
+        padding: 0 0 20px 0;
+    }
+    
+    .index-card-small:last-child {
+        margin-right: 0;
     }
     
     .index-cards-scroll-wrapper {
@@ -572,6 +620,10 @@
     
     .index-card-small {
         width: 240px;
+    }
+
+    .index-card-small:first-child {
+        margin-left: 16px;
     }
     
     .index-card-small-image {
