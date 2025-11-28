@@ -571,6 +571,7 @@
     /* Cards sections - same horizontal scroll but more cards visible */
     .index-section-header {
         padding: 20px 0 16px 0 !important;
+        width: 100%;
     }
     
     .index-section-title {
@@ -580,7 +581,7 @@
         align-items: center;
         justify-content: space-between;
         padding-left: 32px;
-        padding-right: 16px;
+        padding-right: 40px;
         position: relative;
     }
     
@@ -608,14 +609,17 @@
     
     .index-cards-scroll-container {
         padding: 0 0 20px 0;
+        width: 100%;
+        overflow-x: auto;
     }
     
     .index-card-small:last-child {
-        margin-right: 0;
+        margin-right: 40px;
     }
     
     .index-cards-scroll-wrapper {
         gap: 20px;
+        padding-left: 0;
     }
     
     .index-card-small {
@@ -623,7 +627,7 @@
     }
 
     .index-card-small:first-child {
-        margin-left: 16px;
+        margin-left: 40px;
     }
     
     .index-card-small-image {
@@ -643,13 +647,13 @@
     .index-marcas-grid {
         grid-template-columns: 1fr 1fr;
         gap: 24px;
-        padding: 24px;
+        padding: 0 40px !important;
     }
     
     /* Noticias - same stack layout, larger elements */
     .index-noticias-container {
         gap: 20px;
-        padding: 24px;
+        padding: 0 40px 0 40px !important;
     }
     
     .index-noticia-grande-image {

@@ -4,6 +4,8 @@
     ViewData["Title"] = "Búsqueda Avanzada - AutoClick.cr";
 }
 
+<link rel="stylesheet" href="~/css/busqueda-avanzada-responsive.css" />
+
 <!-- Dark Theme Page Container -->
 <div class="busqueda-avanzada-page">
     <div class="busqueda-container">
@@ -250,6 +252,25 @@
             <main class="busqueda-main">
                 <!-- Sort Dropdown -->
                 <div class="busqueda-sort-header">
+                    <!-- Mobile/Tablet Filter Button -->
+                    <button class="busqueda-filter-btn-mobile" onclick="openFilterModal()">
+                        <!-- Icono Figma: controles verticales (estilo sliders) -->
+                        <svg width="18" height="18" viewBox="0 0 18 18" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false">
+                            <g stroke="currentColor" stroke-width="1.6" stroke-linecap="round">
+                                <!-- Línea izquierda + círculo -->
+                                <path d="M4.5 3V15"/>
+                                <circle cx="4.5" cy="6.5" r="1.6" fill="currentColor"/>
+                                <!-- Línea centro + círculo -->
+                                <path d="M9 3V15"/>
+                                <circle cx="9" cy="11.5" r="1.6" fill="currentColor"/>
+                                <!-- Línea derecha + círculo -->
+                                <path d="M13.5 3V15"/>
+                                <circle cx="13.5" cy="8.5" r="1.6" fill="currentColor"/>
+                            </g>
+                        </svg>
+                        Filtros
+                    </button>
+
                     <div class="busqueda-sort-wrapper">
                         <select class="busqueda-sort-select" onchange="changeBusquedaSorting(this.value)">
                             <option value="recent" selected="@(Model.SortBy == "recent" || string.IsNullOrEmpty(Model.SortBy))">Ordenar por: Más recientes</option>
@@ -427,6 +448,200 @@
     </div>
 </div>
 
+<!-- Mobile/Tablet Filter Modal -->
+<div class="busqueda-filter-modal" id="filterModal">
+    <div class="busqueda-filter-modal-content">
+        <div class="busqueda-filter-modal-header">
+            <h3 class="busqueda-filter-modal-title">Filtros de búsqueda</h3>
+            <button class="busqueda-filter-modal-close" onclick="closeFilterModal()">&times;</button>
+        </div>
+        
+        <div class="busqueda-filter-modal-body">
+            <!-- Usar exactamente el contenedor de filtros de escritorio -->
+            <div class="busqueda-filters-container">
+                <div class="busqueda-filters-section">
+                <!-- Applied Filters Tags -->
+                @if (Model.AppliedFilters.Any())
+                {
+                    <div class="applied-filters-tags">
+                        @foreach (var filter in Model.AppliedFilters)
+                        {
+                            <div class="filter-tag">
+                                <span>@filter</span>
+                                <button class="remove-filter-btn" onclick="removeFilter('@filter')" title="Eliminar filtro">×</button>
+                            </div>
+                        }
+                    </div>
+                    
+                    <!-- Línea divisoria -->
+                    <hr class="filter-divider" />
+                }
+
+                <!-- Filter Form -->
+                <form method="get" class="busqueda-filters-form" id="mobileFilterForm">
+                    <input type="hidden" name="page" value="1" />
+                    <input type="hidden" name="sortBy" value="@Model.SortBy" />
+
+                    <!-- Provincia -->
+                    <div class="busqueda-filter-group">
+                        <label class="busqueda-filter-label">Provincia</label>
+                        <div class="busqueda-select-wrapper">
+                            <select name="province" class="busqueda-filter-select" id="province-select-modal" onchange="onProvinceChange()">
+                                <option value="">Todas las provincias</option>
+                                @foreach (var province in Model.AvailableProvinces)
+                                {
+                                    <option value="@province" selected="@(Model.Province == province)">@province</option>
+                                }
+                            </select>
+                        </div>
+                    </div>
+
+                    <!-- Cantón -->
+                    <div class="busqueda-filter-group">
+                        <label class="busqueda-filter-label">Cantón</label>
+                        <div class="busqueda-select-wrapper">
+                            <select name="canton" class="busqueda-filter-select" id="canton-select-modal">
+                                <option value="">Todos los cantones</option>
+                                @foreach (var canton in Model.AvailableCantons)
+                                {
+                                    <option value="@canton" selected="@(Model.Canton == canton)">@canton</option>
+                                }
+                            </select>
+                        </div>
+                    </div>
+
+                    <!-- Línea divisoria -->
+                    <hr class="filter-divider" />
+
+                    <!-- Marca -->
+                    <div class="busqueda-filter-group">
+                        <label class="busqueda-filter-label">Marca</label>
+                        <div class="busqueda-select-wrapper">
+                            <select name="brand" class="busqueda-filter-select" id="brand-select-modal" onchange="onBrandChange()">
+                                <option value="">Todas las marcas</option>
+                                @foreach (var brand in Model.AvailableBrands)
+                                {
+                                    <option value="@brand" selected="@(Model.Brand == brand)">@brand</option>
+                                }
+                            </select>
+                        </div>
+                    </div>
+
+                    <!-- Modelo -->
+                    <div class="busqueda-filter-group">
+                        <label class="busqueda-filter-label">Modelo</label>
+                        <div class="busqueda-select-wrapper">
+                            <select name="model" class="busqueda-filter-select" id="model-select-modal">
+                                <option value="">Todos los modelos</option>
+                                @foreach (var modelName in Model.AvailableModels)
+                                {
+                                    <option value="@modelName" selected="@(Model.Model == modelName)">@modelName</option>
+                                }
+                            </select>
+                        </div>
+                    </div>
+
+                    <!-- Línea divisoria -->
+                    <hr class="filter-divider" />
+
+                    <!-- Año (mismo estilo que escritorio) -->
+                    <div class="busqueda-filter-group">
+                        <label class="busqueda-filter-label">Año</label>
+                        <div class="busqueda-price-range">
+                            <div class="price-input-group">
+                                <label class="price-input-label">Min</label>
+                                <div class="busqueda-select-wrapper">
+                                    <select name="minYear" class="busqueda-filter-select small">
+                                        <option value="">Cualquiera</option>
+                                        @foreach (var year in Model.AvailableYears)
+                                        {
+                                            <option value="@year" selected="@(Model.MinYear == year)">@year</option>
+                                        }
+                                    </select>
+                                </div>
+                            </div>
+                            <span class="price-separator">hasta</span>
+                            <div class="price-input-group">
+                                <label class="price-input-label">Max</label>
+                                <div class="busqueda-select-wrapper">
+                                    <select name="maxYear" class="busqueda-filter-select small">
+                                        <option value="">Cualquiera</option>
+                                        @foreach (var year in Model.AvailableYears)
+                                        {
+                                            <option value="@year" selected="@(Model.MaxYear == year)">@year</option>
+                                        }
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Precio -->
+                    <div class="busqueda-filter-group">
+                        <label class="busqueda-filter-label">Precio (₡)</label>
+                        <div class="busqueda-price-inputs">
+                            <input type="number" name="minPrice" class="busqueda-price-field" placeholder="Mínimo" value="@Model.MinPrice" min="0" step="100000" />
+                            <span>-</span>
+                            <input type="number" name="maxPrice" class="busqueda-price-field" placeholder="Máximo" value="@Model.MaxPrice" min="0" step="100000" />
+                        </div>
+                    </div>
+
+                    <!-- Línea divisoria -->
+                    <hr class="filter-divider" />
+
+                    <!-- Combustible -->
+                    <div class="busqueda-filter-group">
+                        <label class="busqueda-filter-label">Combustible/Propulsión</label>
+                        <div class="busqueda-select-wrapper">
+                            <select name="fuelType" class="busqueda-filter-select">
+                                <option value="">Todos los combustibles</option>
+                                @foreach (var fuelType in Model.AvailableFuelTypes)
+                                {
+                                    <option value="@fuelType" selected="@(Model.FuelType == fuelType)">@fuelType</option>
+                                }
+                            </select>
+                        </div>
+                    </div>
+                    
+                    <!-- Transmisión -->
+                    <div class="busqueda-filter-group">
+                        <label class="busqueda-filter-label">Transmisión</label>
+                        <div class="busqueda-select-wrapper">
+                            <select name="transmission" class="busqueda-filter-select">
+                                <option value="">Todas las transmisiones</option>
+                                @foreach (var transmission in Model.AvailableTransmissions)
+                                {
+                                    <option value="@transmission" selected="@(Model.Transmission == transmission)">@transmission</option>
+                                }
+                            </select>
+                        </div>
+                    </div>
+                    
+                    <!-- Condición -->
+                    <div class="busqueda-filter-group">
+                        <label class="busqueda-filter-label">Condición</label>
+                        <div class="busqueda-select-wrapper">
+                            <select name="condition" class="busqueda-filter-select">
+                                <option value="">Todas las condiciones</option>
+                                @foreach (var condition in Model.AvailableConditions)
+                                {
+                                    <option value="@condition" selected="@(Model.Condition == condition)">@condition</option>
+                                }
+                            </select>
+                        </div>
+                    </div>
+                </form>
+                </div>
+            </div>
+        </div>
+
+        <div class="busqueda-filter-modal-actions">
+            <button class="busqueda-filter-clear-btn" onclick="clearAllFilters()">Limpiar</button>
+            <button class="busqueda-filter-apply-btn" onclick="applyFilters()">Aplicar</button>
+        </div>
+    </div>
+</div>
+
 <script>
 function mostrarModalVendedor(autoId, nombreCompleto, nombreMostrar, telefono, ubicacion, cantidadAutos) {
     console.log('=== MODAL DEBUG ===');
@@ -511,7 +726,29 @@ document.addEventListener('DOMContentLoaded', function() {
             cerrarModalVendedor();
         }
     });
+    
+    // Close filter modal when clicking outside
+    document.getElementById('filterModal').addEventListener('click', function(e) {
+        if (e.target === this) {
+            closeFilterModal();
+        }
+    });
 });
+
+// Filter Modal Functions
+function openFilterModal() {
+    document.getElementById('filterModal').classList.add('active');
+    document.body.style.overflow = 'hidden'; // Prevent background scrolling
+}
+
+function closeFilterModal() {
+    document.getElementById('filterModal').classList.remove('active');
+    document.body.style.overflow = ''; // Restore scrolling
+}
+
+function applyFilters() {
+    document.getElementById('mobileFilterForm').submit();
+}
 </script>
 
 <script src="~/js/favoritos.js"></script>
