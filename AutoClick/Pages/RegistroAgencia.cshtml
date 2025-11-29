@@ -86,9 +86,21 @@
             border: 0.50px solid rgba(255, 255, 255, 0.50);
             backdrop-filter: blur(6px);
             width: 100%;
-            max-width: 600px;
+            max-width: 1200px;
             padding: 32px;
             color: white;
+        }
+        
+        .form-columns {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 32px;
+            margin-top: 24px;
+        }
+        
+        .form-column {
+            display: flex;
+            flex-direction: column;
         }
 
         .form-header {
@@ -244,6 +256,81 @@
             margin-bottom: 16px;
             font-size: 14px;
         }
+        
+        .upload-area {
+            border: 2px dashed rgba(255, 255, 255, 0.3);
+            border-radius: 4px;
+            padding: 24px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            background: rgba(255, 255, 255, 0.02);
+            margin-bottom: 8px;
+        }
+        
+        .upload-area:hover {
+            border-color: rgba(255, 255, 255, 0.5);
+            background: rgba(255, 255, 255, 0.05);
+        }
+        
+        .upload-area input[type="file"] {
+            display: none;
+        }
+        
+        .upload-placeholder {
+            color: rgba(255, 255, 255, 0.7);
+            font-size: 14px;
+        }
+        
+        .upload-recommendation {
+            color: rgba(255, 255, 255, 0.5);
+            font-size: 12px;
+            font-style: italic;
+            margin-top: 4px;
+        }
+        
+        .image-preview {
+            margin-top: 12px;
+            max-width: 100%;
+            border-radius: 4px;
+            display: none;
+        }
+        
+        .image-preview img {
+            max-width: 100%;
+            border-radius: 4px;
+        }
+        
+        .select-wrapper {
+            position: relative;
+        }
+        
+        .select-wrapper select {
+            width: 100%;
+            padding: 8px 16px;
+            background: #02081C;
+            border: 0.50px solid rgba(255, 255, 255, 0.50);
+            border-radius: 4px;
+            font-size: 14px;
+            color: white;
+            font-family: 'Montserrat', sans-serif;
+            font-weight: 500;
+            appearance: none;
+            cursor: pointer;
+        }
+        
+        .select-wrapper select option {
+            background: #02081C;
+            color: white;
+            padding: 8px;
+        }
+
+        @@media (max-width: 968px) {
+            .form-columns {
+                grid-template-columns: 1fr;
+                gap: 24px;
+            }
+        }
 
         @@media (max-width: 768px) {
             .form-row {
@@ -297,105 +384,190 @@
                 <div class="success-message">@Model.SuccessMessage</div>
             }
 
-            <form method="post" class="register-form">
-                <!-- Datos de la Agencia -->
-                <div class="form-section">
-                    <div class="form-group full-width">
-                        <label class="form-label">
-                            Nombre de la Agencia <span class="required">*</span>
-                        </label>
-                        <input type="text" 
-                               class="form-input" 
-                               placeholder="Introducir nombre de la agencia"
-                               asp-for="NombreAgencia" 
-                               required />
+            <form method="post" class="register-form" enctype="multipart/form-data">
+                <!-- Layout de 2 columnas -->
+                <div class="form-columns">
+                    <!-- Columna Izquierda: Datos Básicos -->
+                    <div class="form-column">
+                        <div class="form-section">
+                            <div class="form-group full-width">
+                                <label class="form-label">
+                                    Nombre de la Agencia <span class="required">*</span>
+                                </label>
+                                <input type="text" 
+                                       class="form-input" 
+                                       placeholder="Introducir nombre de la agencia"
+                                       asp-for="NombreAgencia" 
+                                       required />
+                            </div>
+
+                            <div class="form-group full-width">
+                                <label class="form-label">
+                                    Cédula Jurídica/Física
+                                </label>
+                                <input type="text" 
+                                       class="form-input" 
+                                       placeholder="Introducir cédula"
+                                       asp-for="CedulaJuridica" />
+                            </div>
+
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label class="form-label">
+                                        Nombre <span class="required">*</span>
+                                    </label>
+                                    <input type="text" 
+                                           class="form-input" 
+                                           placeholder="Introducir nombre"
+                                           asp-for="Nombre" 
+                                           required />
+                                </div>
+                                <div class="form-group">
+                                    <label class="form-label">
+                                        Apellido <span class="required">*</span>
+                                    </label>
+                                    <input type="text" 
+                                           class="form-input" 
+                                           placeholder="Introducir apellido"
+                                           asp-for="Apellidos" 
+                                           required />
+                                </div>
+                            </div>
+
+                            <div class="form-group full-width">
+                                <label class="form-label">
+                                    Correo electrónico <span class="required">*</span>
+                                </label>
+                                <input type="email" 
+                                       class="form-input" 
+                                       placeholder="Introducir correo"
+                                       asp-for="Email" 
+                                       required />
+                            </div>
+
+                            <div class="form-group full-width">
+                                <label class="form-label">
+                                    Confirmar correo electrónico <span class="required">*</span>
+                                </label>
+                                <input type="email" 
+                                       class="form-input" 
+                                       placeholder="Vuelva a introducir correo"
+                                       asp-for="ConfirmarEmail" 
+                                       required />
+                            </div>
+
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label class="form-label">
+                                        Teléfono 1 <span class="required">*</span>
+                                    </label>
+                                    <input type="tel" 
+                                           class="form-input" 
+                                           placeholder="Introducir número"
+                                           asp-for="Telefono1" 
+                                           required />
+                                </div>
+                                <div class="form-group">
+                                    <label class="form-label">WhatsApp</label>
+                                    <input type="tel" 
+                                           class="form-input" 
+                                           placeholder="Introducir número"
+                                           asp-for="WhatsApp" />
+                                </div>
+                            </div>
+
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label class="form-label">
+                                        Contraseña <span class="required">*</span>
+                                    </label>
+                                    <input type="password" 
+                                           class="form-input" 
+                                           placeholder="Introducir contraseña"
+                                           asp-for="Contrasena" 
+                                           required />
+                                </div>
+                                <div class="form-group">
+                                    <label class="form-label">
+                                        Confirmar contraseña <span class="required">*</span>
+                                    </label>
+                                    <input type="password" 
+                                           class="form-input" 
+                                           placeholder="Introducir contraseña"
+                                           asp-for="ConfirmarContrasena" 
+                                           required />
+                                </div>
+                            </div>
+                        </div>
                     </div>
 
-                    <div class="form-row">
-                        <div class="form-group">
-                            <label class="form-label">
-                                Nombre <span class="required">*</span>
-                            </label>
-                            <input type="text" 
-                                   class="form-input" 
-                                   placeholder="Introducir nombre"
-                                   asp-for="Nombre" 
-                                   required />
-                        </div>
-                        <div class="form-group">
-                            <label class="form-label">
-                                Apellido <span class="required">*</span>
-                            </label>
-                            <input type="text" 
-                                   class="form-input" 
-                                   placeholder="Introducir apellido"
-                                   asp-for="Apellidos" 
-                                   required />
-                        </div>
-                    </div>
+                    <!-- Columna Derecha: Ubicación e Imágenes -->
+                    <div class="form-column">
+                        <div class="form-section">
+                            <!-- Provincia y Cantón -->
+                            <div class="form-group full-width">
+                                <label class="form-label">Provincia</label>
+                                <div class="select-wrapper">
+                                    <select id="provincia" 
+                                            name="Provincia" 
+                                            class="form-input" 
+                                            onchange="updateCantones(this)">
+                                        <option value="">Seleccione una provincia</option>
+                                        <option value="San José">San José</option>
+                                        <option value="Alajuela">Alajuela</option>
+                                        <option value="Cartago">Cartago</option>
+                                        <option value="Heredia">Heredia</option>
+                                        <option value="Guanacaste">Guanacaste</option>
+                                        <option value="Puntarenas">Puntarenas</option>
+                                        <option value="Limón">Limón</option>
+                                    </select>
+                                </div>
+                            </div>
 
-                    <div class="form-group full-width">
-                        <label class="form-label">
-                            Correo electrónico <span class="required">*</span>
-                        </label>
-                        <input type="email" 
-                               class="form-input" 
-                               placeholder="Introducir correo"
-                               asp-for="Email" 
-                               required />
-                    </div>
+                            <div class="form-group full-width">
+                                <label class="form-label">Cantón</label>
+                                <div class="select-wrapper">
+                                    <select id="canton" 
+                                            name="Canton" 
+                                            class="form-input">
+                                        <option value="">Seleccione un cantón</option>
+                                    </select>
+                                </div>
+                            </div>
 
-                    <div class="form-group full-width">
-                        <label class="form-label">
-                            Confirmar correo electrónico <span class="required">*</span>
-                        </label>
-                        <input type="email" 
-                               class="form-input" 
-                               placeholder="Vuelva a introducir correo"
-                               asp-for="ConfirmarEmail" 
-                               required />
-                    </div>
+                            <!-- Imagen de Perfil -->
+                            <div class="form-group full-width">
+                                <label class="form-label">Foto de Perfil</label>
+                                <div class="upload-area" onclick="document.getElementById('imagenPerfil').click()">
+                                    <input type="file" 
+                                           id="imagenPerfil" 
+                                           name="ImagenPerfil" 
+                                           accept="image/*"
+                                           onchange="previewImage(this, 'perfilPreview')" />
+                                    <div class="upload-placeholder">
+                                        📷 Haga clic para subir imagen
+                                    </div>
+                                    <div id="perfilPreview" class="image-preview"></div>
+                                </div>
+                                <p class="upload-recommendation">Recomendado 102x102px</p>
+                            </div>
 
-                    <div class="form-row">
-                        <div class="form-group">
-                            <label class="form-label">
-                                Teléfono 1 <span class="required">*</span>
-                            </label>
-                            <input type="tel" 
-                                   class="form-input" 
-                                   placeholder="Introducir número"
-                                   asp-for="Telefono1" 
-                                   required />
-                        </div>
-                        <div class="form-group">
-                            <label class="form-label">WhatsApp</label>
-                            <input type="tel" 
-                                   class="form-input" 
-                                   placeholder="Introducir número"
-                                   asp-for="WhatsApp" />
-                        </div>
-                    </div>
-
-                    <div class="form-row">
-                        <div class="form-group">
-                            <label class="form-label">
-                                Contraseña <span class="required">*</span>
-                            </label>
-                            <input type="password" 
-                                   class="form-input" 
-                                   placeholder="Introducir contraseña"
-                                   asp-for="Contrasena" 
-                                   required />
-                        </div>
-                        <div class="form-group">
-                            <label class="form-label">
-                                Confirmar contraseña <span class="required">*</span>
-                            </label>
-                            <input type="password" 
-                                   class="form-input" 
-                                   placeholder="Introducir contraseña"
-                                   asp-for="ConfirmarContrasena" 
-                                   required />
+                            <!-- Banner -->
+                            <div class="form-group full-width">
+                                <label class="form-label">Banner de la Empresa</label>
+                                <div class="upload-area" onclick="document.getElementById('imagenBanner').click()">
+                                    <input type="file" 
+                                           id="imagenBanner" 
+                                           name="ImagenBanner" 
+                                           accept="image/*"
+                                           onchange="previewImage(this, 'bannerPreview')" />
+                                    <div class="upload-placeholder">
+                                        🖼️ Haga clic para subir banner
+                                    </div>
+                                    <div id="bannerPreview" class="image-preview"></div>
+                                </div>
+                                <p class="upload-recommendation">Recomendado 650x266px</p>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -416,6 +588,51 @@
 
 @section Scripts {
     <script>
+        // Province/Canton cascade
+        function updateCantones(provinciaSelect) {
+            const cantonSelect = document.querySelector('#canton');
+            const provincia = provinciaSelect.value;
+
+            // Clear current options
+            cantonSelect.innerHTML = '<option value="">Seleccione un cantón</option>';
+
+            // Add cantones based on province
+            const cantonesPorProvincia = {
+                'San José': ['Central', 'Escazú', 'Desamparados', 'Puriscal', 'Tarrazú', 'Aserrí', 'Mora', 'Goicoechea', 'Santa Ana', 'Alajuelita', 'Coronado', 'Acosta', 'Tibás', 'Moravia', 'Montes de Oca', 'Turrubares', 'Dota', 'Curridabat', 'Pérez Zeledón', 'León Cortés'],
+                'Alajuela': ['Central', 'San Ramón', 'Grecia', 'San Mateo', 'Atenas', 'Naranjo', 'Palmares', 'Poás', 'Orotina', 'San Carlos', 'Zarcero', 'Sarchí', 'Upala', 'Los Chiles', 'Guatuso'],
+                'Cartago': ['Central', 'Paraíso', 'La Unión', 'Jiménez', 'Turrialba', 'Alvarado', 'Oreamuno', 'El Guarco'],
+                'Heredia': ['Central', 'Barva', 'Santo Domingo', 'Santa Bárbara', 'San Rafael', 'San Isidro', 'Belén', 'Flores', 'San Pablo', 'Sarapiquí'],
+                'Guanacaste': ['Liberia', 'Nicoya', 'Santa Cruz', 'Bagaces', 'Carrillo', 'Cañas', 'Abangares', 'Tilarán', 'Nandayure', 'La Cruz', 'Hojancha'],
+                'Puntarenas': ['Central', 'Esparza', 'Buenos Aires', 'Montes de Oro', 'Osa', 'Quepos', 'Golfito', 'Coto Brus', 'Parrita', 'Corredores', 'Garabito'],
+                'Limón': ['Central', 'Pococí', 'Siquirres', 'Talamanca', 'Matina', 'Guácimo']
+            };
+
+            if (cantonesPorProvincia[provincia]) {
+                cantonesPorProvincia[provincia].forEach(canton => {
+                    const option = document.createElement('option');
+                    option.value = canton;
+                    option.textContent = canton;
+                    cantonSelect.appendChild(option);
+                });
+            }
+        }
+
+        // Preview image function
+        function previewImage(input, previewId) {
+            const previewDiv = document.getElementById(previewId);
+            
+            if (input.files && input.files[0]) {
+                const reader = new FileReader();
+                
+                reader.onload = function(e) {
+                    previewDiv.innerHTML = '<img src="' + e.target.result + '" alt="Preview" />';
+                    previewDiv.style.display = 'block';
+                }
+                
+                reader.readAsDataURL(input.files[0]);
+            }
+        }
+
         // Form validation
         document.addEventListener('DOMContentLoaded', function() {
             const form = document.querySelector('.register-form');

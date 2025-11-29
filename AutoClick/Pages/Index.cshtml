@@ -773,16 +773,18 @@
         <div class="index-hero-gradient" style="width: 100%; height: 736px; left: 0px; top: 0px; position: absolute; background: linear-gradient(180deg, rgba(0, 0, 0, 0) 0%, rgba(0, 0, 0, 0.90) 100%); overflow: hidden">
             <!-- Búsqueda rápida centrada -->
             <div class="index-busqueda-rapida" style="width: 624px; padding-left: 20px; padding-right: 20px; padding-top: 19px; padding-bottom: 19px; left: 50%; top: 266px; position: absolute; transform: translateX(-50%); background: rgba(0, 0, 0, 0.25); box-shadow: 5px 5px 6px rgba(0, 0, 0, 0.25); overflow: hidden; border-radius: 4px; outline: 1px white solid; outline-offset: -1px; backdrop-filter: blur(6px); flex-direction: column; justify-content: flex-start; align-items: center; gap: 32px; display: inline-flex">
-            <div style="align-self: stretch; text-box-trim: trim-both; text-box-edge: cap alphabetic; text-align: center; color: white; font-size: 32px; font-family: Montserrat; font-weight: 700; word-wrap: break-word">Búsqueda rápida</div>
-            <div data-property-1="Default" style="align-self: stretch; flex-direction: column; justify-content: flex-start; align-items: flex-start; gap: 16px; display: flex">
-                <div style="align-self: stretch; text-box-trim: trim-both; text-box-edge: cap alphabetic; color: white; font-size: 16px; font-family: Montserrat; font-weight: 500; word-wrap: break-word">¿Qué auto anda buscando?</div>
-                    <div style="align-self: stretch; padding: 16px; background: white; overflow: hidden; border-radius: 4px; justify-content: space-between; align-items: center; display: inline-flex">
-                        <input type="text" placeholder="Digite marca o modelo" style="width: 100%; border: none; outline: none; text-box-trim: trim-both; text-box-edge: cap alphabetic; color: rgba(0, 0, 0, 0.50); font-size: 16px; font-family: Montserrat; font-weight: 500; word-wrap: break-word; background: transparent;" />
+                <div style="align-self: stretch; text-box-trim: trim-both; text-box-edge: cap alphabetic; text-align: center; color: white; font-size: 32px; font-family: Montserrat; font-weight: 700; word-wrap: break-word">Búsqueda rápida</div>
+                <form method="get" action="@Url.Page("/BusquedaAvanzada")" style="align-self: stretch; flex-direction: column; justify-content: flex-start; align-items: center; gap: 32px; display: flex;">
+                    <div data-property-1="Default" style="align-self: stretch; flex-direction: column; justify-content: flex-start; align-items: flex-start; gap: 16px; display: flex">
+                        <div style="align-self: stretch; text-box-trim: trim-both; text-box-edge: cap alphabetic; color: white; font-size: 16px; font-family: Montserrat; font-weight: 500; word-wrap: break-word">¿Qué auto anda buscando?</div>
+                        <div style="align-self: stretch; padding: 16px; background: white; overflow: hidden; border-radius: 4px; justify-content: space-between; align-items: center; display: inline-flex">
+                            <input type="text" name="Search" placeholder="Digite marca o modelo" style="width: 100%; border: none; outline: none; text-box-trim: trim-both; text-box-edge: cap alphabetic; color: rgba(0, 0, 0, 0.50); font-size: 16px; font-family: Montserrat; font-weight: 500; word-wrap: break-word; background: transparent;" />
+                        </div>
                     </div>
-                </div>
-                <div data-estado="Default" style="width: 129px; height: 44px; padding: 16px; background: white; border-radius: 4px; justify-content: center; align-items: center; gap: 8px; display: inline-flex; cursor: pointer;" onclick="window.location.href='@Url.Page("/BusquedaAvanzada")'">
-                    <div style="text-box-trim: trim-both; text-box-edge: cap alphabetic; color: #06174D; font-size: 16px; font-family: Montserrat; font-weight: 700; word-wrap: break-word">Buscar</div>
-                </div>
+                    <button type="submit" data-estado="Default" style="width: 129px; height: 44px; padding: 16px; background: white; border: none; border-radius: 4px; justify-content: center; align-items: center; gap: 8px; display: inline-flex; cursor: pointer;">
+                        <div style="text-box-trim: trim-both; text-box-edge: cap alphabetic; color: #06174D; font-size: 16px; font-family: Montserrat; font-weight: 700; word-wrap: break-word">Buscar</div>
+                    </button>
+                </form>
             </div>
             
             <!-- Botón Anuncie su auto ahora -->

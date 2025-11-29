@@ -332,22 +332,10 @@ document.addEventListener('DOMContentLoaded', function () {
             });
         });
 
-        // Tag radio buttons (solo uno puede ser seleccionado)
-        const tagRadios = document.querySelectorAll('.tag-option input[type="radio"]');
-        tagRadios.forEach(radio => {
-            radio.addEventListener('change', updateTagSelection);
-
-            // Agregar event listener al contenedor de la tarjeta para hacer clic en toda el área
-            const tagCard = radio.closest('.tag-option').querySelector('.tag-card');
-            if (tagCard) {
-                tagCard.addEventListener('click', function (e) {
-                    // Si el click no fue en el radio button directamente
-                    if (e.target !== radio) {
-                        radio.checked = !radio.checked;
-                        radio.dispatchEvent(new Event('change'));
-                    }
-                });
-            }
+        // Tag checkboxes (se pueden seleccionar múltiples)
+        const tagCheckboxes = document.querySelectorAll('.tag-option input[type="checkbox"]');
+        tagCheckboxes.forEach(checkbox => {
+            checkbox.addEventListener('change', updateTagSelection);
         });
 
         // Initialize tag videos
@@ -386,7 +374,12 @@ document.addEventListener('DOMContentLoaded', function () {
         // File upload handlers
         const fileInputs = document.querySelectorAll('input[type="file"]');
         fileInputs.forEach(input => {
-            input.addEventListener('change', handleFileUpload);
+            input.addEventListener('change', function(e) {
+                const uploadArea = this.closest('.upload-area');
+                if (uploadArea && this.files.length > 0) {
+                    handleFileUpload(this.files, uploadArea);
+                }
+            });
         });
 
         // Payment method toggle
@@ -786,7 +779,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
     function updatePaymentSummary() {
         const selectedPlan = document.querySelector('input[name="Formulario.PlanVisibilidad"]:checked');
-        const selectedTag = document.querySelector('.tag-option input[type="radio"]:checked');
+        const selectedTags = document.querySelectorAll('.tag-option input[type="checkbox"]:checked');
 
         const serviceFee = 180; // Tarifa de servicio fija
         let planPrice = 0;
@@ -799,10 +792,19 @@ document.addEventListener('DOMContentLoaded', function () {
             planName = selectedPlan.dataset.planName || "Plan seleccionado";
         }
 
-        // Solo un tag puede ser seleccionado con radio buttons
-        if (selectedTag) {
-            tagPrice = parseFloat(selectedTag.dataset.price || 0);
-            tagName = selectedTag.dataset.tagName || "Banderín seleccionado";
+        // Calcular precio de banderines (checkboxes - pueden ser múltiples)
+        if (selectedTags.length > 0) {
+            // Sumar el precio de todos los banderines seleccionados
+            selectedTags.forEach(tag => {
+                tagPrice += parseFloat(tag.dataset.price || 0);
+            });
+            
+            // Texto descriptivo
+            if (selectedTags.length === 1) {
+                tagName = selectedTags[0].dataset.tagName || "Banderín seleccionado";
+            } else {
+                tagName = `${selectedTags.length} banderines seleccionados`;
+            }
         }
 
         const subtotal = planPrice + tagPrice;
@@ -954,6 +956,10 @@ document.addEventListener('DOMContentLoaded', function () {
             }
         }
 
+        // Contador para saber cuándo se han procesado todos los archivos
+        let filesProcessed = 0;
+        const totalFiles = fileArray.length;
+
         fileArray.forEach(file => {
             if (isVideo && !file.type.startsWith('video/')) {
                 alert('Por favor, seleccione solo archivos de video');
@@ -971,7 +977,17 @@ document.addEventListener('DOMContentLoaded', function () {
                 if (isVideo) {
                     updateVideoPreview(uploadArea, e.target.result, file.name);
                 } else {
-                    addImagePreview(uploadArea, e.target.result, file.name, file);
+                    // Solo agregar el archivo al array, NO actualizar UI todavía
+                    uploadedFiles.push(file);
+                }
+                
+                // Incrementar contador
+                filesProcessed++;
+                
+                // Solo actualizar UI cuando TODOS los archivos se hayan procesado
+                if (filesProcessed === totalFiles && !isVideo) {
+                    updateUploadAreaText();
+                    updatePhotoOrderSection();
                 }
             };
             reader.readAsDataURL(file);
@@ -988,23 +1004,23 @@ document.addEventListener('DOMContentLoaded', function () {
         `;
     }
 
-    function addImagePreview(uploadArea, src, fileName, file) {
-        // Store file reference
-        uploadedFiles.push(file);
+    function updateUploadAreaText() {
+        const uploadArea = document.querySelector('.upload-area.photos');
+        if (!uploadArea) return;
 
-        // NO crear previsualizaciones en el área de subida
-        // Solo actualizar el texto del placeholder para indicar cuántas fotos se han subido
         const placeholder = uploadArea.querySelector('.upload-placeholder');
-        if (placeholder) {
-            const uploadText = placeholder.querySelector('p');
-            if (uploadText) {
-                uploadText.textContent = `${uploadedFiles.length} foto${uploadedFiles.length > 1 ? 's' : ''} subida${uploadedFiles.length > 1 ? 's' : ''}. Haga clic para agregar más.`;
-                uploadText.style.color = '#00CC00';
-            }
-        }
+        if (!placeholder) return;
 
-        // Actualizar la sección de orden de fotos
-        updatePhotoOrderSection();
+        const uploadText = placeholder.querySelector('p');
+        if (!uploadText) return;
+
+        if (uploadedFiles.length > 0) {
+            uploadText.textContent = `${uploadedFiles.length} foto${uploadedFiles.length > 1 ? 's' : ''} subida${uploadedFiles.length > 1 ? 's' : ''}. Haga clic para agregar más.`;
+            uploadText.style.color = '#00CC00';
+        } else {
+            uploadText.textContent = 'Haga clic o arrastre imágenes aquí';
+            uploadText.style.color = 'white';
+        }
     }
 
     function updatePhotoOrderSection() {
@@ -1014,13 +1030,21 @@ document.addEventListener('DOMContentLoaded', function () {
         if (orderSection && uploadedGrid && uploadedFiles.length > 0) {
             orderSection.style.display = 'block';
 
-            // Limpiar el grid
+            // Limpiar el grid completamente antes de re-renderizar
             uploadedGrid.innerHTML = '';
+            
+            // Contador para asegurar que solo se procese una vez por archivo
+            let processedCount = 0;
 
             // Agregar cada imagen con opción de seleccionar como principal
             uploadedFiles.forEach((file, index) => {
                 const reader = new FileReader();
                 reader.onload = function (e) {
+                    processedCount++;
+                    // Evitar duplicados verificando que no se haya procesado ya
+                    if (processedCount > uploadedFiles.length) {
+                        return;
+                    }
                     const photoCard = document.createElement('div');
                     photoCard.className = 'uploaded-photo-card';
                     if (index === 0) {
@@ -1126,25 +1150,6 @@ document.addEventListener('DOMContentLoaded', function () {
         }
 
         return isValid;
-    }
-
-    function updateUploadAreaText() {
-        const uploadArea = document.querySelector('.upload-area.photos');
-        if (!uploadArea) return;
-
-        const placeholder = uploadArea.querySelector('.upload-placeholder');
-        if (!placeholder) return;
-
-        const uploadText = placeholder.querySelector('p');
-        if (!uploadText) return;
-
-        if (uploadedFiles.length > 0) {
-            uploadText.textContent = `${uploadedFiles.length} foto${uploadedFiles.length > 1 ? 's' : ''} subida${uploadedFiles.length > 1 ? 's' : ''}. Haga clic para agregar más.`;
-            uploadText.style.color = '#00CC00';
-        } else {
-            uploadText.textContent = 'Haga clic o arrastre imágenes aquí';
-            uploadText.style.color = 'white';
-        }
     }
 
     function showFieldError(field, message) {
@@ -1557,6 +1562,11 @@ document.addEventListener('DOMContentLoaded', function () {
         // Add handler for the specific endpoint
         formData.append('handler', 'Finalizar');
 
+        // Debug: log BanderinesSeleccionados
+        const banderinesValues = formData.getAll('BanderinesSeleccionados');
+        console.log('Banderines en FormData:', banderinesValues);
+        console.log('Cantidad de banderines:', banderinesValues.length);
+
         // Debug: log all FormData entries
         for (let [key, value] of formData.entries()) {
             if (value instanceof File) {
@@ -1760,31 +1770,27 @@ document.addEventListener('DOMContentLoaded', function () {
     }
 
     function updateTagSelection(event) {
-        const radio = event.target;
-        const tagOptions = document.querySelectorAll('.tag-option');
-
-        // Remover la clase 'selected' de todas las opciones
-        tagOptions.forEach(option => {
-            const tagCard = option.querySelector('.tag-card');
-            if (tagCard) {
-                tagCard.style.borderColor = 'rgba(255, 255, 255, 0.5)';
-                tagCard.style.background = '#02081C';
-                tagCard.style.boxShadow = 'none';
-            }
-        });
-
-        // Agregar la clase 'selected' solo a la opción seleccionada
-        const selectedTagOption = radio.closest('.tag-option');
-        if (selectedTagOption && radio.checked) {
+        const checkbox = event.target;
+        const selectedTagOption = checkbox.closest('.tag-option');
+        
+        if (selectedTagOption) {
             const tagCard = selectedTagOption.querySelector('.tag-card');
             if (tagCard) {
-                tagCard.style.borderColor = '#00CC00';
-                tagCard.style.background = 'rgba(0, 204, 0, 0.1)';
-                tagCard.style.boxShadow = '0 0 20px rgba(0, 204, 0, 0.3)';
+                if (checkbox.checked) {
+                    // Aplicar estilo de selección
+                    tagCard.style.borderColor = '#00CC00';
+                    tagCard.style.background = 'rgba(0, 204, 0, 0.1)';
+                    tagCard.style.boxShadow = '0 0 20px rgba(0, 204, 0, 0.3)';
+                } else {
+                    // Remover estilo de selección
+                    tagCard.style.borderColor = 'rgba(255, 255, 255, 0.5)';
+                    tagCard.style.background = '#02081C';
+                    tagCard.style.boxShadow = 'none';
+                }
             }
         }
 
-        // Actualizar el resumen de pago cuando cambia el banderín
+        // Actualizar el resumen de pago cuando cambia la selección de banderines
         updatePaymentSummary();
     }
 

@@ -136,7 +136,7 @@ public class Auto
 
     [MaxLength(200)]
     [Display(Name = "Ubicación Exacta")]
-    public string UbicacionExacta { get; set; } = string.Empty;
+    public string? UbicacionExacta { get; set; }
 
     // Descripción del vehículo
     [Column(TypeName = "TEXT")]
@@ -149,7 +149,11 @@ public class Auto
     [Display(Name = "Plan de Visibilidad")]
     public int PlanVisibilidad { get; set; } = 0; // 0 = Pendiente de aprobación, 1+ = Aprobado/Pagado
 
-    [Range(0, 10)]
+    [MaxLength(500)]
+    [Display(Name = "Banderines Adquiridos")]
+    public string? BanderinesAdquiridos { get; set; } = null; // IDs separados por coma: "version-americana,unico-dueno"
+    
+    // Deprecated: mantener por compatibilidad, usar BanderinesAdquiridos
     [Display(Name = "Banderín Adquirido")]
     public int BanderinAdquirido { get; set; } = 0;
 

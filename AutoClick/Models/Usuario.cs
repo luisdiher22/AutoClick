@@ -37,6 +37,26 @@ public class Usuario
     [Display(Name = "Nombre de Agencia")]
     public string? NombreAgencia { get; set; }
     
+    [MaxLength(50)]
+    [Display(Name = "Cédula Jurídica/Física")]
+    public string? CedulaJuridica { get; set; }
+    
+    [MaxLength(50)]
+    [Display(Name = "Provincia")]
+    public string? Provincia { get; set; }
+    
+    [MaxLength(50)]
+    [Display(Name = "Cantón")]
+    public string? Canton { get; set; }
+    
+    [MaxLength(500)]
+    [Display(Name = "URL de Imagen de Perfil")]
+    public string? ImagenPerfilUrl { get; set; }
+    
+    [MaxLength(500)]
+    [Display(Name = "URL de Banner")]
+    public string? ImagenBannerUrl { get; set; }
+    
     [Display(Name = "Es Agencia")]
     public bool EsAgencia => !string.IsNullOrEmpty(NombreAgencia);
     

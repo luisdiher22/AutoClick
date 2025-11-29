@@ -40,9 +40,12 @@
             <div class="profile-header">
                 <div class="profile-avatar-section">
                     <div class="profile-avatar">
-                        @if (!string.IsNullOrEmpty(Model.LogoUrl))
+                        @{
+                            var profileImageUrl = !string.IsNullOrEmpty(Model.ImagenPerfilUrl) ? Model.ImagenPerfilUrl : Model.LogoUrl;
+                        }
+                        @if (!string.IsNullOrEmpty(profileImageUrl))
                         {
-                            <img src="@Model.LogoUrl" alt="Logo de la empresa" style="width: 100%; height: 100%; object-fit: cover; border-radius: 50%;" />
+                            <img src="@profileImageUrl" alt="Logo de la empresa" style="width: 100%; height: 100%; object-fit: cover; border-radius: 50%;" />
                         }
                         else
                         {
@@ -132,16 +135,6 @@
                             <label for="canton">Cantón <span class="required">*</span></label>
                             <input type="text" id="canton" name="Canton" asp-for="Canton" class="form-input" placeholder="Ingrese el cantón" required />
                             <span asp-validation-for="Canton" class="validation-message"></span>
-                        </div>
-                    </div>
-                    
-                    <div class="form-row">
-                        <div class="form-group full-width">
-                            <label for="direccionExacta">Dirección exacta</label>
-                            <textarea id="direccionExacta" name="DireccionExacta" 
-                                      asp-for="DireccionExacta" class="form-textarea" 
-                                      placeholder="Montecillos, Urbanización Pandora"></textarea>
-                            <span asp-validation-for="DireccionExacta" class="validation-message"></span>
                         </div>
                     </div>
                 </div>

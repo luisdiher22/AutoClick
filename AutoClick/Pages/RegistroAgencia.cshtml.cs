@@ -2,6 +2,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using AutoClick.Models;
 using AutoClick.Data;
+using AutoClick.Services;
 using Microsoft.EntityFrameworkCore;
 using System.ComponentModel.DataAnnotations;
 using System.Security.Cryptography;
@@ -12,10 +13,12 @@ namespace AutoClick.Pages
     public class RegistroAgenciaModel : PageModel
     {
         private readonly ApplicationDbContext _context;
+        private readonly IFileUploadService _fileUploadService;
 
-        public RegistroAgenciaModel(ApplicationDbContext context)
+        public RegistroAgenciaModel(ApplicationDbContext context, IFileUploadService fileUploadService)
         {
             _context = context;
+            _fileUploadService = fileUploadService;
         }
 
         [BindProperty]
@@ -66,6 +69,24 @@ namespace AutoClick.Pages
         [Required(ErrorMessage = "Debe confirmar la contraseña")]
         [Compare("Contrasena", ErrorMessage = "Las contraseñas no coinciden")]
         public string ConfirmarContrasena { get; set; } = "";
+
+        [BindProperty]
+        [MaxLength(50, ErrorMessage = "La cédula no puede exceder 50 caracteres")]
+        public string? CedulaJuridica { get; set; }
+
+        [BindProperty]
+        [MaxLength(50, ErrorMessage = "La provincia no puede exceder 50 caracteres")]
+        public string? Provincia { get; set; }
+
+        [BindProperty]
+        [MaxLength(50, ErrorMessage = "El cantón no puede exceder 50 caracteres")]
+        public string? Canton { get; set; }
+
+        [BindProperty]
+        public IFormFile? ImagenPerfil { get; set; }
+
+        [BindProperty]
+        public IFormFile? ImagenBanner { get; set; }
 
         public string ErrorMessage { get; set; } = "";
         public string SuccessMessage { get; set; } = "";
@@ -127,6 +148,36 @@ namespace AutoClick.Pages
                     return Page();
                 }
 
+                // Subir imágenes si se proporcionaron
+                string? imagenPerfilUrl = null;
+                string? imagenBannerUrl = null;
+
+                if (ImagenPerfil != null && ImagenPerfil.Length > 0)
+                {
+                    try
+                    {
+                        imagenPerfilUrl = await _fileUploadService.UploadFileAsync(ImagenPerfil, "agencias");
+                    }
+                    catch (Exception ex)
+                    {
+                        ErrorMessage = "Error al subir la imagen de perfil. Intente nuevamente.";
+                        return Page();
+                    }
+                }
+
+                if (ImagenBanner != null && ImagenBanner.Length > 0)
+                {
+                    try
+                    {
+                        imagenBannerUrl = await _fileUploadService.UploadFileAsync(ImagenBanner, "agencias");
+                    }
+                    catch (Exception ex)
+                    {
+                        ErrorMessage = "Error al subir la imagen del banner. Intente nuevamente.";
+                        return Page();
+                    }
+                }
+
                 // Crear el nuevo usuario (agencia)
                 var nuevoUsuario = new Usuario
                 {
@@ -135,7 +186,12 @@ namespace AutoClick.Pages
                     Apellidos = Apellidos.Trim(),
                     NumeroTelefono = Telefono1.Trim(),
                     Contrasena = HashPassword(Contrasena),
-                    NombreAgencia = NombreAgencia.Trim() // Esto hace que EsAgencia sea true
+                    NombreAgencia = NombreAgencia.Trim(), // Esto hace que EsAgencia sea true
+                    CedulaJuridica = CedulaJuridica?.Trim(),
+                    Provincia = Provincia?.Trim(),
+                    Canton = Canton?.Trim(),
+                    ImagenPerfilUrl = imagenPerfilUrl,
+                    ImagenBannerUrl = imagenBannerUrl
                 };
 
                 // Guardar en la base de datos

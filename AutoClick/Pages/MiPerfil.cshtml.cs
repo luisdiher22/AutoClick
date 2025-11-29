@@ -32,7 +32,6 @@ namespace AutoClick.Pages
 
         [BindProperty]
         [Display(Name = "Cédula jurídica")]
-        [RegularExpression(@"^\d-\d{3}-\d{6}$", ErrorMessage = "El formato de cédula jurídica debe ser: #-###-######")]
         public string? CedulaJuridica { get; set; }
 
         [BindProperty]
@@ -60,15 +59,13 @@ namespace AutoClick.Pages
         [Display(Name = "Cantón")]
         public string? Canton { get; set; }
 
-        [BindProperty]
-        [Display(Name = "Dirección exacta")]
-        public string? DireccionExacta { get; set; }
-
         // File upload properties
         [BindProperty]
         public IFormFile? LogoFile1 { get; set; }
 
         public string? LogoUrl { get; set; }
+        public string? ImagenPerfilUrl { get; set; }
+        public string? ImagenBannerUrl { get; set; }
 
         // Newsletter subscription
         [BindProperty]
@@ -184,13 +181,13 @@ namespace AutoClick.Pages
                     Telefono1 = usuario.NumeroTelefono;
                     WhatsApp = usuario.NumeroTelefono;
                     LogoUrl = usuario.LogoUrl;
+                    ImagenPerfilUrl = usuario.ImagenPerfilUrl;
+                    ImagenBannerUrl = usuario.ImagenBannerUrl;
                     
-                    
-                    // Set some default values for demo - in a real app these would come from an extended user profile
-                    CedulaJuridica = usuario.EsAgencia ? "3-008-4534245" : "";
-                    Provincia = "San José";
-                    Canton = "San José";
-                    DireccionExacta = "Centro de San José";
+                    // Load actual values from database
+                    CedulaJuridica = usuario.CedulaJuridica;
+                    Provincia = usuario.Provincia;
+                    Canton = usuario.Canton;
                 }
                 else
                 {
@@ -251,6 +248,11 @@ namespace AutoClick.Pages
                     }
                 }
 
+                // Update agency-specific fields
+                usuario.CedulaJuridica = CedulaJuridica;
+                usuario.Provincia = Provincia;
+                usuario.Canton = Canton;
+                
                 if (!string.IsNullOrWhiteSpace(Telefono1))
                 {
                     usuario.NumeroTelefono = Telefono1;

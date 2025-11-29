@@ -23,6 +23,9 @@ namespace AutoClick.Pages
         [BindProperty]
         public Auto Formulario { get; set; } = new Auto();
 
+        [BindProperty(SupportsGet = false)]
+        public List<string>? BanderinesSeleccionados { get; set; }
+
         [BindProperty]
         public int SeccionActual { get; set; } = 1;
 
@@ -140,6 +143,24 @@ namespace AutoClick.Pages
                 {
                 }
 
+                // DEBUG: Log para verificar qué banderines se reciben
+                Console.WriteLine($"BanderinesSeleccionados Count: {BanderinesSeleccionados?.Count ?? 0}");
+                if (BanderinesSeleccionados != null && BanderinesSeleccionados.Any())
+                {
+                    Console.WriteLine($"Banderines recibidos: {string.Join(", ", BanderinesSeleccionados)}");
+                }
+                
+                // DEBUG: Verificar también en Request.Form directamente
+                if (Request.Form.ContainsKey("BanderinesSeleccionados"))
+                {
+                    var banderinesFromForm = Request.Form["BanderinesSeleccionados"].ToArray();
+                    Console.WriteLine($"BanderinesSeleccionados en Request.Form: {string.Join(", ", banderinesFromForm)}");
+                }
+                else
+                {
+                    Console.WriteLine("BanderinesSeleccionados NO está en Request.Form");
+                }
+
                 var userEmail = User?.Identity?.Name;
 
                 // Verificar que el usuario esté autenticado
@@ -246,6 +267,9 @@ namespace AutoClick.Pages
                 // Configuración del anuncio
                 PlanVisibilidad = Formulario.PlanVisibilidad,
                 BanderinAdquirido = Formulario.BanderinAdquirido,
+                BanderinesAdquiridos = BanderinesSeleccionados != null && BanderinesSeleccionados.Any() 
+                    ? string.Join(",", BanderinesSeleccionados) 
+                    : null,
 
                 // Multimedia - usar las URLs subidas
                 ImagenesUrls = System.Text.Json.JsonSerializer.Serialize(imagenesUrls),
@@ -258,6 +282,9 @@ namespace AutoClick.Pages
                 FechaActualizacion = DateTime.Now,
                 Activo = true
             };
+
+            // DEBUG: Log antes de guardar
+            Console.WriteLine($"AUTO CREADO - BanderinesAdquiridos: {auto.BanderinesAdquiridos ?? "NULL"}");
 
             try
             {
@@ -356,6 +383,9 @@ namespace AutoClick.Pages
             // Configuración del anuncio
             auto.PlanVisibilidad = Formulario.PlanVisibilidad;
             auto.BanderinAdquirido = Formulario.BanderinAdquirido;
+            auto.BanderinesAdquiridos = BanderinesSeleccionados != null && BanderinesSeleccionados.Any()
+                ? string.Join(",", BanderinesSeleccionados)
+                : null;
 
             // No sobreescribir multimedia si no se proporcionaron nuevos archivos
             if (Formulario.Fotos == null || !Formulario.Fotos.Any())

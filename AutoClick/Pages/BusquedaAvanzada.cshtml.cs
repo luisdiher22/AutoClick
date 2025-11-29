@@ -86,11 +86,11 @@ namespace AutoClick.Pages
         public string? SortBy { get; set; } = "recent";
         
         [BindProperty(SupportsGet = true)]
-        public new int Page { get; set; } = 1;
+        public int PageNumber { get; set; } = 1;
         
         public int PageSize { get; set; } = 8; // 2 columns x 4 rows
         public int TotalPages { get; set; }
-        public int CurrentPage => Page;
+        public int CurrentPage => PageNumber;
         public int TotalCars { get; set; }
 
         // Applied Filters for Display
@@ -184,7 +184,7 @@ namespace AutoClick.Pages
             // Apply pagination (con AsNoTracking para performance)
             Autos = await query
                 .AsNoTracking()
-                .Skip((Page - 1) * PageSize)
+                .Skip((PageNumber - 1) * PageSize)
                 .Take(PageSize)
                 .ToListAsync();
 
@@ -200,7 +200,7 @@ namespace AutoClick.Pages
                 TotalPages = (int)Math.Ceiling((double)TotalCars / PageSize);
                 
                 Autos = sampleAutos
-                    .Skip((Page - 1) * PageSize)
+                    .Skip((PageNumber - 1) * PageSize)
                     .Take(PageSize)
                     .ToList();
             }
