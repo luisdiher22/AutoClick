@@ -14,10 +14,10 @@
             }
             
             <!-- Search Button (Todas las vistas) -->
-            <a asp-page="/BusquedaAvanzada" class="search-btn-index" title="Búsqueda">
+            <button class="search-btn-index" id="searchBtnResponsive" title="Búsqueda">
                 <img src="~/images/icons/search-icon.svg" alt="Búsqueda" />
                 <span>Búsqueda</span>
-            </a>
+            </button>
             
             <!-- Menu/Close Button -->
             <button class="menu-btn" id="menuBtn" aria-label="Menú">
@@ -169,6 +169,28 @@
     </div>
 </header>
 
+<!-- Search Modal Responsive -->
+<div class="search-modal-responsive" id="searchModalResponsive">
+    <div class="search-modal-content">
+        <button class="search-modal-close" id="searchModalClose">
+            <span>×</span>
+            <span class="search-modal-close-text">Cerrar</span>
+        </button>
+        <div class="search-modal-body">
+            <h2 class="search-modal-title">Búsqueda rápida</h2>
+            <form method="get" action="@Url.Page("/BusquedaAvanzada")" class="search-modal-form">
+                <div class="search-modal-field">
+                    <label class="search-modal-label">¿Qué auto anda buscando?</label>
+                    <div class="search-modal-input-wrapper">
+                        <input type="text" name="Search" placeholder="Digite marca o modelo" class="search-modal-input" />
+                    </div>
+                </div>
+                <button type="submit" class="search-modal-submit">Buscar</button>
+            </form>
+        </div>
+    </div>
+</div>
+
 <script>
     // Menu JavaScript
     document.addEventListener('DOMContentLoaded', function() {
@@ -178,6 +200,34 @@
         const closeIcon = menuBtn.querySelector('.close-icon');
         const menuText = menuBtn.querySelector('.menu-text');
         const closeText = menuBtn.querySelector('.close-text');
+        
+        // Search Modal
+        const searchBtn = document.getElementById('searchBtnResponsive');
+        const searchModal = document.getElementById('searchModalResponsive');
+        const searchModalClose = document.getElementById('searchModalClose');
+        
+        if (searchBtn && searchModal) {
+            searchBtn.addEventListener('click', function(e) {
+                e.preventDefault();
+                e.stopPropagation();
+                searchModal.classList.add('active');
+                document.body.style.overflow = 'hidden';
+            });
+            
+            if (searchModalClose) {
+                searchModalClose.addEventListener('click', function() {
+                    searchModal.classList.remove('active');
+                    document.body.style.overflow = '';
+                });
+            }
+            
+            searchModal.addEventListener('click', function(e) {
+                if (e.target === searchModal) {
+                    searchModal.classList.remove('active');
+                    document.body.style.overflow = '';
+                }
+            });
+        }
         
         function openMenu() {
             menuOverlay.classList.add('active');

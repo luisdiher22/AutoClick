@@ -51,7 +51,7 @@
                             <div class="busqueda-filter-group">
                                 <label class="busqueda-filter-label">Provincia</label>
                                 <div class="busqueda-select-wrapper">
-                                    <select name="province" class="busqueda-filter-select" id="province-select" onchange="onProvinceChange(this)">
+                                    <select name="province" class="busqueda-filter-select" id="province-select">
                                         <option value="">Todas las provincias</option>
                                         @foreach (var province in Model.AvailableProvinces)
                                         {
@@ -82,7 +82,7 @@
                             <div class="busqueda-filter-group">
                                 <label class="busqueda-filter-label">Marca</label>
                                 <div class="busqueda-select-wrapper">
-                                    <select name="brand" class="busqueda-filter-select" id="brand-select" onchange="onBrandChange(this)">
+                                    <select name="brand" class="busqueda-filter-select" id="brand-select">
                                         <option value="">Todas las marcas</option>
                                         @foreach (var brand in Model.AvailableBrands)
                                         {
@@ -554,21 +554,19 @@
                     <input type="hidden" name="page" value="1" />
                     <input type="hidden" name="sortBy" value="@Model.SortBy" />
 
-                    <!-- Provincia -->
-                    <div class="busqueda-filter-group">
-                        <label class="busqueda-filter-label">Provincia</label>
-                        <div class="busqueda-select-wrapper">
-                            <select name="province" class="busqueda-filter-select" id="province-select-modal" onchange="onProvinceChange(this)">
-                                <option value="">Todas las provincias</option>
-                                @foreach (var province in Model.AvailableProvinces)
-                                {
-                                    <option value="@province" selected="@(Model.Province == province)">@province</option>
-                                }
-                            </select>
-                        </div>
-                    </div>
-
-                    <!-- Cantón -->
+                            <!-- Provincia -->
+                            <div class="busqueda-filter-group">
+                                <label class="busqueda-filter-label">Provincia</label>
+                                <div class="busqueda-select-wrapper">
+                                    <select name="province" class="busqueda-filter-select" id="province-select-modal">
+                                        <option value="">Todas las provincias</option>
+                                        @foreach (var province in Model.AvailableProvinces)
+                                        {
+                                            <option value="@province" selected="@(Model.Province == province)">@province</option>
+                                        }
+                                    </select>
+                                </div>
+                            </div>                    <!-- Cantón -->
                     <div class="busqueda-filter-group">
                         <label class="busqueda-filter-label">Cantón</label>
                         <div class="busqueda-select-wrapper">
@@ -585,21 +583,19 @@
                     <!-- Línea divisoria -->
                     <hr class="filter-divider" />
 
-                    <!-- Marca -->
-                    <div class="busqueda-filter-group">
-                        <label class="busqueda-filter-label">Marca</label>
-                        <div class="busqueda-select-wrapper">
-                            <select name="brand" class="busqueda-filter-select" id="brand-select-modal" onchange="onBrandChange(this)">
-                                <option value="">Todas las marcas</option>
-                                @foreach (var brand in Model.AvailableBrands)
-                                {
-                                    <option value="@brand" selected="@(Model.Brand == brand)">@brand</option>
-                                }
-                            </select>
-                        </div>
-                    </div>
-
-                    <!-- Modelo -->
+                            <!-- Marca -->
+                            <div class="busqueda-filter-group">
+                                <label class="busqueda-filter-label">Marca</label>
+                                <div class="busqueda-select-wrapper">
+                                    <select name="brand" class="busqueda-filter-select" id="brand-select-modal">
+                                        <option value="">Todas las marcas</option>
+                                        @foreach (var brand in Model.AvailableBrands)
+                                        {
+                                            <option value="@brand" selected="@(Model.Brand == brand)">@brand</option>
+                                        }
+                                    </select>
+                                </div>
+                            </div>                    <!-- Modelo -->
                     <div class="busqueda-filter-group">
                         <label class="busqueda-filter-label">Modelo</label>
                         <div class="busqueda-select-wrapper">
@@ -610,6 +606,44 @@
                                     <option value="@modelName" selected="@(Model.Model == modelName)">@modelName</option>
                                 }
                             </select>
+                        </div>
+                    </div>
+
+                    <!-- Línea divisoria -->
+                    <hr class="filter-divider" />
+
+                    <!-- Rango de precio (mismo estilo que escritorio) -->
+                    <div class="busqueda-filter-group">
+                        <label class="busqueda-filter-label">Rango de precio</label>
+                        <div class="busqueda-price-range">
+                            <div class="price-input-group">
+                                <label class="price-input-label">Min</label>
+                                <input type="number" name="minPrice" placeholder="$" class="busqueda-price-field" value="@Model.MinPrice" />
+                            </div>
+                            <span class="price-separator">hasta</span>
+                            <div class="price-input-group">
+                                <label class="price-input-label">Max</label>
+                                <input type="number" name="maxPrice" placeholder="$" class="busqueda-price-field" value="@Model.MaxPrice" />
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Línea divisoria -->
+                    <hr class="filter-divider" />
+
+                    <!-- Kilometraje (mismo estilo que escritorio) -->
+                    <div class="busqueda-filter-group">
+                        <label class="busqueda-filter-label">Kilometraje</label>
+                        <div class="busqueda-price-range">
+                            <div class="price-input-group">
+                                <label class="price-input-label">Min</label>
+                                <input type="number" name="minKm" class="busqueda-price-field" value="@Model.MinKm" />
+                            </div>
+                            <span class="price-separator">hasta</span>
+                            <div class="price-input-group">
+                                <label class="price-input-label">Max</label>
+                                <input type="number" name="maxKm" class="busqueda-price-field" value="@Model.MaxKm" />
+                            </div>
                         </div>
                     </div>
 
@@ -648,19 +682,23 @@
                         </div>
                     </div>
 
-                    <!-- Precio -->
-                    <div class="busqueda-filter-group">
-                        <label class="busqueda-filter-label">Precio (₡)</label>
-                        <div class="busqueda-price-inputs">
-                            <input type="number" name="minPrice" class="busqueda-price-field" placeholder="Mínimo" value="@Model.MinPrice" min="0" step="100000" />
-                            <span>-</span>
-                            <input type="number" name="maxPrice" class="busqueda-price-field" placeholder="Máximo" value="@Model.MaxPrice" min="0" step="100000" />
-                        </div>
-                    </div>
-
                     <!-- Línea divisoria -->
                     <hr class="filter-divider" />
 
+                    <!-- Carrocería (mismo estilo que escritorio) -->
+                    <div class="busqueda-filter-group">
+                        <label class="busqueda-filter-label">Carrocería</label>
+                        <div class="busqueda-select-wrapper">
+                            <select name="bodyType" class="busqueda-filter-select">
+                                <option value="">Todas las carrocerías</option>
+                                @foreach (var bodyType in Model.AvailableBodyTypes)
+                                {
+                                    <option value="@bodyType" selected="@(Model.BodyType == bodyType)">@bodyType</option>
+                                }
+                            </select>
+                        </div>
+                    </div>
+                    
                     <!-- Combustible -->
                     <div class="busqueda-filter-group">
                         <label class="busqueda-filter-label">Combustible/Propulsión</label>
@@ -962,7 +1000,8 @@ function clearAllFilters() {
     window.location.href = url.toString();
 }
 
-// Auto-submit form when any filter changes (optional - for better UX)
+// Auto-submit deshabilitado - Los filtros solo se aplican al presionar "Aplicar filtros"
+/*
 document.addEventListener('DOMContentLoaded', function() {
     const selects = document.querySelectorAll('.busqueda-filter-select:not(#province-select):not(#brand-select)');
     const inputs = document.querySelectorAll('.busqueda-price-field');
@@ -987,6 +1026,7 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     });
 });
+*/
 </script>
 
 

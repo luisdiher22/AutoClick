@@ -645,4 +645,141 @@
         padding-top: 68px;
     }
     
+    /* ====================================
+       SEARCH MODAL RESPONSIVE
+       ==================================== */
+    .search-modal-responsive {
+        display: none;
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: #000000;
+        z-index: 10000;
+        overflow-y: auto;
+    }
+    
+    .search-modal-responsive.active {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 40px;
+    }
+    
+    .search-modal-content {
+        width: 100%;
+        max-width: 500px;
+        position: relative;
+    }
+    
+    .search-modal-close {
+        position: absolute;
+        top: 0;
+        right: 0;
+        background: transparent;
+        border: none;
+        color: white;
+        font-size: 48px;
+        cursor: pointer;
+        padding: 0;
+        width: 54px;
+        height: 54px;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: flex-start;
+        gap: 2px;
+        line-height: 0.8;
+    }
+    
+    .search-modal-close-text {
+        color: white;
+        font-size: 11px;
+        font-family: 'Montserrat', sans-serif;
+        font-weight: 400;
+        line-height: 1;
+    }
+    
+    .search-modal-body {
+        display: flex;
+        flex-direction: column;
+        gap: 36px;
+        margin-top: 70px;
+    }
+    
+    .search-modal-title {
+        color: white;
+        font-size: 32px;
+        font-family: 'Montserrat', sans-serif;
+        font-weight: 700;
+        text-align: center;
+        margin: 0;
+    }
+    
+    .search-modal-form {
+        display: flex;
+        flex-direction: column;
+        gap: 36px;
+    }
+    
+    .search-modal-field {
+        display: flex;
+        flex-direction: column;
+        gap: 18px;
+    }
+    
+    .search-modal-label {
+        color: white;
+        font-size: 18px;
+        font-family: 'Montserrat', sans-serif;
+        font-weight: 500;
+        margin: 0;
+    }
+    
+    .search-modal-input-wrapper {
+        background: white;
+        border-radius: 4px;
+        padding: 18px;
+    }
+    
+    .search-modal-input {
+        width: 100%;
+        border: none;
+        outline: none;
+        color: rgba(0, 0, 0, 0.5);
+        font-size: 18px;
+        font-family: 'Montserrat', sans-serif;
+        font-weight: 500;
+        background: transparent;
+    }
+    
+    .search-modal-input::placeholder {
+        color: rgba(0, 0, 0, 0.5);
+    }
+    
+    .search-modal-submit {
+        width: 140px;
+        height: 48px;
+        padding: 0;
+        background: white;
+        border: none;
+        border-radius: 4px;
+        color: #06174D;
+        font-size: 18px;
+        font-family: 'Montserrat', sans-serif;
+        font-weight: 700;
+        cursor: pointer;
+        align-self: center;
+        transition: background 0.3s ease;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+    
+    .search-modal-submit:hover {
+        background: #f0f0f0;
+    }
+    
 }
+

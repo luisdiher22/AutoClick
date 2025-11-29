@@ -5523,19 +5523,23 @@ body {
 }
 
 .busqueda-avanzada-page .busqueda-select-wrapper::after {
-    content: '▼';
+    content: '';
     position: absolute;
     right: 12px;
     top: 50%;
     transform: translateY(-50%);
-    color: rgba(255, 255, 255, 0.75);
-    font-size: 12px;
+    width: 12px;
+    height: 8px;
+    background-image: url("data:image/svg+xml,%3Csvg width='12' height='8' viewBox='0 0 12 8' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M1 1L6 6L11 1' stroke='white' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: contain;
     pointer-events: none;
     transition: all 0.3s ease;
 }
 
 .busqueda-avanzada-page .busqueda-select-wrapper:hover::after {
-    color: white;
+    opacity: 0.8;
 }
 
 /* Option styling - Note: Limited browser support for styling options */
@@ -5572,6 +5576,13 @@ body {
     background-image: none;
     text-indent: 0.01px;
     text-overflow: '';
+}
+
+.busqueda-avanzada-page .busqueda-sort-select {
+    color: white;
+    font-size: 14px;
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 500;
 }
 
 /* Price fields styling */
@@ -5633,19 +5644,23 @@ body {
 }
 
 .busqueda-avanzada-page .busqueda-sort-wrapper::after {
-    content: '▼';
+    content: '';
     position: absolute;
     right: 12px;
     top: 50%;
     transform: translateY(-50%);
-    color: rgba(255, 255, 255, 0.75);
-    font-size: 12px;
+    width: 12px;
+    height: 8px;
+    background-image: url("data:image/svg+xml,%3Csvg width='12' height='8' viewBox='0 0 12 8' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M1 1L6 6L11 1' stroke='white' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: contain;
     pointer-events: none;
     transition: all 0.3s ease;
 }
 
 .busqueda-avanzada-page .busqueda-sort-wrapper:hover::after {
-    color: white;
+    opacity: 0.8;
 }
 
 /* Additional styling for better UX */
