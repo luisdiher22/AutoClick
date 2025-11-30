@@ -165,11 +165,153 @@
                 border-left: 1px solid rgba(255, 255, 255, 0.2);
                 transform: rotate(45deg);
             }
+
+            /* Privacy Modal Styles */
+            .privacy-modal {
+                display: none;
+                position: fixed;
+                z-index: 10000;
+                left: 0;
+                top: 0;
+                width: 100%;
+                height: 100%;
+                background-color: rgba(0, 0, 0, 0.8);
+                backdrop-filter: blur(5px);
+                justify-content: center;
+                align-items: center;
+                opacity: 0;
+                transition: opacity 0.3s ease;
+            }
+
+            .privacy-modal.show {
+                display: flex;
+                opacity: 1;
+            }
+
+            .privacy-modal-content {
+                background: #02081C;
+                border: 1px solid rgba(255, 255, 255, 0.2);
+                border-radius: 12px;
+                max-width: 700px;
+                width: 90%;
+                max-height: 80vh;
+                overflow-y: auto;
+                padding: 40px 60px;
+                box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+                position: relative;
+                transform: scale(0.9);
+                transition: transform 0.3s ease;
+            }
+
+            .privacy-modal.show .privacy-modal-content {
+                transform: scale(1);
+            }
+
+            .privacy-modal-content ul {
+                list-style: none;
+                padding-left: 0;
+                margin-bottom: 0;
+            }
+
+            .privacy-modal-content li {
+                position: relative;
+                padding-left: 30px;
+                margin-bottom: 20px;
+                color: white;
+                font-size: 20px;
+                font-family: 'Inter', 'Montserrat', sans-serif;
+                font-weight: 400;
+                line-height: 1.5;
+            }
+
+            .privacy-modal-content li::before {
+                content: '•';
+                position: absolute;
+                left: 10px;
+                color: white;
+                font-size: 20px;
+            }
+
+            .privacy-modal-content li .highlight {
+                color: #FF931E;
+                font-weight: 700;
+            }
+
+            .privacy-modal-button {
+                display: block;
+                margin: 32px auto 0;
+                padding: 14px 48px;
+                background: linear-gradient(135deg, #FF931E, #FF7A00);
+                color: white;
+                border: none;
+                border-radius: 8px;
+                font-size: 16px;
+                font-weight: 700;
+                font-family: 'Montserrat', sans-serif;
+                cursor: pointer;
+                transition: all 0.2s ease;
+            }
+
+            .privacy-modal-button:hover {
+                background: linear-gradient(135deg, #FF7A00, #FF6600);
+                transform: translateY(-2px);
+                box-shadow: 0 4px 12px rgba(255, 147, 30, 0.4);
+            }
+
+            /* Scrollbar para el modal */
+            .privacy-modal-content::-webkit-scrollbar {
+                width: 8px;
+            }
+
+            .privacy-modal-content::-webkit-scrollbar-track {
+                background: rgba(255, 255, 255, 0.05);
+                border-radius: 4px;
+            }
+
+            .privacy-modal-content::-webkit-scrollbar-thumb {
+                background: rgba(255, 255, 255, 0.2);
+                border-radius: 4px;
+            }
+
+            .privacy-modal-content::-webkit-scrollbar-thumb:hover {
+                background: rgba(255, 255, 255, 0.3);
+            }
         </style>
 }
 
 @section Scripts {
         <script src="~/js/anunciar-auto.js"></script>
+        <script>
+            // Privacy modal auto-show on section 6
+            let privacyModalShown = false;
+            
+            function closePrivacyModal() {
+                const modal = document.getElementById('privacyModal');
+                modal.classList.remove('show');
+                privacyModalShown = true;
+            }
+            
+            // Observer para detectar cuando se muestra la sección 6
+            const observer = new MutationObserver(() => {
+                const section6 = document.querySelector('[data-section="6"]');
+                if (section6 && !section6.classList.contains('d-none') && !privacyModalShown) {
+                    // Pequeño delay para mejor UX
+                    setTimeout(() => {
+                        const modal = document.getElementById('privacyModal');
+                        modal.classList.add('show');
+                    }, 300);
+                }
+            });
+            
+            // Iniciar observer cuando el DOM esté listo
+            document.addEventListener('DOMContentLoaded', () => {
+                observer.observe(document.body, {
+                    attributes: true,
+                    attributeFilter: ['class'],
+                    subtree: true
+                });
+            });
+        </script>
 }
 
 <div class="anunciar-container">
@@ -1307,6 +1449,42 @@ valor fiscal</div>
                 </div>
             </div>
         </div>
+    </div>
+</div>
+
+<!-- Privacy Modal -->
+<div id="privacyModal" class="privacy-modal">
+    <div class="privacy-modal-content">
+        <ul>
+            <li>
+                <span>Realizar un </span>
+                <span class="highlight">CÁLCULO APROXIMADO</span>
+                <span> del Valor de Mercado de mi vehículo.</span>
+            </li>
+            <li>
+                <span>Generar un </span>
+                <span class="highlight">ESTIMADO INFORMATIVO</span>
+                <span> del costo del marchamo y de los gastos de traspaso de mi vehículo.</span>
+            </li>
+            <li>
+                <span>Entiendo que los montos mostrados son referenciales y </span>
+                <span class="highlight">NO CONSTITUYEN VALORES OFICIALES.</span>
+            </li>
+            <li>
+                <span>Acepto que, respecto de la información ingresada en este formulario, únicamente se publicarán mi nombre y apellido como anunciante, y que </span>
+                <span class="highlight">NINGÚN OTRO DATO PERSONAL</span>
+                <span>, número de placa ni valor fiscal será visible para otros usuarios.</span>
+            </li>
+            <li>
+                <span>Entiendo que, si en las fotografías del vehículo se aprecia claramente el número de placa, es posible que otros usuarios puedan acceder, por sus propios medios, a la información del vehículo asociada a dicha placa.</span>
+            </li>
+            <li>
+                <span>Confirmo que AutoClick.cr </span>
+                <span class="highlight">NO</span>
+                <span> comparte ni utiliza esta información con otros fines distintos al cálculo estimado.</span>
+            </li>
+        </ul>
+        <button class="privacy-modal-button" onclick="closePrivacyModal()">Continuar</button>
     </div>
 </div>
 

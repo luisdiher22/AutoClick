@@ -4,6 +4,7 @@ using AutoClick.Models;
 using AutoClick.Data;
 using Microsoft.EntityFrameworkCore;
 using AutoClick.Services;
+using AutoClick.Helpers;
 
 namespace AutoClick.Pages
 {
@@ -27,6 +28,10 @@ namespace AutoClick.Pages
         // Market Value Analysis
         public ValorMercadoAnalisis? ValorMercado { get; set; }
         
+        // Marchamo and Transfer Costs
+        public MarchamoDesglose? MarchamoInfo { get; set; }
+        public TraspasoCostos? TraspasoInfo { get; set; }
+        
         // Financing Calculator Properties
         [BindProperty(SupportsGet = true)]
         public string Currency { get; set; } = "USD";
@@ -38,10 +43,10 @@ namespace AutoClick.Pages
         public int LoanTerm { get; set; } = 84;
         
         [BindProperty(SupportsGet = true)]
-        public decimal DownPayment { get; set; } = 10000;
+        public decimal DownPayment { get; set; }
         
         [BindProperty(SupportsGet = true)]
-        public decimal AnnualRate { get; set; } = 8.5m;
+        public decimal AnnualRate { get; set; } = 8.0m;
         
         public decimal MonthlyPayment { get; set; }
         
@@ -82,8 +87,13 @@ namespace AutoClick.Pages
             if (VehiclePrice == 0)
                 VehiclePrice = Vehicle.Precio;
 
-            // Always keep AnnualRate fixed at 8.5%
-            AnnualRate = 8.5m;
+            // Set down payment to 20% of vehicle price (in CRC)
+            var precioEnCRC = AutoClick.Helpers.PrecioHelper.ConvertirACRC(Vehicle.Precio, Vehicle.Divisa);
+            if (DownPayment == 0)
+                DownPayment = precioEnCRC * 0.20m;
+
+            // Always keep AnnualRate fixed at 8%
+            AnnualRate = 8.0m;
 
             CalculateMonthlyPayment();
             await LoadSimilarAutos();
@@ -92,6 +102,9 @@ namespace AutoClick.Pages
             if (Vehicle != null)
             {
                 ValorMercado = await _ventasExternasService.AnalizarValorMercado(Vehicle);
+                
+                // Calcular marchamo y costos de traspaso
+                CalcularMarchamoYTraspaso();
             }
 
             return Page();
@@ -138,6 +151,26 @@ namespace AutoClick.Pages
                     
                     MonthlyPayment = Math.Round(monthlyPaymentCalc, 2);
                 }
+            }
+        }
+
+        private void CalcularMarchamoYTraspaso()
+        {
+            if (Vehicle == null) return;
+
+            // Solo calcular si hay valor fiscal disponible
+            if (Vehicle.ValorFiscal.HasValue && Vehicle.ValorFiscal.Value > 0)
+            {
+                // Calcular marchamo
+                MarchamoInfo = MarchamoHelper.CalcularMarchamoDesglose(Vehicle.ValorFiscal.Value, Vehicle.Ano);
+            }
+
+            // Calcular costos de traspaso basado en el precio de venta
+            if (Vehicle.Precio > 0)
+            {
+                // Convertir precio a CRC si está en USD
+                decimal precioEnCRC = PrecioHelper.ConvertirACRC(Vehicle.Precio, Vehicle.Divisa);
+                TraspasoInfo = MarchamoHelper.CalcularTraspasoDesglose(precioEnCRC);
             }
         }
 

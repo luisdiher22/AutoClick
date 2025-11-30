@@ -1,0 +1,470 @@
+@page "/perfil-agencia/{agenciaEmail}"
+@model PerfilAgenciaModel
+@{
+    ViewData["Title"] = $"{Model.Agencia?.NombreAgencia ?? "Agencia"} - AutoClick.cr";
+}
+
+<link rel="stylesheet" href="~/css/perfil-agencia.css" />
+<link rel="stylesheet" href="~/css/busqueda-avanzada-responsive.css" />
+
+<!-- Perfil Agencia Page -->
+<div class="perfil-agencia-page">
+    <div class="perfil-agencia-container">
+        <!-- Breadcrumb Navigation -->
+        <nav class="perfil-agencia-breadcrumb">
+            <a asp-page="/Index" class="breadcrumb-link">Inicio</a>
+            <span class="breadcrumb-separator">/</span>
+            <span class="breadcrumb-current">Agencia: @(Model.Agencia?.NombreAgencia ?? "Agencia")</span>
+        </nav>
+
+        <div class="perfil-agencia-content">
+            <!-- Sidebar Filters -->
+            <aside class="perfil-agencia-sidebar">
+                <!-- Agency Header Card -->
+                <div class="agencia-header-card">
+                    <!-- Banner -->
+                    <div class="agencia-banner">
+                        @if (!string.IsNullOrEmpty(Model.Agencia?.ImagenBannerUrl))
+                        {
+                            <img src="@Model.Agencia.ImagenBannerUrl" alt="Banner de @Model.Agencia.NombreAgencia" />
+                        }
+                        else
+                        {
+                            <div class="agencia-banner-placeholder">PORTADA</div>
+                        }
+                    </div>
+
+                    <!-- Logo -->
+                    <div class="agencia-logo">
+                        @if (!string.IsNullOrEmpty(Model.Agencia?.LogoUrl))
+                        {
+                            <img src="@Model.Agencia.LogoUrl" alt="Logo de @Model.Agencia.NombreAgencia" />
+                        }
+                        else
+                        {
+                            <div class="agencia-logo-placeholder">LOGO</div>
+                        }
+                    </div>
+                </div>
+
+                <!-- Filter Container -->
+                <div class="perfil-agencia-filters-container">
+                    <div class="perfil-agencia-filters-section">
+                        <!-- Filters Header -->
+                        <h3 class="perfil-agencia-filters-title">Filtros de búsqueda</h3>
+                        <hr class="filter-divider" />
+
+                        <!-- Filter Form -->
+                        <form method="get" class="perfil-agencia-filters-form">
+                            <input type="hidden" name="pageNumber" value="1" />
+                            <input type="hidden" name="sortBy" value="@Model.SortBy" />
+
+                            <!-- Provincia -->
+                            <div class="perfil-agencia-filter-group">
+                                <label class="perfil-agencia-filter-label">Provincia</label>
+                                <div class="perfil-agencia-select-wrapper">
+                                    <select name="province" class="perfil-agencia-filter-select">
+                                        <option value="">Todas las provincias</option>
+                                        @foreach (var province in Model.AvailableProvinces)
+                                        {
+                                            <option value="@province" selected="@(Model.Province == province)">@province</option>
+                                        }
+                                    </select>
+                                </div>
+                            </div>
+
+                            <!-- Cantón -->
+                            <div class="perfil-agencia-filter-group">
+                                <label class="perfil-agencia-filter-label">Cantón</label>
+                                <div class="perfil-agencia-select-wrapper">
+                                    <select name="canton" class="perfil-agencia-filter-select">
+                                        <option value="">Todos los cantones</option>
+                                        @foreach (var canton in Model.AvailableCantons)
+                                        {
+                                            <option value="@canton" selected="@(Model.Canton == canton)">@canton</option>
+                                        }
+                                    </select>
+                                </div>
+                            </div>
+
+                            <!-- Línea divisoria -->
+                            <hr class="filter-divider" />
+
+                            <!-- Marca -->
+                            <div class="perfil-agencia-filter-group">
+                                <label class="perfil-agencia-filter-label">Marca</label>
+                                <div class="perfil-agencia-select-wrapper">
+                                    <select name="brand" class="perfil-agencia-filter-select">
+                                        <option value="">Todas las marcas</option>
+                                        @foreach (var brand in Model.AvailableBrands)
+                                        {
+                                            <option value="@brand" selected="@(Model.Brand == brand)">@brand</option>
+                                        }
+                                    </select>
+                                </div>
+                            </div>
+
+                            <!-- Modelo -->
+                            <div class="perfil-agencia-filter-group">
+                                <label class="perfil-agencia-filter-label">Modelo</label>
+                                <div class="perfil-agencia-select-wrapper">
+                                    <select name="model" class="perfil-agencia-filter-select">
+                                        <option value="">Todos los modelos</option>
+                                        @foreach (var modelName in Model.AvailableModels)
+                                        {
+                                            <option value="@modelName" selected="@(Model.Model == modelName)">@modelName</option>
+                                        }
+                                    </select>
+                                </div>
+                            </div>
+
+                            <!-- Línea divisoria -->
+                            <hr class="filter-divider" />
+
+                            <!-- Rango de precio -->
+                            <div class="perfil-agencia-filter-group">
+                                <label class="perfil-agencia-filter-label">Rango de precio</label>
+                                <div class="perfil-agencia-price-range">
+                                    <div class="price-input-group">
+                                        <label class="price-input-label">Min</label>
+                                        <input type="number" name="minPrice" placeholder="$" class="perfil-agencia-price-field" value="@Model.MinPrice" />
+                                    </div>
+                                    <span class="price-separator">hasta</span>
+                                    <div class="price-input-group">
+                                        <label class="price-input-label">Max</label>
+                                        <input type="number" name="maxPrice" placeholder="$" class="perfil-agencia-price-field" value="@Model.MaxPrice" />
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Línea divisoria -->
+                            <hr class="filter-divider" />
+
+                            <!-- Kilometraje -->
+                            <div class="perfil-agencia-filter-group">
+                                <label class="perfil-agencia-filter-label">Kilometraje</label>
+                                <div class="perfil-agencia-price-range">
+                                    <div class="price-input-group">
+                                        <label class="price-input-label">Min</label>
+                                        <input type="number" name="minKm" class="perfil-agencia-price-field" value="@Model.MinKm" />
+                                    </div>
+                                    <span class="price-separator">hasta</span>
+                                    <div class="price-input-group">
+                                        <label class="price-input-label">Max</label>
+                                        <input type="number" name="maxKm" class="perfil-agencia-price-field" value="@Model.MaxKm" />
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Línea divisoria -->
+                            <hr class="filter-divider" />
+
+                            <!-- Año -->
+                            <div class="perfil-agencia-filter-group">
+                                <label class="perfil-agencia-filter-label">Año</label>
+                                <div class="perfil-agencia-price-range">
+                                    <div class="price-input-group">
+                                        <label class="price-input-label">Min</label>
+                                        <select name="minYear" class="perfil-agencia-filter-select-small">
+                                            <option value="">Cualquiera</option>
+                                            @for (int year = DateTime.Now.Year; year >= 1990; year--)
+                                            {
+                                                <option value="@year" selected="@(Model.MinYear == year)">@year</option>
+                                            }
+                                        </select>
+                                    </div>
+                                    <span class="price-separator">hasta</span>
+                                    <div class="price-input-group">
+                                        <label class="price-input-label">Max</label>
+                                        <select name="maxYear" class="perfil-agencia-filter-select-small">
+                                            <option value="">Cualquiera</option>
+                                            @for (int year = DateTime.Now.Year; year >= 1990; year--)
+                                            {
+                                                <option value="@year" selected="@(Model.MaxYear == year)">@year</option>
+                                            }
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Línea divisoria -->
+                            <hr class="filter-divider" />
+
+                            <!-- Carrocería -->
+                            <details class="perfil-agencia-dropdown">
+                                <summary>Carrocería</summary>
+                                <div class="dropdown-content">
+                                    <select name="bodyType" class="perfil-agencia-filter-select">
+                                        <option value="">Todas</option>
+                                        <option value="Sedan" selected="@(Model.BodyType == "Sedan")">Sedan</option>
+                                        <option value="SUV" selected="@(Model.BodyType == "SUV")">SUV</option>
+                                        <option value="Coupe" selected="@(Model.BodyType == "Coupe")">Coupe</option>
+                                        <option value="Pickup" selected="@(Model.BodyType == "Pickup")">Pickup</option>
+                                        <option value="Hatchback" selected="@(Model.BodyType == "Hatchback")">Hatchback</option>
+                                    </select>
+                                </div>
+                            </details>
+
+                            <!-- Combustible -->
+                            <details class="perfil-agencia-dropdown">
+                                <summary>Combustible/Propulsión</summary>
+                                <div class="dropdown-content">
+                                    <select name="fuelType" class="perfil-agencia-filter-select">
+                                        <option value="">Todos</option>
+                                        <option value="Gasolina" selected="@(Model.FuelType == "Gasolina")">Gasolina</option>
+                                        <option value="Diesel" selected="@(Model.FuelType == "Diesel")">Diesel</option>
+                                        <option value="Híbrido" selected="@(Model.FuelType == "Híbrido")">Híbrido</option>
+                                        <option value="Eléctrico" selected="@(Model.FuelType == "Eléctrico")">Eléctrico</option>
+                                    </select>
+                                </div>
+                            </details>
+
+                            <!-- Transmisión -->
+                            <details class="perfil-agencia-dropdown">
+                                <summary>Transmisión</summary>
+                                <div class="dropdown-content">
+                                    <select name="transmission" class="perfil-agencia-filter-select">
+                                        <option value="">Todas</option>
+                                        <option value="Automatica" selected="@(Model.Transmission == "Automatica")">Automática</option>
+                                        <option value="Manual" selected="@(Model.Transmission == "Manual")">Manual</option>
+                                    </select>
+                                </div>
+                            </details>
+
+                            <!-- Condición -->
+                            <details class="perfil-agencia-dropdown">
+                                <summary>Condición</summary>
+                                <div class="dropdown-content">
+                                    <select name="condition" class="perfil-agencia-filter-select">
+                                        <option value="">Todas</option>
+                                        <option value="Nuevo" selected="@(Model.Condition == "Nuevo")">Nuevo</option>
+                                        <option value="Usado" selected="@(Model.Condition == "Usado")">Usado</option>
+                                    </select>
+                                </div>
+                            </details>
+
+                            <!-- Submit Button (Hidden - form submits on change) -->
+                        </form>
+                    </div>
+                </div>
+
+                <!-- Sidebar Advertisement -->
+                <div style="margin-top: 24px;">
+                    @await Component.InvokeAsync("CarruselPublicidad", new { formato = "cuadrado", seccion = "perfil-agencia-sidebar" })
+                </div>
+            </aside>
+
+            <!-- Main Content -->
+            <main class="perfil-agencia-main">
+                <!-- Title -->
+                <h1 class="perfil-agencia-title">Garaje de @(Model.Agencia?.NombreAgencia ?? "Agencia")</h1>
+
+                <!-- Sort Dropdown -->
+                <div class="perfil-agencia-sort-header">
+                    <div class="perfil-agencia-sort-wrapper">
+                        <select class="perfil-agencia-sort-select" onchange="changePerfilAgenciaSorting(this.value)">
+                            <option value="recent" selected="@(Model.SortBy == "recent" || string.IsNullOrEmpty(Model.SortBy))">Ordenar por: Más recientes</option>
+                            <option value="price-asc" selected="@(Model.SortBy == "price-asc")">Ordenar por: Precio menor a mayor</option>
+                            <option value="price-desc" selected="@(Model.SortBy == "price-desc")">Ordenar por: Precio mayor a menor</option>
+                            <option value="year-desc" selected="@(Model.SortBy == "year-desc")">Ordenar por: Año más nuevo</option>
+                        </select>
+                    </div>
+                </div>
+
+                <!-- Cars Grid - 2 Columns -->
+                <div class="busqueda-cars-grid perfil-agencia-cars-grid">
+                    @foreach (var auto in Model.AutosAgencia)
+                    {
+                        <div class="busqueda-auto-card">
+                            <!-- Banderín superior derecho (si aplica) -->
+                            @if (!string.IsNullOrEmpty(auto.BanderinVideoUrl))
+                            {
+                                <div class="busqueda-banderin-container">
+                                    @if (auto.BanderinVideoUrl.EndsWith(".gif", StringComparison.OrdinalIgnoreCase))
+                                    {
+                                        <img src="@auto.BanderinVideoUrl" alt="Banderín" />
+                                    }
+                                    else
+                                    {
+                                        <video autoplay loop muted playsinline>
+                                            <source src="@auto.BanderinVideoUrl" type="video/mp4">
+                                        </video>
+                                    }
+                                </div>
+                            }
+                            
+                            <a asp-page="/Producto" asp-route-id="@auto.Id" class="busqueda-auto-card-link">
+                                <!-- Car Image -->
+                                <div class="busqueda-auto-card-image">
+                                    <img src="@auto.ImagenPrincipal" alt="@auto.NombreCompleto" />
+                                </div>
+
+                                <!-- Car Info Container with dark background -->
+                                <div class="busqueda-auto-card-info">
+                                    <!-- Top row: Title only -->
+                                    <div class="busqueda-auto-card-row-top">
+                                        <div class="busqueda-auto-card-title">@auto.NombreCompleto</div>
+                                    </div>
+                                    
+                                    <!-- Middle row: Price on left, KM + Cuota on right -->
+                                    <div class="busqueda-auto-card-row-middle">
+                                        <div class="busqueda-auto-card-price">@auto.PrecioFormateado</div>
+                                        <div class="busqueda-auto-card-right-info">
+                                            <div class="busqueda-auto-card-km">@auto.KilometrajeFormateado</div>
+                                            <div class="busqueda-auto-card-cuota">Est. @auto.CuotaMensualEstimada</div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </a>
+                            
+                            <!-- Botón de Favoritos fuera del link -->
+                            <button class="busqueda-favorite-btn favorite-btn" 
+                                    data-auto-id="@auto.Id" 
+                                    data-email-usuario="@(User.Identity?.IsAuthenticated == true ? User.FindFirst(System.Security.Claims.ClaimTypes.Email)?.Value ?? User.FindFirst("Email")?.Value : "")"
+                                    title="Agregar a favoritos"
+                                    type="button"
+                                    onclick="event.preventDefault(); event.stopPropagation();">
+                                <img src="https://autoclickstorage.blob.core.windows.net/uploads/Component%20183.png" 
+                                     alt="Favorito" />
+                            </button>
+                            
+                            <!-- Botón de Contactar Vendedor fuera del link con estilo btn-primario -->
+                            <button class="busqueda-contact-btn" 
+                                    onclick="event.preventDefault(); event.stopPropagation(); mostrarModalVendedor(@auto.Id, '@(auto.Propietario?.NombreCompleto ?? "")', '@(auto.Propietario?.NombreAMostrar ?? "")', '@(auto.Propietario?.NumeroTelefono ?? "")', '@(auto.UbicacionCompleta ?? "")', @(Model.AutosAgencia.Count(a => a.EmailPropietario == auto.EmailPropietario)))" 
+                                    type="button">
+                                Contactar vendedor
+                            </button>
+                        </div>
+                    }
+                </div>
+
+                <!-- Advertisement Banner -->
+                <div style="margin: 32px 0;">
+                    @await Component.InvokeAsync("CarruselPublicidad", new { formato = "horizontal", seccion = "perfil-agencia-banner" })
+                </div>
+
+                <!-- Pagination -->
+                @if (Model.TotalPages > 1)
+                {
+                    <nav class="perfil-agencia-pagination" aria-label="Paginación">
+                        <div class="pagination-container">
+                            <!-- Previous Button -->
+                            <a href="@Url.Page("/PerfilAgencia", new { 
+                                   agenciaEmail = Model.AgenciaEmail,
+                                   pageNumber = Model.CurrentPage - 1,
+                                   sortBy = Model.SortBy,
+                                   province = Model.Province,
+                                   canton = Model.Canton,
+                                   brand = Model.Brand,
+                                   model = Model.Model,
+                                   minPrice = Model.MinPrice,
+                                   maxPrice = Model.MaxPrice,
+                                   minYear = Model.MinYear,
+                                   maxYear = Model.MaxYear,
+                                   minKm = Model.MinKm,
+                                   maxKm = Model.MaxKm,
+                                   bodyType = Model.BodyType,
+                                   fuelType = Model.FuelType,
+                                   transmission = Model.Transmission,
+                                   condition = Model.Condition
+                               })" 
+                               class="pagination-arrow @(Model.CurrentPage <= 1 ? "disabled" : "")">
+                                <div class="pagination-arrow-icon left"></div>
+                            </a>
+
+                            <!-- Page Numbers -->
+                            @{
+                                int startPage = Math.Max(1, Model.CurrentPage - 2);
+                                int endPage = Math.Min(Model.TotalPages, Model.CurrentPage + 2);
+                            }
+
+                            @if (startPage > 1)
+                            {
+                                <a href="@Url.Page("/PerfilAgencia", new { agenciaEmail = Model.AgenciaEmail, pageNumber = 1 })" class="pagination-number">1</a>
+                                @if (startPage > 2)
+                                {
+                                    <span class="pagination-ellipsis">…</span>
+                                }
+                            }
+
+                            @for (int i = startPage; i <= endPage; i++)
+                            {
+                                <a href="@Url.Page("/PerfilAgencia", new { 
+                                       agenciaEmail = Model.AgenciaEmail,
+                                       pageNumber = i,
+                                       sortBy = Model.SortBy,
+                                       province = Model.Province,
+                                       canton = Model.Canton,
+                                       brand = Model.Brand,
+                                       model = Model.Model,
+                                       minPrice = Model.MinPrice,
+                                       maxPrice = Model.MaxPrice,
+                                       minYear = Model.MinYear,
+                                       maxYear = Model.MaxYear,
+                                       minKm = Model.MinKm,
+                                       maxKm = Model.MaxKm,
+                                       bodyType = Model.BodyType,
+                                       fuelType = Model.FuelType,
+                                       transmission = Model.Transmission,
+                                       condition = Model.Condition
+                                   })" 
+                                   class="pagination-number @(i == Model.CurrentPage ? "active" : "")">
+                                    @i
+                                </a>
+                            }
+
+                            @if (endPage < Model.TotalPages)
+                            {
+                                @if (endPage < Model.TotalPages - 1)
+                                {
+                                    <span class="pagination-ellipsis">…</span>
+                                }
+                                <a href="@Url.Page("/PerfilAgencia", new { agenciaEmail = Model.AgenciaEmail, pageNumber = Model.TotalPages })" class="pagination-number">@Model.TotalPages</a>
+                            }
+
+                            <!-- Next Button -->
+                            <a href="@Url.Page("/PerfilAgencia", new { 
+                                   agenciaEmail = Model.AgenciaEmail,
+                                   pageNumber = Model.CurrentPage + 1,
+                                   sortBy = Model.SortBy,
+                                   province = Model.Province,
+                                   canton = Model.Canton,
+                                   brand = Model.Brand,
+                                   model = Model.Model,
+                                   minPrice = Model.MinPrice,
+                                   maxPrice = Model.MaxPrice,
+                                   minYear = Model.MinYear,
+                                   maxYear = Model.MaxYear,
+                                   minKm = Model.MinKm,
+                                   maxKm = Model.MaxKm,
+                                   bodyType = Model.BodyType,
+                                   fuelType = Model.FuelType,
+                                   transmission = Model.Transmission,
+                                   condition = Model.Condition
+                               })" 
+                               class="pagination-arrow @(Model.CurrentPage >= Model.TotalPages ? "disabled" : "")">
+                                <div class="pagination-arrow-icon right"></div>
+                            </a>
+                        </div>
+                    </nav>
+                }
+            </main>
+        </div>
+    </div>
+</div>
+
+<script>
+    function changePerfilAgenciaSorting(value) {
+        const urlParams = new URLSearchParams(window.location.search);
+        urlParams.set('sortBy', value);
+        urlParams.set('page', '1');
+        window.location.search = urlParams.toString();
+    }
+
+    // Auto-submit form on filter change
+    document.querySelectorAll('.perfil-agencia-filters-form select, .perfil-agencia-filters-form input').forEach(element => {
+        element.addEventListener('change', function() {
+            this.form.submit();
+        });
+    });
+</script>

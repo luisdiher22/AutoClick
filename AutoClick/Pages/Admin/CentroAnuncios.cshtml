@@ -1,0 +1,666 @@
+@page
+@model AutoClick.Pages.Admin.CentroAnunciosModel
+@{
+    ViewData["Title"] = "Centro de Anuncios";
+    Layout = "~/Pages/Shared/_Layout.cshtml";
+}
+
+<style>
+    /* Reset body styles for admin dashboard */
+    body {
+        margin: 0;
+        padding: 0;
+        background: #02081C !important;
+        font-family: 'Montserrat', sans-serif !important;
+        overflow-x: hidden;
+    }
+    
+    .main-container {
+        background: #02081C !important;
+        min-height: 100vh;
+        position: relative;
+        width: 100%;
+        overflow: hidden;
+    }
+    
+    /* Admin Dashboard Container */
+    .admin-dashboard-container {
+        width: 100%;
+        min-height: 100vh;
+        position: relative;
+        background: #02081C;
+        overflow-x: hidden;
+        overflow-y: auto;
+    }
+    
+    /* Main Content Area */
+    .admin-main-content {
+        margin-left: 376px;
+        padding: 24px 40px 0 40px;
+        background: #02081C;
+    }
+    
+    /* Page Title */
+    .page-title {
+        color: white;
+        font-size: 36px;
+        font-family: 'Montserrat', sans-serif;
+        font-weight: 800;
+        margin-bottom: 8px;
+        margin-top: 0;
+        letter-spacing: -0.5px;
+    }
+    
+    .page-subtitle {
+        color: rgba(255, 255, 255, 0.6);
+        font-size: 14px;
+        font-family: 'Montserrat', sans-serif;
+        font-weight: 400;
+        margin-top: 16px;
+        margin-bottom: 32px;
+    }
+
+    /* Table Container */
+    .table-container {
+        background: rgba(255, 255, 255, 0.05);
+        border-radius: 12px;
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        overflow: hidden;
+        margin-top: 32px;
+    }
+
+    /* Table Styles */
+    .anuncios-table {
+        width: 100%;
+        border-collapse: collapse;
+        color: white;
+    }
+
+    .anuncios-table thead {
+        background: rgba(255, 255, 255, 0.1);
+    }
+
+    .anuncios-table thead th {
+        padding: 16px;
+        text-align: left;
+        font-size: 14px;
+        font-weight: 700;
+        font-family: 'Montserrat', sans-serif;
+        color: rgba(255, 255, 255, 0.9);
+        border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    }
+
+    .anuncios-table tbody tr {
+        border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+        transition: background-color 0.2s ease;
+    }
+
+    .anuncios-table tbody tr:hover {
+        background: rgba(255, 255, 255, 0.05);
+    }
+
+    .anuncios-table tbody tr.sin-valor-fiscal {
+        background: rgba(255, 50, 50, 0.1);
+    }
+
+    .anuncios-table tbody tr.sin-valor-fiscal:hover {
+        background: rgba(255, 50, 50, 0.15);
+    }
+
+    .anuncios-table tbody td {
+        padding: 14px 16px;
+        font-size: 14px;
+        font-weight: 400;
+        font-family: 'Montserrat', sans-serif;
+        color: rgba(255, 255, 255, 0.8);
+    }
+
+    /* Action Buttons */
+    .action-buttons {
+        display: flex;
+        gap: 8px;
+    }
+
+    .btn-action {
+        padding: 8px 16px;
+        border-radius: 6px;
+        border: none;
+        font-size: 13px;
+        font-weight: 600;
+        font-family: 'Montserrat', sans-serif;
+        cursor: pointer;
+        transition: all 0.2s ease;
+    }
+
+    .btn-detalles {
+        background: rgba(59, 130, 246, 0.2);
+        color: #60A5FA;
+        border: 1px solid rgba(59, 130, 246, 0.3);
+    }
+
+    .btn-detalles:hover {
+        background: rgba(59, 130, 246, 0.3);
+        border-color: rgba(59, 130, 246, 0.5);
+    }
+
+    .btn-editar {
+        background: rgba(34, 197, 94, 0.2);
+        color: #4ADE80;
+        border: 1px solid rgba(34, 197, 94, 0.3);
+    }
+
+    .btn-editar:hover {
+        background: rgba(34, 197, 94, 0.3);
+        border-color: rgba(34, 197, 94, 0.5);
+    }
+
+    /* Modal Styles */
+    .modal {
+        display: none;
+        position: fixed;
+        z-index: 1000;
+        left: 0;
+        top: 0;
+        width: 100%;
+        height: 100%;
+        overflow: auto;
+        background-color: rgba(0, 0, 0, 0.7);
+        backdrop-filter: blur(5px);
+    }
+
+    .modal-content {
+        background: #030D2B;
+        margin: 5% auto;
+        padding: 0;
+        border: 1px solid rgba(255, 255, 255, 0.2);
+        border-radius: 12px;
+        width: 90%;
+        max-width: 800px;
+        box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+    }
+
+    .modal-header {
+        padding: 24px 32px;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+
+    .modal-title {
+        color: white;
+        font-size: 24px;
+        font-weight: 700;
+        font-family: 'Montserrat', sans-serif;
+        margin: 0;
+    }
+
+    .close {
+        color: rgba(255, 255, 255, 0.6);
+        font-size: 32px;
+        font-weight: 300;
+        cursor: pointer;
+        transition: color 0.2s ease;
+        line-height: 1;
+    }
+
+    .close:hover {
+        color: white;
+    }
+
+    .modal-body {
+        padding: 32px;
+        color: rgba(255, 255, 255, 0.8);
+        max-height: 70vh;
+        overflow-y: auto;
+    }
+
+    .modal-footer {
+        padding: 20px 32px;
+        border-top: 1px solid rgba(255, 255, 255, 0.1);
+        text-align: right;
+    }
+
+    /* Details Modal Styles */
+    .detail-grid {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 20px;
+    }
+
+    .detail-item {
+        margin-bottom: 8px;
+    }
+
+    .detail-label {
+        font-size: 12px;
+        font-weight: 600;
+        color: rgba(255, 255, 255, 0.5);
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+        margin-bottom: 4px;
+    }
+
+    .detail-value {
+        font-size: 15px;
+        font-weight: 500;
+        color: rgba(255, 255, 255, 0.9);
+        word-wrap: break-word;
+    }
+
+    /* Form Styles */
+    .form-group {
+        margin-bottom: 24px;
+    }
+
+    .form-label {
+        display: block;
+        font-size: 14px;
+        font-weight: 600;
+        color: rgba(255, 255, 255, 0.8);
+        margin-bottom: 8px;
+        font-family: 'Montserrat', sans-serif;
+    }
+
+    .form-input {
+        width: 100%;
+        padding: 12px 16px;
+        background: rgba(255, 255, 255, 0.05);
+        border: 1px solid rgba(255, 255, 255, 0.2);
+        border-radius: 8px;
+        color: white;
+        font-size: 15px;
+        font-family: 'Montserrat', sans-serif;
+        transition: all 0.2s ease;
+    }
+
+    .form-input:focus {
+        outline: none;
+        border-color: rgba(59, 130, 246, 0.5);
+        background: rgba(255, 255, 255, 0.08);
+    }
+
+    .form-input:disabled {
+        opacity: 0.5;
+        cursor: not-allowed;
+    }
+
+    .btn-submit {
+        background: linear-gradient(135deg, #3B82F6, #2563EB);
+        color: white;
+        padding: 12px 32px;
+        border: none;
+        border-radius: 8px;
+        font-size: 15px;
+        font-weight: 600;
+        font-family: 'Montserrat', sans-serif;
+        cursor: pointer;
+        transition: all 0.2s ease;
+    }
+
+    .btn-submit:hover {
+        background: linear-gradient(135deg, #2563EB, #1D4ED8);
+        transform: translateY(-1px);
+        box-shadow: 0 4px 12px rgba(59, 130, 246, 0.4);
+    }
+
+    .btn-cancel {
+        background: transparent;
+        color: rgba(255, 255, 255, 0.6);
+        padding: 12px 32px;
+        border: 1px solid rgba(255, 255, 255, 0.2);
+        border-radius: 8px;
+        font-size: 15px;
+        font-weight: 600;
+        font-family: 'Montserrat', sans-serif;
+        cursor: pointer;
+        margin-right: 12px;
+        transition: all 0.2s ease;
+    }
+
+    .btn-cancel:hover {
+        background: rgba(255, 255, 255, 0.05);
+        border-color: rgba(255, 255, 255, 0.3);
+    }
+
+    /* Empty State */
+    .empty-state {
+        text-align: center;
+        padding: 80px 20px;
+        color: rgba(255, 255, 255, 0.5);
+    }
+
+    .empty-state-icon {
+        font-size: 64px;
+        margin-bottom: 16px;
+        opacity: 0.3;
+    }
+
+    .empty-state-text {
+        font-size: 18px;
+        font-weight: 500;
+        font-family: 'Montserrat', sans-serif;
+    }
+
+    /* Scrollbar Styles */
+    .modal-body::-webkit-scrollbar {
+        width: 8px;
+    }
+
+    .modal-body::-webkit-scrollbar-track {
+        background: rgba(255, 255, 255, 0.05);
+        border-radius: 4px;
+    }
+
+    .modal-body::-webkit-scrollbar-thumb {
+        background: rgba(255, 255, 255, 0.2);
+        border-radius: 4px;
+    }
+
+    .modal-body::-webkit-scrollbar-thumb:hover {
+        background: rgba(255, 255, 255, 0.3);
+    }
+</style>
+
+<div class="main-container">
+    <div class="admin-dashboard-container">
+        @await Html.PartialAsync("_AdminSidebar")
+        <form method="post" style="display: none;">
+            @Html.AntiForgeryToken()
+        </form>
+
+        <div class="admin-main-content">
+            <h1 class="page-title">Centro de Anuncios</h1>
+            <p class="page-subtitle">Administra todos los anuncios de vehículos publicados en la plataforma</p>
+
+            <div class="table-container">
+                @if (Model.Anuncios.Count > 0)
+                {
+                    <table class="anuncios-table">
+                        <thead>
+                            <tr>
+                                <th>Placa</th>
+                                <th>Modelo</th>
+                                <th>Marca</th>
+                                <th>Año</th>
+                                <th>Valor Fiscal</th>
+                                <th>Valor</th>
+                                <th style="width: 200px;">Acciones</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var anuncio in Model.Anuncios)
+                            {
+                                <tr class="@(anuncio.ValorFiscal == null || anuncio.ValorFiscal == 0 ? "sin-valor-fiscal" : "")" data-id="@anuncio.Id">
+                                    <td>@anuncio.PlacaVehiculo</td>
+                                    <td>@anuncio.Modelo</td>
+                                    <td>@anuncio.Marca</td>
+                                    <td>@anuncio.Ano</td>
+                                    <td>@(anuncio.ValorFiscal?.ToString("N2") ?? "No establecido")</td>
+                                    <td>@anuncio.Divisa @anuncio.Precio.ToString("N2")</td>
+                                    <td>
+                                        <div class="action-buttons">
+                                            <button class="btn-action btn-detalles" onclick="verDetalles(@anuncio.Id)">
+                                                Detalles
+                                            </button>
+                                            <button class="btn-action btn-editar" onclick="editarValorFiscal(@anuncio.Id, @(anuncio.ValorFiscal ?? 0))">
+                                                Editar
+                                            </button>
+                                        </div>
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                }
+                else
+                {
+                    <div class="empty-state">
+                        <div class="empty-state-icon">📋</div>
+                        <div class="empty-state-text">No hay anuncios registrados en el sistema</div>
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal de Detalles -->
+<div id="modalDetalles" class="modal">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h2 class="modal-title">Detalles del Anuncio</h2>
+            <span class="close" onclick="cerrarModal('modalDetalles')">&times;</span>
+        </div>
+        <div class="modal-body" id="detallesBody">
+            <div class="detail-grid">
+                <div class="detail-item">
+                    <div class="detail-label">Marca</div>
+                    <div class="detail-value" id="det-marca"></div>
+                </div>
+                <div class="detail-item">
+                    <div class="detail-label">Modelo</div>
+                    <div class="detail-value" id="det-modelo"></div>
+                </div>
+                <div class="detail-item">
+                    <div class="detail-label">Año</div>
+                    <div class="detail-value" id="det-ano"></div>
+                </div>
+                <div class="detail-item">
+                    <div class="detail-label">Placa</div>
+                    <div class="detail-value" id="det-placa"></div>
+                </div>
+                <div class="detail-item">
+                    <div class="detail-label">Precio</div>
+                    <div class="detail-value" id="det-precio"></div>
+                </div>
+                <div class="detail-item">
+                    <div class="detail-label">Valor Fiscal</div>
+                    <div class="detail-value" id="det-valor-fiscal"></div>
+                </div>
+                <div class="detail-item">
+                    <div class="detail-label">Carrocería</div>
+                    <div class="detail-value" id="det-carroceria"></div>
+                </div>
+                <div class="detail-item">
+                    <div class="detail-label">Combustible</div>
+                    <div class="detail-value" id="det-combustible"></div>
+                </div>
+                <div class="detail-item">
+                    <div class="detail-label">Transmisión</div>
+                    <div class="detail-value" id="det-transmision"></div>
+                </div>
+                <div class="detail-item">
+                    <div class="detail-label">Tracción</div>
+                    <div class="detail-value" id="det-traccion"></div>
+                </div>
+                <div class="detail-item">
+                    <div class="detail-label">Kilometraje</div>
+                    <div class="detail-value" id="det-kilometraje"></div>
+                </div>
+                <div class="detail-item">
+                    <div class="detail-label">Condición</div>
+                    <div class="detail-value" id="det-condicion"></div>
+                </div>
+                <div class="detail-item">
+                    <div class="detail-label">Color Exterior</div>
+                    <div class="detail-value" id="det-color-ext"></div>
+                </div>
+                <div class="detail-item">
+                    <div class="detail-label">Color Interior</div>
+                    <div class="detail-value" id="det-color-int"></div>
+                </div>
+                <div class="detail-item">
+                    <div class="detail-label">Número de Puertas</div>
+                    <div class="detail-value" id="det-puertas"></div>
+                </div>
+                <div class="detail-item">
+                    <div class="detail-label">Número de Pasajeros</div>
+                    <div class="detail-value" id="det-pasajeros"></div>
+                </div>
+                <div class="detail-item">
+                    <div class="detail-label">Provincia</div>
+                    <div class="detail-value" id="det-provincia"></div>
+                </div>
+                <div class="detail-item">
+                    <div class="detail-label">Cantón</div>
+                    <div class="detail-value" id="det-canton"></div>
+                </div>
+                <div class="detail-item" style="grid-column: 1 / -1;">
+                    <div class="detail-label">Descripción</div>
+                    <div class="detail-value" id="det-descripcion"></div>
+                </div>
+                <div class="detail-item">
+                    <div class="detail-label">Email Propietario</div>
+                    <div class="detail-value" id="det-email"></div>
+                </div>
+                <div class="detail-item">
+                    <div class="detail-label">Fecha de Creación</div>
+                    <div class="detail-value" id="det-fecha"></div>
+                </div>
+            </div>
+        </div>
+        <div class="modal-footer">
+            <button class="btn-cancel" onclick="cerrarModal('modalDetalles')">Cerrar</button>
+        </div>
+    </div>
+</div>
+
+<!-- Modal de Editar Valor Fiscal -->
+<div id="modalEditar" class="modal">
+    <div class="modal-content" style="max-width: 500px;">
+        <div class="modal-header">
+            <h2 class="modal-title">Editar Valor Fiscal</h2>
+            <span class="close" onclick="cerrarModal('modalEditar')">&times;</span>
+        </div>
+        <div class="modal-body">
+            <form id="formEditarValorFiscal" onsubmit="return guardarValorFiscal(event)">
+                <input type="hidden" id="edit-anuncio-id" />
+                
+                <div class="form-group">
+                    <label class="form-label">Valor Fiscal Original</label>
+                    <input type="text" class="form-input" id="edit-valor-original" disabled />
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">Nuevo Valor Fiscal *</label>
+                    <input type="number" step="0.01" class="form-input" id="edit-valor-nuevo" required placeholder="Ingrese el nuevo valor fiscal" />
+                </div>
+            </form>
+        </div>
+        <div class="modal-footer">
+            <button class="btn-cancel" onclick="cerrarModal('modalEditar')">Cancelar</button>
+            <button class="btn-submit" onclick="document.getElementById('formEditarValorFiscal').requestSubmit()">Guardar Cambios</button>
+        </div>
+    </div>
+</div>
+
+<script>
+    function verDetalles(id) {
+        fetch(`/Admin/CentroAnuncios?handler=Detalles&id=${id}`)
+            .then(response => response.json())
+            .then(data => {
+                // Llenar los campos del modal con los datos del anuncio
+                document.getElementById('det-marca').textContent = data.marca || 'N/A';
+                document.getElementById('det-modelo').textContent = data.modelo || 'N/A';
+                document.getElementById('det-ano').textContent = data.ano || 'N/A';
+                document.getElementById('det-placa').textContent = data.placaVehiculo || 'N/A';
+                document.getElementById('det-precio').textContent = `${data.divisa} ${parseFloat(data.precio).toLocaleString('es-CR', {minimumFractionDigits: 2, maximumFractionDigits: 2})}`;
+                document.getElementById('det-valor-fiscal').textContent = data.valorFiscal ? parseFloat(data.valorFiscal).toLocaleString('es-CR', {minimumFractionDigits: 2, maximumFractionDigits: 2}) : 'No establecido';
+                document.getElementById('det-carroceria').textContent = data.carroceria || 'N/A';
+                document.getElementById('det-combustible').textContent = data.combustible || 'N/A';
+                document.getElementById('det-transmision').textContent = data.transmision || 'N/A';
+                document.getElementById('det-traccion').textContent = data.traccion || 'N/A';
+                document.getElementById('det-kilometraje').textContent = data.kilometraje ? `${parseInt(data.kilometraje).toLocaleString()} ${data.unidadKilometraje}` : 'N/A';
+                document.getElementById('det-condicion').textContent = data.condicion || 'N/A';
+                document.getElementById('det-color-ext').textContent = data.colorExterior || 'N/A';
+                document.getElementById('det-color-int').textContent = data.colorInterior || 'N/A';
+                document.getElementById('det-puertas').textContent = data.numeroPuertas || 'N/A';
+                document.getElementById('det-pasajeros').textContent = data.numeroPasajeros || 'N/A';
+                document.getElementById('det-provincia').textContent = data.provincia || 'N/A';
+                document.getElementById('det-canton').textContent = data.canton || 'N/A';
+                document.getElementById('det-descripcion').textContent = data.descripcion || 'N/A';
+                document.getElementById('det-email').textContent = data.emailPropietario || 'N/A';
+                
+                // Formatear fecha
+                if (data.fechaCreacion) {
+                    const fecha = new Date(data.fechaCreacion);
+                    document.getElementById('det-fecha').textContent = fecha.toLocaleString('es-CR');
+                } else {
+                    document.getElementById('det-fecha').textContent = 'N/A';
+                }
+
+                // Mostrar modal
+                document.getElementById('modalDetalles').style.display = 'block';
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                alert('Error al cargar los detalles del anuncio');
+            });
+    }
+
+    function editarValorFiscal(id, valorActual) {
+        document.getElementById('edit-anuncio-id').value = id;
+        document.getElementById('edit-valor-original').value = valorActual > 0 ? parseFloat(valorActual).toLocaleString('es-CR', {minimumFractionDigits: 2, maximumFractionDigits: 2}) : 'No establecido';
+        document.getElementById('edit-valor-nuevo').value = '';
+        
+        document.getElementById('modalEditar').style.display = 'block';
+    }
+
+    function guardarValorFiscal(event) {
+        event.preventDefault();
+        
+        const id = document.getElementById('edit-anuncio-id').value;
+        const nuevoValor = document.getElementById('edit-valor-nuevo').value;
+
+        if (!nuevoValor || parseFloat(nuevoValor) < 0) {
+            alert('Por favor ingrese un valor fiscal válido');
+            return false;
+        }
+
+        const formData = new FormData();
+        formData.append('id', id);
+        formData.append('nuevoValorFiscal', nuevoValor);
+        formData.append('__RequestVerificationToken', document.querySelector('input[name="__RequestVerificationToken"]').value);
+
+        fetch('/Admin/CentroAnuncios?handler=ActualizarValorFiscal', {
+            method: 'POST',
+            body: formData
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                alert(data.message);
+                location.reload(); // Recargar la página para ver los cambios
+            } else {
+                alert('Error al actualizar el valor fiscal');
+            }
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            alert('Error al guardar los cambios');
+        });
+
+        return false;
+    }
+
+    function cerrarModal(modalId) {
+        document.getElementById(modalId).style.display = 'none';
+    }
+
+    // Cerrar modal al hacer clic fuera de él
+    window.onclick = function(event) {
+        if (event.target.classList.contains('modal')) {
+            event.target.style.display = 'none';
+        }
+    }
+
+    // Cerrar modal con ESC
+    document.addEventListener('keydown', function(event) {
+        if (event.key === 'Escape') {
+            document.querySelectorAll('.modal').forEach(modal => {
+                modal.style.display = 'none';
+            });
+        }
+    });
+</script>
