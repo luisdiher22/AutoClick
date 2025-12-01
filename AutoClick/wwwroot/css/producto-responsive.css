@@ -658,8 +658,8 @@
 
     .producto-marchamo {
         order: 6 !important;
-        width: 100vw !important;
-        margin-left: calc(-50vw + 50%) !important;
+        width: 100% !important;
+        margin: 0 !important;
     }
 
     .producto-financing {

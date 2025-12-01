@@ -1,5 +1,5 @@
 /* ====================================
-   MI PERFIL RESPONSIVE STYLES
+   CONFIGURACION CUENTA RESPONSIVE STYLES
    Mobile & Tablet specific styles
    ==================================== */
 
@@ -157,63 +157,77 @@
    ==================================== */
 @media (max-width: 767px) {
     /* Hide sidebar on mobile */
-    .profile-sidebar {
+    .account-sidebar {
         display: none !important;
     }
 
     /* Full width content */
-    .mi-perfil-container {
+    .configuracion-cuenta-container {
         flex-direction: column !important;
     }
 
-    .profile-content {
+    .account-content {
         width: 100% !important;
         padding: 20px !important;
     }
 
-    /* Profile header adjustments */
-    .profile-header {
-        flex-direction: column !important;
-        gap: 20px !important;
+    /* Page header */
+    .page-header {
+        margin-bottom: 24px !important;
     }
 
-    .profile-avatar-section {
-        width: 100% !important;
-        align-items: center !important;
+    .page-title {
+        font-size: 24px !important;
     }
 
-    .profile-avatar {
-        width: 100px !important;
-        height: 100px !important;
+    /* Alert messages */
+    .alert {
+        font-size: 14px !important;
+        padding: 12px !important;
+        margin-bottom: 16px !important;
     }
 
-    .profile-name-section {
-        width: 100% !important;
-    }
-
-    /* Form adjustments */
-    .profile-form-group {
+    /* Settings sections */
+    .settings-section {
+        padding: 20px !important;
         margin-bottom: 20px !important;
     }
 
-    .profile-form-row {
+    .settings-section-title {
+        font-size: 18px !important;
+        margin-bottom: 16px !important;
+    }
+
+    /* Form groups */
+    .settings-form-group {
+        margin-bottom: 20px !important;
+    }
+
+    .settings-form-row {
         flex-direction: column !important;
         gap: 20px !important;
     }
 
-    .profile-form-row .profile-form-group {
+    .settings-form-row .settings-form-group {
         width: 100% !important;
     }
 
     /* Buttons */
-    .profile-actions {
-        flex-direction: column !important;
-        gap: 12px !important;
+    .settings-btn,
+    .settings-btn-secondary,
+    .settings-btn-danger {
+        width: 100% !important;
+        margin-bottom: 12px !important;
     }
 
-    .profile-btn,
-    .profile-btn-secondary {
-        width: 100% !important;
+    /* Delete account section */
+    .delete-account-section {
+        padding: 20px !important;
+    }
+
+    .delete-account-warning {
+        font-size: 13px !important;
+        padding: 12px !important;
     }
 }
 
@@ -222,28 +236,23 @@
    ==================================== */
 @media (min-width: 768px) and (max-width: 1023px) {
     /* Hide desktop sidebar */
-    .profile-sidebar {
+    .account-sidebar {
         display: none !important;
     }
 
     /* Adjust content padding */
-    .profile-content {
+    .account-content {
         padding: 30px !important;
         width: 100% !important;
     }
 
-    /* Profile header adjustments */
-    .profile-header {
-        gap: 24px !important;
-    }
-
-    .profile-avatar {
-        width: 110px !important;
-        height: 110px !important;
+    /* Settings sections */
+    .settings-section {
+        padding: 24px !important;
     }
 
     /* Form adjustments */
-    .profile-form-row {
+    .settings-form-row {
         gap: 20px !important;
     }
 }

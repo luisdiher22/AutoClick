@@ -203,6 +203,102 @@
                         </section>
                     }
                 }
+
+                <!-- Marchamo Calculator Section (movido dentro de producto-main-content) -->
+                @if (Model.Vehicle != null)
+                {
+                    <section class="producto-marchamo">
+                        <div class="marchamo-tari-content">
+                            <!-- Logo TariFlash y subtítulo -->
+                            <div class="marchamo-tari-header">
+                                <div class="marchamo-tari-logo">
+                                    <!-- Logo TariFlash -->
+                                    <img src="https://autoclickstorage.blob.core.windows.net/logos/tariflash-logo.png"
+                                        alt="TariFlash" style="width: 100%; height: 100%; object-fit: contain;" />
+                                </div>
+                                <p class="marchamo-tari-subtitle">Calculadora de marchamo y traspaso</p>
+                            </div>
+
+                            <!-- Nombre del vehículo -->
+                            <h2 class="marchamo-tari-car-title">@Model.Vehicle.NombreCompleto</h2>
+
+                            <!-- Marchamo 2025 -->
+                            <div class="marchamo-tari-section marchamo-tari-section-top">
+                                <h3 class="marchamo-tari-title-orange-1">Marchamo 2025</h3>
+                                @if (Model.MarchamoInfo != null && Model.MarchamoInfo.Total > 0)
+                                {
+                                    <div style="display: flex; flex-direction: column; gap: 8px; width: 100%;">
+                                        <div style="display: flex; justify-content: space-between; padding: 0 20px;">
+                                            <span style="font-family: 'Montserrat', sans-serif; font-weight: 500; font-size: 14px; color: rgba(0, 0, 0, 0.6);">Impuesto de circulación:</span>
+                                            <span style="font-family: 'Montserrat', sans-serif; font-weight: 700; font-size: 14px; color: rgba(0, 0, 0, 0.75);">@Model.MarchamoInfo.ImpuestoCirculacionFormateado</span>
+                                        </div>
+                                        <div style="display: flex; justify-content: space-between; padding: 0 20px;">
+                                            <span style="font-family: 'Montserrat', sans-serif; font-weight: 500; font-size: 14px; color: rgba(0, 0, 0, 0.6);">Seguro obligatorio (INS):</span>
+                                            <span style="font-family: 'Montserrat', sans-serif; font-weight: 700; font-size: 14px; color: rgba(0, 0, 0, 0.75);">@Model.MarchamoInfo.SeguroObligatorioFormateado</span>
+                                        </div>
+                                        <div style="display: flex; justify-content: space-between; padding: 0 20px;">
+                                            <span style="font-family: 'Montserrat', sans-serif; font-weight: 500; font-size: 14px; color: rgba(0, 0, 0, 0.6);">Timbre de circulación:</span>
+                                            <span style="font-family: 'Montserrat', sans-serif; font-weight: 700; font-size: 14px; color: rgba(0, 0, 0, 0.75);">@Model.MarchamoInfo.TimbreCirculacionFormateado</span>
+                                        </div>
+                                        <div style="height: 1px; background: rgba(0, 0, 0, 0.15); margin: 4px 20px;"></div>
+                                        <div style="display: flex; justify-content: space-between; padding: 0 20px;">
+                                            <span style="font-family: 'Montserrat', sans-serif; font-weight: 700; font-size: 18px; color: #FF8500;">TOTAL APROXIMADO:</span>
+                                            <span style="font-family: 'Montserrat', sans-serif; font-weight: 700; font-size: 18px; color: rgba(0, 0, 0, 0.85);">@Model.MarchamoInfo.TotalFormateado</span>
+                                        </div>
+                                    </div>
+                                }
+                                else
+                                {
+                                    <p class="marchamo-tari-disponible">VALOR FISCAL NO DISPONIBLE</p>
+                                    <p style="font-family: 'Montserrat', sans-serif; font-weight: 500; font-size: 12px; color: rgba(0, 0, 0, 0.5); margin: 0;">Contacte al vendedor para más información</p>
+                                }
+                            </div>
+
+                            <!-- Costos de traspaso -->
+                            <div class="marchamo-tari-section marchamo-tari-section-bottom">
+                                <h3 class="marchamo-tari-title-orange-2">Costos de traspaso</h3>
+                                @if (Model.TraspasoInfo != null && Model.TraspasoInfo.Total > 0)
+                                {
+                                    <div style="display: flex; flex-direction: column; gap: 8px; width: 100%;">
+                                        <div style="display: flex; justify-content: space-between; padding: 0 20px;">
+                                            <span style="font-family: 'Montserrat', sans-serif; font-weight: 500; font-size: 14px; color: rgba(0, 0, 0, 0.6);">Impuesto de traspaso (2.5%):</span>
+                                            <span style="font-family: 'Montserrat', sans-serif; font-weight: 700; font-size: 14px; color: rgba(0, 0, 0, 0.75);">@Model.TraspasoInfo.ImpuestoTraspasoFormateado</span>
+                                        </div>
+                                        <div style="display: flex; justify-content: space-between; padding: 0 20px;">
+                                            <span style="font-family: 'Montserrat', sans-serif; font-weight: 500; font-size: 14px; color: rgba(0, 0, 0, 0.6);">Timbres y gastos:</span>
+                                            <span style="font-family: 'Montserrat', sans-serif; font-weight: 700; font-size: 14px; color: rgba(0, 0, 0, 0.75);">@Model.TraspasoInfo.TimbresFormateado</span>
+                                        </div>
+                                        <div style="display: flex; justify-content: space-between; padding: 0 20px;">
+                                            <span style="font-family: 'Montserrat', sans-serif; font-weight: 500; font-size: 14px; color: rgba(0, 0, 0, 0.6);">Honorarios de abogado:</span>
+                                            <span style="font-family: 'Montserrat', sans-serif; font-weight: 700; font-size: 14px; color: rgba(0, 0, 0, 0.75);">@Model.TraspasoInfo.HonorariosAbogadoFormateado</span>
+                                        </div>
+                                        <div style="height: 1px; background: rgba(0, 0, 0, 0.15); margin: 4px 20px;"></div>
+                                        <div style="display: flex; justify-content: space-between; padding: 0 20px;">
+                                            <span style="font-family: 'Montserrat', sans-serif; font-weight: 700; font-size: 18px; color: #FF8400;">TOTAL APROXIMADO:</span>
+                                            <span style="font-family: 'Montserrat', sans-serif; font-weight: 700; font-size: 18px; color: rgba(0, 0, 0, 0.85);">@Model.TraspasoInfo.TotalFormateado</span>
+                                        </div>
+                                    </div>
+                                }
+                                else
+                                {
+                                    <p class="marchamo-tari-disponible">PRECIO NO DISPONIBLE</p>
+                                }
+                            </div>
+
+                            <!-- Footer -->
+                            <div class="marchamo-tari-footer">
+                                <p class="marchamo-tari-powered">Impulsado por AutoClick.cr</p>
+                            </div>
+                        </div>
+
+                        <div class="marchamo-disclaimer">
+                            Autoclick.cr informa que los valores presentados en esta plataforma son únicamente estimaciones de
+                            referencia. El cálculo oficial del marchamo corresponde al Instituto Nacional de Seguros (INS) y el
+                            monto exacto de los gastos de traspaso debe ser determinado por un abogado autorizado. Autoclick.cr no
+                            se hace responsable por diferencias entre los valores estimados y los montos oficiales.
+                        </div>
+                    </section>
+                }
             </div>
 
             <!-- Right Sidebar (33.33% width) -->
@@ -681,7 +777,7 @@
                 }
 
                 <!-- Espacios Publicitarios Verticales -->
-                <div style="display: flex; flex-direction: column; gap: 44px; margin-top: 8px; width: 560px;">
+                <div style="display: flex; flex-direction: column; gap: 16px; margin-top: 4px; width: 560px;">
                     @await Component.InvokeAsync("CarruselPublicidad", new { formato = "cuadrado", seccion =
                     "producto-sidebar-1" })
                     @await Component.InvokeAsync("CarruselPublicidad", new { formato = "cuadrado", seccion =
@@ -689,102 +785,6 @@
                 </div>
             </div>
         </div>
-
-        <!-- Marchamo Calculator Section -->
-        @if (Model.Vehicle != null)
-        {
-            <section class="producto-marchamo">
-                <div class="marchamo-tari-content">
-                    <!-- Logo TariFlash y subtítulo -->
-                    <div class="marchamo-tari-header">
-                        <div class="marchamo-tari-logo">
-                            <!-- Logo TariFlash -->
-                            <img src="https://autoclickstorage.blob.core.windows.net/logos/tariflash-logo.png"
-                                alt="TariFlash" style="width: 100%; height: 100%; object-fit: contain;" />
-                        </div>
-                        <p class="marchamo-tari-subtitle">Calculadora de marchamo y traspaso</p>
-                    </div>
-
-                    <!-- Nombre del vehículo -->
-                    <h2 class="marchamo-tari-car-title">@Model.Vehicle.NombreCompleto</h2>
-
-                    <!-- Marchamo 2025 -->
-                    <div class="marchamo-tari-section marchamo-tari-section-top">
-                        <h3 class="marchamo-tari-title-orange-1">Marchamo 2025</h3>
-                        @if (Model.MarchamoInfo != null && Model.MarchamoInfo.Total > 0)
-                        {
-                            <div style="display: flex; flex-direction: column; gap: 8px; width: 100%;">
-                                <div style="display: flex; justify-content: space-between; padding: 0 20px;">
-                                    <span style="font-family: 'Montserrat', sans-serif; font-weight: 500; font-size: 14px; color: rgba(0, 0, 0, 0.6);">Impuesto de circulación:</span>
-                                    <span style="font-family: 'Montserrat', sans-serif; font-weight: 700; font-size: 14px; color: rgba(0, 0, 0, 0.75);">@Model.MarchamoInfo.ImpuestoCirculacionFormateado</span>
-                                </div>
-                                <div style="display: flex; justify-content: space-between; padding: 0 20px;">
-                                    <span style="font-family: 'Montserrat', sans-serif; font-weight: 500; font-size: 14px; color: rgba(0, 0, 0, 0.6);">Seguro obligatorio (INS):</span>
-                                    <span style="font-family: 'Montserrat', sans-serif; font-weight: 700; font-size: 14px; color: rgba(0, 0, 0, 0.75);">@Model.MarchamoInfo.SeguroObligatorioFormateado</span>
-                                </div>
-                                <div style="display: flex; justify-content: space-between; padding: 0 20px;">
-                                    <span style="font-family: 'Montserrat', sans-serif; font-weight: 500; font-size: 14px; color: rgba(0, 0, 0, 0.6);">Timbre de circulación:</span>
-                                    <span style="font-family: 'Montserrat', sans-serif; font-weight: 700; font-size: 14px; color: rgba(0, 0, 0, 0.75);">@Model.MarchamoInfo.TimbreCirculacionFormateado</span>
-                                </div>
-                                <div style="height: 1px; background: rgba(0, 0, 0, 0.15); margin: 4px 20px;"></div>
-                                <div style="display: flex; justify-content: space-between; padding: 0 20px;">
-                                    <span style="font-family: 'Montserrat', sans-serif; font-weight: 700; font-size: 18px; color: #FF8500;">TOTAL APROXIMADO:</span>
-                                    <span style="font-family: 'Montserrat', sans-serif; font-weight: 700; font-size: 18px; color: rgba(0, 0, 0, 0.85);">@Model.MarchamoInfo.TotalFormateado</span>
-                                </div>
-                            </div>
-                        }
-                        else
-                        {
-                            <p class="marchamo-tari-disponible">VALOR FISCAL NO DISPONIBLE</p>
-                            <p style="font-family: 'Montserrat', sans-serif; font-weight: 500; font-size: 12px; color: rgba(0, 0, 0, 0.5); margin: 0;">Contacte al vendedor para más información</p>
-                        }
-                    </div>
-
-                    <!-- Costos de traspaso -->
-                    <div class="marchamo-tari-section marchamo-tari-section-bottom">
-                        <h3 class="marchamo-tari-title-orange-2">Costos de traspaso</h3>
-                        @if (Model.TraspasoInfo != null && Model.TraspasoInfo.Total > 0)
-                        {
-                            <div style="display: flex; flex-direction: column; gap: 8px; width: 100%;">
-                                <div style="display: flex; justify-content: space-between; padding: 0 20px;">
-                                    <span style="font-family: 'Montserrat', sans-serif; font-weight: 500; font-size: 14px; color: rgba(0, 0, 0, 0.6);">Impuesto de traspaso (2.5%):</span>
-                                    <span style="font-family: 'Montserrat', sans-serif; font-weight: 700; font-size: 14px; color: rgba(0, 0, 0, 0.75);">@Model.TraspasoInfo.ImpuestoTraspasoFormateado</span>
-                                </div>
-                                <div style="display: flex; justify-content: space-between; padding: 0 20px;">
-                                    <span style="font-family: 'Montserrat', sans-serif; font-weight: 500; font-size: 14px; color: rgba(0, 0, 0, 0.6);">Timbres y gastos:</span>
-                                    <span style="font-family: 'Montserrat', sans-serif; font-weight: 700; font-size: 14px; color: rgba(0, 0, 0, 0.75);">@Model.TraspasoInfo.TimbresFormateado</span>
-                                </div>
-                                <div style="display: flex; justify-content: space-between; padding: 0 20px;">
-                                    <span style="font-family: 'Montserrat', sans-serif; font-weight: 500; font-size: 14px; color: rgba(0, 0, 0, 0.6);">Honorarios de abogado:</span>
-                                    <span style="font-family: 'Montserrat', sans-serif; font-weight: 700; font-size: 14px; color: rgba(0, 0, 0, 0.75);">@Model.TraspasoInfo.HonorariosAbogadoFormateado</span>
-                                </div>
-                                <div style="height: 1px; background: rgba(0, 0, 0, 0.15); margin: 4px 20px;"></div>
-                                <div style="display: flex; justify-content: space-between; padding: 0 20px;">
-                                    <span style="font-family: 'Montserrat', sans-serif; font-weight: 700; font-size: 18px; color: #FF8400;">TOTAL APROXIMADO:</span>
-                                    <span style="font-family: 'Montserrat', sans-serif; font-weight: 700; font-size: 18px; color: rgba(0, 0, 0, 0.85);">@Model.TraspasoInfo.TotalFormateado</span>
-                                </div>
-                            </div>
-                        }
-                        else
-                        {
-                            <p class="marchamo-tari-disponible">PRECIO NO DISPONIBLE</p>
-                        }
-                    </div>
-
-                    <!-- Footer -->
-                    <div class="marchamo-tari-footer">
-                        <p class="marchamo-tari-powered">Impulsado por AutoClick.cr</p>
-                    </div>
-                </div>
-
-                <div class="marchamo-disclaimer">
-                    Autoclick.cr informa que los valores presentados en esta plataforma son únicamente estimaciones de
-                    referencia. El cálculo oficial del marchamo corresponde al Instituto Nacional de Seguros (INS) y el
-                    monto exacto de los gastos de traspaso debe ser determinado por un abogado autorizado. Autoclick.cr no
-                    se hace responsable por diferencias entre los valores estimados y los montos oficiales.
-                </div>
-            </section>
-        }
 
         <!-- Market Value Analysis Section -->
         @if (Model.ValorMercado != null)

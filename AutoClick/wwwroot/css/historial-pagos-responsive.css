@@ -1,5 +1,5 @@
 /* ====================================
-   MI PERFIL RESPONSIVE STYLES
+   HISTORIAL PAGOS RESPONSIVE STYLES
    Mobile & Tablet specific styles
    ==================================== */
 
@@ -157,63 +157,65 @@
    ==================================== */
 @media (max-width: 767px) {
     /* Hide sidebar on mobile */
-    .profile-sidebar {
+    .payments-sidebar {
         display: none !important;
     }
 
     /* Full width content */
-    .mi-perfil-container {
+    .historial-pagos-container {
         flex-direction: column !important;
     }
 
-    .profile-content {
+    .payments-content {
         width: 100% !important;
         padding: 20px !important;
     }
 
-    /* Profile header adjustments */
-    .profile-header {
-        flex-direction: column !important;
-        gap: 20px !important;
+    /* Page header */
+    .page-header {
+        margin-bottom: 24px !important;
     }
 
-    .profile-avatar-section {
-        width: 100% !important;
-        align-items: center !important;
+    .page-title {
+        font-size: 24px !important;
     }
 
-    .profile-avatar {
-        width: 100px !important;
-        height: 100px !important;
+    /* Table responsive */
+    .payments-table-container {
+        overflow-x: auto !important;
+        -webkit-overflow-scrolling: touch !important;
     }
 
-    .profile-name-section {
-        width: 100% !important;
+    .payments-table {
+        min-width: 600px !important;
+        font-size: 13px !important;
     }
 
-    /* Form adjustments */
-    .profile-form-group {
-        margin-bottom: 20px !important;
+    .payments-table th,
+    .payments-table td {
+        padding: 10px 8px !important;
     }
 
-    .profile-form-row {
-        flex-direction: column !important;
-        gap: 20px !important;
+    /* Alternative: Card view for mobile */
+    .payment-row {
+        display: block !important;
+        margin-bottom: 16px !important;
+        padding: 16px !important;
+        background: rgba(255, 255, 255, 0.05) !important;
+        border-radius: 8px !important;
     }
 
-    .profile-form-row .profile-form-group {
-        width: 100% !important;
+    .payment-row td {
+        display: block !important;
+        padding: 8px 0 !important;
+        border: none !important;
     }
 
-    /* Buttons */
-    .profile-actions {
-        flex-direction: column !important;
-        gap: 12px !important;
-    }
-
-    .profile-btn,
-    .profile-btn-secondary {
-        width: 100% !important;
+    .payment-row td::before {
+        content: attr(data-label) !important;
+        font-weight: 600 !important;
+        display: inline-block !important;
+        width: 120px !important;
     }
 }
 
@@ -222,28 +224,23 @@
    ==================================== */
 @media (min-width: 768px) and (max-width: 1023px) {
     /* Hide desktop sidebar */
-    .profile-sidebar {
+    .payments-sidebar {
         display: none !important;
     }
 
     /* Adjust content padding */
-    .profile-content {
+    .payments-content {
         padding: 30px !important;
         width: 100% !important;
     }
 
-    /* Profile header adjustments */
-    .profile-header {
-        gap: 24px !important;
+    /* Table adjustments */
+    .payments-table {
+        font-size: 14px !important;
     }
 
-    .profile-avatar {
-        width: 110px !important;
-        height: 110px !important;
-    }
-
-    /* Form adjustments */
-    .profile-form-row {
-        gap: 20px !important;
+    .payments-table th,
+    .payments-table td {
+        padding: 12px 10px !important;
     }
 }

@@ -5,6 +5,40 @@
     Layout = "~/Pages/Shared/_Layout.cshtml";
 }
 
+@section Styles {
+    <link rel="stylesheet" href="~/css/historial-pagos.css" />
+    <link rel="stylesheet" href="~/css/historial-pagos-responsive.css" />
+}
+
+<!-- Floating Sidebar Toggle Button (Mobile & Tablet only) -->
+<button class="profile-sidebar-toggle" onclick="toggleProfileSidebar()" aria-label="Abrir menú">
+    <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M9 5l7 7-7 7" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+    </svg>
+</button>
+
+<!-- Overlay for sidebar -->
+<div class="profile-sidebar-overlay" onclick="closeProfileSidebar()"></div>
+
+<!-- Floating Sidebar Menu (Mobile & Tablet only) -->
+<aside class="profile-sidebar-floating">
+    <div class="profile-sidebar-floating-header">
+        <h3 class="profile-sidebar-floating-title">Menú de perfil</h3>
+        <button class="profile-sidebar-close" onclick="closeProfileSidebar()">&times;</button>
+    </div>
+    <nav class="sidebar-nav">
+        <a href="/MiPerfil" class="nav-item">
+            <span>Información personal</span>
+        </a>
+        <a href="/HistorialPagos" class="nav-item active">
+            <span>Historial de pagos</span>
+        </a>
+        <a href="/ConfiguracionCuenta" class="nav-item">
+            <span>Configuración de cuenta</span>
+        </a>
+    </nav>
+</aside>
+
 <div class="page-wrapper">
     <div class="historial-pagos-container">
     <!-- Sidebar -->
@@ -80,11 +114,8 @@
     </div>
 </div>
 
-@section Styles {
-    <link rel="stylesheet" href="~/css/historial-pagos.css" />
-}
-
 @section Scripts {
+    <script src="~/js/profile-sidebar.js"></script>
     <script src="~/js/historial-pagos.js"></script>
 }
 
