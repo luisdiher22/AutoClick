@@ -26,7 +26,7 @@ public class IndexModel : PageModel
     public List<Auto> AutosRecientes { get; set; } = new();
     public List<Auto> AutosGuardados { get; set; } = new();
     public List<Auto> AutosExploracion { get; set; } = new();
-    public Dictionary<int, string?> BanderinUrls { get; set; } = new();
+    public Dictionary<int, List<string>> BanderinUrls { get; set; } = new(); // Changed to List<string> for multiple banderines
 
     public async Task<string?> GetBanderinUrlAsync(string? fileName)
     {
@@ -43,22 +43,36 @@ public class IndexModel : PageModel
         
         foreach (var auto in autos)
         {
-            _logger.LogInformation($"Auto {auto.Id}: BanderinAdquirido={auto.BanderinAdquirido}, BanderinVideoUrl={auto.BanderinVideoUrl}");
+            _logger.LogInformation($"Auto {auto.Id}: BanderinAdquirido={auto.BanderinAdquirido}, BanderinesAdquiridos={auto.BanderinesAdquiridos}");
             
-            if (!string.IsNullOrEmpty(auto.BanderinVideoUrl) && !BanderinUrls.ContainsKey(auto.Id))
+            if (!BanderinUrls.ContainsKey(auto.Id))
             {
-                _logger.LogInformation($"Attempting to load banderin URL for auto {auto.Id}: {auto.BanderinVideoUrl}");
-                var url = await _banderinesService.GetBanderinUrlAsync(auto.BanderinVideoUrl);
-                _logger.LogInformation($"Result URL for auto {auto.Id}: {url}");
-                BanderinUrls[auto.Id] = url;
-            }
-            else
-            {
-                _logger.LogWarning($"Skipping auto {auto.Id}: BanderinVideoUrl is null or already loaded");
+                var urls = new List<string>();
+                var banderinFiles = auto.BanderinesVideoUrls; // Use the new property that gets multiple banderines
+                
+                foreach (var fileName in banderinFiles)
+                {
+                    if (!string.IsNullOrEmpty(fileName))
+                    {
+                        _logger.LogInformation($"Loading banderin URL for auto {auto.Id}: {fileName}");
+                        var url = await _banderinesService.GetBanderinUrlAsync(fileName);
+                        if (!string.IsNullOrEmpty(url))
+                        {
+                            urls.Add(url);
+                            _logger.LogInformation($"Loaded URL: {url}");
+                        }
+                    }
+                }
+                
+                if (urls.Count > 0)
+                {
+                    BanderinUrls[auto.Id] = urls;
+                    _logger.LogInformation($"Auto {auto.Id}: Loaded {urls.Count} banderin URL(s)");
+                }
             }
         }
         
-        _logger.LogInformation($"=== LoadBanderinUrlsAsync END: Loaded {BanderinUrls.Count} URLs ===");
+        _logger.LogInformation($"=== LoadBanderinUrlsAsync END: Loaded URLs for {BanderinUrls.Count} autos ===");
     }
 
     public async Task OnGetAsync()

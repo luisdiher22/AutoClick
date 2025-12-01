@@ -364,6 +364,127 @@ public class Auto
         }
     }
 
+    // Helper method to get multiple banderines from BanderinesAdquiridos field
+    [NotMapped]
+    public List<string> BanderinesVideoUrls
+    {
+        get
+        {
+            var urls = new List<string>();
+            
+            // Primero revisar el campo nuevo BanderinesAdquiridos (múltiples)
+            if (!string.IsNullOrEmpty(BanderinesAdquiridos))
+            {
+                var items = BanderinesAdquiridos.Split(',', StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries);
+                foreach (var item in items)
+                {
+                    // Intentar primero como ID numérico (legacy)
+                    if (int.TryParse(item, out int id) && id > 0)
+                    {
+                        var url = GetBanderinFileById(id);
+                        if (!string.IsNullOrEmpty(url))
+                            urls.Add(url);
+                    }
+                    // Si no es ID, tratarlo como slug
+                    else
+                    {
+                        var url = GetBanderinFileBySlug(item);
+                        if (!string.IsNullOrEmpty(url))
+                            urls.Add(url);
+                    }
+                }
+            }
+            
+            // Fallback al campo antiguo BanderinAdquirido (un solo banderin)
+            if (urls.Count == 0 && !string.IsNullOrEmpty(BanderinVideoUrl))
+            {
+                urls.Add(BanderinVideoUrl);
+            }
+            
+            return urls;
+        }
+    }
+
+    // Helper privado para obtener el archivo de banderin por slug
+    private string? GetBanderinFileBySlug(string slug)
+    {
+        var slugFiles = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase)
+        {
+            { "version-americana", "Versión Americana.gif" },
+            { "unico-dueno", "ÚNICO DUEÑO.gif" },
+            { "full-extras", "FULL EXTRAS-.gif" },
+            { "mantenimiento-agencia", "MANTENIMIENTO DE AGENCIA-.gif" },
+            { "perfecto-estado", "PERFECTO ESTADO.gif" },
+            { "al-dia", "AL DÍA.gif" },
+            { "bajo-kilometraje", "BAJO KILOMETRAJE.gif" },
+            { "negociable", "NEGOCIABLE.gif" },
+            { "financiamiento-disponible", "FINANCIAMIENTO DISPONIBLE.gif" },
+            { "escucho-ofertas", "ESCUCHO OFERTAS.gif" },
+            { "impecable", "IMPECABLE.gif" },
+            { "cero-detalles", "CERO DETALLES.gif" },
+            { "poco-uso", "POCO USO.gif" },
+            { "registro-limpio", "REGISTRO LIMPIO.gif" },
+            { "traspaso-incluido", "TRASPASO INCLUÍDO.gif" },
+            { "recibo", "RECIBO.gif" },
+            { "vendo-o-cambio", "VENDO O CAMBIO.gif" },
+            { "urge-vender", "URGE VENDER.gif" },
+            { "precio-especial", "PRECIO ESPECIAL.gif" },
+            { "oportunidad-unica", "OPORTUNIDAD UNICA.gif" },
+            { "llame-ahora", "LLAME AHORA.gif" },
+            { "unico-en-pais", "ÚNICO EN EL PAÍS.gif" },
+            { "edicion-limitada", "EDICIÓN LIMITADA.gif" },
+            { "para-inscribir", "PARA INSCRIBIR.gif" },
+            { "bajo-consumo", "BAJO CONSUMO.gif" },
+            { "garantia-extendida", "GARANTÍA EXTENDIDA.gif" },
+            { "full-ppf", "FULL PPF.gif" },
+            { "tratamiento-ceramico", "TRATAMIENTO CERÁMICO.gif" },
+            { "taylor-made", "TAYLOR MADE.gif" },
+            { "cedo-deuda", "CEDO DEUDA.gif" }
+        };
+
+        return slugFiles.ContainsKey(slug) ? slugFiles[slug] : null;
+    }
+
+    // Helper privado para obtener el archivo de banderin por ID
+    private string? GetBanderinFileById(int id)
+    {
+        var tagFiles = new Dictionary<int, string>
+        {
+            { 1, "Versión Americana.gif" },
+            { 2, "ÚNICO DUEÑO.gif" },
+            { 3, "FULL EXTRAS-.gif" },
+            { 4, "MANTENIMIENTO DE AGENCIA-.gif" },
+            { 5, "PERFECTO ESTADO.gif" },
+            { 6, "AL DÍA.gif" },
+            { 7, "BAJO KILOMETRAJE.gif" },
+            { 8, "NEGOCIABLE.gif" },
+            { 9, "FINANCIAMIENTO DISPONIBLE.gif" },
+            { 10, "ESCUCHO OFERTAS.gif" },
+            { 11, "IMPECABLE.gif" },
+            { 12, "CERO DETALLES.gif" },
+            { 13, "POCO USO.gif" },
+            { 14, "REGISTRO LIMPIO.gif" },
+            { 15, "TRASPASO INCLUÍDO.gif" },
+            { 16, "RECIBO.gif" },
+            { 17, "VENDO O CAMBIO.gif" },
+            { 18, "URGE VENDER.gif" },
+            { 19, "PRECIO ESPECIAL.gif" },
+            { 20, "OPORTUNIDAD UNICA.gif" },
+            { 21, "LLAME AHORA.gif" },
+            { 22, "ÚNICO EN EL PAÍS.gif" },
+            { 23, "EDICIÓN LIMITADA.gif" },
+            { 24, "PARA INSCRIBIR.gif" },
+            { 25, "BAJO CONSUMO.gif" },
+            { 26, "GARANTÍA EXTENDIDA.gif" },
+            { 27, "FULL PPF.gif" },
+            { 28, "TRATAMIENTO CERÁMICO.gif" },
+            { 29, "TAYLOR MADE.gif" },
+            { 30, "CEDO DEUDA.gif" }
+        };
+
+        return tagFiles.ContainsKey(id) ? tagFiles[id] : null;
+    }
+
     // Propiedad para recibir archivos del formulario (no se mapea a BD)
     [NotMapped]
     [Display(Name = "Fotos del Vehículo")]
