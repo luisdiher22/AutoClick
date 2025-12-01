@@ -3,10 +3,10 @@
     <div class="header-container">
         <!-- Logo Section -->
         <div class="logo-section">
-            <a asp-page="/Index" class="logo-link" style="position: relative !important; left: 60px !important; top: -5px !important; padding: 0 20px !important; display: flex !important; align-items: center !important; height: 100% !important;">
+            <a asp-page="/Index" class="logo-link" style="position: relative !important; left: 10px !important; top: -5px !important; padding: 0 20px !important; display: flex !important; align-items: center !important; height: 100% !important;">
                 <div class="logo-container" style="position: relative !important; width: 260px !important; height: 42px !important; overflow: hidden !important; display: block !important;">
-                    <img src="~/images/logos/autoclick-logo-hd.png" alt="AutoClick.cr" class="logo-image logo-main" style="position: absolute !important; top: 0 !important; left: 0 !important; height: 42px !important; width: auto !important; transform: translateX(0) !important; z-index: 2 !important; transition: transform 0.5s cubic-bezier(0.4, 0.0, 0.2, 1) !important; display: block !important;" />
-                    <img src="https://autoclickstorage.blob.core.windows.net/logos/LOGOS%20AUTOCLICK-06.png" alt="AutoClick.cr" class="logo-image logo-hover" style="position: absolute !important; top: 0 !important; left: 0 !important; height: 42px !important; width: auto !important; transform: translateX(-100%) !important; z-index: 1 !important; transition: transform 0.5s cubic-bezier(0.4, 0.0, 0.2, 1) !important; display: block !important;" />
+                    <img src="~/images/logos/autoclick-logo-hd.png" alt="AutoClick.cr" class="logo-image logo-main" style="position: absolute !important; top: 0 !important; left: 0 !important; height: 42px !important; width: auto !important; z-index: 2 !important; transition: transform 0.5s cubic-bezier(0.4, 0.0, 0.2, 1) !important; display: block !important;" />
+                    <img src="https://autoclickstorage.blob.core.windows.net/logos/LOGOS%20AUTOCLICK-06.png" alt="AutoClick.cr" class="logo-image logo-hover" style="position: absolute !important; top: 0 !important; left: 0 !important; height: 42px !important; width: auto !important; z-index: 1 !important; transition: transform 0.5s cubic-bezier(0.4, 0.0, 0.2, 1) !important; display: block !important;" />
                 </div>
             </a>
         </div>
@@ -187,13 +187,13 @@
         
         if (logoLink && logoMain && logoHover) {
             logoLink.addEventListener('mouseenter', function() {
-                logoMain.style.transform = 'translateX(-100%)';
-                logoHover.style.transform = 'translateX(0)';
+                logoMain.style.setProperty('transform', 'translateX(-100%)', 'important');
+                logoHover.style.setProperty('transform', 'translateX(0)', 'important');
             });
             
             logoLink.addEventListener('mouseleave', function() {
-                logoMain.style.transform = 'translateX(0)';
-                logoHover.style.transform = 'translateX(-100%)';
+                logoMain.style.setProperty('transform', 'translateX(0)', 'important');
+                logoHover.style.setProperty('transform', 'translateX(-100%)', 'important');
             });
         }
     }
@@ -345,12 +345,14 @@
             z-index: 1 !important;
         }
 
-        /* On hover: swap positions */
-        .logo-section .logo-link:hover .logo-container .logo-main {
+        /* On hover: swap positions - CRITICAL with higher specificity */
+        .logo-section .logo-link:hover .logo-container .logo-main,
+        .logo-section a.logo-link:hover .logo-container .logo-main {
             transform: translateX(-100%) !important;
         }
 
-        .logo-section .logo-link:hover .logo-container .logo-hover {
+        .logo-section .logo-link:hover .logo-container .logo-hover,
+        .logo-section a.logo-link:hover .logo-container .logo-hover {
             transform: translateX(0) !important;
         }
         

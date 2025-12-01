@@ -204,16 +204,7 @@
     display: none;
 }
 
-/* Sidebar Advertisement */
-.sidebar-ad {
-    background: rgba(255, 255, 255, 0.05);
-    border-radius: 4px;
-    overflow: hidden;
-    min-height: 423px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-}
+/* Sidebar Advertisement - Removido, ahora usa estilos de CarruselPublicidad */
 
 /* Main Content */
 .main-content {
@@ -620,9 +611,9 @@
 /* Bottom Advertisement */
 .bottom-ad {
     margin-top: 24px;
-    background: rgba(255, 255, 255, 0.05);
+    background: #0B0E14;
     border-radius: 4px;
-    min-height: 259px;
+    min-height: 189px;
     display: flex;
     align-items: center;
     justify-content: center;

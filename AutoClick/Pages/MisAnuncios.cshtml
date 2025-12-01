@@ -204,10 +204,10 @@
 
                         <button type="submit" class="apply-filters-btn">Aplicar Filtros</button>
                     </form>
-                </div>                <!-- Advertisement Placeholder -->
-                <div class="sidebar-ad">
-                    @await Component.InvokeAsync("CarruselPublicidad", new { formato = "cuadrado", seccion = "mis-anuncios-sidebar" })
                 </div>
+                
+                <!-- Advertisement Placeholder -->
+                @await Component.InvokeAsync("CarruselPublicidad", new { formato = "cuadrado", seccion = "mis-anuncios-sidebar" })
             </aside>
 
             <!-- Main Content Area -->

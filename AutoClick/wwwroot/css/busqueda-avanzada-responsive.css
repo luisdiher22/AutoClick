@@ -319,6 +319,12 @@
         object-fit: contain !important;
     }
 
+    /* Hacer el corazón lleno más pequeño en mobile */
+    .busqueda-favorite-btn img[src*="CORAZONLLENO"] {
+        width: 70% !important;
+        height: 70% !important;
+    }
+
     @keyframes fadeIn {
         from {
             opacity: 0;
@@ -612,6 +618,12 @@
         object-fit: contain !important;
     }
 
+    /* Hacer el corazón lleno más pequeño en tablet */
+    .busqueda-favorite-btn img[src*="CORAZONLLENO"] {
+        width: 70% !important;
+        height: 70% !important;
+    }
+
     @keyframes fadeIn {
         from {
             opacity: 0;
@@ -632,5 +644,41 @@
 
     .busqueda-filter-modal {
         display: none !important;
+    }
+}
+
+/* ====================================
+   ANUNCIOS HORIZONTALES RESPONSIVE
+   ==================================== */
+/* Mobile - max 767px */
+@media (max-width: 767px) {
+    .ad-carousel-horizontal[data-seccion="busqueda-banner"],
+    .ad-carousel-horizontal[data-seccion="busqueda-footer"],
+    .ad-carousel-horizontal[data-seccion="guardados-footer"],
+    .ad-carousel-horizontal[data-seccion="mis-anuncios-footer"] {
+        max-width: 100% !important;
+        width: 100% !important;
+    }
+}
+
+/* Tablet - 768px a 1023px */
+@media (min-width: 768px) and (max-width: 1023px) {
+    .ad-carousel-horizontal[data-seccion="busqueda-banner"],
+    .ad-carousel-horizontal[data-seccion="busqueda-footer"],
+    .ad-carousel-horizontal[data-seccion="guardados-footer"],
+    .ad-carousel-horizontal[data-seccion="mis-anuncios-footer"] {
+        max-width: 100% !important;
+        width: 100% !important;
+    }
+}
+
+/* Desktop - 1024px+ */
+@media (min-width: 1024px) {
+    .ad-carousel-horizontal[data-seccion="busqueda-banner"],
+    .ad-carousel-horizontal[data-seccion="busqueda-footer"],
+    .ad-carousel-horizontal[data-seccion="guardados-footer"],
+    .ad-carousel-horizontal[data-seccion="mis-anuncios-footer"] {
+        max-width: 100% !important;
+        width: 100% !important;
     }
 }

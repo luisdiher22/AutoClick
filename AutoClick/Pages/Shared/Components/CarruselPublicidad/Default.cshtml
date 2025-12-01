@@ -82,7 +82,44 @@
     .ad-carousel-cuadrado {
         width: 100%;
         max-width: 344px;
-        height: 423px;
+        height: 100%;
+        min-height: 423px;
+    }
+
+    /* Anuncios cuadrados en Producto sidebar - 560px de ancho */
+    .ad-carousel-cuadrado[data-seccion="producto-sidebar-1"],
+    .ad-carousel-cuadrado[data-seccion="producto-sidebar-2"] {
+        max-width: 560px !important;
+        width: 560px !important;
+        min-height: 688px !important;
+    }
+
+    /* Asegurar que el contenido cubra todo el ancho y alto */
+    .ad-carousel-cuadrado .ad-carousel-wrapper,
+    .ad-carousel-cuadrado .ad-carousel-item,
+    .ad-carousel-cuadrado .placeholder-content {
+        width: 100% !important;
+        height: 100% !important;
+        min-height: inherit;
+    }
+
+    /* Asegurar altura mínima para MisAnuncios y BusquedaAvanzada */
+    .ad-carousel-cuadrado[data-seccion="busqueda-sidebar"] .ad-carousel-wrapper,
+    .ad-carousel-cuadrado[data-seccion="mis-anuncios-sidebar"] .ad-carousel-wrapper {
+        min-height: 423px !important;
+    }
+
+    .ad-carousel-cuadrado[data-seccion="busqueda-sidebar"] .ad-carousel-item,
+    .ad-carousel-cuadrado[data-seccion="mis-anuncios-sidebar"] .ad-carousel-item,
+    .ad-carousel-cuadrado[data-seccion="busqueda-sidebar"] .placeholder-content,
+    .ad-carousel-cuadrado[data-seccion="mis-anuncios-sidebar"] .placeholder-content {
+        min-height: 423px !important;
+    }
+
+    .ad-carousel-cuadrado .ad-carousel-item .ad-image,
+    .ad-carousel-cuadrado .ad-carousel-item .ad-link {
+        width: 100% !important;
+        height: 100% !important;
     }
 
     .ad-carousel-horizontal {
@@ -90,6 +127,20 @@
         max-width: 1010px;
         height: 189px;
         margin: 0 auto;
+    }
+
+    /* Estilos específicos para anuncios horizontales en diferentes secciones */
+    .ad-carousel-horizontal[data-seccion="busqueda-banner"],
+    .ad-carousel-horizontal[data-seccion="busqueda-footer"] {
+        max-width: 100%;
+    }
+
+    .ad-carousel-horizontal[data-seccion="guardados-footer"] {
+        max-width: 100%;
+    }
+
+    .ad-carousel-horizontal[data-seccion="mis-anuncios-footer"] {
+        max-width: 100%;
     }
 
     .ad-carousel-medio-vertical {
@@ -121,6 +172,12 @@
         object-fit: contain;
         cursor: pointer;
         display: block;
+    }
+
+    /* Imágenes en carruseles cuadrados usan cover para llenar el espacio */
+    .ad-carousel-cuadrado .ad-carousel-item .ad-image,
+    .ad-carousel-cuadrado .ad-carousel-item .ad-link img {
+        object-fit: cover;
     }
 
     .ad-carousel-item .ad-link {

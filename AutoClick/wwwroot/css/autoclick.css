@@ -4154,7 +4154,20 @@ body {
     grid-template-columns: 1fr 560px;
     gap: 40px;
     align-items: start;
-    margin-bottom: -200px; /* Subir calculadora cuando sidebar es más alto */
+}
+
+/* Sidebar container para ads */
+.producto-sidebar {
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+}
+
+/* Marchamo calculator dentro del grid */
+.producto-marchamo {
+    grid-column: 2;
+    align-self: end;
+    margin-top: 0 !important;
 }
 
 /* Main Content Column (Gallery + Description + Specifications + Equipment) */
@@ -4190,21 +4203,22 @@ body {
     position: absolute;
     top: 50%;
     transform: translateY(-50%);
-    width: 51px;
-    height: 51px;
-    background: rgba(217, 217, 217, 0.15);
-    border: 1.27px solid white;
+    width: 40px;
+    height: 40px;
+    background: transparent;
+    border: none;
     border-radius: 50%;
     display: flex;
     align-items: center;
     justify-content: center;
     cursor: pointer;
-    transition: background 0.3s ease;
-    box-shadow: 3px 3px 4px rgba(0, 0, 0, 0.50);
+    transition: opacity 0.3s ease;
+    opacity: 0.7;
+    z-index: 10;
 }
 
 .gallery-nav-btn:hover {
-    background: rgba(217, 217, 217, 0.25);
+    opacity: 1;
 }
 
 .gallery-nav-btn.prev-btn {

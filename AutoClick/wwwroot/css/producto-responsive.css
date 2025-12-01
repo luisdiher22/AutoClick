@@ -113,20 +113,22 @@
 
     .producto-main-image {
         width: 100% !important;
-        min-height: 250px !important;
-        height: auto !important;
+        height: 0 !important;
+        padding-bottom: 66.67% !important;
         position: relative !important;
         border-radius: 0 !important;
         overflow: hidden;
-        display: flex !important;
-        align-items: center !important;
-        justify-content: center !important;
+        background: #000 !important;
     }
 
     .producto-main-image img {
+        position: absolute !important;
+        top: 0 !important;
+        left: 0 !important;
         width: 100% !important;
-        height: auto !important;
+        height: 100% !important;
         object-fit: contain !important;
+        object-position: center !important;
     }
 
     /* Ocultar thumbnails en responsive */
@@ -137,6 +139,13 @@
     /* Mantener botones de navegación visibles */
     .gallery-nav-btn {
         display: flex !important;
+        width: 36px !important;
+        height: 36px !important;
+    }
+
+    .gallery-nav-btn svg {
+        width: 36px !important;
+        height: 36px !important;
     }
 
     /* Contador de fotos - abajo derecha, icono pequeño */
@@ -144,27 +153,32 @@
         position: absolute;
         bottom: 8px;
         right: 8px;
-        background: rgba(0, 0, 0, 0.5);
-        border-radius: 2.13px;
-        padding: 5px 6px;
+        background: rgba(0, 0, 0, 0.6);
+        border-radius: 4px;
+        padding: 8px 12px;
         display: flex;
         align-items: center;
-        gap: 8px;
+        gap: 6px;
         z-index: 10;
+        width: auto;
+        height: auto;
+        box-sizing: border-box;
     }
 
     .photo-counter span {
         color: white;
         font-family: 'Montserrat', sans-serif;
-        font-size: 12px;
+        font-size: 11px;
         font-weight: 500;
-        line-height: normal;
+        line-height: 1;
         white-space: nowrap;
+        display: flex;
+        align-items: center;
     }
 
+    /* Ocultar icono de cámara */
     .photo-counter img {
-        width: 12px !important;
-        height: 10px !important;
+        display: none !important;
     }
 
     /* Botón de ver video - abajo izquierda */
@@ -549,7 +563,7 @@
     }
 
     .equipment-item li:before {
-        content: "•";
+        content: "\2022";
         position: absolute;
         left: 0;
         color: #FFD700;
@@ -566,6 +580,11 @@
     /* Ocultar elementos de sidebar que se mueven a tabs */
     .producto-contact-card,
     .producto-sidebar > .producto-seller-card {
+        display: none !important;
+    }
+
+    /* Ocultar publicidad sidebar en mobile */
+    .producto-sidebar > div[style*="flex-direction: column"] {
         display: none !important;
     }
 }
@@ -656,20 +675,22 @@
 
     .producto-main-image {
         width: 100% !important;
-        min-height: 400px !important;
-        height: auto !important;
+        height: 0 !important;
+        padding-bottom: 66.67% !important;
         position: relative !important;
         border-radius: 0 !important;
         overflow: hidden;
-        display: flex !important;
-        align-items: center !important;
-        justify-content: center !important;
+        background: #000 !important;
     }
 
     .producto-main-image img {
+        position: absolute !important;
+        top: 0 !important;
+        left: 0 !important;
         width: 100% !important;
-        height: auto !important;
+        height: 100% !important;
         object-fit: contain !important;
+        object-position: center !important;
     }
 
     /* Ocultar thumbnails en responsive */
@@ -680,6 +701,13 @@
     /* Mantener botones de navegación visibles */
     .gallery-nav-btn {
         display: flex !important;
+        width: 38px !important;
+        height: 38px !important;
+    }
+
+    .gallery-nav-btn svg {
+        width: 38px !important;
+        height: 38px !important;
     }
 
     /* Contador de fotos - abajo derecha, icono pequeño */
@@ -687,27 +715,32 @@
         position: absolute;
         bottom: 12px;
         right: 12px;
-        background: rgba(0, 0, 0, 0.5);
-        border-radius: 2.13px;
-        padding: 5px 6px;
+        background: rgba(0, 0, 0, 0.6);
+        border-radius: 4px;
+        padding: 8px 14px;
         display: flex;
         align-items: center;
-        gap: 8px;
+        gap: 7px;
         z-index: 10;
+        width: auto;
+        height: auto;
+        box-sizing: border-box;
     }
 
     .photo-counter span {
         color: white;
         font-family: 'Montserrat', sans-serif;
-        font-size: 12px;
+        font-size: 11px;
         font-weight: 500;
-        line-height: normal;
+        line-height: 1;
         white-space: nowrap;
+        display: flex;
+        align-items: center;
     }
 
+    /* Ocultar icono de cámara */
     .photo-counter img {
-        width: 14px !important;
-        height: 12px !important;
+        display: none !important;
     }
 
     /* Botón de ver video - abajo izquierda */
@@ -1092,7 +1125,7 @@
     }
 
     .equipment-item li:before {
-        content: "•";
+        content: "\2022";
         position: absolute;
         left: 0;
         color: #FFD700;
@@ -1110,5 +1143,28 @@
     .producto-contact-card,
     .producto-sidebar > .producto-seller-card {
         display: none !important;
+    }
+
+    /* Ocultar publicidad sidebar en tablet */
+    .producto-sidebar > div[style*="flex-direction: column"] {
+        display: none !important;
+    }
+}
+
+/* ====================================
+   DESKTOP - Anuncios Sidebar con espaciado de 44px
+   ==================================== */
+@media (min-width: 1024px) {
+    /* Asegurar que los anuncios sidebar tengan el gap correcto */
+    .producto-sidebar > div[style*="flex-direction: column"] {
+        gap: 44px !important;
+    }
+
+    /* Asegurar que los anuncios cuadrados llenen su espacio */
+    .ad-carousel-cuadrado[data-seccion="producto-sidebar-1"],
+    .ad-carousel-cuadrado[data-seccion="producto-sidebar-2"] {
+        width: 100% !important;
+        max-width: 344px !important;
+        height: 423px !important;
     }
 }

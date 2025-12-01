@@ -2,13 +2,12 @@
 @model AutoClick.Pages.MiPerfilModel
 @{
     ViewData["Title"] = "Mi perfil - AutoClick.cr";
+    Layout = "~/Pages/Shared/_Layout.cshtml";
 }
 
 @section Styles {
     <link rel="stylesheet" href="~/css/mi-perfil.css" />
 }
-
-@await Html.PartialAsync("_Header")
 
 <div class="page-wrapper">
     <div class="mi-perfil-container">
@@ -163,8 +162,6 @@
         </form>
     </main>
     </div>
-
-    <!-- Footer -->
 </div>
 
 @section Scripts {

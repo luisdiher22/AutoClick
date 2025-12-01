@@ -457,6 +457,8 @@ document.addEventListener('DOMContentLoaded', function () {
         updateNavigationButtons();
         updateSectionIndicator();
 
+        // Scroll hacia arriba en todas las versiones (mobile, tablet y desktop)
+        window.scrollTo({ top: 0, behavior: 'smooth' });
     }
 
     function updateSectionIndicator() {
