@@ -464,7 +464,7 @@ a.dropdown-toggle::before,
     font-size: 16px !important; /* EXACTLY from Figma */
     color: white !important;
     padding: 8px 0 !important; /* height: 40px with 8px padding */
-    justify-content: flex-start !important;
+    justify-content: center !important;
     background: transparent !important;
     height: 40px; /* EXACTLY from Figma */
     display: flex !important;
