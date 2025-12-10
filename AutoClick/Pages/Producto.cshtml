@@ -187,11 +187,11 @@
                     allExtras.AddRange(Model.Vehicle.ExtrasAntiRoboList ?? new List<string>());
                     allExtras = allExtras.Where(e => !string.IsNullOrEmpty(e)).ToList();
 
-                    if (allExtras.Count > 0)
-                    {
-                        <section class="producto-equipment">
-                            <h2>Equipamiento</h2>
-                            <div class="equipment-divider"></div>
+                    <section class="producto-equipment">
+                        <h2>Equipamiento</h2>
+                        <div class="equipment-divider"></div>
+                        @if (allExtras.Count > 0)
+                        {
                             <div class="equipment-grid">
                                 @foreach (var item in allExtras)
                                 {
@@ -200,11 +200,17 @@
                                     </ul>
                                 }
                             </div>
-                        </section>
-                    }
+                        }
+                        else
+                        {
+                            <div class="equipment-no-data">
+                                <p>Este vehículo no tiene extras registrados</p>
+                            </div>
+                        }
+                    </section>
                 }
 
-                <!-- Marchamo Calculator Section (movido dentro de producto-main-content) -->
+                <!-- Marchamo Calculator Section (debe aparecer PRIMERO) -->
                 @if (Model.Vehicle != null)
                 {
                     <section class="producto-marchamo">
@@ -297,6 +303,81 @@
                             monto exacto de los gastos de traspaso debe ser determinado por un abogado autorizado. Autoclick.cr no
                             se hace responsable por diferencias entre los valores estimados y los montos oficiales.
                         </div>
+                    </section>
+                }
+
+                <!-- Market Value Section (debe aparecer SEGUNDO, después de Marchamo) -->
+                @if (Model.ValorMercado != null)
+                {
+                    <section class="producto-market-analysis">
+                        <h2>Valor de mercado</h2>
+
+                        @if (!Model.ValorMercado.TieneDatos)
+                        {
+                            <!-- Sin datos disponibles -->
+                            <div class="market-no-data">
+                                <svg width="48" height="48" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                    <path
+                                        d="M12 22C17.5228 22 22 17.5228 22 12C22 6.47715 17.5228 2 12 2C6.47715 2 2 6.47715 2 12C2 17.5228 6.47715 22 12 22Z"
+                                        stroke="rgba(255, 255, 255, 0.3)" stroke-width="2" />
+                                    <path d="M12 8V12" stroke="rgba(255, 255, 255, 0.3)" stroke-width="2" stroke-linecap="round" />
+                                    <circle cx="12" cy="16" r="1" fill="rgba(255, 255, 255, 0.3)" />
+                                </svg>
+                                <p>@Model.ValorMercado.MensajeSinDatos</p>
+                            </div>
+                        }
+                        else
+                        {
+                            <!-- Badge de clasificación -->
+                            <div class="market-badge-container">
+                                <div class="market-badge" style="background-color: @Model.ValorMercado.ColorOferta;">
+                                    @Model.ValorMercado.DescripcionOferta
+                                </div>
+                            </div>
+
+                            <!-- Gráfico de rango de precios -->
+                            <div class="market-chart">
+                                <div class="market-chart-header">
+                                    <div class="chart-label">
+                                        <span class="label-title">Mínimo</span>
+                                        <span class="label-value">₡@Model.FormatNumber(Model.ValorMercado.PrecioMinimo)</span>
+                                    </div>
+                                    <div class="chart-label">
+                                        <span class="label-title">Promedio</span>
+                                        <span class="label-value">₡@Model.FormatNumber(Model.ValorMercado.PromedioPrecio)</span>
+                                    </div>
+                                    <div class="chart-label">
+                                        <span class="label-title">Máximo</span>
+                                        <span class="label-value">₡@Model.FormatNumber(Model.ValorMercado.PrecioMaximo)</span>
+                                    </div>
+                                </div>
+
+                                <div class="market-range-bar">
+                                    <!-- Barra de rango completo -->
+                                    <div class="range-bar-background"></div>
+
+                                    <!-- Marcador del promedio -->
+                                    <div class="range-marker average-marker" style="left: 50%;">
+                                        <div class="marker-line"></div>
+                                    </div>
+
+                                    <!-- Marcador del precio actual -->
+                                    <div class="range-marker current-marker"
+                                        style="left: @(Model.ValorMercado.PosicionEnRango)%;">
+                                        <div class="marker-dot" style="background-color: @Model.ValorMercado.ColorOferta;"></div>
+                                        <div class="marker-label">
+                                            <span>Este auto</span>
+                                            <span class="marker-price">₡@Model.FormatNumber(Model.ValorMercado.PrecioActual)</span>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="market-chart-footer">
+                                    <p>Basado en @Model.ValorMercado.CantidadRegistros @(Model.ValorMercado.CantidadRegistros == 1 ?
+                                "venta similar" : "ventas similares")</p>
+                                </div>
+                            </div>
+                        }
                     </section>
                 }
             </div>
@@ -785,81 +866,6 @@
                 </div>
             </div>
         </div>
-
-        <!-- Market Value Analysis Section -->
-        @if (Model.ValorMercado != null)
-        {
-            <section class="producto-market-analysis">
-                <h2>Valor de mercado</h2>
-
-                @if (!Model.ValorMercado.TieneDatos)
-                {
-                    <!-- Sin datos disponibles -->
-                    <div class="market-no-data">
-                        <svg width="48" height="48" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                            <path
-                                d="M12 22C17.5228 22 22 17.5228 22 12C22 6.47715 17.5228 2 12 2C6.47715 2 2 6.47715 2 12C2 17.5228 6.47715 22 12 22Z"
-                                stroke="rgba(255, 255, 255, 0.3)" stroke-width="2" />
-                            <path d="M12 8V12" stroke="rgba(255, 255, 255, 0.3)" stroke-width="2" stroke-linecap="round" />
-                            <circle cx="12" cy="16" r="1" fill="rgba(255, 255, 255, 0.3)" />
-                        </svg>
-                        <p>@Model.ValorMercado.MensajeSinDatos</p>
-                    </div>
-                }
-                else
-                {
-                    <!-- Badge de clasificación -->
-                    <div class="market-badge-container">
-                        <div class="market-badge" style="background-color: @Model.ValorMercado.ColorOferta;">
-                            @Model.ValorMercado.DescripcionOferta
-                        </div>
-                    </div>
-
-                    <!-- Gráfico de rango de precios -->
-                    <div class="market-chart">
-                        <div class="market-chart-header">
-                            <div class="chart-label">
-                                <span class="label-title">Mínimo</span>
-                                <span class="label-value">₡@Model.FormatNumber(Model.ValorMercado.PrecioMinimo)</span>
-                            </div>
-                            <div class="chart-label">
-                                <span class="label-title">Promedio</span>
-                                <span class="label-value">₡@Model.FormatNumber(Model.ValorMercado.PromedioPrecio)</span>
-                            </div>
-                            <div class="chart-label">
-                                <span class="label-title">Máximo</span>
-                                <span class="label-value">₡@Model.FormatNumber(Model.ValorMercado.PrecioMaximo)</span>
-                            </div>
-                        </div>
-
-                        <div class="market-range-bar">
-                            <!-- Barra de rango completo -->
-                            <div class="range-bar-background"></div>
-
-                            <!-- Marcador del promedio -->
-                            <div class="range-marker average-marker" style="left: 50%;">
-                                <div class="marker-line"></div>
-                            </div>
-
-                            <!-- Marcador del precio actual -->
-                            <div class="range-marker current-marker"
-                                style="left: @(Model.ValorMercado.PosicionEnRango)%;">
-                                <div class="marker-dot" style="background-color: @Model.ValorMercado.ColorOferta;"></div>
-                                <div class="marker-label">
-                                    <span>Este auto</span>
-                                    <span class="marker-price">₡@Model.FormatNumber(Model.ValorMercado.PrecioActual)</span>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="market-chart-footer">
-                            <p>Basado en @Model.ValorMercado.CantidadRegistros @(Model.ValorMercado.CantidadRegistros == 1 ?
-                        "venta similar" : "ventas similares")</p>
-                        </div>
-                    </div>
-                }
-            </section>
-        }
 
         <!-- Financing Calculator Section -->
         <section class="producto-financing">
@@ -1451,18 +1457,12 @@
     }
 
     .marchamo-tari-logo {
-        width: 255px;
-        height: 48px;
+        width: 340px;
+        height: 64px;
     }
 
     .marchamo-tari-subtitle {
-        font-family: 'Montserrat', sans-serif;
-        font-weight: 500;
-        font-style: italic;
-        font-size: 12.75px;
-        color: rgba(0, 0, 0, 0.5);
-        margin: 0;
-        white-space: nowrap;
+        display: none;
     }
 
     .marchamo-tari-car-title {

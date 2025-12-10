@@ -85,13 +85,13 @@
     }
 
     /* Calculadoras DESPUÉS de sidebar - viewport completo */
-    .producto-market-analysis {
+    .producto-marchamo {
         order: 5 !important;
         width: 100vw !important;
         margin-left: calc(-50vw + 50%) !important;
     }
 
-    .producto-marchamo {
+    .producto-market-analysis {
         order: 6 !important;
         width: 100vw !important;
         margin-left: calc(-50vw + 50%) !important;
@@ -650,16 +650,16 @@
     }
 
     /* Calculadoras DESPUÉS de sidebar - viewport completo */
-    .producto-market-analysis {
-        order: 5 !important;
-        width: 100vw !important;
-        margin-left: calc(-50vw + 50%) !important;
-    }
-
     .producto-marchamo {
-        order: 6 !important;
+        order: 5 !important;
         width: 100% !important;
         margin: 0 !important;
+    }
+
+    .producto-market-analysis {
+        order: 6 !important;
+        width: 100vw !important;
+        margin-left: calc(-50vw + 50%) !important;
     }
 
     .producto-financing {

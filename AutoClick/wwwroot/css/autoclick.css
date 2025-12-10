@@ -4781,6 +4781,22 @@ body {
     line-height: 1.4;
 }
 
+.equipment-no-data {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 32px;
+    text-align: center;
+}
+
+.equipment-no-data p {
+    color: rgba(255, 255, 255, 0.5);
+    font-size: 16px;
+    font-weight: 500;
+    font-family: 'Montserrat', sans-serif;
+    margin: 0;
+}
+
 /* Marchamo Calculator Section */
 .producto-marchamo {
     max-width: 1200px;

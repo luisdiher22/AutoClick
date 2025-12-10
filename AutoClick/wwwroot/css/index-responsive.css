@@ -270,6 +270,7 @@
         flex-direction: column;
         align-self: center;
         margin-top: 13px;
+        margin-right: 16px;
     }
     
     .index-card-ver-mas-btn {
@@ -641,6 +642,11 @@
     
     .index-card-small-price {
         font-size: 17px;
+    }
+
+    /* "Ver más" button */
+    .index-card-ver-mas {
+        margin-right: 40px;
     }
     
     /* Marcas - same 2 columns, larger squares */
