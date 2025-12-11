@@ -51,11 +51,11 @@
     .logo-responsive {
         display: flex;
         align-items: center;
-        height: 36px;
+        height: 30px;
     }
     
     .logo-responsive img {
-        height: 36px;
+        height: 30px;
         width: auto;
         object-fit: contain;
     }
