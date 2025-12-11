@@ -241,6 +241,19 @@ document.addEventListener('DOMContentLoaded', function () {
             });
         }
 
+        // Modal informativo para el campo de valor fiscal
+        const valorFiscalInput = document.querySelector('#valor-fiscal');
+        let valorFiscalModalShown = false;
+
+        if (valorFiscalInput) {
+            valorFiscalInput.addEventListener('focus', function () {
+                if (!valorFiscalModalShown) {
+                    showValorFiscalInfoModal();
+                    valorFiscalModalShown = true;
+                }
+            });
+        }
+
         // Form input handlers (sin validación en tiempo real)
         const formInputs = document.querySelectorAll('input, select, textarea');
         formInputs.forEach(input => {
@@ -1205,6 +1218,143 @@ document.addEventListener('DOMContentLoaded', function () {
         }
     }
 
+    function showValorFiscalInfoModal() {
+        // Remover modal existente si hay uno
+        const existingModal = document.querySelector('.valor-fiscal-info-modal');
+        if (existingModal) {
+            existingModal.remove();
+        }
+
+        // Crear overlay
+        const overlay = document.createElement('div');
+        overlay.className = 'valor-fiscal-info-modal';
+        overlay.style.cssText = `
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.7);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 10000;
+            animation: fadeIn 0.3s;
+        `;
+
+        // Crear modal
+        const modal = document.createElement('div');
+        modal.style.cssText = `
+            background: #02081C;
+            border: 2px solid #d7dcd7ff;
+            border-radius: 12px;
+            padding: 32px;
+            max-width: 500px;
+            width: 90%;
+            box-shadow: 0 10px 40px rgba(190, 192, 190, 0.3);
+            animation: slideIn 0.3s;
+        `;
+
+        // Icono
+        const icon = document.createElement('div');
+        icon.textContent = 'ℹ️';
+        icon.style.cssText = `
+            font-size: 48px;
+            text-align: center;
+            margin-bottom: 16px;
+        `;
+
+        // Título
+        const title = document.createElement('h3');
+        title.textContent = 'Información sobre el Valor Fiscal';
+        title.style.cssText = `
+            color: #f2f2f4ff;
+            font-size: 20px;
+            font-family: Montserrat, sans-serif;
+            font-weight: 700;
+            margin: 0 0 16px 0;
+            text-align: center;
+        `;
+
+        // Mensaje
+        const message = document.createElement('p');
+        message.textContent = 'El valor fiscal es únicamente para control interno de AutoClick.cr y NO será publicado en su anuncio público.';
+        message.style.cssText = `
+            color: rgba(255, 255, 255, 0.9);
+            font-size: 15px;
+            font-family: Montserrat, sans-serif;
+            margin: 0 0 24px 0;
+            line-height: 1.6;
+            text-align: center;
+        `;
+
+        // Mensaje adicional
+        const additionalInfo = document.createElement('p');
+        additionalInfo.textContent = 'Gracias por su comprensión.';
+        additionalInfo.style.cssText = `
+            color: rgba(255, 255, 255, 0.7);
+            font-size: 13px;
+            font-family: Montserrat, sans-serif;
+            margin: 0 0 24px 0;
+            line-height: 1.5;
+            text-align: center;
+        `;
+
+        // Botón de aceptar
+        const acceptBtn = document.createElement('button');
+        acceptBtn.textContent = 'Entendido';
+        acceptBtn.style.cssText = `
+            background: linear-gradient(135deg, #FF931E, #FF7A00);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            padding: 12px 32px;
+            font-size: 15px;
+            font-family: Montserrat, sans-serif;
+            font-weight: 700;
+            cursor: pointer;
+            width: 100%;
+            transition: all 0.3s;
+        `;
+
+        acceptBtn.addEventListener('mouseenter', () => {
+            acceptBtn.style.background = 'linear-gradient(135deg, #FF7A00, #FF6600)';
+            acceptBtn.style.transform = 'translateY(-2px)';
+            acceptBtn.style.boxShadow = '0 4px 12px rgba(255, 147, 30, 0.4)';
+        });
+
+        acceptBtn.addEventListener('mouseleave', () => {
+            acceptBtn.style.background = 'linear-gradient(135deg, #FF931E, #FF7A00)';
+            acceptBtn.style.transform = 'translateY(0)';
+            acceptBtn.style.boxShadow = 'none';
+        });
+
+        acceptBtn.addEventListener('click', () => {
+            overlay.remove();
+            // Enfocar el input después de cerrar el modal
+            const valorFiscalInput = document.querySelector('#valor-fiscal');
+            if (valorFiscalInput) {
+                valorFiscalInput.focus();
+            }
+        });
+
+        // Cerrar al hacer click fuera del modal
+        overlay.addEventListener('click', (e) => {
+            if (e.target === overlay) {
+                overlay.remove();
+            }
+        });
+
+        // Construir modal
+        modal.appendChild(icon);
+        modal.appendChild(title);
+        modal.appendChild(message);
+        modal.appendChild(additionalInfo);
+        modal.appendChild(acceptBtn);
+        overlay.appendChild(modal);
+        document.body.appendChild(overlay);
+    }
+
     function showPlacaInfoModal() {
         // Remover modal existente si hay uno
         const existingModal = document.querySelector('.placa-info-modal');
@@ -1291,27 +1441,27 @@ document.addEventListener('DOMContentLoaded', function () {
         const acceptBtn = document.createElement('button');
         acceptBtn.textContent = 'Entendido';
         acceptBtn.style.cssText = `
-            background: #1f1e44ff;
+            background: linear-gradient(135deg, #FF931E, #FF7A00);
             color: white;
             border: none;
-            border-radius: 6px;
+            border-radius: 8px;
             padding: 12px 32px;
             font-size: 15px;
             font-family: Montserrat, sans-serif;
-            font-weight: 600;
+            font-weight: 700;
             cursor: pointer;
             width: 100%;
             transition: all 0.3s;
         `;
 
         acceptBtn.addEventListener('mouseenter', () => {
-            acceptBtn.style.background = '#00AA00';
+            acceptBtn.style.background = 'linear-gradient(135deg, #FF7A00, #FF6600)';
             acceptBtn.style.transform = 'translateY(-2px)';
-            acceptBtn.style.boxShadow = '0 4px 12px rgba(0, 204, 0, 0.4)';
+            acceptBtn.style.boxShadow = '0 4px 12px rgba(255, 147, 30, 0.4)';
         });
 
         acceptBtn.addEventListener('mouseleave', () => {
-            acceptBtn.style.background = '#00CC00';
+            acceptBtn.style.background = 'linear-gradient(135deg, #FF931E, #FF7A00)';
             acceptBtn.style.transform = 'translateY(0)';
             acceptBtn.style.boxShadow = 'none';
         });
