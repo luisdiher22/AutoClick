@@ -577,6 +577,22 @@ document.addEventListener('DOMContentLoaded', function () {
                 const locationValid = validateLocationData();
                 isValid = locationValid && isValid;
                 break;
+            case 4: // Planes de visibilidad
+                const selectedPlan = document.querySelector('input[name="Formulario.PlanVisibilidad"]:checked');
+                if (!selectedPlan) {
+                    showValidationModal('Debe seleccionar un plan de visibilidad para continuar');
+                    isValid = false;
+                }
+                break;
+            case 5: // Tags - Validar checkbox de privacidad
+                const privacyCheckbox = document.querySelector('#acepto-privacidad');
+                if (privacyCheckbox && !privacyCheckbox.checked) {
+                    showValidationModal('Debe aceptar los términos de privacidad para continuar');
+                    isValid = false;
+                    // Scroll al checkbox para que el usuario lo vea
+                    privacyCheckbox.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                }
+                break;
             case 6: // Pago
                 const paymentValid = validatePaymentData();
                 isValid = paymentValid && isValid;
@@ -956,17 +972,35 @@ document.addEventListener('DOMContentLoaded', function () {
         const fileArray = Array.from(files);
         const isVideo = uploadArea.classList.contains('video');
 
-        // Para videos: solo permitir 1 archivo
-        if (isVideo && fileArray.length > 1) {
-            alert('Solo se permite subir 1 video');
-            return;
+        // Obtener el plan seleccionado
+        const selectedPlanInput = document.querySelector('input[name="Formulario.PlanVisibilidad"]:checked');
+        const planValue = selectedPlanInput ? selectedPlanInput.value : '5'; // Default a plan gratuito si no hay selección
+
+        // Definir límites de fotos según el plan
+        // Plan 5 (gratuito) = 6 fotos, Plan 2 (super) = 8 fotos, Plan 3 (ultra) = 10 fotos, Plan 1 (instantáneo) = 6 fotos
+        const maxPhotos = planValue === '2' ? 8 : planValue === '3' ? 10 : 6;
+
+        // Para videos: solo permitir si es plan Ultra (valor 3)
+        if (isVideo) {
+            if (planValue !== '3') {
+                showValidationModal('El video solo está disponible con el plan Ultra Visible. Por favor, seleccione el plan Ultra Visible para subir videos.');
+                return;
+            }
+            if (fileArray.length > 1) {
+                showValidationModal('Solo se permite subir 1 video');
+                return;
+            }
         }
 
-        // Para imágenes: permitir hasta 10 archivos
+        // Para imágenes: validar total acumulado (fotos ya subidas + nuevas fotos)
         if (!isVideo) {
-            const currentImages = uploadArea.querySelectorAll('.image-preview').length;
-            if (currentImages + fileArray.length > 10) {
-                alert('Solo se permiten máximo 10 imágenes');
+            // Contar fotos ya subidas en el array global uploadedFiles
+            const currentUploadedCount = uploadedFiles.length;
+            const newFilesCount = fileArray.length;
+            const totalAfterUpload = currentUploadedCount + newFilesCount;
+            
+            if (totalAfterUpload > maxPhotos) {
+                showValidationModal(`Solo se permiten máximo ${maxPhotos} imágenes con su plan seleccionado`);
                 return;
             }
         }
@@ -977,12 +1011,12 @@ document.addEventListener('DOMContentLoaded', function () {
 
         fileArray.forEach(file => {
             if (isVideo && !file.type.startsWith('video/')) {
-                alert('Por favor, seleccione solo archivos de video');
+                showValidationModal('Por favor, seleccione solo archivos de video');
                 return;
             }
 
             if (!isVideo && !file.type.startsWith('image/')) {
-                alert('Por favor, seleccione solo archivos de imagen');
+                showValidationModal('Por favor, seleccione solo archivos de imagen');
                 return;
             }
 
@@ -1152,16 +1186,12 @@ document.addEventListener('DOMContentLoaded', function () {
 
         // Verificar que se aceptaron los términos y condiciones
         if (!aceptoTerminos || !aceptoTerminos.checked) {
-            if (aceptoTerminos) {
-                showFieldError(aceptoTerminos, 'Debe aceptar los términos y condiciones para continuar');
-            }
-            showGlobalError('⚠️ Debe aceptar los términos y condiciones para continuar.');
+            showValidationModal('Debe aceptar los términos y condiciones para continuar');
             isValid = false;
-        } else {
+            // Scroll al checkbox para que el usuario lo vea
             if (aceptoTerminos) {
-                clearFieldError(aceptoTerminos);
+                aceptoTerminos.scrollIntoView({ behavior: 'smooth', block: 'center' });
             }
-            clearGlobalError();
         }
 
         return isValid;

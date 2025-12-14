@@ -344,32 +344,100 @@
 @section Scripts {
         <script src="~/js/anunciar-auto.js"></script>
         <script>
-            // Privacy modal auto-show on section 6
-            let privacyModalShown = false;
+            // Función para mostrar el modal de privacidad cuando se hace clic en "leer más"
+            function showPrivacyModal() {
+                const modal = document.getElementById('privacyModal');
+                modal.classList.add('show');
+            }
             
             function closePrivacyModal() {
                 const modal = document.getElementById('privacyModal');
                 modal.classList.remove('show');
-                privacyModalShown = true;
+            }
+
+            // Funciones para el modal de validación
+            function showValidationModal(message) {
+                const modal = document.getElementById('validationModal');
+                const messageElement = document.getElementById('validationMessage');
+                messageElement.textContent = message;
+                modal.classList.add('show');
             }
             
-            // Observer para detectar cuando se muestra la sección 6
-            const observer = new MutationObserver(() => {
-                const section6 = document.querySelector('[data-section="6"]');
-                if (section6 && !section6.classList.contains('d-none') && !privacyModalShown) {
-                    // Pequeño delay para mejor UX
-                    setTimeout(() => {
-                        const modal = document.getElementById('privacyModal');
-                        modal.classList.add('show');
-                        privacyModalShown = true;
-                        // Desconectar observer después de mostrar modal
-                        observer.disconnect();
-                    }, 300);
+            function closeValidationModal() {
+                const modal = document.getElementById('validationModal');
+                modal.classList.remove('show');
+            }
+
+            // Función para actualizar los límites de fotos según el plan seleccionado
+            function updateUploadLimits() {
+                const selectedPlan = document.querySelector('input[name="Formulario.PlanVisibilidad"]:checked');
+                const planValue = selectedPlan ? selectedPlan.value : '5'; // Default: Gratuito
+                
+                // Calcular límites según el plan
+                let maxPhotos;
+                let videoAllowed = false;
+                
+                switch(planValue) {
+                    case '2': // Super
+                        maxPhotos = 8;
+                        break;
+                    case '3': // Ultra
+                        maxPhotos = 10;
+                        videoAllowed = true;
+                        break;
+                    case '5': // Gratuito
+                    default:
+                        maxPhotos = 6;
+                        break;
                 }
-            });
-            
-            // Iniciar observer cuando el DOM esté listo
+                
+                // Actualizar texto de fotos (debe funcionar en todas las versiones: mobile, tablet, desktop)
+                const photoText = document.getElementById('photoLimitText');
+                if (photoText) {
+                    photoText.textContent = `📷 Subir máximo ${maxPhotos} fotos`;
+                }
+                
+                // Actualizar texto del área de video
+                const videoText = document.getElementById('videoLimitText');
+                if (videoText) {
+                    if (videoAllowed) {
+                        videoText.textContent = 'Haga clic o arrastre el video aquí';
+                    } else {
+                        videoText.textContent = 'Solo disponible con plan Ultra Visible';
+                    }
+                }
+                
+                // Mostrar/ocultar área de video con setProperty para que funcione en responsive
+                const videoArea = document.getElementById('videoUploadArea');
+                if (videoArea) {
+                    if (videoAllowed) {
+                        videoArea.style.removeProperty('display');
+                        videoArea.style.setProperty('display', 'flex', 'important');
+                    } else {
+                        videoArea.style.setProperty('display', 'none', 'important');
+                    }
+                }
+            }
+
+            // Agregar listener para cambios en los planes
             document.addEventListener('DOMContentLoaded', () => {
+                // Actualizar límites al cargar la página
+                updateUploadLimits();
+                
+                // Agregar listeners a los radio buttons de planes
+                const planRadios = document.querySelectorAll('input[name="Formulario.PlanVisibilidad"]');
+                planRadios.forEach(radio => {
+                    radio.addEventListener('change', updateUploadLimits);
+                });
+
+                // También actualizar cuando se cambia a la sección 7
+                const observer = new MutationObserver(() => {
+                    const section7 = document.getElementById('seccion7');
+                    if (section7 && section7.classList.contains('active')) {
+                        updateUploadLimits();
+                    }
+                });
+                
                 observer.observe(document.body, {
                     attributes: true,
                     attributeFilter: ['class'],
@@ -1135,66 +1203,76 @@ valor fiscal</div>
 
                     <div class="plan-options">
                         <div class="plan-option">
-                            <input type="radio" id="plan-instantaneo" name="Formulario.PlanVisibilidad" value="1" data-price="2500" data-plan-name="Posteo instantáneo">
+                            <input type="radio" id="plan-instantaneo" name="Formulario.PlanVisibilidad" value="1" data-price="2000" data-plan-name="Posteo instantáneo">
                             <label for="plan-instantaneo" class="plan-card">
                                 <div class="plan-content">
-                                    <h3>Posteo instantáneo</h3>
+                                    <h3>1. Posteo instantáneo</h3>
                                     <p>Seleccione esta opción si desea que su anuncio se publique inmediatamente, sin necesidad de esperar nuestra aprobación.</p>
                                 </div>
-                                <div class="plan-price">
-                                    <span class="price">₡2500</span>
-                                    <span class="price-usd">₡($5)</span>
+                                <div class="plan-price" style="display: flex; align-items: center; justify-content: center;">
+                                    <span class="price">₡2.000</span>
                                 </div>
                             </label>
                         </div>
 
                         <div class="plan-option">
-                            <input type="radio" id="plan-super" name="Formulario.PlanVisibilidad" value="2" data-price="9500" data-plan-name="Súper visible">
+                            <input type="radio" id="plan-super" name="Formulario.PlanVisibilidad" value="2" data-price="5990" data-plan-name="Súper visible">
                             <label for="plan-super" class="plan-card">
                                 <div class="plan-content">
-                                    <h3>Súper visible <span class="plan-addon">+ posteo instantáneo</span></h3>
+                                    <h3>2. Súper visible <span class="plan-addon">+ posteo instantáneo</span></h3>
                                     <p>Su anuncio se mostrará como "Destacado" en la sección correspondiente, según lo que los usuarios están buscando.<br/>
                                     Su anuncio aparecerá de forma temporal en la página principal, dependiendo de cuántos anuncios destacados haya en ese momento.<br/>
-                                    Podrá subir 8 fotografías en vez de 5.<br/>
+                                    Podrá subir 8 fotografías en vez de 6.<br/>
                                     Su anuncio se publicará instantáneamente.</p>
                                 </div>
-                                <div class="plan-price">
-                                    <span class="price">₡9500</span>
-                                    <span class="price-usd">₡($19)</span>
+                                <div class="plan-price" style="display: flex; align-items: center; justify-content: center;">
+                                    <span class="price">₡5.990</span>
                                 </div>
                             </label>
                         </div>
 
                         <div class="plan-option">
-                            <input type="radio" id="plan-ultra" name="Formulario.PlanVisibilidad" value="3" data-price="12900" data-plan-name="Ultra visible">
+                            <input type="radio" id="plan-ultra" name="Formulario.PlanVisibilidad" value="3" data-price="7990" data-plan-name="Ultra visible">
                             <label for="plan-ultra" class="plan-card">
                                 <div class="plan-content">
-                                    <h3>Ultra visible <span class="plan-addon">+ posteo instantáneo</span></h3>
+                                    <h3>3. Ultra visible <span class="plan-addon">+ posteo instantáneo</span></h3>
                                     <p>Su anuncio se mostrará como "Destacado" en la sección correspondiente, según lo que los usuarios están buscando.<br/>
                                     Su anuncio aparecerá de forma temporal en la página principal, dependiendo de cuántos anuncios destacados haya en ese momento.<br/>
-                                    Podrá subir 10 fotografías en vez de 5.<br/>
+                                    Podrá subir 10 fotografías en vez de 6.<br/>
                                     Podrá subir un video de su vehículo.<br/>
                                     Posteamos su anuncio en nuestras redes sociales.<br/>
                                     Su anuncio se publicará instantáneamente.</p>
                                 </div>
-                                <div class="plan-price">
-                                    <span class="price">₡12900</span>
-                                    <span class="price-usd">₡($25)</span>
+                                <div class="plan-price" style="display: flex; align-items: center; justify-content: center;">
+                                    <span class="price">₡7.990</span>
+                                </div>
+                            </label>
+                        </div>
+
+                        <div class="plan-option" style="display: none;">
+                            <input type="radio" id="plan-profesional" name="Formulario.PlanVisibilidad" value="4" data-price="47500" data-plan-name="Fotografía profesional">
+                            <label for="plan-profesional" class="plan-card">
+                                <div class="plan-content">
+                                    <h3>4. Fotografía profesional</h3>
+                                    <p>Todo lo incluído en el "Ultra visible".<br/>
+                                    Una sesión fotográfica profesional de su vehículo a domicilio dentro de la GAM.</p>
+                                </div>
+                                <div class="plan-price" style="display: flex; align-items: center; justify-content: center;">
+                                    <span class="price">₡47.500</span>
                                 </div>
                             </label>
                         </div>
 
                         <div class="plan-option">
-                            <input type="radio" id="plan-profesional" name="Formulario.PlanVisibilidad" value="4" data-price="47500" data-plan-name="Fotografía profesional">
-                            <label for="plan-profesional" class="plan-card">
+                            <input type="radio" id="plan-gratuito" name="Formulario.PlanVisibilidad" value="5" data-price="0" data-plan-name="Publicación gratuita">
+                            <label for="plan-gratuito" class="plan-card">
                                 <div class="plan-content">
-                                    <h3>Fotografía profesional</h3>
-                                    <p>Todo lo incluído en el "Ultra visible".<br/>
-                                    Una sesión fotográfica profesional de su vehículo a domicilio dentro de la GAM.</p>
+                                    <h3>4. Publicación gratuita</h3>
+                                    <p>Su anuncio deberá ser revisado y aprobado por uno de nuestros agentes, en un plazo de 24 horas.<br/>
+                                    Podrá subir 6 fotografías de su vehículo.</p>
                                 </div>
-                                <div class="plan-price">
-                                    <span class="price">₡47500</span>
-                                    <span class="price-usd">₡($95)</span>
+                                <div class="plan-price" style="display: flex; align-items: center; justify-content: center;">
+                                    <span class="price">GRATIS</span>
                                 </div>
                             </label>
                         </div>
@@ -1219,42 +1297,42 @@ valor fiscal</div>
                     <div class="tags-grid">
                             @{
                                 var tags = new[] {
-                                new { id = "version-americana", name = "Versión Americana", file = "Versión Americana.gif", price = "₡5000" },
-                                new { id = "unico-dueno", name = "Único Dueño", file = "ÚNICO DUEÑO.gif", price = "₡5000" },
-                                new { id = "full-extras", name = "Full Extras", file = "FULL EXTRAS-.gif", price = "₡5000" },
-                                new { id = "mantenimiento-agencia", name = "Mantenimiento de Agencia", file = "MANTENIMIENTO DE AGENCIA-.gif", price = "₡5000" },
-                                new { id = "perfecto-estado", name = "Perfecto Estado", file = "PERFECTO ESTADO.gif", price = "₡5000" },
-                                new { id = "al-dia", name = "Al Día", file = "AL DÍA.gif", price = "₡5000" },
-                                new { id = "bajo-kilometraje", name = "Bajo Kilometraje", file = "BAJO KILOMETRAJE.gif", price = "₡5000" },
-                                new { id = "negociable", name = "Negociable", file = "NEGOCIABLE.gif", price = "₡5000" },
-                                new { id = "financiamiento-disponible", name = "Financiamiento Disponible", file = "FINANCIAMIENTO DISPONIBLE.gif", price = "₡5000" },
-                                new { id = "escucho-ofertas", name = "Escucho Ofertas", file = "ESCUCHO OFERTAS.gif", price = "₡5000" },
-                                new { id = "impecable", name = "Impecable", file = "IMPECABLE.gif", price = "₡5000" },
-                                new { id = "cero-detalles", name = "Cero Detalles", file = "CERO DETALLES.gif", price = "₡5000" },
-                                new { id = "poco-uso", name = "Poco Uso", file = "POCO USO.gif", price = "₡5000" },
-                                new { id = "registro-limpio", name = "Registro Limpio", file = "REGISTRO LIMPIO.gif", price = "₡5000" },
-                                new { id = "traspaso-incluido", name = "Traspaso Incluído", file = "TRASPASO INCLUÍDO.gif", price = "₡5000" },
-                                new { id = "recibo", name = "Recibo", file = "RECIBO.gif", price = "₡5000" },
-                                new { id = "vendo-o-cambio", name = "Vendo o Cambio", file = "VENDO O CAMBIO.gif", price = "₡5000" },
-                                new { id = "urge-vender", name = "Urge Vender", file = "URGE VENDER.gif", price = "₡5000" },
-                                new { id = "precio-especial", name = "Precio Especial", file = "PRECIO ESPECIAL.gif", price = "₡5000" },
-                                new { id = "oportunidad-unica", name = "Oportunidad Única", file = "OPORTUNIDAD UNICA.gif", price = "₡5000" },
-                                new { id = "llame-ahora", name = "Llame Ahora", file = "LLAME AHORA.gif", price = "₡5000" },
-                                new { id = "unico-en-el-pais", name = "Único en el País", file = "ÚNICO EN EL PAÍS.gif", price = "₡5000" },
-                                new { id = "edicion-limitada", name = "Edición Limitada", file = "EDICIÓN LIMITADA.gif", price = "₡5000" },
-                                new { id = "para-inscribir", name = "Para Inscribir", file = "PARA INSCRIBIR.gif", price = "₡5000" },
-                                new { id = "bajo-consumo", name = "Bajo Consumo", file = "BAJO CONSUMO.gif", price = "₡5000" },
-                                new { id = "garantia-extendida", name = "Garantía Extendida", file = "GARANTÍA EXTENDIDA.gif", price = "₡5000" },
-                                new { id = "full-ppf", name = "Full PPF", file = "FULL PPF.gif", price = "₡5000" },
-                                new { id = "tratamiento-ceramico", name = "Tratamiento Cerámico", file = "TRATAMIENTO CERÁMICO.gif", price = "₡5000" },
-                                new { id = "taylor-made", name = "Taylor Made", file = "TAYLOR MADE.gif", price = "₡5000" },
-                                new { id = "cedo-deuda", name = "Cedo Deuda", file = "CEDO DEUDA.gif", price = "₡5000" }
+                                new { id = "version-americana", name = "Versión Americana", file = "Versión Americana.gif", price = "₡1.890" },
+                                new { id = "unico-dueno", name = "Único Dueño", file = "ÚNICO DUEÑO.gif", price = "₡1.890" },
+                                new { id = "full-extras", name = "Full Extras", file = "FULL EXTRAS-.gif", price = "₡1.890" },
+                                new { id = "mantenimiento-agencia", name = "Mantenimiento de Agencia", file = "MANTENIMIENTO DE AGENCIA-.gif", price = "₡1.890" },
+                                new { id = "perfecto-estado", name = "Perfecto Estado", file = "PERFECTO ESTADO.gif", price = "₡1.890" },
+                                new { id = "al-dia", name = "Al Día", file = "AL DÍA.gif", price = "₡1.890" },
+                                new { id = "bajo-kilometraje", name = "Bajo Kilometraje", file = "BAJO KILOMETRAJE.gif", price = "₡1.890" },
+                                new { id = "negociable", name = "Negociable", file = "NEGOCIABLE.gif", price = "₡1.890" },
+                                new { id = "financiamiento-disponible", name = "Financiamiento Disponible", file = "FINANCIAMIENTO DISPONIBLE.gif", price = "₡1.890" },
+                                new { id = "escucho-ofertas", name = "Escucho Ofertas", file = "ESCUCHO OFERTAS.gif", price = "₡1.890" },
+                                new { id = "impecable", name = "Impecable", file = "IMPECABLE.gif", price = "₡1.890" },
+                                new { id = "cero-detalles", name = "Cero Detalles", file = "CERO DETALLES.gif", price = "₡1.890" },
+                                new { id = "poco-uso", name = "Poco Uso", file = "POCO USO.gif", price = "₡1.890" },
+                                new { id = "registro-limpio", name = "Registro Limpio", file = "REGISTRO LIMPIO.gif", price = "₡1.890" },
+                                new { id = "traspaso-incluido", name = "Traspaso Incluído", file = "TRASPASO INCLUÍDO.gif", price = "₡1.890" },
+                                new { id = "recibo", name = "Recibo", file = "RECIBO.gif", price = "₡1.890" },
+                                new { id = "vendo-o-cambio", name = "Vendo o Cambio", file = "VENDO O CAMBIO.gif", price = "₡1.890" },
+                                new { id = "urge-vender", name = "Urge Vender", file = "URGE VENDER.gif", price = "₡1.890" },
+                                new { id = "precio-especial", name = "Precio Especial", file = "PRECIO ESPECIAL.gif", price = "₡1.890" },
+                                new { id = "oportunidad-unica", name = "Oportunidad Única", file = "OPORTUNIDAD UNICA.gif", price = "₡1.890" },
+                                new { id = "llame-ahora", name = "Llame Ahora", file = "LLAME AHORA.gif", price = "₡1.890" },
+                                new { id = "unico-en-el-pais", name = "Único en el País", file = "ÚNICO EN EL PAÍS.gif", price = "₡1.890" },
+                                new { id = "edicion-limitada", name = "Edición Limitada", file = "EDICIÓN LIMITADA.gif", price = "₡1.890" },
+                                new { id = "para-inscribir", name = "Para Inscribir", file = "PARA INSCRIBIR.gif", price = "₡1.890" },
+                                new { id = "bajo-consumo", name = "Bajo Consumo", file = "BAJO CONSUMO.gif", price = "₡1.890" },
+                                new { id = "garantia-extendida", name = "Garantía Extendida", file = "GARANTÍA EXTENDIDA.gif", price = "₡1.890" },
+                                new { id = "full-ppf", name = "Full PPF", file = "FULL PPF.gif", price = "₡1.890" },
+                                new { id = "tratamiento-ceramico", name = "Tratamiento Cerámico", file = "TRATAMIENTO CERÁMICO.gif", price = "₡1.890" },
+                                new { id = "taylor-made", name = "Taylor Made", file = "TAYLOR MADE.gif", price = "₡1.890" },
+                                new { id = "cedo-deuda", name = "Cedo Deuda", file = "CEDO DEUDA.gif", price = "₡1.890" }
                                                 };
                             }
                             @foreach (var tag in tags)
                             {
                                 <div class="tag-option">
-                                    <input type="checkbox" id="tag-@tag.id" name="BanderinesSeleccionados" value="@tag.id" data-price="5000" data-tag-name="@tag.name" class="banderin-checkbox" style="opacity: 0; position: absolute; pointer-events: none;">
+                                    <input type="checkbox" id="tag-@tag.id" name="BanderinesSeleccionados" value="@tag.id" data-price="1890" data-tag-name="@tag.name" class="banderin-checkbox" style="opacity: 0; position: absolute; pointer-events: none;">
                                     <label for="tag-@tag.id" class="tag-card">
                                         <span class="tag-price">@tag.price</span>
                                         <div class="tag-image">
@@ -1273,6 +1351,16 @@ valor fiscal</div>
 
                     <!-- Divisor de sección -->
                     <div style="width: 100%; height: 1px; background: rgba(255, 255, 255, 0.25); margin-top: 32px;"></div>
+
+                    <!-- Checkbox de privacidad -->
+                    <div style="margin-top: 32px; padding: 24px; background: rgba(255, 255, 255, 0.05); border-radius: 8px; border: 1px solid rgba(255, 255, 255, 0.1);">
+                        <div style="display: flex; align-items: flex-start; gap: 12px;">
+                            <input type="checkbox" id="acepto-privacidad" name="acepto-privacidad" required style="margin-top: 4px; width: 20px; height: 20px; cursor: pointer; flex-shrink: 0;">
+                            <label for="acepto-privacidad" style="color: rgba(255, 255, 255, 0.9); font-size: 14px; font-family: Montserrat; font-weight: 500; line-height: 1.6; cursor: pointer;">
+                                He leído y acepto los términos de privacidad y uso de datos. AutoClick.cr realizará un cálculo aproximado del valor de mercado de mi vehículo y generará estimados informativos. Entiendo que solo se publicarán mi nombre y apellido como anunciante, y que ningún otro dato personal, número de placa ni valor fiscal será visible para otros usuarios. <a href="javascript:void(0)" onclick="showPrivacyModal()" style="color: #FF931E; text-decoration: underline; font-weight: 600;">Leer más</a> <span class="required">*</span>
+                            </label>
+                        </div>
+                    </div>
                 </div>
 
                 <!-- Section 6: Método de pago -->
@@ -1383,16 +1471,16 @@ valor fiscal</div>
                         <div class="upload-area photos">
                             <div class="upload-placeholder">
                                 <div class="upload-icon"></div>
-                                <p>📷 Subir máximo 10 fotos</p>
+                                <p id="photoLimitText">📷 Subir máximo 10 fotos</p>
                                 <small style="color: rgba(255,255,255,0.6); font-size: 12px;">Haga clic o arrastre las imágenes aquí</small>
                             </div>
                         </div>
 
-                        <div class="upload-area video">
+                        <div class="upload-area video" id="videoUploadArea">
                             <div class="upload-placeholder">
                                 <div class="play-icon"></div>
                                 <p>🎥 Subir 1 video</p>
-                                <small style="color: rgba(255,255,255,0.6); font-size: 12px;">Formatos soportados: MP4, MOV, AVI</small>
+                                <small id="videoLimitText" style="color: rgba(255,255,255,0.6); font-size: 12px;">Haga clic o arrastre el video aquí</small>
                             </div>
                         </div>
                     </div>
@@ -1550,6 +1638,20 @@ valor fiscal</div>
             </li>
         </ul>
         <button class="privacy-modal-button" onclick="closePrivacyModal()">Continuar</button>
+    </div>
+</div>
+
+<!-- Validation Modal -->
+<div id="validationModal" class="privacy-modal">
+    <div class="privacy-modal-content" style="max-width: 500px; padding: 40px;">
+        <div style="text-align: center; margin-bottom: 20px;">
+            <svg width="64" height="64" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" style="margin: 0 auto;">
+                <circle cx="12" cy="12" r="10" stroke="#FF931E" stroke-width="2"/>
+                <path d="M12 8V12M12 16H12.01" stroke="#FF931E" stroke-width="2" stroke-linecap="round"/>
+            </svg>
+        </div>
+        <p id="validationMessage" style="color: rgba(255, 255, 255, 0.9); font-size: 16px; font-family: Montserrat; font-weight: 500; line-height: 1.6; text-align: center; margin-bottom: 24px;"></p>
+        <button class="privacy-modal-button" onclick="closeValidationModal()">Entendido</button>
     </div>
 </div>
 

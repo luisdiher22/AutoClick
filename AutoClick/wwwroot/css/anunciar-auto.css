@@ -118,14 +118,43 @@
     min-height: 1300px;
 }
 
-/* Bajar botones en secciones 2, 5, 6 */
+/* Control de altura para sección 3 (Ubicación) solo en desktop */
+@media (min-width: 1024px) {
+    #seccion3 {
+        min-height: 900px; /* Ajustable según necesidad - puedes cambiar este valor */
+    }
+}
+
+/* Aumentar altura mínima de sección 5 para dar espacio al checkbox y botones */
+#seccion5 {
+    min-height: 800px;
+}
+
+@media (min-width: 1024px) {
+    #seccion5 {
+        min-height: 870px; /* Más altura en desktop para evitar superposición */
+    }
+}
+
+/* Bajar botones en secciones 2, 6 */
 #seccion2 + .form-nav-buttons,
 #seccion2 ~ .form-nav-buttons,
-#seccion5 + .form-nav-buttons,
-#seccion5 ~ .form-nav-buttons,
 #seccion6 + .form-nav-buttons,
 #seccion6 ~ .form-nav-buttons {
     bottom: -150px;
+}
+
+/* Bajar botones en sección 5 aún más en escritorio para evitar superposición con checkbox */
+#seccion5 + .form-nav-buttons,
+#seccion5 ~ .form-nav-buttons {
+    bottom: -150px;
+}
+
+@media (min-width: 1024px) {
+    #seccion5 + .form-nav-buttons,
+    #seccion5 ~ .form-nav-buttons {
+        bottom: -250px; /* Mucho más espacio en desktop */
+    }
 }
 
 .btn-back {
@@ -1812,44 +1841,25 @@ select#ano option {
         clip-path: none !important;
     }
     
-    #seccion7 .upload-placeholder p {
+    /* Área de fotos: permitir texto dinámico desde JavaScript */
+    #seccion7 .upload-area.photos .upload-placeholder p {
         font-size: 14px !important;
         font-weight: 700 !important;
         margin-bottom: 6px !important;
         color: white !important;
         text-align: center !important;
-        visibility: hidden !important;
-        position: relative !important;
     }
     
-    #seccion7 .upload-placeholder p::after {
-        content: "Presione para subir fotografías" !important;
-        visibility: visible !important;
-        position: absolute !important;
-        left: 50% !important;
-        top: 0 !important;
-        transform: translateX(-50%) !important;
-        white-space: nowrap !important;
+    #seccion7 .upload-area.photos .upload-placeholder small {
+        font-size: 12px !important;
+        color: rgba(255,255,255,0.6) !important;
     }
     
-    #seccion7 .upload-placeholder small {
-        font-size: 14px !important;
-        font-weight: 500 !important;
-        color: white !important;
-        display: block !important;
+    /* Área de video: permitir texto dinámico desde JavaScript */
+    #seccion7 .upload-area.video .upload-placeholder small {
+        font-size: 12px !important;
+        color: rgba(255,255,255,0.6) !important;
         text-align: center !important;
-        visibility: hidden !important;
-        position: relative !important;
-    }
-    
-    #seccion7 .upload-placeholder small::after {
-        content: "Suba como máximo 10 fotos y 1 video" !important;
-        visibility: visible !important;
-        position: absolute !important;
-        left: 50% !important;
-        top: 0 !important;
-        transform: translateX(-50%) !important;
-        white-space: nowrap !important;
     }
     
     /* Mostrar toggle desplegable en tablet como en móvil */
@@ -2361,44 +2371,25 @@ select#ano option {
         clip-path: none !important;
     }
     
-    #seccion7 .upload-placeholder p {
+    /* Área de fotos: permitir texto dinámico desde JavaScript */
+    #seccion7 .upload-area.photos .upload-placeholder p {
         font-size: 14px !important;
         font-weight: 700 !important;
         margin-bottom: 6px !important;
         color: white !important;
         text-align: center !important;
-        visibility: hidden !important;
-        position: relative !important;
     }
     
-    #seccion7 .upload-placeholder p::after {
-        content: "Presione para subir fotografías" !important;
-        visibility: visible !important;
-        position: absolute !important;
-        left: 50% !important;
-        top: 0 !important;
-        transform: translateX(-50%) !important;
-        white-space: nowrap !important;
+    #seccion7 .upload-area.photos .upload-placeholder small {
+        font-size: 12px !important;
+        color: rgba(255,255,255,0.6) !important;
     }
     
-    #seccion7 .upload-placeholder small {
-        font-size: 14px !important;
-        font-weight: 500 !important;
-        color: white !important;
-        display: block !important;
+    /* Área de video: permitir texto dinámico desde JavaScript */
+    #seccion7 .upload-area.video .upload-placeholder small {
+        font-size: 12px !important;
+        color: rgba(255,255,255,0.6) !important;
         text-align: center !important;
-        visibility: hidden !important;
-        position: relative !important;
-    }
-    
-    #seccion7 .upload-placeholder small::after {
-        content: "Suba como máximo 10 fotos y 1 video" !important;
-        visibility: visible !important;
-        position: absolute !important;
-        left: 50% !important;
-        top: 0 !important;
-        transform: translateX(-50%) !important;
-        white-space: nowrap !important;
     }
     
     #seccion1 #descripcion {
