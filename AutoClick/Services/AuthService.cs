@@ -54,7 +54,7 @@ public class AuthService : IAuthService
                 return new AuthResult 
                 { 
                     Success = false, 
-                    Message = $"Contraseña incorrecta. Hash generado: {inputHash.Substring(0, 10)}... vs Almacenado: {user.Contrasena.Substring(0, 10)}...",
+                    Message = "La contraseña ingresada es incorrecta. Por favor, intenta nuevamente.",
                     Errors = new List<string> { "Contraseña incorrecta" }
                 };
             }

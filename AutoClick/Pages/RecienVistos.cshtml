@@ -4,176 +4,310 @@
     ViewData["Title"] = "Recién Vistos - AutoClick.cr";
 }
 
-<div style="width: 100%; min-height: 100vh; position: relative; background: #02081C; overflow: hidden">
-    <!-- Breadcrumb Navigation -->
-    <div style="left: 32px; top: 40px; position: absolute; justify-content: flex-start; align-items: center; gap: 8px; display: inline-flex">
-        <div data-estado="Default" style="height: 40px; justify-content: center; align-items: center; gap: 8px; display: flex">
-            <div style="justify-content: center; align-items: center; gap: 8px; display: flex">
-                <a asp-page="/Index" style="text-box-trim: trim-both; text-box-edge: cap alphabetic; color: white; font-size: 16px; font-family: Montserrat; font-weight: 400; word-wrap: break-word; text-decoration: none;">Inicio</a>
-            </div>
-        </div>
-        <div style="text-box-trim: trim-both; text-box-edge: cap alphabetic; color: white; font-size: 16px; font-family: Montserrat; font-weight: 400; word-wrap: break-word">/</div>
-        <div data-estado="Default" style="height: 40px; justify-content: center; align-items: center; gap: 8px; display: flex">
-            <div style="justify-content: center; align-items: center; gap: 8px; display: flex">
-                <div style="text-box-trim: trim-both; text-box-edge: cap alphabetic; color: white; font-size: 16px; font-family: Montserrat; font-weight: 400; word-wrap: break-word">Recién vistos</div>
-            </div>
-        </div>
-    </div>
+<link rel="stylesheet" href="~/css/busqueda-avanzada-responsive.css" />
+<link rel="stylesheet" href="~/css/guardados.css" />
 
-    <!-- Page Title -->
-    <div style="left: 32px; top: 128px; position: absolute; text-box-trim: trim-both; text-box-edge: cap alphabetic; color: white; font-size: 24px; font-family: Montserrat; font-weight: 700; word-wrap: break-word">Autos recién vistos</div>
+<!-- Dark Theme Page Container -->
+<div class="busqueda-avanzada-page">
+    <div class="busqueda-container">
+        <!-- Breadcrumb Navigation -->
+        <nav class="busqueda-breadcrumb">
+            <a asp-page="/Index" class="breadcrumb-link">Inicio</a>
+            <span class="breadcrumb-separator">/</span>
+            <span class="breadcrumb-current">Recién vistos</span>
+        </nav>
 
-    <!-- Sort Controls -->
-    <div data-property-1="Frame 144" style="padding-left: 4px; padding-right: 4px; right: 32px; top: 105px; position: absolute; overflow: hidden; flex-direction: column; justify-content: flex-start; align-items: flex-start; display: inline-flex">
-        <div style="align-self: stretch; padding: 8px; border-radius: 4px; justify-content: flex-start; align-items: center; gap: 8px; display: inline-flex">
-            <div data-estado="Default" style="height: 40px; justify-content: center; align-items: center; gap: 8px; display: flex">
-                <div style="justify-content: center; align-items: center; gap: 8px; display: flex">
-                    <div style="text-box-trim: trim-both; text-box-edge: cap alphabetic; color: white; font-size: 16px; font-family: Montserrat; font-weight: 600; word-wrap: break-word">Ordenar por: Más recientes</div>
-                </div>
-            </div>
-            <div style="width: 16px; height: 8px; background: white"></div>
-        </div>
-    </div>
-
-    <!-- Cars Grid -->
-    @{
-        int totalCars = Model.RecentlyViewedAutos.Count();
-        int columns = 4; // Cambiado de 3 a 4 para pantallas de 1728px o superiores
-        int rows = (int)Math.Ceiling((double)totalCars / columns);
-        int currentIndex = 0;
-    }
-
-    @if (totalCars > 0)
-    {
-        @foreach (var auto in Model.RecentlyViewedAutos)
-        {
-            int row = currentIndex / columns;
-            int col = currentIndex % columns;
-            int topPosition = 169 + (row * 312); // 312px spacing between rows
-            int leftPosition = 22 + (col * 422); // 422px spacing between columns (412px width + 10px gap)
-
-            <!-- Car Card -->
-            <div data-estado="Default" style="width: 412px; height: 296px; padding-left: 10px; padding-right: 10px; padding-top: 8px; padding-bottom: 8px; left: @(leftPosition)px; top: @(topPosition)px; position: absolute; border-radius: 4px; flex-direction: column; justify-content: flex-start; align-items: flex-start; gap: 8px; display: inline-flex; cursor: pointer;" onclick="window.location.href='@Url.Page("/Producto", new { id = auto.Id })'">
-            @* Bander�n Tag - Primera capa, encima de todo *@
-            @if (!string.IsNullOrEmpty(auto.BanderinVideoUrl))
-            {
-                <div style="position: absolute; top: -22px; right: 2px; width: 104px; height: 103px; pointer-events: none; z-index: 100;">
-                    @if (auto.BanderinVideoUrl.EndsWith(".gif", StringComparison.OrdinalIgnoreCase))
-                    {
-                        <img src="@auto.BanderinVideoUrl" style="width: 100%; height: 100%; object-fit: contain; filter: drop-shadow(2px 2px 4px rgba(0, 0, 0, 0.5));" alt="Bander�n" />
-                    }
-                    else
-                    {
-                        <video autoplay loop muted playsinline preload="auto" style="width: 100%; height: 100%; object-fit: contain; filter: drop-shadow(2px 2px 4px rgba(0, 0, 0, 0.5));">
-                            <source src="@auto.BanderinVideoUrl" type="video/mp4">
-                        </video>
-                    }
-                </div>
-            }
-                <div style="align-self: stretch; flex: 1 1 0; position: relative; overflow: hidden; border-radius: 4px; flex-direction: column; justify-content: flex-start; align-items: flex-start; gap: 8px; display: flex">
-                    <img style="align-self: stretch; height: 209px; padding: 8px; border-radius: 4px; object-fit: cover;" src="@(string.IsNullOrEmpty(auto.ImagenPrincipal) ? "https://placehold.co/392x209" : auto.ImagenPrincipal)" alt="@auto.NombreCompleto" />
-
-
-                    <div style="width: 355px; left: 0px; top: 225px; position: absolute; text-box-trim: trim-both; text-box-edge: cap alphabetic; color: white; font-size: 20px; font-family: Montserrat; font-weight: 700; word-wrap: break-word">@auto.NombreCompleto</div>
-                    <div style="left: 0px; top: 263px; position: absolute; text-box-trim: trim-both; text-box-edge: cap alphabetic; color: white; font-size: 20px; font-family: Montserrat; font-weight: 500; word-wrap: break-word">@auto.PrecioEnCRC</div>
-
-                    <!-- Share Icon -->
-                    <div style="width: 16.67px; height: 20px; left: 375.33px; top: 260px; position: absolute; background: white"></div>
-
-                    <!-- Favorite Icon -->
-                    <div data-estado="Favoritos" style="left: 371px; top: 225px; position: absolute; flex-direction: column; justify-content: flex-start; align-items: flex-start; gap: 8px; display: flex">
-                        <div style="width: 20px; height: 17px; background: white; outline: 2px white solid; outline-offset: -1px"></div>
+        <div class="busqueda-content" style="display: block;">
+            <!-- Main Content (sin sidebar, full width) -->
+            <main class="busqueda-main" style="width: 100%; max-width: none;">
+                <!-- Header with Title and Sort (Solo en Desktop) -->
+                <div class="busqueda-sort-header guardados-header-desktop" style="justify-content: space-between; margin-bottom: 32px;">
+                    <h1 style="color: white; font-size: 28px; font-family: 'Montserrat', sans-serif; font-weight: 700; margin: 0;">Autos recién vistos</h1>
+                    
+                    <div class="busqueda-sort-wrapper">
+                        <select class="busqueda-sort-select" onchange="changeSorting(this.value)">
+                            <option value="recent" selected="@(Model.SortBy == "recent")">Ordenar por: Más recientes</option>
+                            <option value="price-asc" selected="@(Model.SortBy == "price-asc")">Ordenar por: Precio menor a mayor</option>
+                            <option value="price-desc" selected="@(Model.SortBy == "price-desc")">Ordenar por: Precio mayor a menor</option>
+                            <option value="year" selected="@(Model.SortBy == "year")">Ordenar por: Año más nuevo</option>
+                        </select>
                     </div>
                 </div>
-                
-                @if (auto.PlanVisibilidad > 1)
+
+                <!-- Cars Grid - 3 columns desktop, 2 tablet, 1 mobile -->
+                <div class="guardados-cars-grid">
+                    @{
+                        int cardIndex = 0;
+                        int adIndex = 0;
+                    }
+                    @foreach (var auto in Model.RecentlyViewedAutos)
+                    {
+                        cardIndex++;
+                        
+                        <!-- DESKTOP: Anuncio en posición 5 -->
+                        @if (cardIndex == 5 && !Model.IsMobile && !Model.IsTablet)
+                        {
+                            <div class="guardados-ad-card guardados-ad-desktop">
+                                @await Component.InvokeAsync("CarruselPublicidad", new { formato = "cuadrado", seccion = "recien-vistos-grid-desktop" })
+                            </div>
+                        }
+                        
+                        <!-- MOBILE: Anuncios después de card 1 y card 4 (mantener como está) -->
+                        @if (Model.IsMobile && (cardIndex == 2 || cardIndex == 5))
+                        {
+                            adIndex++;
+                            <div class="guardados-ad-card guardados-ad-mobile">
+                                @await Component.InvokeAsync("CarruselPublicidad", new { formato = "cuadrado", seccion = $"recien-vistos-grid-mobile-{adIndex}" })
+                            </div>
+                        }
+                        
+                        <div class="busqueda-auto-card">
+                            <!-- Banderín superior derecho (fuera del link) -->
+                            @if (!string.IsNullOrEmpty(auto.BanderinVideoUrl))
+                            {
+                                <div class="busqueda-banderin-container">
+                                    @if (auto.BanderinVideoUrl.EndsWith(".gif", StringComparison.OrdinalIgnoreCase))
+                                    {
+                                        <img src="@auto.BanderinVideoUrl" alt="Banderín" />
+                                    }
+                                    else
+                                    {
+                                        <video autoplay loop muted playsinline>
+                                            <source src="@auto.BanderinVideoUrl" type="video/mp4">
+                                        </video>
+                                    }
+                                </div>
+                            }
+                            
+                            <a asp-page="/Producto" asp-route-id="@auto.Id" class="busqueda-auto-card-link">
+                                <!-- Car Image -->
+                                <div class="busqueda-auto-card-image">
+                                    <img src="@auto.ImagenPrincipal" alt="@auto.NombreCompleto" />
+                                </div>
+
+                                <!-- Car Info Container with dark background -->
+                                <div class="busqueda-auto-card-info">
+                                    <!-- Top row: Title only -->
+                                    <div class="busqueda-auto-card-row-top">
+                                        <div class="busqueda-auto-card-title">@auto.NombreCompleto</div>
+                                    </div>
+                                    
+                                    <!-- Middle row: Price on left, KM + Cuota on right -->
+                                    <div class="busqueda-auto-card-row-middle">
+                                        <div class="busqueda-auto-card-price">@auto.PrecioFormateado</div>
+                                        <div class="busqueda-auto-card-right-info">
+                                            <div class="busqueda-auto-card-km">@auto.KilometrajeFormateado</div>
+                                            <div class="busqueda-auto-card-cuota">Est. @auto.CuotaMensualEstimada</div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </a>
+                            
+                            <!-- Botón de Favoritos fuera del link -->
+                            <button class="busqueda-favorite-btn favorite-btn" 
+                                    data-auto-id="@auto.Id" 
+                                    data-email-usuario="@(User.Identity?.IsAuthenticated == true ? User.FindFirst(System.Security.Claims.ClaimTypes.Email)?.Value ?? User.FindFirst("Email")?.Value : "")"
+                                    title="Agregar a favoritos"
+                                    type="button"
+                                    onclick="event.preventDefault(); event.stopPropagation();">
+                                <img src="https://autoclickstorage.blob.core.windows.net/uploads/Component%20183.png" 
+                                     alt="Favorito" />
+                            </button>
+                            
+                            <!-- Botón de Contactar Vendedor fuera del link -->
+                            <button class="busqueda-contact-btn" 
+                                    onclick="event.preventDefault(); event.stopPropagation(); mostrarModalVendedor(@auto.Id, '@(auto.Propietario?.NombreCompleto ?? "")', '@(auto.Propietario?.NombreAMostrar ?? "")', '@(auto.Propietario?.NumeroTelefono ?? "")', '@(auto.UbicacionCompleta ?? "")', @(Model.AutoCountByOwner.ContainsKey(auto.Id) ? Model.AutoCountByOwner[auto.Id] : 0))" 
+                                    type="button">
+                                Contactar vendedor
+                            </button>
+                        </div>
+                        
+                        <!-- TABLET: Anuncios DESPUÉS de card 2 y card 8 -->
+                        @if (Model.IsTablet && (cardIndex == 2 || cardIndex == 8))
+                        {
+                            adIndex++;
+                            <div class="guardados-ad-card guardados-ad-tablet">
+                                @await Component.InvokeAsync("CarruselPublicidad", new { formato = "cuadrado", seccion = $"recien-vistos-grid-tablet-{adIndex}" })
+                            </div>
+                        }
+                    }
+                </div>
+
+                <!-- Pagination -->
+                @if (Model.TotalPages > 1)
                 {
-                    <!-- Premium Badge -->
-                    <img style="width: 104px; height: 102.84px; left: 292px; top: -4px; position: absolute" src="https://placehold.co/104x103" />
+                    <nav class="busqueda-pagination" aria-label="Paginación de recién vistos">
+                        <div class="pagination-container">
+                            <!-- Previous Button -->
+                            <a href="@Url.Page("/RecienVistos", new { page = Model.CurrentPage - 1, sortBy = Model.SortBy })" 
+                               class="busqueda-pagination-arrow @(Model.CurrentPage <= 1 ? "disabled" : "")">
+                                <div class="pagination-arrow-icon left"></div>
+                            </a>
+
+                            <!-- Page Numbers -->
+                            @for (int i = 1; i <= Math.Min(5, Model.TotalPages); i++)
+                            {
+                                <a href="@Url.Page("/RecienVistos", new { page = i, sortBy = Model.SortBy })" 
+                                   class="busqueda-pagination-number @(Model.CurrentPage == i ? "active" : "")">
+                                    @i
+                                </a>
+                            }
+
+                            @if (Model.TotalPages > 5)
+                            {
+                                <span class="busqueda-pagination-ellipsis">…</span>
+                                
+                                <a href="@Url.Page("/RecienVistos", new { page = Model.TotalPages, sortBy = Model.SortBy })" 
+                                   class="busqueda-pagination-number @(Model.CurrentPage == Model.TotalPages ? "active" : "")">
+                                    @Model.TotalPages
+                                </a>
+                            }
+
+                            <!-- Next Button -->
+                            <a href="@Url.Page("/RecienVistos", new { page = Model.CurrentPage + 1, sortBy = Model.SortBy })" 
+                               class="busqueda-pagination-arrow @(Model.CurrentPage >= Model.TotalPages ? "disabled" : "")">
+                                <div class="pagination-arrow-icon right"></div>
+                            </a>
+                        </div>
+                    </nav>
                 }
-            </div>
 
-            currentIndex++;
-        }
-
-        <!-- Advertisement Slots -->
-        @if (totalCars >= 3)
-        {
-            <!-- First Advertisement (after 3rd car, in position where 4th car would be) - Carousel Cuadrado -->
-            <div style="width: 393px; height: 281.27px; left: 444.50px; top: 488px; position: absolute;">
-                @await Component.InvokeAsync("CarruselPublicidad", new { formato = "cuadrado", seccion = "recien-vistos-primero" })
-            </div>
-        }
-
-        @if (totalCars >= 12)
-        {
-            <!-- Second Advertisement (after 12 cars) - Carousel Horizontal -->
-            <div style="width: 1010px; height: 196px; left: 135px; top: @(169 + ((totalCars / 3 + 1) * 312))px; position: absolute;">
-                @await Component.InvokeAsync("CarruselPublicidad", new { formato = "horizontal", seccion = "recien-vistos-segundo" })
-            </div>
-        }
-
-        <!-- Pagination -->
-        <div style="width: 468px; height: 44px; left: 50%; top: @(169 + ((totalCars / 3 + 2) * 312))px; position: absolute; transform: translateX(-50%);">
-            <div data-property-1="Default" style="width: 40px; left: 0px; top: 1px; position: absolute; border-radius: 40px; flex-direction: column; justify-content: center; align-items: center; display: inline-flex">
-                <div style="width: 40px; height: 40px; position: relative; transform: rotate(180deg); transform-origin: top left">
-                    <div style="width: 38.05px; height: 38.05px; left: 0.98px; top: 0.98px; position: absolute; outline: 1px white solid; outline-offset: -0.50px"></div>
-                    <div style="width: 16.69px; height: 14.37px; left: 11.04px; top: 12.82px; position: absolute; background: white"></div>
+                <!-- Advertisement after pagination -->
+                <div style="margin-top: 48px;">
+                    @await Component.InvokeAsync("CarruselPublicidad", new { formato = "horizontal", seccion = "recien-vistos-footer" })
                 </div>
-            </div>
-            <div style="width: 44px; height: 44px; padding: 2px; left: 50px; top: 0px; position: absolute; background: rgba(255, 255, 255, 0.25); border-radius: 44px; outline: 2px white solid; outline-offset: -2px; flex-direction: column; justify-content: center; align-items: center; display: inline-flex">
-                <div style="text-box-trim: trim-both; text-box-edge: cap alphabetic; text-align: center; color: white; font-size: 12px; font-family: Montserrat; font-weight: 600; word-wrap: break-word">1</div>
-            </div>
-            <div style="width: 44px; height: 44px; padding: 2px; left: 104px; top: 0px; position: absolute; border-radius: 44px; outline: 2px rgba(255, 255, 255, 0.75) solid; outline-offset: -2px; flex-direction: column; justify-content: center; align-items: center; display: inline-flex">
-                <div style="text-box-trim: trim-both; text-box-edge: cap alphabetic; text-align: center; color: white; font-size: 12px; font-family: Montserrat; font-weight: 600; word-wrap: break-word">2</div>
-            </div>
-            <div style="width: 44px; height: 44px; padding: 2px; left: 158px; top: 0px; position: absolute; border-radius: 44px; outline: 2px rgba(255, 255, 255, 0.75) solid; outline-offset: -2px; flex-direction: column; justify-content: center; align-items: center; display: inline-flex">
-                <div style="text-box-trim: trim-both; text-box-edge: cap alphabetic; text-align: center; color: white; font-size: 12px; font-family: Montserrat; font-weight: 600; word-wrap: break-word">3</div>
-            </div>
-            <div style="width: 44px; height: 44px; padding: 2px; left: 212px; top: 0px; position: absolute; border-radius: 44px; outline: 2px rgba(255, 255, 255, 0.75) solid; outline-offset: -2px; flex-direction: column; justify-content: center; align-items: center; display: inline-flex">
-                <div style="text-box-trim: trim-both; text-box-edge: cap alphabetic; text-align: center; color: white; font-size: 12px; font-family: Montserrat; font-weight: 600; word-wrap: break-word">4</div>
-            </div>
-            <div style="width: 44px; height: 44px; padding: 2px; left: 266px; top: 0px; position: absolute; border-radius: 44px; outline: 2px rgba(255, 255, 255, 0.75) solid; outline-offset: -2px; flex-direction: column; justify-content: center; align-items: center; display: inline-flex">
-                <div style="text-box-trim: trim-both; text-box-edge: cap alphabetic; text-align: center; color: white; font-size: 12px; font-family: Montserrat; font-weight: 600; word-wrap: break-word">5</div>
-            </div>
-            <div style="width: 44px; height: 44px; padding: 2px; left: 320px; top: 0px; position: absolute; border-radius: 44px; outline: 2px rgba(255, 255, 255, 0.75) solid; outline-offset: -2px; flex-direction: column; justify-content: center; align-items: center; display: inline-flex">
-                <div style="text-box-trim: trim-both; text-box-edge: cap alphabetic; text-align: center; color: white; font-size: 12px; font-family: Montserrat; font-weight: 600; word-wrap: break-word">…</div>
-            </div>
-            <div style="width: 44px; height: 44px; padding: 2px; left: 374px; top: 0px; position: absolute; border-radius: 44px; outline: 2px rgba(255, 255, 255, 0.75) solid; outline-offset: -2px; flex-direction: column; justify-content: center; align-items: center; display: inline-flex">
-                <div style="text-box-trim: trim-both; text-box-edge: cap alphabetic; text-align: center; color: white; font-size: 12px; font-family: Montserrat; font-weight: 600; word-wrap: break-word">@((totalCars / 9) + 1)</div>
-            </div>
-            <div data-property-1="Default" style="width: 40px; left: 468px; top: 41px; position: absolute; transform: rotate(180deg); transform-origin: top left; border-radius: 40px; flex-direction: column; justify-content: center; align-items: center; display: inline-flex">
-                <div style="width: 40px; height: 40px; position: relative; transform: rotate(180deg); transform-origin: top left">
-                    <div style="width: 38.05px; height: 38.05px; left: 0.98px; top: 0.98px; position: absolute; outline: 1px white solid; outline-offset: -0.50px"></div>
-                    <div style="width: 16.69px; height: 14.37px; left: 12.27px; top: 12.82px; position: absolute; background: white"></div>
-                </div>
-            </div>
+            </main>
         </div>
-    }
-    else
-    {
-        <!-- Empty State -->
-        <div style="width: 100%; height: 400px; left: 0px; top: 300px; position: absolute; flex-direction: column; justify-content: center; align-items: center; gap: 32px; display: inline-flex">
-            <div style="width: 80px; height: 80px; background: rgba(255, 255, 255, 0.1); border-radius: 50%; flex-direction: column; justify-content: center; align-items: center; display: flex">
-                <div style="width: 40px; height: 40px; background: rgba(255, 255, 255, 0.3)"></div>
-            </div>
-            <div style="text-box-trim: trim-both; text-box-edge: cap alphabetic; text-align: center; color: white; font-size: 24px; font-family: Montserrat; font-weight: 700; word-wrap: break-word">No has visto ningún auto recientemente</div>
-            <div style="text-box-trim: trim-both; text-box-edge: cap alphabetic; text-align: center; color: rgba(255, 255, 255, 0.7); font-size: 16px; font-family: Montserrat; font-weight: 400; word-wrap: break-word">Explora nuestro catálogo de autos y los verás aparecer aquí</div>
-            <div data-estado="Default" style="padding: 16px; background: white; border-radius: 4px; justify-content: center; align-items: center; gap: 8px; display: inline-flex; cursor: pointer;" onclick="window.location.href='@Url.Page("/Index")'">
-                <div style="text-box-trim: trim-both; text-box-edge: cap alphabetic; color: #06174D; font-size: 16px; font-family: Montserrat; font-weight: 700; word-wrap: break-word">Explorar autos</div>
-            </div>
-        </div>
-    }
-
-    <!-- Espacio Publicitario -->
-    <div style="margin: 48px auto; max-width: 1200px; padding: 0 32px;">
-        @await Component.InvokeAsync("CarruselPublicidad", new { formato = "horizontal", seccion = "recien-vistos-footer" })
     </div>
-
-    <!-- Footer -->
 </div>
 
+<!-- Modal de Contactar Vendedor -->
+<div id="modalVendedor" class="modal-vendedor" style="display: none;">
+    <div class="modal-vendedor-content">
+        <button class="modal-vendedor-close" onclick="cerrarModalVendedor()">×</button>
+        <h3 class="modal-vendedor-title">Contactar al vendedor</h3>
+        <p class="modal-vendedor-name" id="modalVendedorNombre"></p>
+        
+        <button class="modal-vendedor-phone-btn" id="modalVendedorTelBtn" onclick="">
+            Llamar <span id="modalVendedorTel"></span>
+        </button>
+        
+        <button class="modal-vendedor-whatsapp-btn" id="modalVendedorWhatsAppBtn" onclick="">
+            <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <g clip-path="url(#clip0_modal)">
+                    <path d="M14.5893 11.9223L14.5818 11.9848C12.7493 11.0715 12.5576 10.9498 12.3209 11.3048C12.1568 11.5506 11.6784 12.1081 11.5343 12.2731C11.3884 12.4356 11.2434 12.4481 10.9959 12.3356C10.7459 12.2106 9.94345 11.9481 8.99345 11.0981C8.25345 10.4356 7.75678 9.62315 7.61011 9.37315C7.36595 8.95148 7.87678 8.89148 8.34178 8.01148C8.42511 7.83648 8.38261 7.69898 8.32095 7.57482C8.25845 7.44982 7.76095 6.22482 7.55261 5.73648C7.35261 5.24982 7.14678 5.31148 6.99261 5.31148C6.51261 5.26982 6.16178 5.27648 5.85261 5.59815C4.50761 7.07648 4.84678 8.60148 5.99761 10.2231C8.25928 13.1831 9.46428 13.7281 11.6676 14.4848C12.2626 14.674 12.8051 14.6473 13.2343 14.5856C13.7126 14.5098 14.7068 13.9848 14.9143 13.3973C15.1268 12.8098 15.1268 12.3223 15.0643 12.2098C15.0026 12.0973 14.8393 12.0348 14.5893 11.9223Z" fill="white"/>
+                    <path d="M17.1 2.87404C10.6925 -3.32013 0.0883333 1.17237 0.0841667 9.91071C0.0841667 11.6574 0.541667 13.3607 1.41333 14.8649L0 19.9999L5.27917 18.6232C11.8667 22.1815 19.9967 17.4565 20 9.91571C20 7.26904 18.9667 4.77821 17.0875 2.90654L17.1 2.87404ZM18.335 9.88821C18.33 16.249 11.3475 20.2215 5.825 16.9749L5.525 16.7965L2.4 17.609L3.2375 14.5715L3.03833 14.259C-0.398333 8.78821 3.55 1.63821 10.06 1.63821C12.2717 1.63821 14.3475 2.50071 15.9108 4.06321C17.4733 5.61237 18.335 7.68821 18.335 9.88821Z" fill="white"/>
+                </g>
+                <defs>
+                    <clipPath id="clip0_modal">
+                        <rect width="20" height="20" fill="white"/>
+                    </clipPath>
+                </defs>
+            </svg>
+            <span id="modalVendedorWhatsApp"></span>
+        </button>
+        
+        <div class="modal-vendedor-info">
+            <div class="modal-vendedor-info-row" id="modalVendedorTelInfo">
+                <svg width="18" height="18" viewBox="0 0 18 18" fill="none">
+                    <path d="M3 3h2l1.5 4-1.5 1.5c1 2 2.5 3.5 4.5 4.5L11 11.5l4 1.5v2c0 1.1-.9 2-2 2C6.477 17 2 12.523 2 6c0-1.1.9-2 2-2z" stroke="white" stroke-width="1.5"/>
+                </svg>
+                <span id="modalVendedorTelText"></span>
+            </div>
+            <div class="modal-vendedor-info-row" id="modalVendedorUbicacion">
+                <svg width="14" height="17" viewBox="0 0 14 17" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M6.58801 16.17C9.6369 13.034 12.6858 10.2259 12.6858 6.76199C12.6858 3.29806 9.95573 0.48999 6.58801 0.48999C3.22031 0.48999 0.490234 3.29806 0.490234 6.76199C0.490234 10.2259 3.53912 13.034 6.58801 16.17Z" stroke="white" stroke-width="0.98" stroke-linecap="round" stroke-linejoin="round"/>
+                    <path d="M6.80668 8.3299C7.7689 8.3299 8.5489 7.54991 8.5489 6.58768C8.5489 5.62548 7.7689 4.84546 6.80668 4.84546C5.84445 4.84546 5.06445 5.62548 5.06445 6.58768C5.06445 7.54991 5.84445 8.3299 6.80668 8.3299Z" stroke="white" stroke-width="0.98" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+                <span id="modalVendedorUbicacionText"></span>
+            </div>
+            <div class="modal-vendedor-info-row" id="modalVendedorAutos">
+                <svg width="21" height="18" viewBox="0 0 21 18" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M0.980469 4.60054L3.79609 6.94686C3.98199 7.10182 4.21632 7.18665 4.45832 7.18665H16.1226C16.3646 7.18665 16.5989 7.10182 16.7848 6.94686L19.6005 4.60054M4.60102 10.8072H4.61137M15.9799 10.8072H15.9903M6.31887 0.97998H14.2621C15.0045 0.97998 15.6901 1.3778 16.0583 2.02241L19.0553 7.26702C19.4125 7.89224 19.6005 8.5998 19.6005 9.31998V15.4622C19.6005 16.0335 19.1373 16.4966 18.566 16.4966H17.5316C16.9603 16.4966 16.4971 16.0335 16.4971 15.4622V14.4278H4.0838V15.4622C4.0838 16.0335 3.62066 16.4966 3.04936 16.4966H2.01491C1.44361 16.4966 0.980469 16.0335 0.980469 15.4622V9.31998C0.980469 8.5998 1.16839 7.89224 1.52565 7.26702L4.52257 2.02241C4.89092 1.3778 5.57643 0.97998 6.31887 0.97998ZM5.11825 10.8072C5.11825 11.0928 4.88668 11.3244 4.60102 11.3244C4.31537 11.3244 4.0838 11.0928 4.0838 10.8072C4.0838 10.5216 4.31537 10.29 4.60102 10.29C4.88668 10.29 5.11825 10.5216 5.11825 10.8072ZM16.4971 10.8072C16.4971 11.0928 16.2655 11.3244 15.9799 11.3244C15.6943 11.3244 15.4627 11.0928 15.4627 10.8072C15.4627 10.5216 15.6943 10.29 15.9799 10.29C16.2655 10.29 16.4971 10.5216 16.4971 10.8072Z" stroke="white" stroke-width="1.96" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+                <span id="modalVendedorAutosText"></span>
+            </div>
+        </div>
+    </div>
+</div>
 
+<script>
+function mostrarModalVendedor(autoId, nombreCompleto, nombreMostrar, telefono, ubicacion, cantidadAutos) {
+    // Mostrar nombre del vendedor - usar nombreMostrar o nombreCompleto
+    const nombreElement = document.getElementById('modalVendedorNombre');
+    const nombreFinal = (nombreMostrar && nombreMostrar.trim() !== '') ? nombreMostrar : 
+                        (nombreCompleto && nombreCompleto.trim() !== '') ? nombreCompleto : 
+                        'Vendedor';
+    
+    nombreElement.textContent = nombreFinal;
+    nombreElement.style.display = 'block';
+    
+    // Configurar botón de teléfono
+    const telBtn = document.getElementById('modalVendedorTelBtn');
+    if (telefono && telefono.trim() !== '') {
+        document.getElementById('modalVendedorTel').textContent = telefono;
+        telBtn.onclick = () => window.location.href = 'tel:' + telefono;
+        telBtn.style.display = 'flex';
+    } else {
+        telBtn.style.display = 'none';
+    }
+    
+    // Configurar botón de WhatsApp
+    const whatsappBtn = document.getElementById('modalVendedorWhatsAppBtn');
+    if (telefono && telefono.trim() !== '') {
+        document.getElementById('modalVendedorWhatsApp').textContent = telefono;
+        const telefonoLimpio = telefono.replace(/[^0-9]/g, '');
+        whatsappBtn.onclick = () => window.open('https://wa.me/' + telefonoLimpio, '_blank');
+        whatsappBtn.style.display = 'flex';
+    } else {
+        whatsappBtn.style.display = 'none';
+    }
+    
+    // Mostrar información de teléfono en la sección de info
+    const telInfo = document.getElementById('modalVendedorTelInfo');
+    if (telefono && telefono.trim() !== '') {
+        document.getElementById('modalVendedorTelText').textContent = telefono;
+        telInfo.style.display = 'flex';
+    } else {
+        telInfo.style.display = 'none';
+    }
+    
+    // Mostrar ubicación
+    const ubicacionDiv = document.getElementById('modalVendedorUbicacion');
+    if (ubicacion && ubicacion.trim() !== '') {
+        document.getElementById('modalVendedorUbicacionText').textContent = ubicacion;
+        ubicacionDiv.style.display = 'flex';
+    } else {
+        ubicacionDiv.style.display = 'none';
+    }
+    
+    // Mostrar cantidad de autos
+    document.getElementById('modalVendedorAutosText').textContent = '(' + cantidadAutos + ' de autos publicados)';
+    document.getElementById('modalVendedorAutos').style.display = 'flex';
+    
+    // Mostrar el modal
+    document.getElementById('modalVendedor').style.display = 'flex';
+}
 
+function cerrarModalVendedor() {
+    document.getElementById('modalVendedor').style.display = 'none';
+}
 
+// Cerrar modal al hacer clic fuera
+document.addEventListener('DOMContentLoaded', function() {
+    const modal = document.getElementById('modalVendedor');
+    if (modal) {
+        modal.addEventListener('click', function(e) {
+            if (e.target === this) {
+                cerrarModalVendedor();
+            }
+        });
+    }
+});
 
+function changeSorting(sortBy) {
+    const currentPage = @Model.CurrentPage;
+    const url = `@Url.Page("/RecienVistos")?page=1&sortBy=${sortBy}`;
+    window.location.href = url;
+}
+</script>

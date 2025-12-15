@@ -100,6 +100,7 @@ namespace AutoClick.Pages
             // SOLO MOSTRAR AUTOS CON PLAN DE VISIBILIDAD MAYOR A 1
             var query = _context.Autos
                 .AsNoTracking()
+                .Include(a => a.Propietario)
                 .Where(a => a.Activo && a.PlanVisibilidad > 1); // Filtro principal para destacados
 
             // Build applied filters list for UI

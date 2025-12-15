@@ -121,7 +121,7 @@
 /* Control de altura para sección 3 (Ubicación) solo en desktop */
 @media (min-width: 1024px) {
     #seccion3 {
-        min-height: 900px; /* Ajustable según necesidad - puedes cambiar este valor */
+        min-height: 600px; /* Reducido para menos espacio vacío */
     }
 }
 

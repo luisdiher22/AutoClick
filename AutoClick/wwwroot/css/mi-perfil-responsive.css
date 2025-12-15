@@ -204,6 +204,36 @@
     .profile-form-row .profile-form-group {
         width: 100% !important;
     }
+    
+    /* Fix form-row and form-group for mobile */
+    .form-row {
+        flex-direction: column !important;
+        gap: 0 !important;
+        align-items: stretch !important;
+    }
+    
+    .form-group {
+        width: 100% !important;
+        height: auto !important;
+        min-height: 68px !important;
+        margin-bottom: 16px !important;
+    }
+    
+    .form-group.full-width {
+        width: 100% !important;
+    }
+    
+    /* Fix form inputs spacing */
+    .form-input,
+    .form-textarea {
+        width: 100% !important;
+    }
+    
+    /* Fix section titles */
+    .section-title {
+        font-size: 18px !important;
+        margin-bottom: 20px !important;
+    }
 
     /* Buttons */
     .profile-actions {

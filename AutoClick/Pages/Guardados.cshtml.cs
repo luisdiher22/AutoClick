@@ -20,13 +20,35 @@ namespace AutoClick.Pages
         public List<Auto> SavedAutos { get; set; } = new List<Auto>();
         public int CurrentPage { get; set; } = 1;
         public int TotalPages { get; set; }
-        public int PageSize { get; set; } = 12; // 3 columns x 4 rows
+        public int PageSize { get; set; } = 11; // Desktop: 11 cards (3x4 grid - 1 for ad)
         public string SortBy { get; set; } = "recent";
+        public Dictionary<int, int> AutoCountByOwner { get; set; } = new Dictionary<int, int>();
+        public bool IsMobile { get; set; }
+        public bool IsTablet { get; set; }
 
         public async Task OnGetAsync(int? page, string? sortBy)
         {
             CurrentPage = page ?? 1;
             SortBy = sortBy ?? "recent";
+
+            // Detectar dispositivo móvil o tablet
+            var userAgent = Request.Headers["User-Agent"].ToString().ToLower();
+            IsMobile = userAgent.Contains("mobile") && !userAgent.Contains("tablet");
+            IsTablet = userAgent.Contains("tablet") || (userAgent.Contains("android") && !userAgent.Contains("mobile"));
+
+            // Ajustar PageSize según dispositivo
+            if (IsMobile)
+            {
+                PageSize = 5; // Móvil: 5 cards
+            }
+            else if (IsTablet)
+            {
+                PageSize = 8; // Tablet: 8 cards
+            }
+            else
+            {
+                PageSize = 11; // Desktop: 11 cards
+            }
 
             // Obtener el email del usuario autenticado
             var emailUsuario = User.Identity?.IsAuthenticated == true 
@@ -59,6 +81,7 @@ namespace AutoClick.Pages
 
                 // Obtener los autos favoritos
                 var query = _context.Autos
+                    .Include(a => a.Propietario)
                     .Where(a => favoritosIds.Contains(a.Id) && a.Activo);
                 
                 // Apply sorting
@@ -77,6 +100,16 @@ namespace AutoClick.Pages
                     .Skip((CurrentPage - 1) * PageSize)
                     .Take(PageSize)
                     .ToListAsync();
+                
+                // Calcular cantidad de autos por propietario
+                foreach (var auto in SavedAutos)
+                {
+                    if (!string.IsNullOrEmpty(auto.EmailPropietario))
+                    {
+                        var count = await _context.Autos.CountAsync(a => a.EmailPropietario == auto.EmailPropietario && a.Activo);
+                        AutoCountByOwner[auto.Id] = count;
+                    }
+                }
             }
             catch
             {
