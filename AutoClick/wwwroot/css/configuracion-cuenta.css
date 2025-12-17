@@ -11,7 +11,14 @@
     flex: 1;
     color: #ffffff;
     display: flex;
-    min-height: calc(100vh - 80px - 300px); /* Resta altura del header y footer aproximada */
+    min-height: calc(100vh - 80px); /* Resta altura del header */
+}
+
+/* Desktop - sidebar extiende hasta el footer */
+@media (min-width: 1024px) {
+    .account-sidebar {
+        min-height: 100vh;
+    }
 }
 
 /* Sidebar */
@@ -261,8 +268,8 @@
     display: flex;
     justify-content: flex-end;
     margin-top: 80px;
-    margin-bottom: 120px;
-    padding-bottom: 40px;
+    margin-bottom: 20px;
+    padding-bottom: 20px;
     padding-right: 0;
 }
 

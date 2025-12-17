@@ -13,6 +13,11 @@ namespace AutoClick.Services
         /// Envía una notificación por email a los administradores cuando se recibe una solicitud de empresa
         /// </summary>
         Task<bool> EnviarNotificacionSolicitudEmpresaAsync(SolicitudEmpresa solicitud, List<string> correosAdmins, bool esEspacioPublicitario = false);
+        
+        /// <summary>
+        /// Envía un email con el token de recuperación de contraseña
+        /// </summary>
+        Task<bool> SendPasswordResetEmailAsync(string toEmail, string resetToken);
     }
 
     /// <summary>
@@ -201,6 +206,121 @@ namespace AutoClick.Services
             _logger.LogInformation($"Fecha: {solicitud.FechaCreacion}");
             _logger.LogInformation($"Destinatarios (admins): {string.Join(", ", correosAdmins)}");
             _logger.LogInformation("====================================");
+        }
+
+        public async Task<bool> SendPasswordResetEmailAsync(string toEmail, string resetToken)
+        {
+            try
+            {
+                // Configuración SMTP desde appsettings
+                var smtpHost = _configuration["EmailSettings:SmtpHost"];
+                var smtpPort = int.Parse(_configuration["EmailSettings:SmtpPort"] ?? "587");
+                var smtpUser = _configuration["EmailSettings:SmtpUser"];
+                var smtpPass = _configuration["EmailSettings:SmtpPassword"];
+                var fromEmail = _configuration["EmailSettings:FromEmail"] ?? smtpUser;
+                var fromName = _configuration["EmailSettings:FromName"] ?? "AutoClick.cr";
+
+                if (string.IsNullOrEmpty(smtpHost) || string.IsNullOrEmpty(smtpUser) || string.IsNullOrEmpty(smtpPass))
+                {
+                    _logger.LogWarning("Configuración SMTP incompleta. Email no enviado.");
+                    return false;
+                }
+
+                using (var client = new SmtpClient(smtpHost, smtpPort))
+                {
+                    client.EnableSsl = true;
+                    client.Credentials = new NetworkCredential(smtpUser, smtpPass);
+
+                    // Construir la URL de reseteo
+                    var resetUrl = $"https://autoclick-hhhphnfjakb8hccs.mexicocentral-01.azurewebsites.net/ResetPassword?token={resetToken}";
+
+                    var mailMessage = new MailMessage
+                    {
+                        From = new MailAddress(fromEmail!, fromName),
+                        Subject = "Recuperación de contraseña - AutoClick.cr",
+                        Body = GenerarCuerpoEmailResetPassword(resetUrl),
+                        IsBodyHtml = true
+                    };
+
+                    mailMessage.To.Add(toEmail);
+
+                    await client.SendMailAsync(mailMessage);
+                    _logger.LogInformation($"Email de recuperación enviado a {toEmail}");
+                    return true;
+                }
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"Error al enviar email de recuperación: {ex.Message}");
+                return false;
+            }
+        }
+
+        private string GenerarCuerpoEmailResetPassword(string resetUrl)
+        {
+            return $@"
+<!DOCTYPE html>
+<html>
+<head>
+    <style>
+        body {{ font-family: 'Montserrat', Arial, sans-serif; background-color: #02081C; color: #ffffff; margin: 0; padding: 0; }}
+        .container {{ max-width: 600px; margin: 40px auto; background-color: #030D2B; border-radius: 12px; padding: 40px; border: 1px solid rgba(255, 255, 255, 0.2); }}
+        .header {{ text-align: center; margin-bottom: 30px; }}
+        .logo {{ color: #FF931E; font-size: 32px; font-weight: 700; margin: 0; }}
+        .subtitle {{ color: rgba(255, 255, 255, 0.7); font-size: 14px; margin-top: 8px; }}
+        .content {{ margin-bottom: 30px; line-height: 1.8; }}
+        .content h2 {{ color: #ffffff; margin-bottom: 20px; font-size: 22px; }}
+        .content p {{ color: rgba(255, 255, 255, 0.85); margin-bottom: 16px; }}
+        .button-container {{ text-align: center; margin: 30px 0; }}
+        .button {{ display: inline-block; background: linear-gradient(135deg, #FF931E, #FF7A00); color: white; text-decoration: none; padding: 16px 40px; border-radius: 8px; font-weight: 600; font-size: 16px; transition: all 0.3s ease; }}
+        .button:hover {{ transform: translateY(-2px); box-shadow: 0 8px 25px rgba(255, 147, 30, 0.3); }}
+        .url-box {{ background-color: #02081C; padding: 16px; border-radius: 6px; word-break: break-all; border: 1px solid rgba(255, 255, 255, 0.1); margin: 20px 0; }}
+        .url-box a {{ color: #FF931E; text-decoration: none; }}
+        .warning {{ background-color: rgba(255, 193, 7, 0.15); border-left: 4px solid #FFC107; padding: 16px; margin: 25px 0; border-radius: 4px; }}
+        .warning-title {{ color: #FFC107; font-weight: 700; margin-bottom: 8px; }}
+        .footer {{ text-align: center; color: rgba(255, 255, 255, 0.5); font-size: 12px; margin-top: 40px; padding-top: 25px; border-top: 1px solid rgba(255, 255, 255, 0.1); }}
+        .footer p {{ margin: 8px 0; }}
+    </style>
+</head>
+<body>
+    <div class='container'>
+        <div class='header'>
+            <h1 class='logo'>AutoClick.cr</h1>
+            <p class='subtitle'>Tu plataforma de compra y venta de autos</p>
+        </div>
+        <div class='content'>
+            <h2>🔐 Recuperación de contraseña</h2>
+            <p>Hola,</p>
+            <p>Hemos recibido una solicitud para restablecer la contraseña de tu cuenta en <strong>AutoClick.cr</strong>.</p>
+            <p>Para crear una nueva contraseña y recuperar el acceso a tu cuenta, haz clic en el siguiente botón:</p>
+            <div class='button-container'>
+                <a href='{resetUrl}' class='button'>Restablecer mi contraseña</a>
+            </div>
+            <p style='font-size: 14px; color: rgba(255, 255, 255, 0.7);'>Si el botón no funciona, copia y pega el siguiente enlace en tu navegador:</p>
+            <div class='url-box'>
+                <a href='{resetUrl}'>{resetUrl}</a>
+            </div>
+            <div class='warning'>
+                <div class='warning-title'>⚠️ Importante - Lee con atención</div>
+                <p style='margin: 0; font-size: 14px; color: rgba(255, 255, 255, 0.85);'>
+                    • Este enlace es <strong>válido por 1 hora</strong> solamente<br>
+                    • Si no solicitaste este cambio, <strong>ignora este correo</strong><br>
+                    • Tu contraseña actual permanecerá sin cambios si no usas este enlace<br>
+                    • Por seguridad, nunca compartas este enlace con nadie
+                </p>
+            </div>
+            <p style='font-size: 14px; color: rgba(255, 255, 255, 0.7); margin-top: 25px;'>
+                Si tienes alguna pregunta o necesitas ayuda, no dudes en contactarnos.
+            </p>
+        </div>
+        <div class='footer'>
+            <p><strong>Este es un correo automático, por favor no respondas a este mensaje.</strong></p>
+            <p>&copy; 2025 AutoClick.cr - Todos los derechos reservados</p>
+            <p style='margin-top: 15px;'>🚗 Encuentra tu próximo auto en AutoClick.cr</p>
+        </div>
+    </div>
+</body>
+</html>";
         }
     }
 }

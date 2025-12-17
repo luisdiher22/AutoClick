@@ -21,6 +21,7 @@ public class ApplicationDbContext : DbContext
     public DbSet<EmpresaPublicidad> EmpresasPublicidad { get; set; }
     public DbSet<AnuncioPublicidad> AnunciosPublicidad { get; set; }
     public DbSet<SolicitudPreAprobacion> SolicitudesPreAprobacion { get; set; }
+    public DbSet<PasswordResetToken> PasswordResetTokens { get; set; }
     // Car model eliminado
     
     protected override void OnModelCreating(ModelBuilder modelBuilder)

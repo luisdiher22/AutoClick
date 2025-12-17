@@ -246,27 +246,58 @@
     </div>
 </div>
 
-<!-- Forgot Password Modal -->
-<div id="forgotPasswordModal" class="modal-overlay" style="display: none;">
-    <div class="modal-content">
+<!-- Forgot Password Confirmation Modal -->
+<div id="forgotPasswordConfirmModal" class="modal-overlay" style="display: none;">
+    <div class="modal-content" style="max-width: 480px;">
         <div class="modal-header">
-            <h3>Recuperar contraseña</h3>
-            <button type="button" class="modal-close" onclick="closeModal('forgotPasswordModal')">&times;</button>
+            <h3 style="font-size: 18px; font-weight: 700;">Recuperar contraseña</h3>
+            <button type="button" class="modal-close" onclick="closeModal('forgotPasswordConfirmModal')">&times;</button>
         </div>
-        <form method="post" asp-page-handler="ForgotPassword" class="modal-form">
-            <p class="modal-description">
-                Te enviaremos un enlace para restablecer tu contraseña a tu correo electrónico.
+        <div class="modal-body" style="padding: 20px 0;">
+            <p class="modal-description" style="margin-bottom: 20px; font-size: 14px;">
+                Te enviaremos un enlace de recuperación a tu correo electrónico para que puedas restablecer tu contraseña.
             </p>
-            <div class="form-group">
-                <label for="ForgotPasswordEmail">Correo electrónico</label>
-                <input asp-for="ForgotPasswordEmail" type="email" class="form-input" required />
-                <span asp-validation-for="ForgotPasswordEmail" class="validation-message"></span>
+            <div style="background: rgba(255, 193, 7, 0.1); border-left: 4px solid #FFC107; padding: 12px; margin-bottom: 20px; border-radius: 4px;">
+                <p style="margin: 0; font-size: 13px; color: rgba(255, 255, 255, 0.85);">
+                    <strong>📧 Nota:</strong> El enlace será válido por <strong>1 hora</strong>.
+                </p>
             </div>
-            <div class="modal-actions">
-                <button type="submit" class="btn-primary">Enviar enlace</button>
-                <button type="button" class="btn-secondary" onclick="closeModal('forgotPasswordModal')">Cancelar</button>
+            <div class="modal-actions" style="flex-direction: column; gap: 12px;">
+                <button type="button" class="btn-primary btn-full-width" onclick="sendPasswordResetFromModal()">
+                    Enviar correo de recuperación
+                </button>
+                <button type="button" class="btn-secondary btn-full-width" onclick="closeModal('forgotPasswordConfirmModal')">Cancelar</button>
             </div>
-        </form>
+        </div>
+    </div>
+</div>
+
+<!-- Password Recovery Sent Modal -->
+<div id="passwordRecoverySentModal" class="modal-overlay" style="display: none;">
+    <div class="modal-content" style="max-width: 500px;">
+        <div class="modal-header">
+            <h3 style="font-size: 20px; font-weight: 700;">Recuperación de contraseña enviada</h3>
+            <button type="button" class="modal-close" onclick="closeModal('passwordRecoverySentModal')">&times;</button>
+        </div>
+        <div class="modal-body" style="padding: 20px 0;">
+            <p class="modal-description" style="margin-bottom: 24px; font-size: 14px;">
+                Hemos enviado un correo electrónico con instrucciones para recuperar tu contraseña a:
+            </p>
+            <div style="background: #02081C; padding: 14px; border-radius: 6px; margin-bottom: 24px; border: 1px solid rgba(255, 255, 255, 0.2);">
+                <p id="maskedEmailDisplay" style="margin: 0; color: #FF931E; font-weight: 600; font-size: 15px; text-align: center; word-break: break-all;"></p>
+            </div>
+            <div style="background: rgba(255, 193, 7, 0.1); border-left: 4px solid #FFC107; padding: 14px; margin-bottom: 20px; border-radius: 4px;">
+                <p style="margin: 0; font-size: 13px; color: rgba(255, 255, 255, 0.85);">
+                    <strong>⏱️ Importante:</strong> El enlace es válido por <strong>1 hora</strong>. Revisa tu bandeja de entrada y carpeta de spam.
+                </p>
+            </div>
+            <div class="modal-actions" style="flex-direction: column; gap: 12px;">
+                <button type="button" id="resendEmailBtn" class="btn-primary btn-full-width" onclick="resendPasswordResetEmail()" disabled>
+                    Reenviar correo (<span id="cooldownTimer">15:00</span>)
+                </button>
+                <button type="button" class="btn-secondary btn-full-width" onclick="closePasswordRecoveryModal()">Entendido</button>
+            </div>
+        </div>
     </div>
 </div>
 
@@ -357,15 +388,38 @@
         // Mostrar mensaje de éxito si existe
         @if (TempData["SuccessMessage"] != null)
         {
+            var successMsg = TempData["SuccessMessage"].ToString();
+            var shouldLogout = TempData["ShouldLogout"] != null && (bool)TempData["ShouldLogout"];
             <text>
             Swal.fire({
                 icon: 'success',
                 title: '¡Éxito!',
-                text: '@TempData["SuccessMessage"]',
+                html: '@Html.Raw(successMsg)',
                 confirmButtonColor: '#4A90E2',
-                timer: 3000,
-                showConfirmButton: true
+                showConfirmButton: true,
+                allowOutsideClick: false,
+                allowEscapeKey: false
+            }).then((result) => {
+                @if (shouldLogout)
+                {
+                    <text>
+                    // Redirigir a la página de autenticación
+                    window.location.href = '/Auth';
+                    </text>
+                }
             });
+            
+            // Si el usuario cierra el sweet alert sin darle click, también desloguear
+            @if (shouldLogout)
+            {
+                <text>
+                window.addEventListener('beforeunload', function() {
+                    if (window.location.pathname === '/ConfiguracionCuenta') {
+                        window.location.href = '/Auth';
+                    }
+                });
+                </text>
+            }
             </text>
         }
         

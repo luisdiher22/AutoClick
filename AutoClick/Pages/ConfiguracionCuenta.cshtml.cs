@@ -8,6 +8,7 @@ using AutoClick.Models;
 using AutoClick.Helpers;
 using Microsoft.EntityFrameworkCore;
 using System.Security.Claims;
+using Microsoft.AspNetCore.Authentication;
 
 namespace AutoClick.Pages
 {
@@ -15,10 +16,12 @@ namespace AutoClick.Pages
     public class ConfiguracionCuentaModel : PageModel
     {
         private readonly ApplicationDbContext _context;
+        private readonly Services.IEmailService _emailService;
 
-        public ConfiguracionCuentaModel(ApplicationDbContext context)
+        public ConfiguracionCuentaModel(ApplicationDbContext context, Services.IEmailService emailService)
         {
             _context = context;
+            _emailService = emailService;
         }
 
         [BindProperty]
@@ -261,11 +264,9 @@ namespace AutoClick.Pages
                     }
                 });
                 
-                TempData["SuccessMessage"] = "Tu correo electrónico ha sido actualizado exitosamente";
+                TempData["SuccessMessage"] = "Tu correo electrónico ha sido actualizado exitosamente. Por favor inicia sesión nuevamente.";
+                TempData["ShouldLogout"] = true;
                 
-                // IMPORTANTE: Cerrar sesión del usuario ya que su email cambió
-                // En un sistema real con autenticación, aquí deberías hacer logout
-                // Por ahora solo redirigimos
                 return RedirectToPage();
             }
             catch (Exception ex)
@@ -348,7 +349,9 @@ namespace AutoClick.Pages
                 
                 await _context.SaveChangesAsync();
 
-                TempData["SuccessMessage"] = "Tu contraseña ha sido actualizada exitosamente";
+                TempData["SuccessMessage"] = "Tu contraseña ha sido actualizada exitosamente. Por favor inicia sesión nuevamente.";
+                TempData["ShouldLogout"] = true;
+                
                 return RedirectToPage();
             }
             catch (Exception ex)
@@ -360,29 +363,158 @@ namespace AutoClick.Pages
             }
         }
 
-        public async Task<IActionResult> OnPostForgotPasswordAsync()
+        public async Task<IActionResult> OnPostForgotPasswordAutoAsync()
         {
-            if (string.IsNullOrEmpty(ForgotPasswordEmail) || ModelState["ForgotPasswordEmail"]?.ValidationState == Microsoft.AspNetCore.Mvc.ModelBinding.ModelValidationState.Invalid)
-            {
-                ModelState.AddModelError("ForgotPasswordEmail", "Ingresa un correo electrónico válido");
-                OnGet();
-                return Page();
-            }
-
             try
             {
-                // Simular envío de email de recuperación
-                await Task.Delay(1000);
+                // Obtener el email del usuario actual
+                var currentUserEmail = GetCurrentUserEmail();
+                
+                if (string.IsNullOrEmpty(currentUserEmail))
+                {
+                    return new JsonResult(new { success = false, message = "No se pudo obtener el correo del usuario" });
+                }
 
-                TempData["SuccessMessage"] = "Se ha enviado un enlace de recuperación a tu correo electrónico";
-                return RedirectToPage();
+                // Verificar que el correo existe en la base de datos
+                var usuario = await _context.Usuarios.FindAsync(currentUserEmail);
+                
+                if (usuario == null)
+                {
+                    return new JsonResult(new { 
+                        success = false, 
+                        message = "Usuario no encontrado en el sistema"
+                    });
+                }
+
+                // Verificar si existe un token reciente (dentro de 15 minutos)
+                var recentToken = await _context.PasswordResetTokens
+                    .Where(t => t.Email == currentUserEmail && 
+                                !t.IsUsed && 
+                                t.LastEmailSentAt.HasValue &&
+                                t.LastEmailSentAt.Value.AddMinutes(15) > DateTime.UtcNow)
+                    .OrderByDescending(t => t.LastEmailSentAt)
+                    .FirstOrDefaultAsync();
+
+                if (recentToken != null)
+                {
+                    var timeRemaining = (int)(recentToken.LastEmailSentAt.Value.AddMinutes(15) - DateTime.UtcNow).TotalSeconds;
+                    return new JsonResult(new { 
+                        success = false, 
+                        message = "Debes esperar 15 minutos antes de solicitar otro correo",
+                        secondsRemaining = timeRemaining,
+                        email = MaskEmail(currentUserEmail),
+                        userEmail = currentUserEmail
+                    });
+                }
+
+                // Generar nuevo token
+                var token = Guid.NewGuid().ToString("N") + Guid.NewGuid().ToString("N"); // Token largo y unico
+                var resetToken = new PasswordResetToken
+                {
+                    Email = currentUserEmail,
+                    Token = token,
+                    CreatedAt = DateTime.UtcNow,
+                    ExpiresAt = DateTime.UtcNow.AddHours(1),
+                    IsUsed = false,
+                    LastEmailSentAt = DateTime.UtcNow
+                };
+
+                _context.PasswordResetTokens.Add(resetToken);
+                await _context.SaveChangesAsync();
+
+                // Enviar email
+                var emailSent = await _emailService.SendPasswordResetEmailAsync(currentUserEmail, token);
+
+                if (emailSent)
+                {
+                    return new JsonResult(new { 
+                        success = true, 
+                        message = "Correo enviado exitosamente",
+                        email = MaskEmail(currentUserEmail),
+                        userEmail = currentUserEmail,
+                        tokenId = resetToken.Id
+                    });
+                }
+                else
+                {
+                    return new JsonResult(new { 
+                        success = false, 
+                        message = "Error al enviar el correo. Intenta de nuevo mas tarde." 
+                    });
+                }
+            }
+            catch (Exception ex)
+            {
+                return new JsonResult(new { 
+                    success = false, 
+                    message = "Ha ocurrido un error al procesar tu solicitud." 
+                });
+            }
+        }
+
+        public async Task<IActionResult> OnPostResendPasswordResetAsync([FromBody] ResendPasswordResetRequest request)
+        {
+            try
+            {
+                if (string.IsNullOrEmpty(request?.Email))
+                {
+                    return new JsonResult(new { success = false, message = "Email no proporcionado" });
+                }
+
+                // Verificar si puede reenviar (15 minutos de cooldown)
+                var lastToken = await _context.PasswordResetTokens
+                    .Where(t => t.Email == request.Email && 
+                                !t.IsUsed && 
+                                t.LastEmailSentAt.HasValue)
+                    .OrderByDescending(t => t.LastEmailSentAt)
+                    .FirstOrDefaultAsync();
+
+                if (lastToken != null)
+                {
+                    var timeSinceLastEmail = DateTime.UtcNow - lastToken.LastEmailSentAt.Value;
+                    if (timeSinceLastEmail.TotalMinutes < 15)
+                    {
+                        var secondsRemaining = (int)(900 - timeSinceLastEmail.TotalSeconds);
+                        return new JsonResult(new { 
+                            success = false, 
+                            message = "Debes esperar antes de reenviar el correo",
+                            secondsRemaining = secondsRemaining
+                        });
+                    }
+
+                    // Actualizar el timestamp del último envío
+                    lastToken.LastEmailSentAt = DateTime.UtcNow;
+                    await _context.SaveChangesAsync();
+
+                    // Reenviar el email con el mismo token
+                    var emailSent = await _emailService.SendPasswordResetEmailAsync(request.Email, lastToken.Token);
+                    
+                    if (emailSent)
+                    {
+                        return new JsonResult(new { 
+                            success = true, 
+                            message = "Correo reenviado exitosamente" 
+                        });
+                    }
+                }
+
+                return new JsonResult(new { 
+                    success = false, 
+                    message = "No se pudo reenviar el correo" 
+                });
             }
             catch (Exception)
             {
-                ModelState.AddModelError("ForgotPasswordEmail", "Ha ocurrido un error al enviar el enlace de recuperación. Intenta de nuevo.");
-                OnGet();
-                return Page();
+                return new JsonResult(new { 
+                    success = false, 
+                    message = "Error al reenviar el correo" 
+                });
             }
+        }
+
+        public class ResendPasswordResetRequest
+        {
+            public string Email { get; set; } = string.Empty;
         }
 
         public async Task<IActionResult> OnPostDeleteAccountAsync()

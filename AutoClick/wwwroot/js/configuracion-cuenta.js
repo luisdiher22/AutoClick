@@ -86,9 +86,15 @@ function showChangeEmail() {
     showModal('changeEmailModal');
 }
 
-// Show forgot password modal
+// Show forgot password - Show confirmation modal first
 function showForgotPassword() {
-    showModal('forgotPasswordModal');
+    showModal('forgotPasswordConfirmModal');
+}
+
+// Send password reset from modal
+function sendPasswordResetFromModal() {
+    closeModal('forgotPasswordConfirmModal');
+    requestPasswordResetAuto();
 }
 
 // Show change password modal
@@ -499,4 +505,189 @@ function throttle(func, limit) {
             setTimeout(() => inThrottle = false, limit);
         }
     };
+}
+
+// Password Reset Functionality
+let currentUserEmail = '';
+let cooldownTimer = null;
+
+async function requestPasswordResetAuto() {
+    // Show loading indicator
+    Swal.fire({
+        title: 'Enviando correo...',
+        text: 'Por favor espera',
+        allowOutsideClick: false,
+        didOpen: () => {
+            Swal.showLoading();
+        }
+    });
+    
+    try {
+        const response = await fetch('/ConfiguracionCuenta?handler=ForgotPasswordAuto', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'RequestVerificationToken': document.querySelector('input[name="__RequestVerificationToken"]')?.value || ''
+            }
+        });
+        
+        const result = await response.json();
+        
+        Swal.close();
+        
+        if (result.success) {
+            // Save email for resend functionality
+            currentUserEmail = result.userEmail;
+            
+            // Show the success modal with masked email
+            showPasswordRecoverySentModal(result.email);
+        } else {
+            if (result.secondsRemaining) {
+                // Show modal with remaining time
+                currentUserEmail = result.userEmail;
+                showPasswordRecoverySentModal(result.email, result.secondsRemaining);
+            } else {
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Error',
+                    text: result.message || 'Error al enviar el correo',
+                    confirmButtonColor: '#4A90E2'
+                });
+            }
+        }
+    } catch (error) {
+        console.error('Error:', error);
+        Swal.close();
+        Swal.fire({
+            icon: 'error',
+            title: 'Error',
+            text: 'Ha ocurrido un error. Por favor intenta de nuevo.',
+            confirmButtonColor: '#4A90E2'
+        });
+    }
+}
+
+function showPasswordRecoverySentModal(maskedEmail, secondsRemaining = 900) {
+    // Set the masked email
+    document.getElementById('maskedEmailDisplay').textContent = maskedEmail;
+    
+    // Show the modal
+    showModal('passwordRecoverySentModal');
+    
+    // Start the cooldown timer
+    startCooldownTimer(secondsRemaining);
+}
+
+function startCooldownTimer(seconds) {
+    const resendBtn = document.getElementById('resendEmailBtn');
+    const timerSpan = document.getElementById('cooldownTimer');
+    
+    // Clear any existing timer
+    if (cooldownTimer) {
+        clearInterval(cooldownTimer);
+    }
+    
+    let remainingSeconds = seconds;
+    resendBtn.disabled = true;
+    
+    const updateTimer = () => {
+        const minutes = Math.floor(remainingSeconds / 60);
+        const secs = remainingSeconds % 60;
+        timerSpan.textContent = `${minutes}:${secs.toString().padStart(2, '0')}`;
+        
+        if (remainingSeconds <= 0) {
+            clearInterval(cooldownTimer);
+            resendBtn.disabled = false;
+            resendBtn.innerHTML = 'Reenviar correo';
+        }
+        
+        remainingSeconds--;
+    };
+    
+    // Update immediately
+    updateTimer();
+    
+    // Update every second
+    cooldownTimer = setInterval(updateTimer, 1000);
+}
+
+async function resendPasswordResetEmail() {
+    const resendBtn = document.getElementById('resendEmailBtn');
+    const originalText = resendBtn.innerHTML;
+    
+    resendBtn.disabled = true;
+    resendBtn.textContent = 'Reenviando...';
+    
+    try {
+        const response = await fetch('/ConfiguracionCuenta?handler=ResendPasswordReset', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'RequestVerificationToken': document.querySelector('input[name="__RequestVerificationToken"]')?.value || ''
+            },
+            body: JSON.stringify({ email: currentUserEmail })
+        });
+        
+        const result = await response.json();
+        
+        if (result.success) {
+            // Show success message
+            Swal.fire({
+                icon: 'success',
+                title: 'Correo reenviado',
+                text: 'Revisa tu bandeja de entrada',
+                timer: 2000,
+                showConfirmButton: false
+            });
+            
+            // Restart the cooldown
+            startCooldownTimer(900);
+        } else {
+            if (result.secondsRemaining) {
+                // User tried to resend too soon
+                Swal.fire({
+                    icon: 'warning',
+                    title: 'Espera un momento',
+                    text: result.message || 'Debes esperar antes de reenviar el correo',
+                    confirmButtonColor: '#4A90E2'
+                });
+                
+                // Update timer with remaining time
+                startCooldownTimer(result.secondsRemaining);
+            } else {
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Error',
+                    text: result.message || 'No se pudo reenviar el correo',
+                    confirmButtonColor: '#4A90E2'
+                });
+            }
+        }
+    } catch (error) {
+        console.error('Error:', error);
+        Swal.fire({
+            icon: 'error',
+            title: 'Error',
+            text: 'Ha ocurrido un error al reenviar el correo',
+            confirmButtonColor: '#4A90E2'
+        });
+    } finally {
+        if (!resendBtn.disabled) {
+            resendBtn.innerHTML = originalText;
+        }
+    }
+}
+
+function closePasswordRecoveryModal() {
+    // Clear the timer
+    if (cooldownTimer) {
+        clearInterval(cooldownTimer);
+        cooldownTimer = null;
+    }
+    
+    // Reset email
+    currentUserEmail = '';
+    
+    // Close modal
+    closeModal('passwordRecoverySentModal');
 }
