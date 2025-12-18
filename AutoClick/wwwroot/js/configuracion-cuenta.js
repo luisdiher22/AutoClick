@@ -511,7 +511,40 @@ function throttle(func, limit) {
 let currentUserEmail = '';
 let cooldownTimer = null;
 
+// Función para verificar si hay un cooldown activo al cargar la página
+function checkPasswordResetCooldown() {
+    const cooldownData = sessionStorage.getItem('passwordResetCooldown');
+    if (cooldownData) {
+        const data = JSON.parse(cooldownData);
+        const now = Date.now();
+        const elapsed = Math.floor((now - data.timestamp) / 1000);
+        const remaining = data.duration - elapsed;
+        
+        if (remaining > 0) {
+            // Hay un cooldown activo
+            currentUserEmail = data.email;
+            return {
+                active: true,
+                email: data.maskedEmail,
+                remaining: remaining
+            };
+        } else {
+            // Cooldown expirado, limpiar
+            sessionStorage.removeItem('passwordResetCooldown');
+        }
+    }
+    return { active: false };
+}
+
 async function requestPasswordResetAuto() {
+    // Verificar si hay un cooldown activo
+    const cooldownStatus = checkPasswordResetCooldown();
+    if (cooldownStatus.active) {
+        // Mostrar modal con el tiempo restante
+        showPasswordRecoverySentModal(cooldownStatus.email, cooldownStatus.remaining);
+        return;
+    }
+    
     // Show loading indicator
     Swal.fire({
         title: 'Enviando correo...',
@@ -539,12 +572,29 @@ async function requestPasswordResetAuto() {
             // Save email for resend functionality
             currentUserEmail = result.userEmail;
             
+            // Guardar cooldown en sessionStorage
+            sessionStorage.setItem('passwordResetCooldown', JSON.stringify({
+                email: result.userEmail,
+                maskedEmail: result.email,
+                timestamp: Date.now(),
+                duration: 900 // 15 minutos
+            }));
+            
             // Show the success modal with masked email
             showPasswordRecoverySentModal(result.email);
         } else {
             if (result.secondsRemaining) {
                 // Show modal with remaining time
                 currentUserEmail = result.userEmail;
+                
+                // Guardar cooldown en sessionStorage
+                sessionStorage.setItem('passwordResetCooldown', JSON.stringify({
+                    email: result.userEmail,
+                    maskedEmail: result.email,
+                    timestamp: Date.now() - ((900 - result.secondsRemaining) * 1000),
+                    duration: 900
+                }));
+                
                 showPasswordRecoverySentModal(result.email, result.secondsRemaining);
             } else {
                 Swal.fire({
@@ -599,6 +649,8 @@ function startCooldownTimer(seconds) {
             clearInterval(cooldownTimer);
             resendBtn.disabled = false;
             resendBtn.innerHTML = 'Reenviar correo';
+            // Limpiar el cooldown de sessionStorage cuando expire
+            sessionStorage.removeItem('passwordResetCooldown');
         }
         
         remainingSeconds--;
@@ -639,6 +691,14 @@ async function resendPasswordResetEmail() {
                 timer: 2000,
                 showConfirmButton: false
             });
+            
+            // Actualizar cooldown en sessionStorage
+            sessionStorage.setItem('passwordResetCooldown', JSON.stringify({
+                email: currentUserEmail,
+                maskedEmail: result.email || document.getElementById('maskedEmailDisplay').textContent,
+                timestamp: Date.now(),
+                duration: 900
+            }));
             
             // Restart the cooldown
             startCooldownTimer(900);
@@ -685,8 +745,9 @@ function closePasswordRecoveryModal() {
         cooldownTimer = null;
     }
     
-    // Reset email
-    currentUserEmail = '';
+    // NO limpiar el sessionStorage ni el email, para que persista el cooldown
+    // currentUserEmail = ''; // COMENTADO - mantener el email
+    // sessionStorage.removeItem('passwordResetCooldown'); // NO limpiar
     
     // Close modal
     closeModal('passwordRecoverySentModal');

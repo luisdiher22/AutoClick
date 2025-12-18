@@ -256,3 +256,57 @@
         gap: 20px !important;
     }
 }
+
+/* ====================================
+   DESKTOP STYLES (1024px+)
+   Enforce desktop layout - MUST be last
+   ==================================== */
+@media (min-width: 1024px) {
+    /* Container layout */
+    .configuracion-cuenta-container {
+        display: flex !important;
+        flex-direction: row !important;
+    }
+    
+    /* Sidebar desktop styles */
+    .account-sidebar {
+        display: block !important;
+        flex: none !important;
+        width: 376px !important;
+        min-height: 100vh !important;
+        padding: 12px 16px !important;
+        background: #030D2B !important;
+        border-right: 0.5px solid rgba(255, 255, 255, 0.25) !important;
+        position: relative !important;
+        overflow: hidden !important;
+    }
+    
+    /* Sidebar nav must be vertical */
+    .account-sidebar .sidebar-nav {
+        display: flex !important;
+        flex-direction: column !important;
+    }
+    
+    /* Nav items */
+    .account-sidebar .nav-item {
+        height: 56px !important;
+        display: flex !important;
+        flex-direction: row !important;
+        align-items: center !important;
+        padding: 14px 16px !important;
+    }
+    
+    /* Sidebar indicator */
+    .account-sidebar .sidebar-indicator {
+        display: block !important;
+    }
+    
+    /* Content desktop styles */
+    .account-content {
+        flex: 1 !important;
+        width: auto !important;
+        max-width: 1000px !important;
+        padding: 24px 32px !important;
+        display: block !important;
+    }
+}

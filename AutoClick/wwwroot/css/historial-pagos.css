@@ -60,6 +60,14 @@
     background: rgba(255, 255, 255, 0.1);
 }
 
+.nav-icon {
+    width: 20px;
+    height: 20px;
+    margin-right: 8px;
+    background: white;
+    position: relative;
+}
+
 /* Sidebar Icons */
 .personal-icon {
     width: 7.73px;
@@ -112,7 +120,7 @@
     border-radius: 100px;
     position: absolute;
     left: 14px;
-    top: 78px;
+    top: 23px;
     transition: top 0.3s ease;
 }
 

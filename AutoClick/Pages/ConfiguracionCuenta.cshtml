@@ -103,15 +103,15 @@
     <div class="account-sidebar">
         <div class="sidebar-nav">
             <a href="/MiPerfil" class="nav-item">
-                <div class="personal-icon"></div>
-                <span>Información de contacto</span>
+                <div class="nav-icon personal-icon"></div>
+                <span>Información personal</span>
             </a>
             <a href="/HistorialPagos" class="nav-item">
-                <div class="payments-icon"></div>
+                <div class="nav-icon payments-icon"></div>
                 <span>Historial de pagos</span>
             </a>
             <a href="/ConfiguracionCuenta" class="nav-item active">
-                <div class="settings-icon"></div>
+                <div class="nav-icon settings-icon"></div>
                 <span>Configuración de cuenta</span>
             </a>
         </div>
@@ -389,37 +389,14 @@
         @if (TempData["SuccessMessage"] != null)
         {
             var successMsg = TempData["SuccessMessage"].ToString();
-            var shouldLogout = TempData["ShouldLogout"] != null && (bool)TempData["ShouldLogout"];
             <text>
             Swal.fire({
                 icon: 'success',
                 title: '¡Éxito!',
                 html: '@Html.Raw(successMsg)',
                 confirmButtonColor: '#4A90E2',
-                showConfirmButton: true,
-                allowOutsideClick: false,
-                allowEscapeKey: false
-            }).then((result) => {
-                @if (shouldLogout)
-                {
-                    <text>
-                    // Redirigir a la página de autenticación
-                    window.location.href = '/Auth';
-                    </text>
-                }
+                confirmButtonText: 'Entendido'
             });
-            
-            // Si el usuario cierra el sweet alert sin darle click, también desloguear
-            @if (shouldLogout)
-            {
-                <text>
-                window.addEventListener('beforeunload', function() {
-                    if (window.location.pathname === '/ConfiguracionCuenta') {
-                        window.location.href = '/Auth';
-                    }
-                });
-                </text>
-            }
             </text>
         }
         

@@ -14,6 +14,10 @@
 }
 
 /* General Styles */
+* {
+    box-sizing: border-box;
+}
+
 body {
     margin: 0;
     padding: 0;
@@ -30,21 +34,27 @@ body {
     height: auto;
     min-height: 600px;
     position: relative;
-    overflow: hidden;
+    margin: 0;
+    padding: 0;
 }
 
 .rainx-hero-background {
     width: 100%;
     height: 100%;
     position: relative;
+    margin: 0;
+    padding: 0;
 }
 
 .rainx-hero-image {
     width: 100%;
+    max-width: 100%;
     height: auto;
     display: block;
     object-fit: cover;
     object-position: center;
+    margin: 0;
+    padding: 0;
 }
 
 /* Mostrar solo imagen desktop por defecto */
@@ -55,6 +65,24 @@ body {
 
 .rainx-hero-desktop {
     display: block;
+}
+
+/* Rainx2 images - hidden by default on desktop */
+.rainx-hero-tablet-2,
+.rainx-hero-mobile-2 {
+    display: none;
+    width: 100vw !important;
+    max-width: 100vw !important;
+    height: auto;
+    object-fit: fill !important;
+    object-position: center;
+    margin: 0 !important;
+    padding: 0 !important;
+    position: relative;
+    left: 50%;
+    right: 50%;
+    margin-left: -50vw !important;
+    margin-right: -50vw !important;
 }
 
 /* Rain-X Cycle Section */
@@ -260,6 +288,27 @@ body {
         display: none;
     }
     
+    /* Mostrar Rainx2 en tablet */
+    .rainx-hero-tablet-2 {
+        display: block;
+        width: 100vw !important;
+        max-width: 100vw !important;
+        height: auto;
+        object-fit: fill !important;
+        object-position: center;
+        margin: 0 !important;
+        padding: 0 !important;
+        position: relative;
+        left: 50%;
+        right: 50%;
+        margin-left: -50vw !important;
+        margin-right: -50vw !important;
+    }
+    
+    .rainx-hero-mobile-2 {
+        display: none;
+    }
+    
     .rainx-stores-grid {
         grid-template-columns: repeat(2, 1fr);
         gap: 24px;
@@ -304,7 +353,28 @@ body {
     }
     
     .rainx-cycle-section {
-        padding: 40px 0;
+        display: none;
+    }
+    
+    /* Mostrar Rainx2 en móvil */
+    .rainx-hero-tablet-2 {
+        display: none;
+    }
+    
+    .rainx-hero-mobile-2 {
+        display: block;
+        width: 100vw !important;
+        max-width: 100vw !important;
+        height: auto;
+        object-fit: fill !important;
+        object-position: center;
+        margin: 0 !important;
+        padding: 0 !important;
+        position: relative;
+        left: 50%;
+        right: 50%;
+        margin-left: -50vw !important;
+        margin-right: -50vw !important;
     }
     
     .rainx-stores-grid {

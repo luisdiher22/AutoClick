@@ -264,8 +264,10 @@ namespace AutoClick.Pages
                     }
                 });
                 
-                TempData["SuccessMessage"] = "Tu correo electrónico ha sido actualizado exitosamente. Por favor inicia sesión nuevamente.";
-                TempData["ShouldLogout"] = true;
+                // Actualizar claims en la sesión actual con el nuevo email
+                await UpdateSessionEmailAsync(NewEmail);
+                
+                TempData["SuccessMessage"] = "Tu correo electrónico ha sido actualizado exitosamente.";
                 
                 return RedirectToPage();
             }
@@ -349,8 +351,7 @@ namespace AutoClick.Pages
                 
                 await _context.SaveChangesAsync();
 
-                TempData["SuccessMessage"] = "Tu contraseña ha sido actualizada exitosamente. Por favor inicia sesión nuevamente.";
-                TempData["ShouldLogout"] = true;
+                TempData["SuccessMessage"] = "Tu contraseña ha sido actualizada exitosamente.";
                 
                 return RedirectToPage();
             }
@@ -720,6 +721,56 @@ namespace AutoClick.Pages
                              localPart.Substring(Math.Max(2, localPart.Length - 2));
 
             return maskedLocal + "@" + domainPart;
+        }
+
+        private async Task UpdateSessionEmailAsync(string newEmail)
+        {
+            try
+            {
+                // Obtener el usuario actualizado
+                var usuario = await _context.Usuarios.FindAsync(newEmail);
+                if (usuario == null) return;
+
+                // Crear los nuevos claims con el email actualizado
+                var claims = new List<Claim>
+                {
+                    new Claim(ClaimTypes.NameIdentifier, usuario.Email),
+                    new Claim(ClaimTypes.Email, usuario.Email),
+                    new Claim(ClaimTypes.Name, usuario.Nombre ?? usuario.Email)
+                };
+
+                if (usuario.EsAgencia)
+                {
+                    claims.Add(new Claim("IsAgency", "true"));
+                    claims.Add(new Claim("AgencyName", usuario.NombreAgencia!));
+                }
+
+                if (usuario.EsAdministrador)
+                {
+                    claims.Add(new Claim("IsAdmin", "true"));
+                    claims.Add(new Claim(ClaimTypes.Role, "Administrator"));
+                }
+
+                // Crear nueva identidad con los claims actualizados
+                var claimsIdentity = new ClaimsIdentity(claims, Microsoft.AspNetCore.Authentication.Cookies.CookieAuthenticationDefaults.AuthenticationScheme);
+                
+                var authProperties = new Microsoft.AspNetCore.Authentication.AuthenticationProperties
+                {
+                    IsPersistent = true,
+                    ExpiresUtc = DateTimeOffset.UtcNow.AddDays(30)
+                };
+
+                // Actualizar la sesión con los nuevos claims
+                await HttpContext.SignInAsync(
+                    Microsoft.AspNetCore.Authentication.Cookies.CookieAuthenticationDefaults.AuthenticationScheme,
+                    new ClaimsPrincipal(claimsIdentity),
+                    authProperties);
+            }
+            catch (Exception ex)
+            {
+                // Log error but don't throw - la actualización de la base de datos ya se completó
+                Console.WriteLine($"Error updating session: {ex.Message}");
+            }
         }
     }
 }
