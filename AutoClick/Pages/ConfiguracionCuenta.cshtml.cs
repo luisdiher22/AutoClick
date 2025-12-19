@@ -736,7 +736,7 @@ namespace AutoClick.Pages
                 {
                     new Claim(ClaimTypes.NameIdentifier, usuario.Email),
                     new Claim(ClaimTypes.Email, usuario.Email),
-                    new Claim(ClaimTypes.Name, usuario.Nombre ?? usuario.Email)
+                    new Claim(ClaimTypes.Name, usuario.Email) // Usar Email como Name para el navbar
                 };
 
                 if (usuario.EsAgencia)

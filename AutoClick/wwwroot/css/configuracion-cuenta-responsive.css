@@ -258,6 +258,24 @@
 }
 
 /* ====================================
+   SMALL DESKTOP STYLES (1024px - 1280px)
+   Compact sidebar for smaller desktop screens
+   ==================================== */
+@media (min-width: 1024px) and (max-width: 1280px) {
+    .account-sidebar {
+        width: 280px !important;
+        padding: 12px 12px !important;
+        overflow-y: auto !important;
+        overflow-x: hidden !important;
+    }
+    
+    .account-sidebar .nav-item {
+        padding: 12px 14px !important;
+        font-size: 14px !important;
+    }
+}
+
+/* ====================================
    DESKTOP STYLES (1024px+)
    Enforce desktop layout - MUST be last
    ==================================== */

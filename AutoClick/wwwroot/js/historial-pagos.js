@@ -2,28 +2,12 @@
 
 document.addEventListener('DOMContentLoaded', function() {
     // Initialize components
-    initSidebarNavigation();
     initPaymentsTable();
     initNewsletterForm();
     initStatusMessages();
     
     console.log('Historial de Pagos page initialized successfully');
 });
-
-// Sidebar Navigation
-function initSidebarNavigation() {
-    const indicator = document.querySelector('.sidebar-indicator');
-    const activeItem = document.querySelector('.nav-item.active');
-    
-    // Position indicator on the active item
-    if (indicator && activeItem) {
-        const navItems = document.querySelectorAll('.nav-item');
-        const activeIndex = Array.from(navItems).indexOf(activeItem);
-        indicator.style.top = `${23 + (activeIndex * 56)}px`;
-    }
-    
-    // No need for click handlers since we're using real links now
-}
 
 // Payments Table Functionality
 function initPaymentsTable() {

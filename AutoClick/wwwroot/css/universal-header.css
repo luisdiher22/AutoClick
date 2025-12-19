@@ -712,6 +712,225 @@ a.dropdown-toggle::before,
 }
 
 /* Responsive Design */
+
+/* Very Small Desktop Screens (1024px - 1150px) */
+@media (min-width: 1024px) and (max-width: 1150px) {
+    /* Reduce header container padding */
+    .header-container {
+        padding: 0 8px;
+    }
+    
+    /* Scale down logo more aggressively */
+    .logo-section .logo-link {
+        padding: 0 8px !important;
+    }
+    
+    .logo-section .logo-container {
+        width: 140px !important;
+        height: 22px !important;
+    }
+    
+    .logo-section .logo-container .logo-image {
+        height: 22px !important;
+    }
+    
+    /* Reduce navigation gap more */
+    .navigation-section {
+        gap: 28px;
+        padding: 0 8px;
+    }
+    
+    /* Smaller font sizes */
+    .nav-item {
+        font-size: 13px;
+        padding: 6px 10px;
+    }
+    
+    .nav-item svg {
+        width: 9px;
+        height: 5px;
+    }
+    
+    /* Scale down explorar button more */
+    .explorar-btn {
+        width: 110px;
+        height: 32px;
+        font-size: 13px;
+    }
+    
+    /* Smaller dropdown headers */
+    .dropdown-header {
+        font-size: 14px;
+    }
+    
+    .dropdown-column-title {
+        font-size: 13px;
+    }
+    
+    /* Smaller dropdown links */
+    .dropdown-link {
+        font-size: 13px;
+        padding: 6px 10px;
+    }
+    
+    /* Smaller dropdown columns gap */
+    .dropdown-columns {
+        gap: 40px;
+    }
+    
+    /* Smaller actions section */
+    .actions-section {
+        gap: 8px;
+    }
+    
+    /* Smaller favorites button */
+    .favorites-btn {
+        padding: 6px;
+    }
+    
+    .favorites-icon {
+        width: 18px;
+        height: 18px;
+    }
+    
+    /* Smaller user dropdown */
+    .user-name {
+        font-size: 13px;
+        padding: 6px 10px;
+        gap: 4px;
+    }
+    
+    .avatar {
+        width: 26px;
+        height: 26px;
+        font-size: 11px;
+    }
+    
+    .user-name svg {
+        width: 9px;
+        height: 5px;
+    }
+    
+    /* Smaller user menu items */
+    .user-menu-item {
+        font-size: 13px;
+        padding: 6px 10px 6px 6px;
+    }
+    
+    .user-menu-item .admin-icon {
+        font-size: 13px;
+    }
+}
+
+/* Small Desktop Screens (1024px - 1350px) */
+@media (min-width: 1024px) and (max-width: 1350px) {
+    /* Reduce header container padding */
+    .header-container {
+        padding: 0 12px;
+    }
+    
+    /* Scale down logo */
+    .logo-section .logo-link {
+        padding: 0 12px !important;
+    }
+    
+    .logo-section .logo-container {
+        width: 160px !important;
+        height: 24px !important;
+    }
+    
+    .logo-section .logo-container .logo-image {
+        height: 24px !important;
+    }
+    
+    /* Reduce navigation gap */
+    .navigation-section {
+        gap: 40px;
+        padding: 0 12px;
+    }
+    
+    /* Reduce font sizes */
+    .nav-item {
+        font-size: 14px;
+        padding: 8px 12px;
+    }
+    
+    .nav-item svg {
+        width: 10px;
+        height: 5px;
+    }
+    
+    /* Scale down explorar button */
+    .explorar-btn {
+        width: 120px;
+        height: 35px;
+        font-size: 14px;
+    }
+    
+    /* Reduce dropdown header sizes */
+    .dropdown-header {
+        font-size: 15px;
+    }
+    
+    .dropdown-column-title {
+        font-size: 14px;
+    }
+    
+    /* Reduce dropdown link sizes */
+    .dropdown-link {
+        font-size: 14px;
+        padding: 8px 12px;
+    }
+    
+    /* Reduce dropdown columns gap */
+    .dropdown-columns {
+        gap: 60px;
+    }
+    
+    /* Scale down actions section */
+    .actions-section {
+        gap: 12px;
+    }
+    
+    /* Scale down favorites button */
+    .favorites-btn {
+        padding: 8px;
+    }
+    
+    .favorites-icon {
+        width: 20px;
+        height: 20px;
+    }
+    
+    /* Scale down user dropdown */
+    .user-name {
+        font-size: 14px;
+        padding: 8px 12px;
+        gap: 6px;
+    }
+    
+    .avatar {
+        width: 28px;
+        height: 28px;
+        font-size: 12px;
+    }
+    
+    .user-name svg {
+        width: 10px;
+        height: 5px;
+    }
+    
+    /* Reduce user menu item sizes */
+    .user-menu-item {
+        font-size: 14px;
+        padding: 8px 12px 8px 8px;
+    }
+    
+    .user-menu-item .admin-icon {
+        font-size: 14px;
+    }
+}
+
 @media (max-width: 1024px) {
     .navigation-section {
         gap: 32px;

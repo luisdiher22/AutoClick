@@ -112,7 +112,8 @@
             <!-- User Section -->
             @{
                 bool isUserLoggedIn = User.Identity?.IsAuthenticated == true;
-                string userName = User.Identity?.Name ?? User.FindFirst(System.Security.Claims.ClaimTypes.Name)?.Value ?? User.FindFirst("FullName")?.Value ?? "Usuario";
+                // Usar Email en lugar de Name para mostrar en el navbar
+                string userName = User.FindFirst(System.Security.Claims.ClaimTypes.Email)?.Value ?? User.Identity?.Name ?? "Usuario";
                 string currentPage = ViewContext.RouteData.Values["page"]?.ToString() ?? "";
                 bool isAuthPage = currentPage.Contains("/Auth");
             }
