@@ -94,6 +94,7 @@ namespace AutoClick.Pages
 
         // Data Properties
         public List<AnuncioViewModel> Anuncios { get; set; } = new List<AnuncioViewModel>();
+        public List<string> AppliedFilters { get; set; } = new List<string>();
 
         public async Task<IActionResult> OnGetAsync()
         {
@@ -112,6 +113,7 @@ namespace AutoClick.Pages
                 return RedirectToPage("/Auth");
             }
             
+            BuildAppliedFiltersList();
             await LoadAnunciosAsync(userEmail);
             return Page();
         }
@@ -379,6 +381,77 @@ namespace AutoClick.Pages
             }
             
             return Page();
+        }
+
+        private void BuildAppliedFiltersList()
+        {
+            AppliedFilters.Clear();
+            
+            if (!string.IsNullOrEmpty(Provincia))
+                AppliedFilters.Add(Provincia);
+                
+            if (!string.IsNullOrEmpty(Canton))
+                AppliedFilters.Add(Canton);
+                
+            if (!string.IsNullOrEmpty(Marca))
+                AppliedFilters.Add(Marca);
+                
+            if (!string.IsNullOrEmpty(Modelo))
+                AppliedFilters.Add(Modelo);
+                
+            if (!string.IsNullOrEmpty(Carroceria))
+                AppliedFilters.Add(Carroceria);
+                
+            if (!string.IsNullOrEmpty(Combustible))
+                AppliedFilters.Add(Combustible);
+                
+            if (!string.IsNullOrEmpty(Traccion))
+                AppliedFilters.Add(Traccion);
+                
+            if (!string.IsNullOrEmpty(TipoVendedor))
+                AppliedFilters.Add(TipoVendedor);
+                
+            if (!string.IsNullOrEmpty(Condicion))
+                AppliedFilters.Add(Condicion);
+                
+            if (!string.IsNullOrEmpty(Transmision))
+                AppliedFilters.Add(Transmision);
+                
+            if (!string.IsNullOrEmpty(Pasajeros))
+                AppliedFilters.Add(Pasajeros);
+                
+            if (!string.IsNullOrEmpty(Extras))
+                AppliedFilters.Add(Extras);
+                
+            if (PrecioMin.HasValue || PrecioMax.HasValue)
+            {
+                var priceRange = "";
+                if (PrecioMin.HasValue) priceRange += $"₡{PrecioMin:N0}";
+                if (PrecioMin.HasValue && PrecioMax.HasValue) priceRange += " - ";
+                if (PrecioMax.HasValue) priceRange += $"₡{PrecioMax:N0}";
+                if (!string.IsNullOrEmpty(priceRange))
+                    AppliedFilters.Add(priceRange);
+            }
+            
+            if (KilometrajeMin.HasValue || KilometrajeMax.HasValue)
+            {
+                var kmRange = "";
+                if (KilometrajeMin.HasValue) kmRange += $"{KilometrajeMin:N0} km";
+                if (KilometrajeMin.HasValue && KilometrajeMax.HasValue) kmRange += " - ";
+                if (KilometrajeMax.HasValue) kmRange += $"{KilometrajeMax:N0} km";
+                if (!string.IsNullOrEmpty(kmRange))
+                    AppliedFilters.Add(kmRange);
+            }
+            
+            if (AñoMin.HasValue || AñoMax.HasValue)
+            {
+                var yearRange = "";
+                if (AñoMin.HasValue) yearRange += $"{AñoMin}";
+                if (AñoMin.HasValue && AñoMax.HasValue) yearRange += " - ";
+                if (AñoMax.HasValue) yearRange += $"{AñoMax}";
+                if (!string.IsNullOrEmpty(yearRange))
+                    AppliedFilters.Add(yearRange);
+            }
         }
     }
 

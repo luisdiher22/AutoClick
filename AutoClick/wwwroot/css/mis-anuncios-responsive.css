@@ -1,0 +1,593 @@
+/* ========================================
+   MIS ANUNCIOS RESPONSIVE STYLES
+   Mobile & Tablet specific styles
+   ======================================== */
+
+/* ====================================
+   MOBILE STYLES (0px - 767.98px)
+   ==================================== */
+@media (max-width: 767.98px) {
+    /* Hide desktop sidebar */
+    .busqueda-sidebar {
+        display: none !important;
+    }
+
+    /* Main content full width */
+    .busqueda-content {
+        display: block !important;
+    }
+
+    .busqueda-main {
+        width: 100% !important;
+        padding: 12px 0 !important;
+    }
+
+    /* Breadcrumb smaller */
+    .busqueda-breadcrumb {
+        padding: 12px 0 !important;
+        font-size: 13px !important;
+        margin-bottom: 0 !important;
+    }
+
+    /* Header with filter button and sort */
+    .busqueda-sort-header {
+        display: flex !important;
+        justify-content: space-between !important;
+        align-items: center !important;
+        gap: 12px !important;
+        margin-bottom: 16px !important;
+        width: 100% !important;
+    }
+
+    /* Filter button (mobile only) */
+    .busqueda-filter-btn-mobile {
+        flex: 0 0 auto !important;
+        flex-shrink: 0 !important;
+        display: flex !important;
+        align-items: center;
+        gap: 8px;
+        padding: 12px 16px;
+        background: white !important;
+        border: none !important;
+        border-radius: 4px;
+        color: #06174d !important;
+        font-size: 14px;
+        font-family: 'Montserrat', sans-serif;
+        font-weight: 700 !important;
+        cursor: pointer;
+        white-space: nowrap;
+        transition: all 0.3s ease;
+    }
+
+    .busqueda-filter-btn-mobile:hover {
+        background: #f5f5f5 !important;
+    }
+
+    .busqueda-filter-btn-mobile svg {
+        width: 18px;
+        height: 18px;
+    }
+
+    /* Sort dropdown adjust */
+    .busqueda-sort-wrapper {
+        flex: 0 0 auto !important;
+        flex-shrink: 0 !important;
+        margin-left: auto !important;
+        position: relative;
+        width: auto !important;
+        max-width: none !important;
+    }
+
+    .busqueda-sort-wrapper::after {
+        display: none !important;
+    }
+
+    .busqueda-sort-select {
+        width: auto !important;
+        min-width: 0 !important;
+        color: white !important;
+        font-size: 14px !important;
+        font-family: 'Montserrat', sans-serif !important;
+        font-weight: 500 !important;
+        background: transparent !important;
+        border: none !important;
+        padding: 10px 28px 10px 12px !important;
+        appearance: none !important;
+        -webkit-appearance: none !important;
+        -moz-appearance: none !important;
+        cursor: pointer !important;
+        background-image: url("data:image/svg+xml,%3Csvg width='12' height='8' viewBox='0 0 12 8' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M1 1L6 6L11 1' stroke='white' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E") !important;
+        background-repeat: no-repeat !important;
+        background-position: right 8px center !important;
+        background-size: 12px 8px !important;
+    }
+
+    .busqueda-sort-select option {
+        background: rgba(2, 8, 28, 0.95) !important;
+        color: white !important;
+        padding: 12px 8px !important;
+        font-family: 'Montserrat', sans-serif !important;
+        font-size: 14px !important;
+    }
+
+    /* Heredar estilos de escritorio para filtros en modal mobile */
+    .busqueda-filter-modal .busqueda-filter-select {
+        background: rgba(255, 255, 255, 0.08) !important;
+        border: 1px solid rgba(255, 255, 255, 0.2) !important;
+        border-radius: 6px !important;
+        padding: 12px 40px 12px 16px !important;
+        color: white !important;
+        font-size: 14px !important;
+        font-family: 'Montserrat', sans-serif !important;
+        appearance: none;
+        -webkit-appearance: none;
+        -moz-appearance: none;
+    }
+
+    .busqueda-filter-modal .busqueda-filter-select option {
+        background: rgba(2, 8, 28, 0.95) !important;
+        color: white !important;
+        padding: 12px 8px !important;
+        font-family: 'Montserrat', sans-serif !important;
+        font-size: 14px !important;
+    }
+
+    .busqueda-filter-modal .busqueda-select-wrapper::after {
+        content: '' !important;
+        position: absolute;
+        right: 12px;
+        top: 50%;
+        transform: translateY(-50%);
+        width: 12px;
+        height: 8px;
+        background-image: url("data:image/svg+xml,%3Csvg width='12' height='8' viewBox='0 0 12 8' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M1 1L6 6L11 1' stroke='white' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E") !important;
+        background-repeat: no-repeat;
+        background-position: center;
+        background-size: contain;
+        border: none !important;
+        pointer-events: none;
+    }
+
+    .busqueda-filter-modal .busqueda-price-field {
+        background: rgba(255, 255, 255, 0.08) !important;
+        border: 1px solid rgba(255, 255, 255, 0.2) !important;
+        border-radius: 6px !important;
+        padding: 10px 12px !important;
+        color: white !important;
+        font-size: 14px !important;
+        font-family: 'Montserrat', sans-serif !important;
+    }
+
+    /* Cars grid - 1 column */
+    .busqueda-cars-grid {
+        grid-template-columns: 1fr !important;
+        gap: 28px !important;
+    }
+
+    /* Mobile filter modal */
+    .busqueda-filter-modal {
+        display: none;
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0, 0, 0, 0.8);
+        z-index: 9999;
+        overflow-y: auto;
+        animation: fadeIn 0.3s ease;
+    }
+
+    .busqueda-filter-modal.active {
+        display: block;
+    }
+
+    .busqueda-filter-modal-content {
+        background: #030D2B;
+        min-height: 100%;
+        padding: 16px;
+        position: relative;
+    }
+
+    .busqueda-filter-modal-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 20px;
+        padding-bottom: 12px;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.15);
+        background: #030D2B;
+    }
+
+    .busqueda-filter-modal-title {
+        color: white;
+        font-size: 20px;
+        font-family: 'Montserrat', sans-serif;
+        font-weight: 700;
+    }
+
+    .busqueda-filter-modal-close {
+        background: none;
+        border: none;
+        color: white;
+        font-size: 28px;
+        cursor: pointer;
+        padding: 0;
+        width: 32px;
+        height: 32px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .busqueda-filter-modal-body {
+        margin-bottom: 80px;
+    }
+
+    .busqueda-filter-modal-actions {
+        position: fixed;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        background: #030D2B;
+        padding: 16px;
+        border-top: 1px solid rgba(255, 255, 255, 0.15);
+        display: flex;
+        gap: 12px;
+    }
+
+    .busqueda-filter-apply-btn,
+    .busqueda-filter-clear-btn {
+        flex: 1;
+        padding: 14px;
+        border-radius: 4px;
+        font-size: 15px;
+        font-family: 'Montserrat', sans-serif;
+        font-weight: 600;
+        cursor: pointer;
+        border: none;
+        transition: all 0.3s ease;
+    }
+
+    .busqueda-filter-apply-btn {
+        background: white;
+        color: #06174D;
+    }
+
+    .busqueda-filter-apply-btn:hover {
+        background: #f0f0f0;
+    }
+
+    .busqueda-filter-clear-btn {
+        background: rgba(255, 255, 255, 0.1);
+        color: white;
+        border: 1px solid rgba(255, 255, 255, 0.25);
+    }
+
+    .busqueda-filter-clear-btn:hover {
+        background: rgba(255, 255, 255, 0.15);
+    }
+
+    @keyframes fadeIn {
+        from {
+            opacity: 0;
+        }
+        to {
+            opacity: 1;
+        }
+    }
+}
+
+/* ====================================
+   TABLET STYLES (768px - 1023px)
+   ==================================== */
+@media (min-width: 768px) and (max-width: 1023px) {
+    /* Hide desktop sidebar */
+    .busqueda-sidebar {
+        display: none !important;
+    }
+
+    /* Main content full width */
+    .busqueda-content {
+        display: block !important;
+    }
+
+    .busqueda-main {
+        width: 100% !important;
+        padding: 16px 0 !important;
+    }
+
+    /* Breadcrumb */
+    .busqueda-breadcrumb {
+        padding: 12px 0 !important;
+        margin-bottom: 0 !important;
+    }
+
+    /* Header with filter button and sort */
+    .busqueda-sort-header {
+        display: flex !important;
+        justify-content: space-between !important;
+        align-items: center !important;
+        gap: 16px !important;
+        margin-bottom: 24px !important;
+    }
+
+    /* Filter button (tablet) */
+    .busqueda-filter-btn-mobile {
+        display: flex !important;
+        align-items: center;
+        gap: 8px;
+        padding: 12px 20px;
+        background: white !important;
+        border: none !important;
+        border-radius: 4px;
+        color: #06174d !important;
+        font-size: 15px;
+        font-family: 'Montserrat', sans-serif;
+        font-weight: 700 !important;
+        cursor: pointer;
+        white-space: nowrap;
+        transition: all 0.3s ease;
+    }
+
+    .busqueda-filter-btn-mobile:hover {
+        background: #f5f5f5 !important;
+    }
+
+    .busqueda-filter-btn-mobile svg {
+        width: 20px;
+        height: 20px;
+    }
+
+    /* Sort dropdown */
+    .busqueda-sort-wrapper {
+        flex: 0 0 auto !important;
+        width: auto !important;
+        max-width: 300px !important;
+        margin-left: auto !important;
+        position: relative;
+    }
+
+    .busqueda-sort-wrapper::after {
+        display: none !important;
+    }
+
+    .busqueda-sort-select {
+        width: auto !important;
+        max-width: none !important;
+        flex-shrink: 0 !important;
+        color: white !important;
+        font-size: 14px !important;
+        font-family: 'Montserrat', sans-serif !important;
+        font-weight: 500 !important;
+        background: transparent !important;
+        border: none !important;
+        padding: 10px 28px 10px 12px !important;
+        appearance: none !important;
+        -webkit-appearance: none !important;
+        -moz-appearance: none !important;
+        cursor: pointer !important;
+        background-image: url("data:image/svg+xml,%3Csvg width='12' height='8' viewBox='0 0 12 8' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M1 1L6 6L11 1' stroke='white' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E") !important;
+        background-repeat: no-repeat !important;
+        background-position: right 8px center !important;
+        background-size: 12px 8px !important;
+    }
+
+    .busqueda-sort-select option {
+        background: rgba(2, 8, 28, 0.95) !important;
+        color: white !important;
+        padding: 12px 8px !important;
+        font-family: 'Montserrat', sans-serif !important;
+        font-size: 14px !important;
+    }
+
+    /* Heredar estilos de escritorio para filtros en modal tablet */
+    .busqueda-filter-modal .busqueda-filter-select {
+        background: rgba(255, 255, 255, 0.08) !important;
+        border: 1px solid rgba(255, 255, 255, 0.2) !important;
+        border-radius: 6px !important;
+        padding: 12px 40px 12px 16px !important;
+        color: white !important;
+        font-size: 14px !important;
+        font-family: 'Montserrat', sans-serif !important;
+        appearance: none;
+        -webkit-appearance: none;
+        -moz-appearance: none;
+    }
+
+    .busqueda-filter-modal .busqueda-filter-select option {
+        background: rgba(2, 8, 28, 0.95) !important;
+        color: white !important;
+        padding: 12px 8px !important;
+        font-family: 'Montserrat', sans-serif !important;
+        font-size: 14px !important;
+    }
+
+    .busqueda-filter-modal .busqueda-select-wrapper::after {
+        content: '' !important;
+        position: absolute;
+        right: 12px;
+        top: 50%;
+        transform: translateY(-50%);
+        width: 12px;
+        height: 8px;
+        background-image: url("data:image/svg+xml,%3Csvg width='12' height='8' viewBox='0 0 12 8' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M1 1L6 6L11 1' stroke='white' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E") !important;
+        background-repeat: no-repeat;
+        background-position: center;
+        background-size: contain;
+        border: none !important;
+        pointer-events: none;
+    }
+
+    .busqueda-filter-modal .busqueda-price-field {
+        background: rgba(255, 255, 255, 0.08) !important;
+        border: 1px solid rgba(255, 255, 255, 0.2) !important;
+        border-radius: 6px !important;
+        padding: 10px 12px !important;
+        color: white !important;
+        font-size: 14px !important;
+        font-family: 'Montserrat', sans-serif !important;
+    }
+
+    /* Cars grid - 2 columns */
+    .busqueda-cars-grid {
+        grid-template-columns: repeat(2, 1fr) !important;
+        gap: 28px !important;
+    }
+
+    /* Tablet filter modal */
+    .busqueda-filter-modal {
+        display: none;
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0, 0, 0, 0.8);
+        z-index: 9999;
+        overflow-y: auto;
+        animation: fadeIn 0.3s ease;
+    }
+
+    .busqueda-filter-modal.active {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 40px;
+    }
+
+    .busqueda-filter-modal-content {
+        background: #030D2B;
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        border-radius: 8px;
+        width: 100%;
+        max-width: 600px;
+        max-height: 90vh;
+        overflow-y: auto;
+        padding: 24px;
+        position: relative;
+    }
+
+    .busqueda-filter-modal-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 24px;
+        padding-bottom: 16px;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.15);
+    }
+
+    .busqueda-filter-modal-title {
+        color: white;
+        font-size: 22px;
+        font-family: 'Montserrat', sans-serif;
+        font-weight: 700;
+    }
+
+    .busqueda-filter-modal-close {
+        background: none;
+        border: none;
+        color: white;
+        font-size: 32px;
+        cursor: pointer;
+        padding: 0;
+        width: 36px;
+        height: 36px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .busqueda-filter-modal-body {
+        margin-bottom: 20px;
+    }
+
+    .busqueda-filter-modal-actions {
+        display: flex;
+        gap: 12px;
+        padding-top: 20px;
+        border-top: 1px solid rgba(255, 255, 255, 0.15);
+    }
+
+    .busqueda-filter-apply-btn,
+    .busqueda-filter-clear-btn {
+        flex: 1;
+        padding: 14px;
+        border-radius: 4px;
+        font-size: 15px;
+        font-family: 'Montserrat', sans-serif;
+        font-weight: 600;
+        cursor: pointer;
+        border: none;
+        transition: all 0.3s ease;
+    }
+
+    .busqueda-filter-apply-btn {
+        background: white;
+        color: #06174D;
+    }
+
+    .busqueda-filter-apply-btn:hover {
+        background: #f0f0f0;
+    }
+
+    .busqueda-filter-clear-btn {
+        background: rgba(255, 255, 255, 0.1);
+        color: white;
+        border: 1px solid rgba(255, 255, 255, 0.25);
+    }
+
+    .busqueda-filter-clear-btn:hover {
+        background: rgba(255, 255, 255, 0.15);
+    }
+
+    @keyframes fadeIn {
+        from {
+            opacity: 0;
+        }
+        to {
+            opacity: 1;
+        }
+    }
+}
+
+/* ====================================
+   DESKTOP STYLES (1024px+)
+   ==================================== */
+@media (min-width: 1024px) {
+    .busqueda-sidebar {
+        display: block !important;
+    }
+    
+    .busqueda-filter-modal {
+        display: none !important;
+    }
+    
+    .busqueda-filter-btn-mobile {
+        display: none !important;
+    }
+    
+    /* 2 cards per row on desktop */
+    .busqueda-cars-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    /* Estilos de escritorio para sort select */
+    .busqueda-sort-select {
+        font-family: 'Montserrat', sans-serif !important;
+        font-weight: 500 !important;
+    }
+
+    .busqueda-sort-select option {
+        background: rgba(2, 8, 28, 0.95) !important;
+        color: white !important;
+        padding: 12px 8px !important;
+        font-family: 'Montserrat', sans-serif !important;
+        font-size: 14px !important;
+    }
+}
+
+/* Hide body scroll when modal is open */
+body.modal-open {
+    overflow: hidden;
+}

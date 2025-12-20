@@ -1,4 +1,7 @@
-/* Mis Anuncios Styles - Following Figma Design */
+/* Mis Anuncios Styles - Using Busqueda Avanzada Structure */
+
+/* Import Busqueda Avanzada styles for consistent structure */
+@import url('busqueda-avanzada-responsive.css');
 
 /* Page wrapper to ensure footer stays at bottom */
 .page-wrapper {
