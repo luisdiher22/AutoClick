@@ -6,229 +6,313 @@
 
 @section Styles {
     <link rel="stylesheet" href="~/css/mis-anuncios.css" />
+    <link rel="stylesheet" href="~/css/mis-anuncios-responsive.css" />
 }
 
-@await Html.PartialAsync("_Header")
-
-<div class="page-wrapper">
-    <div class="mis-anuncios-container">
+<!-- Dark Theme Page Container -->
+<div class="busqueda-avanzada-page">
+    <div class="busqueda-container">
         <!-- Breadcrumb -->
-        <nav class="breadcrumb">
-            <a href="/" class="breadcrumb-item">Inicio</a>
+        <nav class="busqueda-breadcrumb">
+            <a asp-page="/Index" class="breadcrumb-link">Inicio</a>
             <span class="breadcrumb-separator">/</span>
             <span class="breadcrumb-current">Mis anuncios</span>
         </nav>
 
-            <div class="content-wrapper">
+        <div class="busqueda-content">
             <!-- Sidebar Filters -->
-            <aside class="sidebar">
-                <div class="filter-panel">
-                    <h2 class="filter-title">Filtrar mis anuncios</h2>
+            <aside class="busqueda-sidebar">
+                <div class="busqueda-filters-container">
+                    <div class="busqueda-filters-section">
+                        <h3 class="busqueda-filters-title">Filtrar mis anuncios</h3>
                     
-                    <form method="get" class="filters-form">
-                        <!-- Provincia -->
-                        <div class="filter-group">
-                            <label for="provincia">Provincia</label>
-                            <select id="provincia" name="provincia" asp-for="Provincia">
-                                <option value="">Todas las provincias</option>
-                                <option value="San José">San José</option>
-                                <option value="Alajuela">Alajuela</option>
-                                <option value="Cartago">Cartago</option>
-                                <option value="Heredia">Heredia</option>
-                                <option value="Guanacaste">Guanacaste</option>
-                                <option value="Puntarenas">Puntarenas</option>
-                                <option value="Limón">Limón</option>
-                            </select>
-                        </div>
+                        <!-- Applied Filters Tags -->
+                        @if (Model.AppliedFilters != null && Model.AppliedFilters.Any())
+                        {
+                            <div class="applied-filters-tags">
+                                @foreach (var filter in Model.AppliedFilters)
+                                {
+                                    <div class="filter-tag">
+                                        <span>@filter</span>
+                                        <button class="remove-filter-btn" onclick="removeFilter('@filter')" title="Eliminar filtro">×</button>
+                                    </div>
+                                }
+                            </div>
+                            
+                            <!-- Línea divisoria -->
+                            <hr class="filter-divider" />
+                        }
 
-                        <!-- Cantón -->
-                        <div class="filter-group">
-                            <label for="canton">Cantón</label>
-                            <select id="canton" name="canton" asp-for="Canton">
-                                <option value="">Todos los cantones</option>
-                            </select>
-                        </div>
+                        <form method="get" class="busqueda-filters-form" id="desktopFilterForm">
+                            <input type="hidden" name="page" value="1" />
+                            <input type="hidden" name="sortBy" value="@Model.OrdenarPor" />
 
-                        <!-- Marca -->
-                        <div class="filter-group">
-                            <label for="marca">Marca</label>
-                            <select id="marca" name="marca" asp-for="Marca">
-                                <option value="">Todas las marcas</option>
+                            <!-- Provincia -->
+                            <div class="busqueda-filter-group">
+                                <label class="busqueda-filter-label">Provincia</label>
+                                <div class="busqueda-select-wrapper">
+                                    <select id="provincia" name="provincia" class="busqueda-filter-select" asp-for="Provincia" onchange="autoSubmitFilters()">
+                                        <option value="">Todas las provincias</option>
+                                        <option value="San José">San José</option>
+                                        <option value="Alajuela">Alajuela</option>
+                                        <option value="Cartago">Cartago</option>
+                                        <option value="Heredia">Heredia</option>
+                                        <option value="Guanacaste">Guanacaste</option>
+                                        <option value="Puntarenas">Puntarenas</option>
+                                        <option value="Limón">Limón</option>
+                                    </select>
+                                </div>
+                            </div>
+
+                            <!-- Cantón -->
+                            <div class="busqueda-filter-group">
+                                <label class="busqueda-filter-label">Cantón</label>
+                                <div class="busqueda-select-wrapper">
+                                    <select id="canton" name="canton" class="busqueda-filter-select" asp-for="Canton" onchange="autoSubmitFilters()">
+                                        <option value="">Todos los cantones</option>
+                                    </select>
+                                </div>
+                            </div>
+
+                            <!-- Línea divisoria -->
+                            <hr class="filter-divider" />
+
+                            <!-- Marca -->
+                            <div class="busqueda-filter-group">
+                                <label class="busqueda-filter-label">Marca</label>
+                                <div class="busqueda-select-wrapper">
+                                    <select id="marca" name="marca" class="busqueda-filter-select" asp-for="Marca" onchange="autoSubmitFilters()">
+                                        <option value="">Todas las marcas</option>
                                 <option value="Toyota">Toyota</option>
                                 <option value="Honda">Honda</option>
                                 <option value="Nissan">Nissan</option>
                                 <option value="Hyundai">Hyundai</option>
                                 <option value="Mazda">Mazda</option>
                                 <option value="BMW">BMW</option>
-                                <option value="Mercedes-Benz">Mercedes-Benz</option>
-                                <option value="Audi">Audi</option>
-                            </select>
-                        </div>
-
-                        <!-- Modelo -->
-                        <div class="filter-group">
-                            <label for="modelo">Modelo</label>
-                            <select id="modelo" name="modelo" asp-for="Modelo">
-                                <option value="">Todos los modelos</option>
-                            </select>
-                        </div>
-
-                        <!-- Rango de Precio -->
-                        <div class="filter-group">
-                            <label>Rango de precio</label>
-                            <div class="price-range">
-                                <div class="price-input">
-                                    <label for="precioMin">Min</label>
-                                    <input type="number" id="precioMin" name="precioMin" asp-for="PrecioMin" placeholder="$" />
-                                </div>
-                                <span class="range-separator">hasta</span>
-                                <div class="price-input">
-                                    <label for="precioMax">Max</label>
-                                    <input type="number" id="precioMax" name="precioMax" asp-for="PrecioMax" placeholder="$" />
+                                        <option value="Mercedes-Benz">Mercedes-Benz</option>
+                                        <option value="Audi">Audi</option>
+                                    </select>
                                 </div>
                             </div>
-                        </div>
 
-                        <!-- Kilometraje -->
-                        <div class="filter-group">
-                            <label>Kilometraje</label>
-                            <div class="range-inputs">
-                                <div class="range-input">
-                                    <label for="kmMin">Min</label>
-                                    <input type="number" id="kmMin" name="kmMin" asp-for="KilometrajeMin" />
-                                </div>
-                                <span class="range-separator">hasta</span>
-                                <div class="range-input">
-                                    <label for="kmMax">Max</label>
-                                    <input type="number" id="kmMax" name="kmMax" asp-for="KilometrajeMax" />
+                            <!-- Modelo -->
+                            <div class="busqueda-filter-group">
+                                <label class="busqueda-filter-label">Modelo</label>
+                                <div class="busqueda-select-wrapper">
+                                    <select id="modelo" name="modelo" class="busqueda-filter-select" asp-for="Modelo" onchange="autoSubmitFilters()">
+                                        <option value="">Todos los modelos</option>
+                                    </select>
                                 </div>
                             </div>
-                        </div>
 
-                        <!-- Año -->
-                        <div class="filter-group">
-                            <label>Año</label>
-                            <div class="range-inputs">
-                                <div class="range-input">
-                                    <label for="añoMin">Min</label>
-                                    <input type="number" id="añoMin" name="añoMin" asp-for="AñoMin" />
+                            <!-- Línea divisoria -->
+                            <hr class="filter-divider" />
+
+                            <!-- Rango de precio -->
+                            <div class="busqueda-filter-group">
+                                <label class="busqueda-filter-label">Rango de precio</label>
+                                <div class="busqueda-price-range">
+                                    <div class="price-input-group">
+                                        <label class="price-input-label">Min</label>
+                                        <input type="number" id="precioMin" name="precioMin" asp-for="PrecioMin" placeholder="$" class="busqueda-price-field" />
+                                    </div>
+                                    <span class="price-separator">hasta</span>
+                                    <div class="price-input-group">
+                                        <label class="price-input-label">Max</label>
+                                        <input type="number" id="precioMax" name="precioMax" asp-for="PrecioMax" placeholder="$" class="busqueda-price-field" />
+                                    </div>
                                 </div>
-                                <span class="range-separator">hasta</span>
-                                <div class="range-input">
-                                    <label for="añoMax">Max</label>
-                                    <input type="number" id="añoMax" name="añoMax" asp-for="AñoMax" />
+                            </div>
+
+                            <!-- Línea divisoria -->
+                            <hr class="filter-divider" />
+
+                            <!-- Kilometraje -->
+                            <div class="busqueda-filter-group">
+                                <label class="busqueda-filter-label">Kilometraje</label>
+                                <div class="busqueda-price-range">
+                                    <div class="price-input-group">
+                                        <label class="price-input-label">Min</label>
+                                        <input type="number" id="kmMin" name="kmMin" asp-for="KilometrajeMin" class="busqueda-price-field" />
+                                    </div>
+                                    <span class="price-separator">hasta</span>
+                                    <div class="price-input-group">
+                                        <label class="price-input-label">Max</label>
+                                        <input type="number" id="kmMax" name="kmMax" asp-for="KilometrajeMax" class="busqueda-price-field" />
+                                    </div>
                                 </div>
                             </div>
-                        </div>
 
-                        <!-- Filtros adicionales -->
-                        <div class="additional-filters">
-                            <div class="filter-dropdown">
-                                <select name="carroceria" asp-for="Carroceria">
-                                    <option value="">Carrocería</option>
-                                    <option value="Sedán">Sedán</option>
-                                    <option value="SUV">SUV</option>
-                                    <option value="Hatchback">Hatchback</option>
-                                    <option value="Pickup">Pickup</option>
-                                    <option value="Convertible">Convertible</option>
-                                    <option value="Coupé">Coupé</option>
-                                </select>
+                            <!-- Línea divisoria -->
+                            <hr class="filter-divider" />
+
+                            <!-- Año -->
+                            <div class="busqueda-filter-group">
+                                <label class="busqueda-filter-label">Año</label>
+                                <div class="busqueda-price-range">
+                                    <div class="price-input-group">
+                                        <label class="price-input-label">Min</label>
+                                        <input type="number" id="añoMin" name="añoMin" asp-for="AñoMin" class="busqueda-price-field" />
+                                    </div>
+                                    <span class="price-separator">hasta</span>
+                                    <div class="price-input-group">
+                                        <label class="price-input-label">Max</label>
+                                        <input type="number" id="añoMax" name="añoMax" asp-for="AñoMax" class="busqueda-price-field" />
+                                    </div>
+                                </div>
                             </div>
 
-                            <div class="filter-dropdown">
-                                <select name="combustible" asp-for="Combustible">
-                                    <option value="">Combustible/Propulsión</option>
-                                    <option value="Gasolina">Gasolina</option>
-                                    <option value="Diésel">Diésel</option>
-                                    <option value="Híbrido">Híbrido</option>
-                                    <option value="Eléctrico">Eléctrico</option>
-                                </select>
+                            <!-- Línea divisoria -->
+                            <hr class="filter-divider" />
+
+                            <!-- Carrocería -->
+                            <div class="busqueda-filter-group">
+                                <label class="busqueda-filter-label">Carrocería</label>
+                                <div class="busqueda-select-wrapper">
+                                    <select name="carroceria" class="busqueda-filter-select" asp-for="Carroceria" onchange="autoSubmitFilters()">
+                                        <option value="">Todas las carrocerías</option>
+                                        <option value="Sedán">Sedán</option>
+                                        <option value="SUV">SUV</option>
+                                        <option value="Hatchback">Hatchback</option>
+                                        <option value="Pickup">Pickup</option>
+                                        <option value="Convertible">Convertible</option>
+                                        <option value="Coupé">Coupé</option>
+                                    </select>
+                                </div>
                             </div>
 
-                            <div class="filter-dropdown">
-                                <select name="traccion" asp-for="Traccion">
-                                    <option value="">Tracción</option>
-                                    <option value="Delantera">Delantera</option>
-                                    <option value="Trasera">Trasera</option>
-                                    <option value="4x4">4x4</option>
-                                    <option value="AWD">AWD</option>
-                                </select>
+                            <!-- Combustible -->
+                            <div class="busqueda-filter-group">
+                                <label class="busqueda-filter-label">Combustible/Propulsión</label>
+                                <div class="busqueda-select-wrapper">
+                                    <select name="combustible" class="busqueda-filter-select" asp-for="Combustible" onchange="autoSubmitFilters()">
+                                        <option value="">Todos los tipos</option>
+                                        <option value="Gasolina">Gasolina</option>
+                                        <option value="Diésel">Diésel</option>
+                                        <option value="Híbrido">Híbrido</option>
+                                        <option value="Eléctrico">Eléctrico</option>
+                                    </select>
+                                </div>
                             </div>
 
-                            <div class="filter-dropdown">
-                                <select name="tipoVendedor" asp-for="TipoVendedor">
-                                    <option value="">Tipo de vendedor</option>
-                                    <option value="Particular">Particular</option>
-                                    <option value="Concesionario">Concesionario</option>
-                                </select>
+                            <!-- Tracción -->
+                            <div class="busqueda-filter-group">
+                                <label class="busqueda-filter-label">Tracción</label>
+                                <div class="busqueda-select-wrapper">
+                                    <select name="traccion" class="busqueda-filter-select" asp-for="Traccion" onchange="autoSubmitFilters()">
+                                        <option value="">Todas las tracciones</option>
+                                        <option value="Delantera">Delantera</option>
+                                        <option value="Trasera">Trasera</option>
+                                        <option value="4x4">4x4</option>
+                                        <option value="AWD">AWD</option>
+                                    </select>
+                                </div>
                             </div>
 
-                            <div class="filter-dropdown">
-                                <select name="condicion" asp-for="Condicion">
-                                    <option value="">Condición</option>
-                                    <option value="Nuevo">Nuevo</option>
-                                    <option value="Usado">Usado</option>
-                                </select>
+                            <!-- Tipo de Vendedor -->
+                            <div class="busqueda-filter-group">
+                                <label class="busqueda-filter-label">Tipo de vendedor</label>
+                                <div class="busqueda-select-wrapper">
+                                    <select name="tipoVendedor" class="busqueda-filter-select" asp-for="TipoVendedor" onchange="autoSubmitFilters()">
+                                        <option value="">Todos</option>
+                                        <option value="Particular">Particular</option>
+                                        <option value="Concesionario">Concesionario</option>
+                                    </select>
+                                </div>
                             </div>
 
-                            <div class="filter-dropdown">
-                                <select name="transmision" asp-for="Transmision">
-                                    <option value="">Transmisión</option>
-                                    <option value="Manual">Manual</option>
-                                    <option value="Automática">Automática</option>
-                                    <option value="CVT">CVT</option>
-                                </select>
+                            <!-- Condición -->
+                            <div class="busqueda-filter-group">
+                                <label class="busqueda-filter-label">Condición</label>
+                                <div class="busqueda-select-wrapper">
+                                    <select name="condicion" class="busqueda-filter-select" asp-for="Condicion" onchange="autoSubmitFilters()">
+                                        <option value="">Todas</option>
+                                        <option value="Nuevo">Nuevo</option>
+                                        <option value="Usado">Usado</option>
+                                    </select>
+                                </div>
                             </div>
 
-                            <div class="filter-dropdown">
-                                <select name="pasajeros" asp-for="Pasajeros">
-                                    <option value="">Pasajeros</option>
-                                    <option value="2">2</option>
-                                    <option value="4">4</option>
-                                    <option value="5">5</option>
-                                    <option value="7">7</option>
-                                    <option value="8+">8+</option>
-                                </select>
+                            <!-- Transmisión -->
+                            <div class="busqueda-filter-group">
+                                <label class="busqueda-filter-label">Transmisión</label>
+                                <div class="busqueda-select-wrapper">
+                                    <select name="transmision" class="busqueda-filter-select" asp-for="Transmision" onchange="autoSubmitFilters()">
+                                        <option value="">Todas</option>
+                                        <option value="Manual">Manual</option>
+                                        <option value="Automática">Automática</option>
+                                        <option value="CVT">CVT</option>
+                                    </select>
+                                </div>
                             </div>
 
-                            <div class="filter-dropdown">
-                                <select name="extras" asp-for="Extras">
-                                    <option value="">Extras</option>
-                                    <option value="Aire acondicionado">Aire acondicionado</option>
-                                    <option value="GPS">GPS</option>
-                                    <option value="Cámara trasera">Cámara trasera</option>
-                                    <option value="Asientos de cuero">Asientos de cuero</option>
-                                </select>
+                            <!-- Pasajeros -->
+                            <div class="busqueda-filter-group">
+                                <label class="busqueda-filter-label">Pasajeros</label>
+                                <div class="busqueda-select-wrapper">
+                                    <select name="pasajeros" class="busqueda-filter-select" asp-for="Pasajeros" onchange="autoSubmitFilters()">
+                                        <option value="">Todos</option>
+                                        <option value="2">2</option>
+                                        <option value="4">4</option>
+                                        <option value="5">5</option>
+                                        <option value="7">7</option>
+                                        <option value="8+">8+</option>
+                                    </select>
+                                </div>
                             </div>
-                        </div>
 
-                        <button type="submit" class="apply-filters-btn">Aplicar Filtros</button>
-                    </form>
+                            <!-- Extras -->
+                            <div class="busqueda-filter-group">
+                                <label class="busqueda-filter-label">Extras</label>
+                                <div class="busqueda-select-wrapper">
+                                    <select name="extras" class="busqueda-filter-select" asp-for="Extras" onchange="autoSubmitFilters()">
+                                        <option value="">Todos</option>
+                                        <option value="Aire acondicionado">Aire acondicionado</option>
+                                        <option value="GPS">GPS</option>
+                                        <option value="Cámara trasera">Cámara trasera</option>
+                                        <option value="Asientos de cuero">Asientos de cuero</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
                 </div>
                 
                 <!-- Advertisement Placeholder -->
                 @await Component.InvokeAsync("CarruselPublicidad", new { formato = "cuadrado", seccion = "mis-anuncios-sidebar" })
             </aside>
 
-            <!-- Main Content Area -->
-            <main class="main-content">
-                <!-- Page Title and Sort Options -->
-                <div class="header-section">
-                    <h1 class="page-title">Mis anuncios</h1>
-                    
-                    <div class="sort-dropdown">
-                        <select name="ordenarPor" asp-for="OrdenarPor" onchange="this.form.submit()">
-                            <option value="recientes">Ordenar por: Más recientes</option>
-                            <option value="antiguos">Más antiguos</option>
-                            <option value="precio-asc">Precio: Menor a mayor</option>
-                            <option value="precio-desc">Precio: Mayor a menor</option>
-                            <option value="kilometraje">Menor kilometraje</option>
+            <!-- Main Content -->
+            <main class="busqueda-main">
+                <!-- Sort Dropdown -->
+                <div class="busqueda-sort-header">
+                    <!-- Mobile/Tablet Filter Button -->
+                    <button class="busqueda-filter-btn-mobile" onclick="openFilterModal()">
+                        <svg width="18" height="18" viewBox="0 0 18 18" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false">
+                            <g stroke="currentColor" stroke-width="1.6" stroke-linecap="round">
+                                <path d="M4.5 3V15"/>
+                                <circle cx="4.5" cy="6.5" r="1.6" fill="currentColor"/>
+                                <path d="M9 3V15"/>
+                                <circle cx="9" cy="11.5" r="1.6" fill="currentColor"/>
+                                <path d="M13.5 3V15"/>
+                                <circle cx="13.5" cy="8.5" r="1.6" fill="currentColor"/>
+                            </g>
+                        </svg>
+                        Filtros
+                    </button>
+
+                    <div class="busqueda-sort-wrapper">
+                        <select class="busqueda-sort-select" onchange="changeMisAnunciosSorting(this.value)">
+                            <option value="recent" selected="@(Model.OrdenarPor == "recent" || string.IsNullOrEmpty(Model.OrdenarPor))">Ordenar por: Más recientes</option>
+                            <option value="price-asc" selected="@(Model.OrdenarPor == "price-asc")">Ordenar por: Precio menor a mayor</option>
+                            <option value="price-desc" selected="@(Model.OrdenarPor == "price-desc")">Ordenar por: Precio mayor a menor</option>
+                            <option value="year" selected="@(Model.OrdenarPor == "year")">Ordenar por: Año más nuevo</option>
                         </select>
                     </div>
                 </div>
 
-                <!-- Listings Grid -->
-                <div class="listings-grid">
+                <!-- Listings Grid - 2 Columns -->
+                <div class="busqueda-cars-grid">
                     @if (Model.Anuncios != null && Model.Anuncios.Any())
                     {
                         @foreach (var anuncio in Model.Anuncios)
@@ -298,7 +382,7 @@
                         <div class="no-listings">
                             <h3>No tienes anuncios publicados</h3>
                             <p>¡Comienza a vender tu vehículo ahora!</p>
-                            <a href="/anunciar-mi-auto" class="btn-primary">Publicar Anuncio</a>
+                            <a asp-page="/AnunciarMiAuto" class="btn-primary">Publicar Anuncio</a>
                         </div>
                     }
                 </div>
@@ -306,47 +390,301 @@
                 <!-- Pagination -->
                 @if (Model.TotalPaginas > 1)
                 {
-                    <div class="pagination">
-                        @if (Model.PaginaActual > 1)
-                        {
-                            <a href="?pagina=@(Model.PaginaActual - 1)" class="pagination-btn prev">
-                                <svg width="40" height="40" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                    <path d="M25 30L15 20L25 10" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                                </svg>
+                    <nav class="busqueda-pagination" aria-label="Paginación de anuncios">
+                        <div class="pagination-container">
+                            <!-- Previous Button -->
+                            <a href="?pagina=@(Model.PaginaActual - 1)" 
+                               class="busqueda-pagination-arrow @(Model.PaginaActual <= 1 ? "disabled" : "")">
+                                <div class="pagination-arrow-icon left"></div>
                             </a>
-                        }
 
-                        @for (int i = 1; i <= Math.Min(5, Model.TotalPaginas); i++)
-                        {
-                            <a href="?pagina=@i" class="pagination-number @(i == Model.PaginaActual ? "active" : "")">@i</a>
-                        }
+                            <!-- Page Numbers -->
+                            @for (int i = 1; i <= Math.Min(5, Model.TotalPaginas); i++)
+                            {
+                                <a href="?pagina=@i" 
+                                   class="busqueda-pagination-number @(Model.PaginaActual == i ? "active" : "")">
+                                    @i
+                                </a>
+                            }
 
-                        @if (Model.TotalPaginas > 5)
-                        {
-                            <span class="pagination-ellipsis">…</span>
-                            <a href="?pagina=@Model.TotalPaginas" class="pagination-number">@Model.TotalPaginas</a>
-                        }
+                            @if (Model.TotalPaginas > 5)
+                            {
+                                <span class="busqueda-pagination-ellipsis">…</span>
+                                
+                                <a href="?pagina=@Model.TotalPaginas" 
+                                   class="busqueda-pagination-number @(Model.PaginaActual == Model.TotalPaginas ? "active" : "")">
+                                    @Model.TotalPaginas
+                                </a>
+                            }
 
-                        @if (Model.PaginaActual < Model.TotalPaginas)
-                        {
-                            <a href="?pagina=@(Model.PaginaActual + 1)" class="pagination-btn next">
-                                <svg width="40" height="40" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                    <path d="M15 10L25 20L15 30" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                                </svg>
+                            <!-- Next Button -->
+                            <a href="?pagina=@(Model.PaginaActual + 1)" 
+                               class="busqueda-pagination-arrow @(Model.PaginaActual >= Model.TotalPaginas ? "disabled" : "")">
+                                <div class="pagination-arrow-icon right"></div>
                             </a>
-                        }
-                    </div>
+                        </div>
+                    </nav>
                 }
 
-                <!-- Bottom Advertisement -->
-                <div class="bottom-ad">
+                <!-- Advertisement after pagination -->
+                <div style="margin-top: 48px;">
                     @await Component.InvokeAsync("CarruselPublicidad", new { formato = "horizontal", seccion = "mis-anuncios-footer" })
                 </div>
             </main>
         </div>
     </div>
 
-    <!-- Footer -->
+    <!-- Mobile/Tablet Filter Modal -->
+    <div class="busqueda-filter-modal" id="filterModal">
+        <div class="busqueda-filter-modal-content">
+            <div class="busqueda-filter-modal-header">
+                <h3 class="busqueda-filter-modal-title">Filtros de búsqueda</h3>
+                <button class="busqueda-filter-modal-close" onclick="closeFilterModal()">&times;</button>
+            </div>
+            
+            <div class="busqueda-filter-modal-body">
+                <div class="busqueda-filters-container">
+                    <div class="busqueda-filters-section">
+                        <form method="get" class="busqueda-filters-form" id="mobileFilterForm">
+                            <input type="hidden" name="page" value="1" />
+                            <input type="hidden" name="sortBy" value="@Model.OrdenarPor" />
+
+                            <!-- Same filters as desktop sidebar -->
+                            <!-- Provincia -->
+                            <div class="busqueda-filter-group">
+                                <label class="busqueda-filter-label">Provincia</label>
+                                <div class="busqueda-select-wrapper">
+                                    <select name="provincia" class="busqueda-filter-select" asp-for="Provincia">
+                                        <option value="">Todas las provincias</option>
+                                        <option value="San José">San José</option>
+                                        <option value="Alajuela">Alajuela</option>
+                                        <option value="Cartago">Cartago</option>
+                                        <option value="Heredia">Heredia</option>
+                                        <option value="Guanacaste">Guanacaste</option>
+                                        <option value="Puntarenas">Puntarenas</option>
+                                        <option value="Limón">Limón</option>
+                                    </select>
+                                </div>
+                            </div>
+
+                            <!-- Cantón -->
+                            <div class="busqueda-filter-group">
+                                <label class="busqueda-filter-label">Cantón</label>
+                                <div class="busqueda-select-wrapper">
+                                    <select name="canton" class="busqueda-filter-select" asp-for="Canton">
+                                        <option value="">Todos los cantones</option>
+                                    </select>
+                                </div>
+                            </div>
+
+                            <hr class="filter-divider" />
+
+                            <!-- Marca -->
+                            <div class="busqueda-filter-group">
+                                <label class="busqueda-filter-label">Marca</label>
+                                <div class="busqueda-select-wrapper">
+                                    <select name="marca" class="busqueda-filter-select" asp-for="Marca">
+                                        <option value="">Todas las marcas</option>
+                                        <option value="Toyota">Toyota</option>
+                                        <option value="Honda">Honda</option>
+                                        <option value="Nissan">Nissan</option>
+                                        <option value="Hyundai">Hyundai</option>
+                                        <option value="Mazda">Mazda</option>
+                                        <option value="BMW">BMW</option>
+                                        <option value="Mercedes-Benz">Mercedes-Benz</option>
+                                        <option value="Audi">Audi</option>
+                                    </select>
+                                </div>
+                            </div>
+
+                            <!-- Modelo -->
+                            <div class="busqueda-filter-group">
+                                <label class="busqueda-filter-label">Modelo</label>
+                                <div class="busqueda-select-wrapper">
+                                    <select name="modelo" class="busqueda-filter-select" asp-for="Modelo">
+                                        <option value="">Todos los modelos</option>
+                                    </select>
+                                </div>
+                            </div>
+
+                            <hr class="filter-divider" />
+
+                            <!-- Rango de precio -->
+                            <div class="busqueda-filter-group">
+                                <label class="busqueda-filter-label">Rango de precio</label>
+                                <div class="busqueda-price-range">
+                                    <div class="price-input-group">
+                                        <label class="price-input-label">Min</label>
+                                        <input type="number" name="precioMin" placeholder="$" class="busqueda-price-field" asp-for="PrecioMin" />
+                                    </div>
+                                    <span class="price-separator">hasta</span>
+                                    <div class="price-input-group">
+                                        <label class="price-input-label">Max</label>
+                                        <input type="number" name="precioMax" placeholder="$" class="busqueda-price-field" asp-for="PrecioMax" />
+                                    </div>
+                                </div>
+                            </div>
+
+                            <hr class="filter-divider" />
+
+                            <!-- Kilometraje -->
+                            <div class="busqueda-filter-group">
+                                <label class="busqueda-filter-label">Kilometraje</label>
+                                <div class="busqueda-price-range">
+                                    <div class="price-input-group">
+                                        <label class="price-input-label">Min</label>
+                                        <input type="number" name="kmMin" class="busqueda-price-field" asp-for="KilometrajeMin" />
+                                    </div>
+                                    <span class="price-separator">hasta</span>
+                                    <div class="price-input-group">
+                                        <label class="price-input-label">Max</label>
+                                        <input type="number" name="kmMax" class="busqueda-price-field" asp-for="KilometrajeMax" />
+                                    </div>
+                                </div>
+                            </div>
+
+                            <hr class="filter-divider" />
+
+                            <!-- Año -->
+                            <div class="busqueda-filter-group">
+                                <label class="busqueda-filter-label">Año</label>
+                                <div class="busqueda-price-range">
+                                    <div class="price-input-group">
+                                        <label class="price-input-label">Min</label>
+                                        <input type="number" name="añoMin" class="busqueda-price-field" asp-for="AñoMin" />
+                                    </div>
+                                    <span class="price-separator">hasta</span>
+                                    <div class="price-input-group">
+                                        <label class="price-input-label">Max</label>
+                                        <input type="number" name="añoMax" class="busqueda-price-field" asp-for="AñoMax" />
+                                    </div>
+                                </div>
+                            </div>
+
+                            <hr class="filter-divider" />
+
+                            <!-- Carrocería -->
+                            <div class="busqueda-filter-group">
+                                <label class="busqueda-filter-label">Carrocería</label>
+                                <div class="busqueda-select-wrapper">
+                                    <select name="carroceria" class="busqueda-filter-select" asp-for="Carroceria">
+                                        <option value="">Todas las carrocerías</option>
+                                        <option value="Sedán">Sedán</option>
+                                        <option value="SUV">SUV</option>
+                                        <option value="Hatchback">Hatchback</option>
+                                        <option value="Pickup">Pickup</option>
+                                        <option value="Convertible">Convertible</option>
+                                        <option value="Coupé">Coupé</option>
+                                    </select>
+                                </div>
+                            </div>
+
+                            <!-- Combustible -->
+                            <div class="busqueda-filter-group">
+                                <label class="busqueda-filter-label">Combustible/Propulsión</label>
+                                <div class="busqueda-select-wrapper">
+                                    <select name="combustible" class="busqueda-filter-select" asp-for="Combustible">
+                                        <option value="">Todos los tipos</option>
+                                        <option value="Gasolina">Gasolina</option>
+                                        <option value="Diésel">Diésel</option>
+                                        <option value="Híbrido">Híbrido</option>
+                                        <option value="Eléctrico">Eléctrico</option>
+                                    </select>
+                                </div>
+                            </div>
+
+                            <!-- Tracción -->
+                            <div class="busqueda-filter-group">
+                                <label class="busqueda-filter-label">Tracción</label>
+                                <div class="busqueda-select-wrapper">
+                                    <select name="traccion" class="busqueda-filter-select" asp-for="Traccion">
+                                        <option value="">Todas las tracciones</option>
+                                        <option value="Delantera">Delantera</option>
+                                        <option value="Trasera">Trasera</option>
+                                        <option value="4x4">4x4</option>
+                                        <option value="AWD">AWD</option>
+                                    </select>
+                                </div>
+                            </div>
+
+                            <!-- Tipo de Vendedor -->
+                            <div class="busqueda-filter-group">
+                                <label class="busqueda-filter-label">Tipo de vendedor</label>
+                                <div class="busqueda-select-wrapper">
+                                    <select name="tipoVendedor" class="busqueda-filter-select" asp-for="TipoVendedor">
+                                        <option value="">Todos</option>
+                                        <option value="Particular">Particular</option>
+                                        <option value="Concesionario">Concesionario</option>
+                                    </select>
+                                </div>
+                            </div>
+
+                            <!-- Condición -->
+                            <div class="busqueda-filter-group">
+                                <label class="busqueda-filter-label">Condición</label>
+                                <div class="busqueda-select-wrapper">
+                                    <select name="condicion" class="busqueda-filter-select" asp-for="Condicion">
+                                        <option value="">Todas</option>
+                                        <option value="Nuevo">Nuevo</option>
+                                        <option value="Usado">Usado</option>
+                                    </select>
+                                </div>
+                            </div>
+
+                            <!-- Transmisión -->
+                            <div class="busqueda-filter-group">
+                                <label class="busqueda-filter-label">Transmisión</label>
+                                <div class="busqueda-select-wrapper">
+                                    <select name="transmision" class="busqueda-filter-select" asp-for="Transmision">
+                                        <option value="">Todas</option>
+                                        <option value="Manual">Manual</option>
+                                        <option value="Automática">Automática</option>
+                                        <option value="CVT">CVT</option>
+                                    </select>
+                                </div>
+                            </div>
+
+                            <!-- Pasajeros -->
+                            <div class="busqueda-filter-group">
+                                <label class="busqueda-filter-label">Pasajeros</label>
+                                <div class="busqueda-select-wrapper">
+                                    <select name="pasajeros" class="busqueda-filter-select" asp-for="Pasajeros">
+                                        <option value="">Todos</option>
+                                        <option value="2">2</option>
+                                        <option value="4">4</option>
+                                        <option value="5">5</option>
+                                        <option value="7">7</option>
+                                        <option value="8+">8+</option>
+                                    </select>
+                                </div>
+                            </div>
+
+                            <!-- Extras -->
+                            <div class="busqueda-filter-group">
+                                <label class="busqueda-filter-label">Extras</label>
+                                <div class="busqueda-select-wrapper">
+                                    <select name="extras" class="busqueda-filter-select" asp-for="Extras">
+                                        <option value="">Todos</option>
+                                        <option value="Aire acondicionado">Aire acondicionado</option>
+                                        <option value="GPS">GPS</option>
+                                        <option value="Cámara trasera">Cámara trasera</option>
+                                        <option value="Asientos de cuero">Asientos de cuero</option>
+                                    </select>
+                                </div>
+                            </div>
+
+                        </form>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Modal Actions (Mobile/Tablet) -->
+            <div class="busqueda-filter-modal-actions">
+                <button type="button" class="busqueda-filter-apply-btn" onclick="document.getElementById('mobileFilterForm').submit();">Aplicar filtros</button>
+                <button type="button" class="busqueda-filter-clear-btn" onclick="clearFilters()">Limpiar</button>
+            </div>
+        </div>
+    </div>
 </div>
 
 @section Scripts {
@@ -354,5 +692,83 @@
         @Html.AntiForgeryToken()
     </form>
     <script src="~/js/mis-anuncios.js"></script>
+    <script>
+        // Filter Modal Functions
+        function openFilterModal() {
+            document.getElementById('filterModal').classList.add('active');
+            document.body.classList.add('modal-open');
+        }
+
+        function closeFilterModal() {
+            document.getElementById('filterModal').classList.remove('active');
+            document.body.classList.remove('modal-open');
+        }
+
+        // Close modal when clicking outside
+        document.getElementById('filterModal')?.addEventListener('click', function(e) {
+            if (e.target === this) {
+                closeFilterModal();
+            }
+        });
+
+        // Sorting function
+        function changeMisAnunciosSorting(sortValue) {
+            const url = new URL(window.location.href);
+            url.searchParams.set('ordenarPor', sortValue);
+            url.searchParams.set('pagina', '1'); // Reset to page 1 when sorting changes
+            window.location.href = url.toString();
+        }
+
+        // Auto-submit filters when selection changes (for desktop sidebar)
+        function autoSubmitFilters() {
+            document.getElementById('desktopFilterForm').submit();
+        }
+
+        // Clear all filters
+        function clearFilters() {
+            const url = new URL(window.location.origin + window.location.pathname);
+            url.searchParams.set('page', '1');
+            url.searchParams.set('ordenarPor', '@Model.OrdenarPor');
+            window.location.href = url.toString();
+        }
+
+        // Remove filter function
+        function removeFilter(filterValue) {
+            const url = new URL(window.location);
+            
+            // Check which parameter to remove based on the filter value
+            // Match patterns for different filter types
+            if (filterValue.includes('₡')) {
+                // Price range filter
+                url.searchParams.delete('precioMin');
+                url.searchParams.delete('precioMax');
+            } else if (filterValue.includes('km')) {
+                // Kilometrage filter
+                url.searchParams.delete('kmMin');
+                url.searchParams.delete('kmMax');
+            } else if (/^\d{4}/.test(filterValue)) {
+                // Year filter (starts with 4 digits)
+                url.searchParams.delete('añoMin');
+                url.searchParams.delete('añoMax');
+            } else {
+                // Try to find the parameter by comparing values
+                const params = ['provincia', 'canton', 'marca', 'modelo', 'carroceria', 'combustible', 
+                              'traccion', 'tipoVendedor', 'condicion', 'transmision', 'pasajeros', 'extras'];
+                
+                params.forEach(param => {
+                    const currentValue = url.searchParams.get(param);
+                    if (currentValue && currentValue === filterValue) {
+                        url.searchParams.delete(param);
+                        // Also clear dependent fields
+                        if (param === 'marca') url.searchParams.delete('modelo');
+                        if (param === 'provincia') url.searchParams.delete('canton');
+                    }
+                });
+            }
+            
+            url.searchParams.set('page', '1');
+            window.location.href = url.toString();
+        }
+    </script>
 }
 
