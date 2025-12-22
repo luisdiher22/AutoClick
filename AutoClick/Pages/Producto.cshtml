@@ -233,25 +233,7 @@
                                 <h3 class="marchamo-tari-title-orange-1">Marchamo 2025</h3>
                                 @if (Model.MarchamoInfo != null && Model.MarchamoInfo.Total > 0)
                                 {
-                                    <div style="display: flex; flex-direction: column; gap: 8px; width: 100%;">
-                                        <div style="display: flex; justify-content: space-between; padding: 0 20px;">
-                                            <span style="font-family: 'Montserrat', sans-serif; font-weight: 500; font-size: 14px; color: rgba(0, 0, 0, 0.6);">Impuesto de circulación:</span>
-                                            <span style="font-family: 'Montserrat', sans-serif; font-weight: 700; font-size: 14px; color: rgba(0, 0, 0, 0.75);">@Model.MarchamoInfo.ImpuestoCirculacionFormateado</span>
-                                        </div>
-                                        <div style="display: flex; justify-content: space-between; padding: 0 20px;">
-                                            <span style="font-family: 'Montserrat', sans-serif; font-weight: 500; font-size: 14px; color: rgba(0, 0, 0, 0.6);">Seguro obligatorio (INS):</span>
-                                            <span style="font-family: 'Montserrat', sans-serif; font-weight: 700; font-size: 14px; color: rgba(0, 0, 0, 0.75);">@Model.MarchamoInfo.SeguroObligatorioFormateado</span>
-                                        </div>
-                                        <div style="display: flex; justify-content: space-between; padding: 0 20px;">
-                                            <span style="font-family: 'Montserrat', sans-serif; font-weight: 500; font-size: 14px; color: rgba(0, 0, 0, 0.6);">Timbre de circulación:</span>
-                                            <span style="font-family: 'Montserrat', sans-serif; font-weight: 700; font-size: 14px; color: rgba(0, 0, 0, 0.75);">@Model.MarchamoInfo.TimbreCirculacionFormateado</span>
-                                        </div>
-                                        <div style="height: 1px; background: rgba(0, 0, 0, 0.15); margin: 4px 20px;"></div>
-                                        <div style="display: flex; justify-content: space-between; padding: 0 20px;">
-                                            <span style="font-family: 'Montserrat', sans-serif; font-weight: 700; font-size: 18px; color: #FF8500;">TOTAL APROXIMADO:</span>
-                                            <span style="font-family: 'Montserrat', sans-serif; font-weight: 700; font-size: 18px; color: rgba(0, 0, 0, 0.85);">@Model.MarchamoInfo.TotalFormateado</span>
-                                        </div>
-                                    </div>
+                                    <p class="marchamo-tari-disponible">@Model.MarchamoInfo.TotalFormateado</p>
                                 }
                                 else
                                 {
@@ -265,25 +247,7 @@
                                 <h3 class="marchamo-tari-title-orange-2">Costos de traspaso</h3>
                                 @if (Model.TraspasoInfo != null && Model.TraspasoInfo.Total > 0)
                                 {
-                                    <div style="display: flex; flex-direction: column; gap: 8px; width: 100%;">
-                                        <div style="display: flex; justify-content: space-between; padding: 0 20px;">
-                                            <span style="font-family: 'Montserrat', sans-serif; font-weight: 500; font-size: 14px; color: rgba(0, 0, 0, 0.6);">Impuesto de traspaso (2.5%):</span>
-                                            <span style="font-family: 'Montserrat', sans-serif; font-weight: 700; font-size: 14px; color: rgba(0, 0, 0, 0.75);">@Model.TraspasoInfo.ImpuestoTraspasoFormateado</span>
-                                        </div>
-                                        <div style="display: flex; justify-content: space-between; padding: 0 20px;">
-                                            <span style="font-family: 'Montserrat', sans-serif; font-weight: 500; font-size: 14px; color: rgba(0, 0, 0, 0.6);">Timbres y gastos:</span>
-                                            <span style="font-family: 'Montserrat', sans-serif; font-weight: 700; font-size: 14px; color: rgba(0, 0, 0, 0.75);">@Model.TraspasoInfo.TimbresFormateado</span>
-                                        </div>
-                                        <div style="display: flex; justify-content: space-between; padding: 0 20px;">
-                                            <span style="font-family: 'Montserrat', sans-serif; font-weight: 500; font-size: 14px; color: rgba(0, 0, 0, 0.6);">Honorarios de abogado:</span>
-                                            <span style="font-family: 'Montserrat', sans-serif; font-weight: 700; font-size: 14px; color: rgba(0, 0, 0, 0.75);">@Model.TraspasoInfo.HonorariosAbogadoFormateado</span>
-                                        </div>
-                                        <div style="height: 1px; background: rgba(0, 0, 0, 0.15); margin: 4px 20px;"></div>
-                                        <div style="display: flex; justify-content: space-between; padding: 0 20px;">
-                                            <span style="font-family: 'Montserrat', sans-serif; font-weight: 700; font-size: 18px; color: #FF8400;">TOTAL APROXIMADO:</span>
-                                            <span style="font-family: 'Montserrat', sans-serif; font-weight: 700; font-size: 18px; color: rgba(0, 0, 0, 0.85);">@Model.TraspasoInfo.TotalFormateado</span>
-                                        </div>
-                                    </div>
+                                    <p class="marchamo-tari-disponible">@Model.TraspasoInfo.TotalFormateado</p>
                                 }
                                 else
                                 {
