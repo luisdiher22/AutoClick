@@ -958,6 +958,11 @@
     </div>
 </div>
 
+<!-- Advertisement after financing (mobile/tablet only) -->
+<div class="producto-financing-ad-horizontal">
+    @await Component.InvokeAsync("CarruselPublicidad", new { formato = "horizontal", seccion = "producto-financing-footer" })
+</div>
+
 <script>
     // Gallery navigation
     document.addEventListener('DOMContentLoaded', function () {
@@ -1397,10 +1402,31 @@
         line-height: 1.5;
     }
 
+    /* Advertisement after financing (hidden on desktop) */
+    .producto-financing-ad-horizontal {
+        display: none;
+    }
+
     /* Responsive */
     @@media (max-width: 768px) {
         .financing-grid {
             grid-template-columns: 1fr;
+        }
+
+        /* Show financing ad on mobile */
+        .producto-financing-ad-horizontal {
+            display: block;
+            margin-top: 48px;
+            margin-bottom: 48px;
+        }
+    }
+
+    @@media (min-width: 769px) and (max-width: 1023px) {
+        /* Show financing ad on tablet */
+        .producto-financing-ad-horizontal {
+            display: block;
+            margin-top: 48px;
+            margin-bottom: 48px;
         }
     }
 

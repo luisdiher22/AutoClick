@@ -1,21 +1,36 @@
 using Azure.Storage.Blobs;
 using Azure.Storage.Blobs.Models;
 using Azure.Identity;
+using SixLabors.ImageSharp;
+using SixLabors.ImageSharp.Processing;
+using SixLabors.ImageSharp.Formats.Jpeg;
+using AutoClick.Models;
 
 namespace AutoClick.Services;
 
 /// <summary>
 /// Servicio para gestionar el almacenamiento de imágenes de publicidad en Azure Blob Storage.
 /// Implementa las mejores prácticas de Azure: Managed Identity, manejo de errores, y reintentos automáticos.
+/// Incluye validación y redimensionamiento automático de imágenes según el tamaño del anuncio.
 /// </summary>
 public interface IPublicidadStorageService
 {
     /// <summary>
     /// Sube una imagen de anuncio al contenedor de blobs 'anuncios' en Azure Storage
+    /// La imagen será redimensionada automáticamente según el tamaño especificado
     /// </summary>
     /// <param name="file">Archivo de imagen a subir</param>
+    /// <param name="tamanoAnuncio">Tamaño del anuncio (Horizontal, GrandeVertical, MedioVertical)</param>
     /// <returns>URL pública del blob subido</returns>
-    Task<string> UploadAnuncioImageAsync(IFormFile file);
+    Task<string> UploadAnuncioImageAsync(IFormFile file, TamanoAnuncio tamanoAnuncio);
+    
+    /// <summary>
+    /// Valida si una imagen cumple con los requisitos mínimos de dimensiones
+    /// </summary>
+    /// <param name="file">Archivo de imagen a validar</param>
+    /// <param name="tamanoAnuncio">Tamaño del anuncio esperado</param>
+    /// <returns>Tupla con (esValida, mensajeError)</returns>
+    Task<(bool esValida, string mensajeError)> ValidarDimensionesImagenAsync(IFormFile file, TamanoAnuncio tamanoAnuncio);
     
     /// <summary>
     /// Elimina una imagen de anuncio del contenedor de blobs 'anuncios'
@@ -89,7 +104,7 @@ public class PublicidadStorageService : IPublicidadStorageService
         }
     }
 
-    public async Task<string> UploadAnuncioImageAsync(IFormFile file)
+    public async Task<string> UploadAnuncioImageAsync(IFormFile file, TamanoAnuncio tamanoAnuncio)
     {
         // Validaciones
         if (file == null || file.Length == 0)
@@ -107,21 +122,31 @@ public class PublicidadStorageService : IPublicidadStorageService
             throw new ArgumentException($"Tipo de archivo no permitido. Solo se permiten: {string.Join(", ", AllowedContentTypes)}");
         }
 
+        // Validar dimensiones
+        var (esValida, mensajeError) = await ValidarDimensionesImagenAsync(file, tamanoAnuncio);
+        if (!esValida)
+        {
+            throw new ArgumentException(mensajeError);
+        }
+
         // Generar nombre único para el archivo
         var extension = Path.GetExtension(file.FileName).ToLowerInvariant();
         var fileName = $"{Guid.NewGuid()}{extension}";
 
         try
         {
+            // Redimensionar imagen según el tamaño del anuncio
+            using var resizedImageStream = await ResizeImageAsync(file, tamanoAnuncio);
+            
             if (_useAzureStorage && _blobServiceClient != null)
             {
-                _logger.LogInformation("Subiendo imagen de anuncio '{FileName}' a Azure Blob Storage", fileName);
-                return await UploadToAzureBlobAsync(file, fileName);
+                _logger.LogInformation("Subiendo imagen de anuncio redimensionada '{FileName}' a Azure Blob Storage", fileName);
+                return await UploadToAzureBlobAsync(resizedImageStream, fileName, file.ContentType);
             }
             else
             {
-                _logger.LogInformation("Subiendo imagen de anuncio '{FileName}' a almacenamiento local", fileName);
-                return await UploadToLocalStorageAsync(file, fileName);
+                _logger.LogInformation("Subiendo imagen de anuncio redimensionada '{FileName}' a almacenamiento local", fileName);
+                return await UploadToLocalStorageAsync(resizedImageStream, fileName);
             }
         }
         catch (Exception ex)
@@ -129,6 +154,69 @@ public class PublicidadStorageService : IPublicidadStorageService
             _logger.LogError(ex, "Error al subir imagen de anuncio '{FileName}'", fileName);
             throw new InvalidOperationException($"Error al subir la imagen: {ex.Message}", ex);
         }
+    }
+
+    public async Task<(bool esValida, string mensajeError)> ValidarDimensionesImagenAsync(IFormFile file, TamanoAnuncio tamanoAnuncio)
+    {
+        try
+        {
+            using var stream = file.OpenReadStream();
+            using var image = await Image.LoadAsync(stream);
+
+            var (targetWidth, targetHeight) = tamanoAnuncio.GetDimensions();
+            var aspectRatioTarget = (double)targetWidth / targetHeight;
+            var aspectRatioImage = (double)image.Width / image.Height;
+            
+            // Validar que la imagen no sea demasiado pequeña (al menos 50% de las dimensiones objetivo)
+            var minWidth = targetWidth * 0.5;
+            var minHeight = targetHeight * 0.5;
+
+            if (image.Width < minWidth || image.Height < minHeight)
+            {
+                return (false, $"La imagen es demasiado pequeña. Dimensiones mínimas: {minWidth}x{minHeight}px. Tu imagen: {image.Width}x{image.Height}px");
+            }
+
+            // Advertir si el aspect ratio es muy diferente (se recortará contenido)
+            var aspectRatioDiff = Math.Abs(aspectRatioTarget - aspectRatioImage);
+            if (aspectRatioDiff > 0.3)
+            {
+                _logger.LogWarning("La imagen tiene un aspect ratio muy diferente al objetivo. Puede haber recortes significativos.");
+            }
+
+            return (true, string.Empty);
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, "Error al validar dimensiones de imagen");
+            return (false, "Error al procesar la imagen. Asegúrese de que sea una imagen válida.");
+        }
+    }
+
+    private async Task<MemoryStream> ResizeImageAsync(IFormFile file, TamanoAnuncio tamanoAnuncio)
+    {
+        var (targetWidth, targetHeight) = tamanoAnuncio.GetDimensions();
+        
+        using var stream = file.OpenReadStream();
+        using var image = await Image.LoadAsync(stream);
+
+        // Redimensionar la imagen manteniendo aspect ratio y recortando el exceso
+        image.Mutate(x => x.Resize(new ResizeOptions
+        {
+            Size = new Size(targetWidth, targetHeight),
+            Mode = ResizeMode.Crop,
+            Position = AnchorPositionMode.Center
+        }));
+
+        var outputStream = new MemoryStream();
+        
+        // Guardar como JPEG con calidad alta
+        await image.SaveAsJpegAsync(outputStream, new JpegEncoder
+        {
+            Quality = 90
+        });
+
+        outputStream.Position = 0;
+        return outputStream;
     }
 
     public async Task<bool> DeleteAnuncioImageAsync(string imageUrl)
@@ -177,7 +265,7 @@ public class PublicidadStorageService : IPublicidadStorageService
 
     #region Azure Blob Storage Methods
 
-    private async Task<string> UploadToAzureBlobAsync(IFormFile file, string fileName)
+    private async Task<string> UploadToAzureBlobAsync(Stream stream, string fileName, string contentType)
     {
         var containerClient = _blobServiceClient!.GetBlobContainerClient(CONTAINER_NAME);
         
@@ -189,19 +277,16 @@ public class PublicidadStorageService : IPublicidadStorageService
         // Configurar headers HTTP para optimización
         var blobHttpHeaders = new BlobHttpHeaders
         {
-            ContentType = file.ContentType,
+            ContentType = "image/jpeg", // Siempre JPEG después del redimensionamiento
             CacheControl = "public, max-age=31536000" // Cache por 1 año
         };
 
         // Configurar metadata
         var metadata = new Dictionary<string, string>
         {
-            { "OriginalFileName", file.FileName },
             { "UploadDate", DateTime.UtcNow.ToString("O") },
-            { "FileSize", file.Length.ToString() }
+            { "FileSize", stream.Length.ToString() }
         };
-
-        using var stream = file.OpenReadStream();
         
         var uploadOptions = new BlobUploadOptions 
         { 
@@ -252,7 +337,7 @@ public class PublicidadStorageService : IPublicidadStorageService
 
     #region Local Storage Methods
 
-    private async Task<string> UploadToLocalStorageAsync(IFormFile file, string fileName)
+    private async Task<string> UploadToLocalStorageAsync(Stream stream, string fileName)
     {
         var uploadsPath = Path.Combine(_environment.WebRootPath, "uploads", CONTAINER_NAME);
         
@@ -264,8 +349,8 @@ public class PublicidadStorageService : IPublicidadStorageService
 
         var filePath = Path.Combine(uploadsPath, fileName);
         
-        using var stream = new FileStream(filePath, FileMode.Create);
-        await file.CopyToAsync(stream);
+        using var fileStream = new FileStream(filePath, FileMode.Create);
+        await stream.CopyToAsync(fileStream);
 
         _logger.LogInformation("Imagen de anuncio guardada localmente: {FilePath}", filePath);
 

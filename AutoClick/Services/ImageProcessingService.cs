@@ -61,50 +61,46 @@ namespace AutoClick.Services
             {
                 using var image = await Image.LoadAsync(imageStream);
 
-                // Calcular las dimensiones para mantener el aspect ratio
-                var ratioX = (double)targetWidth / image.Width;
-                var ratioY = (double)targetHeight / image.Height;
-                var ratio = Math.Min(ratioX, ratioY);
+                // Validar dimensiones mínimas (al menos 50% de las dimensiones objetivo)
+                var minWidth = targetWidth * 0.5;
+                var minHeight = targetHeight * 0.5;
 
-                var newWidth = (int)(image.Width * ratio);
-                var newHeight = (int)(image.Height * ratio);
+                if (image.Width < minWidth || image.Height < minHeight)
+                {
+                    throw new ArgumentException($"La imagen es demasiado pequeña. Dimensiones mínimas: {minWidth}x{minHeight}px. Tu imagen: {image.Width}x{image.Height}px");
+                }
 
-                // Redimensionar la imagen
+                // Advertir si el aspect ratio es muy diferente (se recortará contenido)
+                var aspectRatioTarget = (double)targetWidth / targetHeight;
+                var aspectRatioImage = (double)image.Width / image.Height;
+                var aspectRatioDiff = Math.Abs(aspectRatioTarget - aspectRatioImage);
+                
+                if (aspectRatioDiff > 0.3)
+                {
+                    _logger.LogWarning("La imagen tiene un aspect ratio muy diferente al objetivo. Puede haber recortes significativos. Target: {TargetRatio}, Image: {ImageRatio}", aspectRatioTarget, aspectRatioImage);
+                }
+
+                // Redimensionar la imagen manteniendo aspect ratio y recortando el exceso (Crop mode)
+                // Esto garantiza que la imagen llene completamente el espacio sin bordes vacíos
                 image.Mutate(x => x.Resize(new ResizeOptions
                 {
-                    Size = new Size(newWidth, newHeight),
-                    Mode = ResizeMode.Max
+                    Size = new Size(targetWidth, targetHeight),
+                    Mode = ResizeMode.Crop, // Cambiado de Max a Crop para evitar letterboxing
+                    Position = AnchorPositionMode.Center // Recortar desde el centro
                 }));
 
-                // Si la imagen redimensionada no coincide exactamente con el tamaño objetivo,
-                // crear un canvas del tamaño exacto y centrar la imagen
-                if (newWidth != targetWidth || newHeight != targetHeight)
-                {
-                    var targetImage = new Image<SixLabors.ImageSharp.PixelFormats.Rgba32>(targetWidth, targetHeight);
-                    targetImage.Mutate(ctx =>
-                    {
-                        // Calcular posición para centrar
-                        var x = (targetWidth - newWidth) / 2;
-                        var y = (targetHeight - newHeight) / 2;
-                        
-                        // Pegar la imagen redimensionada en el centro
-                        ctx.DrawImage(image, new Point(x, y), 1f);
-                    });
-
-                    image.Dispose();
-
-                    // Guardar la imagen procesada
-                    return await SaveImageAsync(targetImage, fileName);
-                }
-                else
-                {
-                    return await SaveImageAsync(image, fileName);
-                }
+                // Guardar la imagen procesada
+                return await SaveImageAsync(image, fileName);
+            }
+            catch (ArgumentException)
+            {
+                // Re-lanzar excepciones de validación
+                throw;
             }
             catch (Exception ex)
             {
                 _logger.LogError(ex, "Error al procesar imagen publicitaria");
-                throw;
+                throw new InvalidOperationException("Error al procesar la imagen. Asegúrese de que sea una imagen válida.", ex);
             }
         }
 

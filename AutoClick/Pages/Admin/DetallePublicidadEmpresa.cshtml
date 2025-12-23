@@ -862,7 +862,9 @@
                     <span class="modal-field-label">Subir imagen desde tu computadora</span>
                     <input type="file" asp-for="ImagenAnuncio" class="modal-field-input" accept="image/jpeg,image/jpg,image/png,image/gif,image/webp" onchange="onFileSelected('add')" />
                     <small class="modal-field-hint">
-                        Formatos permitidos: JPG, PNG, GIF, WEBP. Tamaño máximo: 5 MB
+                        Formatos permitidos: JPG, PNG, GIF, WEBP. Tamaño máximo: 5 MB<br/>
+                        <strong>📐 Importante:</strong> La imagen se redimensionará automáticamente a las dimensiones exactas del tamaño seleccionado.
+                        Si el aspect ratio no coincide, se recortará desde el centro.
                     </small>
                 </div>
 
@@ -890,12 +892,12 @@
                     <span class="modal-field-label">Tamaño del anuncio <span style="color: #EF4444;">*</span></span>
                     <select name="TamanoAnuncio" class="modal-field-input" required>
                         <option value="">Seleccione un tamaño</option>
-                        <option value="1">Horizontal (1010 x 189 px)</option>
-                        <option value="2">Medio Vertical (401 x 287 px)</option>
-                        <option value="3">Grande Vertical (344 x 423 px)</option>
+                        <option value="1">Horizontal (1010 x 189 px) - Ratio 5.3:1</option>
+                        <option value="2">Medio Vertical (401 x 287 px) - Ratio 1.4:1</option>
+                        <option value="3">Grande Vertical (344 x 423 px) - Ratio 0.8:1</option>
                     </select>
                     <small class="modal-field-hint">
-                        La imagen se adaptará automáticamente a este tamaño
+                        La imagen se redimensionará automáticamente. Para mejores resultados, use imágenes con el aspect ratio indicado.
                     </small>
                 </div>
             </div>
@@ -930,7 +932,9 @@
                     <span class="modal-field-label">Subir nueva imagen desde tu computadora</span>
                     <input type="file" asp-for="ImagenAnuncio" class="modal-field-input" accept="image/jpeg,image/jpg,image/png,image/gif,image/webp" onchange="onFileSelected('edit')" />
                     <small class="modal-field-hint">
-                        Formatos permitidos: JPG, PNG, GIF, WEBP. Tamaño máximo: 5 MB
+                        Formatos permitidos: JPG, PNG, GIF, WEBP. Tamaño máximo: 5 MB<br/>
+                        <strong>📐 Importante:</strong> La imagen se redimensionará automáticamente a las dimensiones exactas del tamaño seleccionado.
+                        Si el aspect ratio no coincide, se recortará desde el centro.
                     </small>
                 </div>
 
@@ -958,12 +962,12 @@
                     <span class="modal-field-label">Tamaño del anuncio <span style="color: #EF4444;">*</span></span>
                     <select name="TamanoAnuncio" id="editTamanoAnuncio" class="modal-field-input" required>
                         <option value="">Seleccione un tamaño</option>
-                        <option value="1">Horizontal (1010 x 189 px)</option>
-                        <option value="2">Medio Vertical (401 x 287 px)</option>
-                        <option value="3">Grande Vertical (344 x 423 px)</option>
+                        <option value="1">Horizontal (1010 x 189 px) - Ratio 5.3:1</option>
+                        <option value="2">Medio Vertical (401 x 287 px) - Ratio 1.4:1</option>
+                        <option value="3">Grande Vertical (344 x 423 px) - Ratio 0.8:1</option>
                     </select>
                     <small class="modal-field-hint">
-                        Si sube una nueva imagen, se adaptará a este tamaño
+                        La imagen se redimensionará automáticamente. Para mejores resultados, use imágenes con el aspect ratio indicado.
                     </small>
                 </div>
             </div>

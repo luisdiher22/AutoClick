@@ -194,7 +194,7 @@
 
 /* Card de publicidad (mismo tamaño que cards de autos) */
 .guardados-ad-card {
-    background: rgba(255, 255, 255, 0.03);
+    background: #02081C;
     border-radius: 8px;
     overflow: hidden;
     display: flex;
