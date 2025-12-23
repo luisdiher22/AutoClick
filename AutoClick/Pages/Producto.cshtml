@@ -822,7 +822,7 @@
                 }
 
                 <!-- Espacios Publicitarios Verticales -->
-                <div style="display: flex; flex-direction: column; gap: 16px; margin-top: 4px; width: 560px;">
+                <div style="display: flex; flex-direction: column; gap: 32px; margin-top: 4px; width: 560px;">
                     @await Component.InvokeAsync("CarruselPublicidad", new { formato = "cuadrado", seccion =
                     "producto-sidebar-1" })
                     @await Component.InvokeAsync("CarruselPublicidad", new { formato = "cuadrado", seccion =
@@ -922,7 +922,7 @@
     </div>
 </div>
 
-<!-- Advertisement after financing (mobile/tablet only) -->
+<!-- Advertisement after financing (all devices) -->
 <div class="producto-financing-ad-horizontal">
     @await Component.InvokeAsync("CarruselPublicidad", new { formato = "horizontal", seccion = "producto-financing-footer" })
 </div>
@@ -1366,31 +1366,17 @@
         line-height: 1.5;
     }
 
-    /* Advertisement after financing (hidden on desktop) */
+    /* Advertisement after financing (all devices) */
     .producto-financing-ad-horizontal {
-        display: none;
+        display: block;
+        margin-top: 48px;
+        margin-bottom: 48px;
     }
 
     /* Responsive */
     @@media (max-width: 768px) {
         .financing-grid {
             grid-template-columns: 1fr;
-        }
-
-        /* Show financing ad on mobile */
-        .producto-financing-ad-horizontal {
-            display: block;
-            margin-top: 48px;
-            margin-bottom: 48px;
-        }
-    }
-
-    @@media (min-width: 769px) and (max-width: 1023px) {
-        /* Show financing ad on tablet */
-        .producto-financing-ad-horizontal {
-            display: block;
-            margin-top: 48px;
-            margin-bottom: 48px;
         }
     }
 

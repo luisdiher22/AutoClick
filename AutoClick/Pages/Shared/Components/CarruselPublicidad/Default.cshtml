@@ -132,13 +132,26 @@
         margin: 0 auto;
     }
 
-    /* Anuncios cuadrados en Producto sidebar - 560px de ancho */
+    /* Anuncios cuadrados en Producto sidebar - ocupan 100% del ancho del contenedor */
+    .ad-carousel-container.ad-carousel-cuadrado[data-seccion="producto-sidebar-1"],
+    .ad-carousel-container.ad-carousel-cuadrado[data-seccion="producto-sidebar-2"] {
+        width: 100% !important;
+        max-width: none !important;
+    }
+
+    /* Agregar espacio después del primer anuncio */
+    .ad-carousel-container.ad-carousel-cuadrado[data-seccion="producto-sidebar-1"] {
+        margin-bottom: 250px !important;
+    }
+
     .ad-carousel-container.ad-carousel-cuadrado[data-seccion="producto-sidebar-1"] .ad-carousel-inner,
     .ad-carousel-container.ad-carousel-cuadrado[data-seccion="producto-sidebar-2"] .ad-carousel-inner {
-        max-width: 560px;
-        aspect-ratio: 560 / 688;
-        min-height: 400px;
-        max-height: 688px;
+        max-width: 100% !important;
+        width: 100% !important;
+        aspect-ratio: 560 / 688 !important;
+        min-height: 400px !important;
+        max-height: 688px !important;
+        margin: 0 !important;
     }
 
     /* ===== ANUNCIOS HORIZONTALES ===== */
