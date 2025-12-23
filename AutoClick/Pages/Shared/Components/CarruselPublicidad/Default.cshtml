@@ -377,8 +377,16 @@
 </style>
 
 <script>
-    const autoplayInterval = 5000; // 5 segundos
-    const carouselStates = new Map(); // Almacena el estado de cada carrusel
+    // Evitar redeclaración si el script se incluye múltiples veces
+    if (typeof window.carouselAutoplayInterval === 'undefined') {
+        window.carouselAutoplayInterval = 5000; // 5 segundos
+    }
+    if (typeof window.carouselStates === 'undefined') {
+        window.carouselStates = new Map(); // Almacena el estado de cada carrusel
+    }
+
+    const autoplayInterval = window.carouselAutoplayInterval;
+    const carouselStates = window.carouselStates;
 
     function getCarouselState(carrusel) {
         if (!carouselStates.has(carrusel)) {
