@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using Microsoft.EntityFrameworkCore;
 using AutoClick.Data;
 using AutoClick.Models;
 using AutoClick.Services;
@@ -175,18 +176,33 @@ namespace AutoClick.Pages
                 if (!string.IsNullOrEmpty(Edit) && int.TryParse(Edit, out int editId))
                 {
                     var auto = await ActualizarAutoAsync(editId, userEmail);
-                    return Redirect("/");
+                    // Retornar JSON con el ID del auto para el frontend
+                    return new JsonResult(new { autoId = auto.Id, success = true });
                 }
                 else
                 {
                     var auto = await CrearAutoAsync(userEmail);
-                    return Redirect("/");
+                    // Retornar JSON con el ID del auto para el frontend
+                    return new JsonResult(new { autoId = auto.Id, success = true });
                 }
+            }
+            catch (DbUpdateException ex)
+            {
+                // Verificar si es un error de placa duplicada
+                if (ex.InnerException != null && 
+                    (ex.InnerException.Message.Contains("IX_Autos_PlacaVehiculo") || 
+                     ex.InnerException.Message.Contains("duplicate key")))
+                {
+                    return new JsonResult(new { error = "Ya existe un anuncio registrado con esta placa. Por favor, verifica que hayas ingresado la placa correctamente." }) { StatusCode = 400 };
+                }
+                
+                // Otro error de base de datos
+                return new JsonResult(new { error = "Error al guardar en la base de datos. Por favor, intenta nuevamente." }) { StatusCode = 500 };
             }
             catch (Exception ex)
             {
-                ModelState.AddModelError("", "Error al procesar el formulario: " + ex.Message);
-                return Page();
+                // Error general
+                return new JsonResult(new { error = "Ocurrió un error al crear el anuncio. Por favor, intenta nuevamente o contacta a soporte." }) { StatusCode = 500 };
             }
         }
 
@@ -280,16 +296,49 @@ namespace AutoClick.Pages
                 EmailPropietario = userEmail,
                 FechaCreacion = DateTime.Now,
                 FechaActualizacion = DateTime.Now,
-                Activo = true
+                // Todos los autos se crean inactivos:
+                // - Planes de pago (1-4): se activan cuando el webhook confirme el pago exitoso
+                // - Plan gratuito (5): se activa cuando un administrador lo apruebe
+                Activo = false
             };
 
             // DEBUG: Log antes de guardar
             Console.WriteLine($"AUTO CREADO - BanderinesAdquiridos: {auto.BanderinesAdquiridos ?? "NULL"}");
+            Console.WriteLine($"AUTO CREADO - PlanVisibilidad: {auto.PlanVisibilidad}");
 
             try
             {
                 _context.Autos.Add(auto);
                 await _context.SaveChangesAsync();
+                
+                Console.WriteLine($"Auto guardado con ID: {auto.Id}");
+                
+                // Si es un plan gratuito (PlanVisibilidad = 5), crear una solicitud de pre-aprobación
+                if (auto.PlanVisibilidad == 5)
+                {
+                    Console.WriteLine("Creando solicitud de pre-aprobación para plan gratuito...");
+                    
+                    var solicitud = new SolicitudPreAprobacion
+                    {
+                        Nombre = "Usuario",
+                        Apellidos = "de AutoClick",
+                        Telefono = "Por contactar",
+                        Email = userEmail,
+                        AutoId = auto.Id,
+                        FechaSolicitud = DateTime.Now,
+                        Procesada = false,
+                        Notas = $"Solicitud de aprobación para anuncio gratuito: {auto.Marca} {auto.Modelo} {auto.Ano}, Placa: {auto.PlacaVehiculo}"
+                    };
+                    
+                    _context.SolicitudesPreAprobacion.Add(solicitud);
+                    await _context.SaveChangesAsync();
+                    
+                    Console.WriteLine($"Solicitud de pre-aprobación creada con ID: {solicitud.Id}");
+                }
+                else
+                {
+                    Console.WriteLine($"No se crea solicitud. Plan: {auto.PlanVisibilidad}");
+                }
             }
             catch (Exception ex)
             {

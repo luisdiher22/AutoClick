@@ -129,6 +129,16 @@ builder.Services.AddSingleton<ITasaCambioService, TasaCambioService>();
 // Add Ventas Externas Service
 builder.Services.AddScoped<IVentasExternasService, VentasExternasService>();
 
+// Add HttpClient for ONVO Pay Service
+builder.Services.AddHttpClient();
+
+// Configure ONVO Pay settings
+builder.Services.Configure<OnvoPaySettings>(
+    builder.Configuration.GetSection("OnvoPay"));
+
+// Add ONVO Pay Service
+builder.Services.AddScoped<IOnvoPayService, OnvoPayService>();
+
 // Add Email Service para notificaciones
 builder.Services.AddScoped<IEmailService, EmailService>();
 

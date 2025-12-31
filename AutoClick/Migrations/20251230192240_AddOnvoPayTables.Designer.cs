@@ -4,6 +4,7 @@ using AutoClick.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace AutoClick.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20251230192240_AddOnvoPayTables")]
+    partial class AddOnvoPayTables
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -445,9 +448,6 @@ namespace AutoClick.Migrations
                     b.Property<int?>("AnuncioPublicidadId")
                         .HasColumnType("int");
 
-                    b.Property<int?>("AutoId")
-                        .HasColumnType("int");
-
                     b.Property<DateTime?>("CompletedAt")
                         .HasColumnType("datetime2");
 
@@ -495,8 +495,6 @@ namespace AutoClick.Migrations
                     b.HasKey("Id");
 
                     b.HasIndex("AnuncioPublicidadId");
-
-                    b.HasIndex("AutoId");
 
                     b.ToTable("PagosOnvo");
                 });
@@ -939,13 +937,7 @@ namespace AutoClick.Migrations
                         .WithMany()
                         .HasForeignKey("AnuncioPublicidadId");
 
-                    b.HasOne("AutoClick.Models.Auto", "Auto")
-                        .WithMany()
-                        .HasForeignKey("AutoId");
-
                     b.Navigation("AnuncioPublicidad");
-
-                    b.Navigation("Auto");
                 });
 
             modelBuilder.Entity("AutoClick.Models.SolicitudPreAprobacion", b =>

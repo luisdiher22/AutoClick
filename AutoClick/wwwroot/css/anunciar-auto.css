@@ -1608,6 +1608,7 @@ select#ano option {
     .btn-next {
         flex: 0 0 70%;
         order: 2;
+        text-align: center;
     }
     
     .form-header {
@@ -1863,71 +1864,17 @@ select#ano option {
     }
     
     /* Mostrar toggle desplegable en tablet como en móvil */
+    /* Ocultar toggle en tablet - mostrar desglose siempre */
     .payment-summary-toggle {
-        display: flex !important;
-        align-items: center;
-        justify-content: space-between;
-        padding: 16px 20px;
-        background: transparent;
-        border: none;
-        border-bottom: 1px solid rgba(255, 255, 255, 0.25);
-        border-radius: 0;
-        cursor: pointer;
-        margin-top: 0;
-        margin-bottom: 0;
-        transition: all 0.3s;
+        display: none !important;
     }
     
-    .payment-summary-toggle:hover {
-        background: transparent;
-    }
-    
-    .payment-summary-toggle .price-display {
-        display: flex;
-        align-items: baseline;
-        gap: 8px;
-    }
-    
-    .payment-summary-toggle .price-display span:first-child {
-        color: white;
-        font-size: 20px;
-        font-family: 'Montserrat', sans-serif;
-        font-weight: 700;
-    }
-    
-    .payment-summary-toggle .price-display span:last-child {
-        color: rgba(255, 255, 255, 0.5);
-        font-size: 14px;
-        font-family: 'Montserrat', sans-serif;
-        font-weight: 500;
-        text-transform: lowercase;
-    }
-    
-    .payment-summary-toggle .toggle-arrow {
-        width: 20px;
-        height: 20px;
-        transition: transform 0.3s;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-    }
-    
-    .payment-summary-toggle .toggle-arrow svg {
-        fill: none;
-        stroke: white;
-        stroke-width: 2;
-    }
-    
-    .payment-summary-toggle.active .toggle-arrow {
-        transform: rotate(180deg);
-    }
-    
-    /* Detalles colapsables en tablet */
+    /* Mostrar detalles siempre en tablet */
     .payment-summary-details {
-        max-height: 0;
-        overflow: hidden;
-        transition: max-height 0.3s ease-out;
-        padding-top: 0;
+        display: block !important;
+        max-height: none !important;
+        overflow: visible !important;
+        padding-top: 24px;
     }
     
     .payment-summary-details.expanded {
@@ -2053,6 +2000,10 @@ select#ano option {
     .btn-next {
         flex: 1;
         order: 2;
+        text-align: center;
+        display: flex;
+        justify-content: center;
+        align-items: center;
     }
     
     /* Fondo oscuro para form-section en móvil */
@@ -2110,75 +2061,21 @@ select#ano option {
         order: 2;
     }
     
-    /* Desplegable de desglose de pago en móvil */
+    /* Ocultar toggle en móvil - mostrar desglose siempre */
     .payment-summary-toggle {
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-        padding: 16px 20px;
-        background: transparent;
-        border: none;
-        border-bottom: 1px solid rgba(255, 255, 255, 0.25);
-        border-radius: 0;
-        cursor: pointer;
-        margin-top: 0;
-        margin-bottom: 0;
-        transition: all 0.3s;
+        display: none !important;
     }
     
-    .payment-summary-toggle:hover {
-        background: transparent;
-    }
-    
-    .payment-summary-toggle .price-display {
-        display: flex;
-        align-items: baseline;
-        gap: 8px;
-    }
-    
-    .payment-summary-toggle .price-display span:first-child {
-        color: white;
-        font-size: 20px;
-        font-family: 'Montserrat', sans-serif;
-        font-weight: 700;
-    }
-    
-    .payment-summary-toggle .price-display span:last-child {
-        color: rgba(255, 255, 255, 0.5);
-        font-size: 14px;
-        font-family: 'Montserrat', sans-serif;
-        font-weight: 500;
-        text-transform: lowercase;
-    }
-    
-    .payment-summary-toggle .toggle-arrow {
-        width: 20px;
-        height: 20px;
-        transition: transform 0.3s;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-    }
-    
-    .payment-summary-toggle .toggle-arrow svg {
-        fill: none;
-        stroke: white;
-        stroke-width: 2;
-    }
-    
-    .payment-summary-toggle.active .toggle-arrow {
-        transform: rotate(180deg);
-    }
-    
+    /* Mostrar detalles siempre en móvil */
     .payment-summary-details {
-        max-height: 0;
-        overflow: hidden;
-        transition: max-height 0.3s ease-out;
-        padding-top: 0;
+        display: block !important;
+        max-height: none !important;
+        overflow: visible !important;
+        padding-top: 24px;
     }
     
     .payment-summary-details.expanded {
-        max-height: 800px;
+        max-height: none;
         padding-top: 24px;
     }
     
@@ -2406,4 +2303,12 @@ select#ano option {
     }
 }
 
-
+/* Estilos para tablet (768px - 1024px) */
+@media (min-width: 768px) and (max-width: 1024px) {
+    .btn-next {
+        text-align: center;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+}

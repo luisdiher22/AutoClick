@@ -190,16 +190,33 @@ window.updatePriceCurrency = function () {
 document.addEventListener('DOMContentLoaded', function () {
     // Form navigation state
     let currentSection = 1;
-    const totalSections = 8;
+    const totalSections = 9; // Actualizado: 1-5 igual, 6=multimedia, 7=desglose, 8=pago (condicional), 9=confirmación
 
     // Inicializar selector de marca/modelo
     initializeMarcaModeloSelectors();
+
+    // Verificar si viene de un pago exitoso o cancelado
+    const urlParams = new URLSearchParams(window.location.search);
+    if (urlParams.get('success') === 'true') {
+        // Mostrar la sección de confirmación (9)
+        currentSection = 9;
+        // Limpiar sessionStorage
+        sessionStorage.removeItem('anuncioFormState');
+    } else if (urlParams.get('section')) {
+        // Restaurar a una sección específica (por ejemplo, después de cancelar pago)
+        const section = parseInt(urlParams.get('section'));
+        if (section >= 1 && section <= totalSections) {
+            currentSection = section;
+            // Restaurar datos del formulario
+            restoreFormState();
+        }
+    }
 
     // Initialize form
     initializeForm();
 
     function initializeForm() {
-        showSection(1);
+        showSection(currentSection);
         updateSectionIndicator();
         initializeEventListeners();
         initializePaymentTabs();
@@ -422,6 +439,73 @@ document.addEventListener('DOMContentLoaded', function () {
         }
 
         if (isValid) {
+            // Si estamos en la sección 7 (desglose de costos)
+            if (currentSection === 7) {
+                const total = window.currentPaymentTotal || 0;
+                
+                if (total > 0) {
+                    // Hay que pagar - crear el auto primero y luego ir a pago
+                    if (nextBtn) {
+                        nextBtn.disabled = true;
+                        nextBtn.textContent = 'Creando anuncio...';
+                    }
+                    
+                    // Guardar estado del formulario antes de redireccionar
+                    saveFormState();
+                    
+                    const autoCreated = await submitForm(true); // true = no mostrar confirmación aún
+                    
+                    if (autoCreated && autoCreated.autoId) {
+                        // Redirigir a la pasarela de pago con el ID del auto
+                        const amount = Math.round(total * 100); // Convertir a centavos
+                        window.location.href = `/Pagos/ProcessPayment?autoId=${autoCreated.autoId}&amount=${amount}`;
+                        return;
+                    } else {
+                        // Error al crear el auto
+                        if (nextBtn) {
+                            nextBtn.disabled = false;
+                            nextBtn.textContent = originalText;
+                        }
+                        
+                        // Verificar si es un error de placa duplicada
+                        let errorMsg = 'Error al crear el anuncio. Por favor, inténtelo de nuevo.';
+                        if (autoCreated && autoCreated.error) {
+                            if (autoCreated.error.includes('placa') || autoCreated.error.includes('duplicate')) {
+                                errorMsg = 'Esta placa ya está registrada en otro anuncio. Por favor, verifica la placa e inténtalo de nuevo.';
+                            } else {
+                                errorMsg = autoCreated.error;
+                            }
+                        }
+                        
+                        showValidationModal(errorMsg);
+                        return;
+                    }
+                } else {
+                    // Total es 0 - saltar la sección 8 (pago) y crear el auto directamente
+                    if (nextBtn) {
+                        nextBtn.disabled = true;
+                        nextBtn.textContent = 'Publicando...';
+                    }
+                    
+                    const result = await submitForm(false); // false = mostrar confirmación
+                    
+                    if (result) {
+                        // Ir directamente a la sección 9 (confirmación)
+                        currentSection = 9;
+                        showSection(currentSection);
+                        updateSectionIndicator();
+                        updateNavigationButtons();
+                        updateConfirmationMessage(false); // false = plan gratuito
+                    }
+                    
+                    if (nextBtn) {
+                        nextBtn.disabled = false;
+                        nextBtn.textContent = originalText;
+                    }
+                    return;
+                }
+            }
+            
             if (currentSection < totalSections) {
                 const previousSection = currentSection;
                 currentSection++;
@@ -493,13 +577,28 @@ document.addEventListener('DOMContentLoaded', function () {
         const navButtons = document.querySelector('.form-nav-buttons');
 
         if (backBtn) {
-            backBtn.style.display = currentSection === 1 ? 'none' : 'flex';
+            // Ocultar botón atrás en sección 1 y en sección 9 (confirmación)
+            backBtn.style.display = (currentSection === 1 || currentSection === 9) ? 'none' : 'flex';
         }
 
         if (nextBtn) {
-            if (currentSection === totalSections) {
-                nextBtn.textContent = 'Publicar anuncio';
+            // Ocultar botón siguiente en sección 9 (confirmación final)
+            if (currentSection === 9) {
+                nextBtn.style.display = 'none';
+            } else if (currentSection === 7) {
+                // Sección 7 (desglose): texto condicional según el total
+                nextBtn.style.display = 'flex';
+                const total = window.currentPaymentTotal || 0;
+                if (total > 0) {
+                    nextBtn.textContent = 'Continuar al pago';
+                } else {
+                    nextBtn.textContent = 'Publicar anuncio';
+                }
+            } else if (currentSection === 8) {
+                // Sección 8 no debería mostrarse, pero por si acaso
+                nextBtn.style.display = 'none';
             } else {
+                nextBtn.style.display = 'flex';
                 nextBtn.textContent = 'Siguiente sección';
             }
         }
@@ -593,9 +692,9 @@ document.addEventListener('DOMContentLoaded', function () {
                     privacyCheckbox.scrollIntoView({ behavior: 'smooth', block: 'center' });
                 }
                 break;
-            case 6: // Pago
-                const paymentValid = validatePaymentData();
-                isValid = paymentValid && isValid;
+            case 6: // Multimedia - No requiere validación obligatoria
+                break;
+            case 7: // Desglose de costos - No requiere validación
                 break;
             default:
                 // For sections without specific validation, check only required fields
@@ -812,15 +911,16 @@ document.addEventListener('DOMContentLoaded', function () {
         const selectedPlan = document.querySelector('input[name="Formulario.PlanVisibilidad"]:checked');
         const selectedTags = document.querySelectorAll('.tag-option input[type="checkbox"]:checked');
 
-        const serviceFee = 180; // Tarifa de servicio fija
         let planPrice = 0;
         let planName = "Ninguno";
+        let planValue = 0;
         let tagPrice = 0;
         let tagName = "Ninguno";
 
         if (selectedPlan) {
             planPrice = parseFloat(selectedPlan.dataset.price || 0);
             planName = selectedPlan.dataset.planName || "Plan seleccionado";
+            planValue = parseInt(selectedPlan.value || 0);
         }
 
         // Calcular precio de banderines (checkboxes - pueden ser múltiples)
@@ -840,6 +940,10 @@ document.addEventListener('DOMContentLoaded', function () {
 
         const subtotal = planPrice + tagPrice;
         const iva = subtotal * 0.13; // 13% IVA
+        
+        // Tarifa de servicio solo para planes de pago (valor 1-4), no para plan gratuito (valor 5)
+        const serviceFee = (planValue >= 1 && planValue <= 4) ? 180 : 0;
+        
         const total = subtotal + iva + serviceFee;
 
         // Función helper para formatear números
@@ -870,15 +974,30 @@ document.addEventListener('DOMContentLoaded', function () {
             summaryIva.querySelector('span:last-child').textContent = formatCurrency(iva);
         }
 
+        // Mostrar/ocultar línea de tarifa de servicio
         const summaryService = document.querySelector('#summary-service');
         if (summaryService) {
-            summaryService.querySelector('span:last-child').textContent = formatCurrency(serviceFee);
+            if (serviceFee > 0) {
+                summaryService.style.display = 'flex';
+                summaryService.querySelector('span:last-child').textContent = formatCurrency(serviceFee);
+            } else {
+                summaryService.style.display = 'none';
+            }
         }
 
         const totalElement = document.querySelector('.total-amount');
         if (totalElement) {
             totalElement.textContent = formatCurrency(total);
         }
+
+        // Actualizar el total en m\u00f3vil tambi\u00e9n
+        const totalMobile = document.querySelector('.total-amount-mobile');
+        if (totalMobile) {
+            totalMobile.textContent = formatCurrency(total);
+        }
+        
+        // Guardar el total actual para uso posterior
+        window.currentPaymentTotal = total;
     }
 
     function updateSummaryLine(label, value) {
@@ -1719,18 +1838,18 @@ document.addEventListener('DOMContentLoaded', function () {
         textarea.parentNode.insertBefore(counter, textarea.nextSibling);
     }
 
-    function submitForm() {
+    async function submitForm(skipConfirmation = false) {
 
         // Show loading state
         const nextBtn = document.querySelector('.btn-next');
-        if (nextBtn) {
+        if (nextBtn && !skipConfirmation) {
             nextBtn.textContent = 'Procesando...';
             nextBtn.disabled = true;
         }
 
         const form = document.querySelector('#anuncioForm');
         if (!form) {
-            return;
+            return null;
         }
 
 
@@ -1756,28 +1875,51 @@ document.addEventListener('DOMContentLoaded', function () {
             }
         }
 
-        // Submit using fetch with FormData
-        fetch(form.action || window.location.pathname, {
-            method: 'POST',
-            body: formData
-        })
-            .then(response => {
-                if (response.ok) {
-                    window.location.href = '/'; // Redirect on success
-                } else {
-                    alert('Error al enviar el formulario');
-                }
-            })
-            .catch(error => {
-                alert('Error de conexión');
-            })
-            .finally(() => {
-                // Reset button state
-                if (nextBtn) {
-                    nextBtn.textContent = 'Finalizar';
-                    nextBtn.disabled = false;
-                }
+        try {
+            // Submit using fetch with FormData
+            const response = await fetch(form.action || window.location.pathname, {
+                method: 'POST',
+                body: formData
             });
+
+            if (response.ok) {
+                // Intentar obtener el JSON de respuesta con el ID del auto
+                try {
+                    const result = await response.json();
+                    if (result && result.autoId) {
+                        return { autoId: result.autoId, success: true };
+                    } else if (result && result.error) {
+                        return { error: result.error };
+                    }
+                } catch {
+                    // Si no hay JSON, asumir que se creó exitosamente
+                }
+                
+                // Para ambos casos (skipConfirmation true o false), retornar success
+                return { success: true };
+            } else {
+                // Intentar obtener el mensaje de error del response
+                try {
+                    const errorResult = await response.json();
+                    if (errorResult && errorResult.error) {
+                        return { error: errorResult.error };
+                    }
+                } catch {
+                    // No hay JSON de error
+                }
+                return { error: 'Error al enviar el formulario' };
+            }
+        } catch (error) {
+            console.error('Error de conexión:', error);
+            alert('Error de conexión');
+            return null;
+        } finally {
+            // Reset button state
+            if (nextBtn && !skipConfirmation) {
+                nextBtn.textContent = 'Finalizar';
+                nextBtn.disabled = false;
+            }
+        }
     }
 
     function prepareEquipmentData() {
@@ -2282,6 +2424,21 @@ function updateMobileTotalDisplay() {
     }
 }
 
+// Actualizar el mensaje de confirmación según el tipo de plan
+function updateConfirmationMessage(isPaidPlan) {
+    const title = document.querySelector('#confirmation-title');
+    const message = document.querySelector('#confirmation-message');
+    
+    if (title && message) {
+        if (isPaidPlan) {
+            title.textContent = '¡Su auto ha sido publicado!';
+            message.textContent = 'Su anuncio ya está visible para todos los usuarios de AutoClick.cr. Puede ver y administrar su anuncio desde la sección "Mis Anuncios".';
+        } else {
+            title.textContent = '¡Anuncio enviado a revisión!';
+            message.textContent = 'Su anuncio ha sido enviado y está pendiente de aprobación por nuestro equipo (máximo 24 horas).';
+        }
+    }
+}
 // Observar cambios en el precio total para actualizar el toggle móvil
 if (document.readyState === 'loading') {
     document.addEventListener('DOMContentLoaded', function () {
@@ -2298,5 +2455,122 @@ if (document.readyState === 'loading') {
         const observer = new MutationObserver(updateMobileTotalDisplay);
         observer.observe(totalAmount, { childList: true, characterData: true, subtree: true });
         updateMobileTotalDisplay(); // Actualizar inicial
+    }
+}
+
+// Funciones para guardar y restaurar estado del formulario
+function saveFormState() {
+    try {
+        const formData = {
+            // Plan y banderines
+            planVisibilidad: document.querySelector('input[name="Formulario.PlanVisibilidad"]:checked')?.value,
+            banderines: Array.from(document.querySelectorAll('input[name="BanderinesSeleccionados"]:checked')).map(cb => cb.value),
+            
+            // Datos básicos
+            marca: document.querySelector('input[name="Formulario.Marca"]')?.value,
+            modelo: document.querySelector('input[name="Formulario.Modelo"]')?.value,
+            ano: document.querySelector('input[name="Formulario.Ano"]')?.value,
+            placaVehiculo: document.querySelector('input[name="Formulario.PlacaVehiculo"]')?.value,
+            precio: document.querySelector('input[name="Formulario.Precio"]')?.value,
+            divisa: document.querySelector('select[name="Formulario.Divisa"]')?.value,
+            
+            // Especificaciones
+            carroceria: document.querySelector('select[name="Formulario.Carroceria"]')?.value,
+            combustible: document.querySelector('select[name="Formulario.Combustible"]')?.value,
+            cilindrada: document.querySelector('input[name="Formulario.Cilindrada"]')?.value,
+            colorExterior: document.querySelector('input[name="Formulario.ColorExterior"]')?.value,
+            colorInterior: document.querySelector('input[name="Formulario.ColorInterior"]')?.value,
+            numeroPuertas: document.querySelector('input[name="Formulario.NumeroPuertas"]')?.value,
+            numeroPasajeros: document.querySelector('input[name="Formulario.NumeroPasajeros"]')?.value,
+            transmision: document.querySelector('select[name="Formulario.Transmision"]')?.value,
+            traccion: document.querySelector('select[name="Formulario.Traccion"]')?.value,
+            kilometraje: document.querySelector('input[name="Formulario.Kilometraje"]')?.value,
+            condicion: document.querySelector('select[name="Formulario.Condicion"]')?.value,
+            
+            // Ubicación
+            provincia: document.querySelector('select[name="Formulario.Provincia"]')?.value,
+            canton: document.querySelector('select[name="Formulario.Canton"]')?.value,
+            ubicacionExacta: document.querySelector('input[name="Formulario.UbicacionExacta"]')?.value,
+            
+            // Descripción
+            descripcion: document.querySelector('textarea[name="Formulario.Descripcion"]')?.value
+        };
+        
+        sessionStorage.setItem('anuncioFormState', JSON.stringify(formData));
+        console.log('Estado del formulario guardado');
+    } catch (error) {
+        console.error('Error al guardar estado del formulario:', error);
+    }
+}
+
+function restoreFormState() {
+    try {
+        const savedState = sessionStorage.getItem('anuncioFormState');
+        if (!savedState) return;
+        
+        const formData = JSON.parse(savedState);
+        console.log('Restaurando estado del formulario:', formData);
+        
+        // Restaurar valores básicos
+        if (formData.marca) document.querySelector('input[name="Formulario.Marca"]').value = formData.marca;
+        if (formData.modelo) document.querySelector('input[name="Formulario.Modelo"]').value = formData.modelo;
+        if (formData.ano) document.querySelector('input[name="Formulario.Ano"]').value = formData.ano;
+        if (formData.placaVehiculo) document.querySelector('input[name="Formulario.PlacaVehiculo"]').value = formData.placaVehiculo;
+        if (formData.precio) document.querySelector('input[name="Formulario.Precio"]').value = formData.precio;
+        if (formData.divisa) document.querySelector('select[name="Formulario.Divisa"]').value = formData.divisa;
+        
+        // Especificaciones
+        if (formData.carroceria) document.querySelector('select[name="Formulario.Carroceria"]').value = formData.carroceria;
+        if (formData.combustible) document.querySelector('select[name="Formulario.Combustible"]').value = formData.combustible;
+        if (formData.cilindrada) document.querySelector('input[name="Formulario.Cilindrada"]').value = formData.cilindrada;
+        if (formData.colorExterior) document.querySelector('input[name="Formulario.ColorExterior"]').value = formData.colorExterior;
+        if (formData.colorInterior) document.querySelector('input[name="Formulario.ColorInterior"]').value = formData.colorInterior;
+        if (formData.numeroPuertas) document.querySelector('input[name="Formulario.NumeroPuertas"]').value = formData.numeroPuertas;
+        if (formData.numeroPasajeros) document.querySelector('input[name="Formulario.NumeroPasajeros"]').value = formData.numeroPasajeros;
+        if (formData.transmision) document.querySelector('select[name="Formulario.Transmision"]').value = formData.transmision;
+        if (formData.traccion) document.querySelector('select[name="Formulario.Traccion"]').value = formData.traccion;
+        if (formData.kilometraje) document.querySelector('input[name="Formulario.Kilometraje"]').value = formData.kilometraje;
+        if (formData.condicion) document.querySelector('select[name="Formulario.Condicion"]').value = formData.condicion;
+        
+        // Ubicación
+        if (formData.provincia) document.querySelector('select[name="Formulario.Provincia"]').value = formData.provincia;
+        if (formData.canton) document.querySelector('select[name="Formulario.Canton"]').value = formData.canton;
+        if (formData.ubicacionExacta) document.querySelector('input[name="Formulario.UbicacionExacta"]').value = formData.ubicacionExacta;
+        
+        // Descripción
+        if (formData.descripcion) document.querySelector('textarea[name="Formulario.Descripcion"]').value = formData.descripcion;
+        
+        // Restaurar plan seleccionado
+        if (formData.planVisibilidad) {
+            const planRadio = document.querySelector(`input[name="Formulario.PlanVisibilidad"][value="${formData.planVisibilidad}"]`);
+            if (planRadio) {
+                planRadio.checked = true;
+                // Trigger change event para actualizar UI
+                planRadio.dispatchEvent(new Event('change', { bubbles: true }));
+            }
+        }
+        
+        // Restaurar banderines seleccionados
+        if (formData.banderines && formData.banderines.length > 0) {
+            formData.banderines.forEach(banderinValue => {
+                const checkbox = document.querySelector(`input[name="BanderinesSeleccionados"][value="${banderinValue}"]`);
+                if (checkbox) {
+                    checkbox.checked = true;
+                    // Trigger change event para actualizar UI
+                    checkbox.dispatchEvent(new Event('change', { bubbles: true }));
+                }
+            });
+        }
+        
+        // Actualizar resumen de pago si estamos en la sección correcta
+        setTimeout(() => {
+            if (typeof updatePaymentSummary === 'function') {
+                updatePaymentSummary();
+            }
+        }, 100);
+        
+        console.log('Estado del formulario restaurado');
+    } catch (error) {
+        console.error('Error al restaurar estado del formulario:', error);
     }
 }

@@ -338,6 +338,12 @@
             .privacy-modal-content::-webkit-scrollbar-thumb:hover {
                 background: rgba(255, 255, 255, 0.3);
             }
+
+            /* Loading spinner animation */
+            @@keyframes spin {
+                0% { transform: rotate(0deg); }
+                100% { transform: rotate(360deg); }
+            }
         </style>
 }
 
@@ -458,7 +464,7 @@
         <div class="form-container">
             <!-- Form Header -->
             <div class="form-header">
-                <h1>Anuncie su auto <span class="section-indicator">Sección <span id="current-section">1</span> / 8</span></h1>
+                <h1>Anuncie su auto <span class="section-indicator">Sección <span id="current-section">1</span> / 9</span></h1>
             </div>
 
             <!-- Form Container -->
@@ -1364,45 +1370,16 @@ valor fiscal</div>
                 </div>
 
                 <!-- Section 6: Método de pago -->
-                <div class="form-section" data-section="6" id="seccion6">
-                    <h2>Selecciona método de pago</h2>
-
-                    <div class="payment-tabs">
-                        <div class="payment-tab active" data-tab="tarjeta">Tarjeta de débito/crédito</div>
-                    </div>
+                <!-- Section 7: Desglose de costos -->
+                <div class="form-section" data-section="7" id="seccion7">
+                    <h2>Desglose de costos</h2>
 
                     <div class="payment-content">
-                        <div class="payment-form">
-                            <div class="form-group full-width">
-                                <label for="numero-tarjeta">Número de tarjeta <span class="required">*</span></label>
-                                <input type="text" id="numero-tarjeta" name="numero-tarjeta" placeholder="Introducir número de tarjeta" required>
-                            </div>
-                            <div class="form-group full-width">
-                                <label for="nombre-tarjeta">Nombre de la tarjeta <span class="required">*</span></label>
-                                <input type="text" id="nombre-tarjeta" name="nombre-tarjeta" placeholder="Introducir nombre de la tarjeta" required>
-                            </div>
-                            <div class="form-group">
-                                <label for="fecha-expiracion">Fecha de expiración <span class="required">*</span></label>
-                                <input type="text" id="fecha-expiracion" name="fecha-expiracion" placeholder="mm/aa" required>
-                            </div>
-                            <div class="form-group">
-                                <label for="cvv">CVV <span class="required">*</span></label>
-                                <input type="text" id="cvv" name="cvv" placeholder="cvv" required>
-                            </div>
-
-                            <div class="payment-options">
-                                <div class="payment-option">
-                                    <input type="checkbox" id="acepto-terminos" name="acepto-terminos" required>
-                                    <label for="acepto-terminos">Acepto <a href="/TerminosCondiciones" target="_blank" class="terms-link">términos y condiciones</a> <span class="required">*</span></label>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="payment-summary">
+                        <div class="payment-summary" style="width: 100%; max-width: 600px; margin: 0 auto;">
                             <!-- Toggle para móvil -->
                             <div class="payment-summary-toggle" onclick="togglePaymentSummary()">
                                 <div class="price-display">
-                                    <span class="total-amount-mobile">₡180</span>
+                                    <span class="total-amount-mobile">₡0</span>
                                     <span>iva incluido</span>
                                 </div>
                                 <div class="toggle-arrow">
@@ -1417,7 +1394,7 @@ valor fiscal</div>
                                 <div class="summary-header">
                                     <img data-logofile="LOGOS AUTOCLICK-04.png" alt="AutoClick.cr" style="max-width: 100%; height: auto;" />
                                 </div>
-                                <h3>Desglose de pago</h3>
+                                <h3>Desglose de costos</h3>
                                 <div class="summary-line" id="summary-plan">
                                     <span>Plan seleccionado</span>
                                     <span>₡0</span>
@@ -1434,13 +1411,13 @@ valor fiscal</div>
                                     <span>IVA (13%)</span>
                                     <span>₡0</span>
                                 </div>
-                                <div class="summary-line" id="summary-service">
+                                <div class="summary-line" id="summary-service" style="display: none;">
                                     <span>Tarifa por servicio</span>
                                     <span>₡180</span>
                                 </div>
                                 <div class="summary-total">
                                     <span>Total</span>
-                                    <span class="total-amount">₡180</span>
+                                    <span class="total-amount">₡0</span>
                                 </div>
                             </div>
                         </div>
@@ -1450,8 +1427,8 @@ valor fiscal</div>
                     <div style="width: 100%; height: 1px; background: rgba(255, 255, 255, 0.25); margin-top: 32px;"></div>
                 </div>
 
-                <!-- Section 7: Subir archivos -->
-                <div class="form-section" data-section="7" id="seccion7">
+                <!-- Section 6: Subir archivos multimedia -->
+                <div class="form-section" data-section="6" id="seccion6">
                     <h2>Subir archivos multimedia</h2>
 
                     <div class="upload-info" style="background: rgba(255, 255, 255, 0.05); padding: 16px; border-radius: 8px; margin-bottom: 24px; border-left: 4px solid #00CC00;">
@@ -1497,26 +1474,36 @@ valor fiscal</div>
                     <div style="width: 100%; height: 1px; background: rgba(255, 255, 255, 0.25); margin-top: 32px;"></div>
                 </div>
 
-                <!-- Section 8: Confirmación -->
-                <div class="form-section" data-section="8" id="seccion8">
+                <!-- Section 8: Pasarela de pago (condicional) -->
+                <div class="form-section" data-section="8" id="seccion8" style="display: none;">
+                    <h2>Procesando pago</h2>
+                    
+                    <div style="text-align: center; padding: 40px 20px;">
+                        <p style="color: rgba(255, 255, 255, 0.8); margin-bottom: 20px;">Será redirigido a la pasarela de pago segura de ONVO Pay...</p>
+                        <div class="loading-spinner" style="margin: 20px auto;">
+                            <div style="width: 50px; height: 50px; border: 4px solid rgba(255, 255, 255, 0.2); border-top-color: #FF931E; border-radius: 50%; animation: spin 1s linear infinite;"></div>
+                        </div>
+                    </div>
+
+                    <!-- Divisor de sección -->
+                    <div style="width: 100%; height: 1px; background: rgba(255, 255, 255, 0.25); margin-top: 32px;"></div>
+                </div>
+
+                <!-- Section 9: Confirmación -->
+                <div class="form-section" data-section="9" id="seccion9">
                     <div class="confirmation-content">
                         <div class="success-icon">
                             <div class="checkmark"></div>
                         </div>
-                        <h2>¡Su auto ha sido publicado!</h2>
+                        <h2 id="confirmation-title">¡Su auto ha sido publicado!</h2>
+                        <p id="confirmation-message" style="color: rgba(255, 255, 255, 0.7); font-size: 16px; margin: 20px 0;"></p>
 
                         <div class="confirmation-actions">
-                            <button type="button" class="btn-upgrade">
-                                <span class="upgrade-icon"></span>
-                                <span>Adquirir planes de visibilidad</span>
+                            <button type="button" class="btn-upgrade" onclick="window.location.href='/MisAnuncios'">
+                                <span>Ir a Mis Anuncios</span>
                             </button>
-                            <button type="button" class="btn-view">
-                                <span class="view-icon"></span>
-                                <span>Ver anuncio</span>
-                            </button>
-                            <button type="button" class="btn-edit">
-                                <span class="edit-icon"></span>
-                                <span>Modificar anuncio</span>
+                            <button type="button" class="btn-edit" onclick="window.location.href='/'">
+                                <span>Ir al menú principal</span>
                             </button>
                         </div>
                     </div>

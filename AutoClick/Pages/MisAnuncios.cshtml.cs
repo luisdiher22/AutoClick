@@ -154,10 +154,14 @@ namespace AutoClick.Pages
                     return new JsonResult(new { success = false, message = "Anuncio no encontrado o sin permisos" });
                 }
                 
-
+                // Eliminar pagos asociados primero (si existen)
+                var pagosAsociados = _context.PagosOnvo.Where(p => p.AutoId == id);
+                if (pagosAsociados.Any())
+                {
+                    _context.PagosOnvo.RemoveRange(pagosAsociados);
+                }
 
                 // Delete the auto
-
                 _context.Autos.Remove(auto);
                 await _context.SaveChangesAsync();
                 
