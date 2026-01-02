@@ -44,6 +44,12 @@ namespace AutoClick.Models
         [Display(Name = "Procesada")]
         public bool Procesada { get; set; } = false;
 
+        [Display(Name = "Aprobada")]
+        public bool? Aprobada { get; set; }
+
+        [Display(Name = "Fecha de Procesamiento")]
+        public DateTime? FechaProcesamiento { get; set; }
+
         [MaxLength(500)]
         [Display(Name = "Notas")]
         public string? Notas { get; set; }

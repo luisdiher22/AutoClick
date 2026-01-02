@@ -137,12 +137,37 @@
 
             // Verificar el estado
             if (data.status === 'succeeded') {
-                showSuccess('¡Pago procesado exitosamente! Tu anuncio será activado en breve.');
+                showSuccess('¡Pago procesado exitosamente! Activando tu anuncio...');
                 
-                // Redirigir después de 3 segundos
-                setTimeout(() => {
-                    window.location.href = '/AnunciarMiAuto?success=true';
-                }, 3000);
+                // Activar el auto en la base de datos
+                if (paymentConfig.autoId && paymentConfig.autoId > 0) {
+                    fetch(`/api/pagos/activar-auto/${paymentConfig.autoId}`, {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        }
+                    }).then(response => {
+                        if (response.ok) {
+                            console.log('Auto activado exitosamente');
+                            // Limpiar el estado guardado del formulario
+                            sessionStorage.removeItem('anuncioFormState');
+                        } else {
+                            console.error('Error al activar auto');
+                        }
+                    }).catch(error => {
+                        console.error('Error al activar auto:', error);
+                    }).finally(() => {
+                        // Redirigir después de 2 segundos
+                        setTimeout(() => {
+                            window.location.href = '/AnunciarMiAuto?success=true';
+                        }, 2000);
+                    });
+                } else {
+                    // Redirigir después de 3 segundos (sin auto para activar)
+                    setTimeout(() => {
+                        window.location.href = '/AnunciarMiAuto?success=true';
+                    }, 3000);
+                }
             } 
             else if (data.status === 'processing') {
                 showSuccess('Tu pago está siendo procesado. Te notificaremos cuando se complete.');
@@ -174,7 +199,7 @@
             showError(errorMsg);
         }
 
-        // Cancelar pago
+        // Cancelar pago - regresar a sección 6 para que recargue imágenes
         function cancelPayment() {
             // Mostrar modal de confirmación
             const modalHtml = `
@@ -182,15 +207,15 @@
                     <div class="modal-dialog modal-dialog-centered" role="document">
                         <div class="modal-content" style="background: #02081C; border: 1px solid rgba(255, 255, 255, 0.25); border-radius: 8px;">
                             <div class="modal-header" style="border-bottom: 1px solid rgba(255, 255, 255, 0.25);">
-                                <h5 class="modal-title" style="color: white; font-family: 'Montserrat', sans-serif; font-weight: 700;">¿Cancelar pago?</h5>
+                                <h5 class="modal-title" style="color: white; font-family: 'Montserrat', sans-serif; font-weight: 700;">¿Regresar al formulario?</h5>
                             </div>
                             <div class="modal-body" style="color: rgba(255, 255, 255, 0.8); font-family: 'Montserrat', sans-serif;">
-                                <p>Si cancelas el pago, tu anuncio no será publicado.</p>
-                                <p><strong>¿Estás seguro de que deseas cancelar?</strong></p>
+                                <p>Si regresas, tendrás que <strong>volver a cargar las imágenes</strong> de tu vehículo.</p>
+                                <p>El resto de tu información se mantendrá guardada.</p>
                             </div>
                             <div class="modal-footer" style="border-top: 1px solid rgba(255, 255, 255, 0.25);">
-                                <button type="button" class="btn" style="background: rgba(255, 255, 255, 0.1); color: white; border: 1px solid rgba(255, 255, 255, 0.3);" onclick="$('#cancelModal').modal('hide')">No, continuar</button>
-                                <button type="button" class="btn" style="background: #FF931E; color: white; border: none;" onclick="confirmCancel()">Sí, cancelar</button>
+                                <button type="button" class="btn" style="background: rgba(255, 255, 255, 0.1); color: white; border: 1px solid rgba(255, 255, 255, 0.3);" onclick="$('#cancelModal').modal('hide')">Continuar con el pago</button>
+                                <button type="button" class="btn" style="background: #FF931E; color: white; border: none;" onclick="confirmCancel()">Sí, regresar</button>
                             </div>
                         </div>
                     </div>
@@ -206,8 +231,26 @@
         
         function confirmCancel() {
             $('#cancelModal').modal('hide');
-            // Volver a la sección de desglose (sección 7)
-            window.location.href = '/AnunciarMiAuto?section=7';
+            
+            // Si hay un autoId, eliminar el auto inactivo antes de regresar
+            if (paymentConfig.autoId && paymentConfig.autoId > 0) {
+                fetch(`/api/pagos/cancelar-auto/${paymentConfig.autoId}`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    }
+                }).then(response => {
+                    console.log('Auto pendiente eliminado:', response.ok);
+                }).catch(error => {
+                    console.error('Error al eliminar auto pendiente:', error);
+                }).finally(() => {
+                    // Redirigir a la sección 6 (multimedia) con parámetro para mostrar modal de imágenes
+                    window.location.href = '/AnunciarMiAuto?section=6&reloadImages=true';
+                });
+            } else {
+                // Redirigir a la sección 6 (multimedia) con parámetro para mostrar modal de imágenes
+                window.location.href = '/AnunciarMiAuto?section=6&reloadImages=true';
+            }
         }
 
         // Funciones de UI

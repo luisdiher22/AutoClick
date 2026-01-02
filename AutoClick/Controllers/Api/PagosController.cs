@@ -1,6 +1,7 @@
 using AutoClick.Data;
 using AutoClick.Services;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using System.Security.Claims;
 
 namespace AutoClick.Controllers.Api
@@ -146,6 +147,128 @@ namespace AutoClick.Controllers.Api
             {
                 publishableKey = _onvoPayService.GetPublishableKey()
             });
+        }
+        
+        /// <summary>
+        /// Verifica si una placa ya existe en la base de datos
+        /// </summary>
+        [HttpGet("verificar-placa/{placa}")]
+        public IActionResult VerificarPlaca(string placa)
+        {
+            try
+            {
+                if (string.IsNullOrWhiteSpace(placa))
+                {
+                    return BadRequest(new { error = "La placa es requerida" });
+                }
+                
+                var existe = _context.Autos.Any(a => a.PlacaVehiculo == placa);
+                
+                return Ok(new { existe = existe });
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error al verificar placa");
+                return StatusCode(500, new { error = "Error al verificar la placa" });
+            }
+        }
+
+        /// <summary>
+        /// Cancela un auto pendiente de pago (elimina el auto si está inactivo)
+        /// </summary>
+        [HttpPost("cancelar-auto/{autoId}")]
+        public async Task<IActionResult> CancelarAuto(int autoId)
+        {
+            try
+            {
+                var auto = await _context.Autos.FindAsync(autoId);
+                
+                if (auto == null)
+                {
+                    // Si no existe, consideramos exitoso (ya fue eliminado)
+                    return Ok(new { success = true, message = "Auto no encontrado o ya eliminado" });
+                }
+
+                // Solo eliminar si el auto está inactivo (pendiente de pago)
+                if (!auto.Activo)
+                {
+                    // Primero eliminar registros relacionados para evitar FK constraint errors
+                    
+                    // 1. Eliminar pagos asociados
+                    var pagosAsociados = await _context.PagosOnvo
+                        .Where(p => p.AutoId == autoId)
+                        .ToListAsync();
+                    if (pagosAsociados.Any())
+                    {
+                        _context.PagosOnvo.RemoveRange(pagosAsociados);
+                        _logger.LogInformation("Eliminados {Count} pagos asociados al auto {AutoId}", pagosAsociados.Count, autoId);
+                    }
+                    
+                    // 2. Eliminar solicitudes de pre-aprobación asociadas
+                    var solicitudesAsociadas = await _context.SolicitudesPreAprobacion
+                        .Where(s => s.AutoId == autoId)
+                        .ToListAsync();
+                    if (solicitudesAsociadas.Any())
+                    {
+                        _context.SolicitudesPreAprobacion.RemoveRange(solicitudesAsociadas);
+                        _logger.LogInformation("Eliminadas {Count} solicitudes pre-aprobación asociadas al auto {AutoId}", solicitudesAsociadas.Count, autoId);
+                    }
+                    
+                    // 3. Eliminar favoritos asociados
+                    var favoritosAsociados = await _context.Favoritos
+                        .Where(f => f.AutoId == autoId)
+                        .ToListAsync();
+                    if (favoritosAsociados.Any())
+                    {
+                        _context.Favoritos.RemoveRange(favoritosAsociados);
+                        _logger.LogInformation("Eliminados {Count} favoritos asociados al auto {AutoId}", favoritosAsociados.Count, autoId);
+                    }
+                    
+                    // Ahora sí eliminar el auto
+                    _context.Autos.Remove(auto);
+                    await _context.SaveChangesAsync();
+                    _logger.LogInformation("Auto {AutoId} cancelado y eliminado por usuario", autoId);
+                    return Ok(new { success = true, message = "Anuncio cancelado correctamente" });
+                }
+                else
+                {
+                    return BadRequest(new { error = "No se puede cancelar un anuncio activo" });
+                }
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error al cancelar auto {AutoId}", autoId);
+                return StatusCode(500, new { error = "Error al cancelar el anuncio: " + ex.Message });
+            }
+        }
+        
+        /// <summary>
+        /// Activa un auto después de un pago exitoso
+        /// </summary>
+        [HttpPost("activar-auto/{autoId}")]
+        public async Task<IActionResult> ActivarAuto(int autoId)
+        {
+            try
+            {
+                var auto = await _context.Autos.FindAsync(autoId);
+                
+                if (auto == null)
+                {
+                    return NotFound(new { error = "Auto no encontrado" });
+                }
+
+                // Activar el auto (hacerlo visible)
+                auto.Activo = true;
+                await _context.SaveChangesAsync();
+                
+                _logger.LogInformation("Auto {AutoId} activado después de pago exitoso", autoId);
+                return Ok(new { success = true, message = "Anuncio activado correctamente" });
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error al activar auto {AutoId}", autoId);
+                return StatusCode(500, new { error = "Error al activar el anuncio" });
+            }
         }
     }
 

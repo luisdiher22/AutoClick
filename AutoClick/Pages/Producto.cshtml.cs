@@ -63,14 +63,28 @@ namespace AutoClick.Pages
                 return NotFound();
             }
 
-            // Verificar si el usuario es admin
-            var isAdmin = User.IsInRole("Admin") || User.HasClaim("Role", "Admin");
+            // Verificar si el usuario es admin (chequear múltiples formas de identificar admin)
+            var isAdmin = User.IsInRole("Admin") || 
+                          User.IsInRole("Administrator") || 
+                          User.HasClaim("Role", "Admin") ||
+                          User.HasClaim("Role", "Administrator") ||
+                          User.HasClaim("IsAdmin", "true");
 
             // Intentar cargar el auto real desde la base de datos
-            // Si es admin, permitir ver anuncios pendientes de aprobación
-            Vehicle = await _context.Autos
-                .Include(a => a.Propietario)
-                .FirstOrDefaultAsync(a => a.Id == Id && a.Activo && (isAdmin || a.PlanVisibilidad > 0));
+            // Si es admin, permitir ver CUALQUIER auto (incluso inactivos/pendientes)
+            if (isAdmin)
+            {
+                Vehicle = await _context.Autos
+                    .Include(a => a.Propietario)
+                    .FirstOrDefaultAsync(a => a.Id == Id);
+            }
+            else
+            {
+                // Para usuarios normales, solo mostrar autos activos con plan visible
+                Vehicle = await _context.Autos
+                    .Include(a => a.Propietario)
+                    .FirstOrDefaultAsync(a => a.Id == Id && a.Activo && a.PlanVisibilidad > 0);
+            }
             
             // Si no se encuentra, usar datos de muestra como fallback
             if (Vehicle == null)

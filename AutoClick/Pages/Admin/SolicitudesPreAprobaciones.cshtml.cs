@@ -30,8 +30,10 @@ namespace AutoClick.Pages.Admin
             {
                 PaginaActual = paginaActual ?? 1;
 
+                // Solo mostrar solicitudes NO procesadas (pendientes)
                 var query = _context.SolicitudesPreAprobacion
                     .Include(s => s.Auto)
+                    .Where(s => !s.Procesada)
                     .OrderByDescending(s => s.FechaSolicitud)
                     .AsQueryable();
 
@@ -63,6 +65,78 @@ namespace AutoClick.Pages.Admin
                 ErrorMessage = "Error al cargar las solicitudes de pre-aprobación.";
 
                 return Page();
+            }
+        }
+
+        public async Task<IActionResult> OnPostAprobarAsync(int solicitudId)
+        {
+            try
+            {
+                var solicitud = await _context.SolicitudesPreAprobacion
+                    .Include(s => s.Auto)
+                    .FirstOrDefaultAsync(s => s.Id == solicitudId);
+                    
+                if (solicitud != null)
+                {
+                    // Marcar la solicitud como procesada y aprobada
+                    solicitud.Procesada = true;
+                    solicitud.FechaProcesamiento = DateTime.Now;
+                    solicitud.Aprobada = true;
+                    
+                    // Activar el auto asociado (hacerlo visible)
+                    if (solicitud.Auto != null)
+                    {
+                        solicitud.Auto.Activo = true;
+                    }
+                    
+                    await _context.SaveChangesAsync();
+                }
+                return RedirectToPage();
+            }
+            catch (Exception)
+            {
+                return RedirectToPage();
+            }
+        }
+
+        public async Task<IActionResult> OnPostRechazarAsync(int solicitudId)
+        {
+            try
+            {
+                var solicitud = await _context.SolicitudesPreAprobacion
+                    .Include(s => s.Auto)
+                    .FirstOrDefaultAsync(s => s.Id == solicitudId);
+                    
+                if (solicitud != null)
+                {
+                    // Si hay un auto asociado, eliminarlo
+                    if (solicitud.Auto != null)
+                    {
+                        // IMPORTANTE: Primero eliminar los pagos asociados al auto (FK constraint)
+                        var pagosAsociados = await _context.PagosOnvo
+                            .Where(p => p.AutoId == solicitud.Auto.Id)
+                            .ToListAsync();
+                        if (pagosAsociados.Any())
+                        {
+                            _context.PagosOnvo.RemoveRange(pagosAsociados);
+                        }
+                        
+                        // Ahora sí eliminar el auto
+                        _context.Autos.Remove(solicitud.Auto);
+                    }
+                    
+                    // Eliminar la solicitud también
+                    _context.SolicitudesPreAprobacion.Remove(solicitud);
+                    
+                    await _context.SaveChangesAsync();
+                }
+                return RedirectToPage();
+            }
+            catch (Exception ex)
+            {
+                // Log the error for debugging
+                Console.WriteLine($"Error al rechazar solicitud: {ex.Message}");
+                return RedirectToPage();
             }
         }
     }

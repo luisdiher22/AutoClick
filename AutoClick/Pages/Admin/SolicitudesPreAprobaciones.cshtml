@@ -138,6 +138,11 @@
         text-align: center;
     }
 
+    .tabla-figma .acciones-col {
+        width: 140px;
+        text-align: center;
+    }
+
     /* Botón Revisar estilo Figma */
     .btn-revisar-figma {
         display: inline-flex;
@@ -249,6 +254,56 @@
         background: rgba(255, 147, 30, 0.2);
         color: #FF931E;
     }
+
+    /* Botones de acción aprobar/rechazar */
+    .acciones-container {
+        display: flex;
+        gap: 8px;
+        justify-content: center;
+    }
+
+    .btn-accion {
+        width: 36px;
+        height: 36px;
+        border-radius: 50%;
+        border: none;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        transition: all 0.3s ease;
+    }
+
+    .btn-aprobar {
+        background: rgba(76, 175, 80, 0.2);
+        border: 1px solid #4CAF50;
+        color: #4CAF50;
+    }
+
+    .btn-aprobar:hover {
+        background: #4CAF50;
+        color: white;
+        transform: scale(1.1);
+        box-shadow: 0 4px 12px rgba(76, 175, 80, 0.4);
+    }
+
+    .btn-rechazar {
+        background: rgba(244, 67, 54, 0.2);
+        border: 1px solid #f44336;
+        color: #f44336;
+    }
+
+    .btn-rechazar:hover {
+        background: #f44336;
+        color: white;
+        transform: scale(1.1);
+        box-shadow: 0 4px 12px rgba(244, 67, 54, 0.4);
+    }
+
+    .btn-accion svg {
+        width: 18px;
+        height: 18px;
+    }
 </style>
 
 <div class="admin-dashboard-container">
@@ -282,6 +337,7 @@
                             <th class="email-col">Email</th>
                             <th class="fecha-col">Fecha</th>
                             <th class="auto-col">Auto</th>
+                            <th class="acciones-col">Acciones</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -301,6 +357,27 @@
                                             <path d="M4.5 4.5L0.602886 0L8.39711 0L4.5 4.5Z" fill="white"/>
                                         </svg>
                                     </a>
+                                </td>
+                                <td class="acciones-col">
+                                    <div class="acciones-container">
+                                        <form method="post" asp-page="/Admin/SolicitudesPreAprobaciones" asp-page-handler="Aprobar" style="margin: 0;">
+                                            <input type="hidden" name="solicitudId" value="@solicitud.Id" />
+                                            <button type="submit" class="btn-accion btn-aprobar" title="Aprobar solicitud">
+                                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                                                    <polyline points="20 6 9 17 4 12"></polyline>
+                                                </svg>
+                                            </button>
+                                        </form>
+                                        <form method="post" asp-page="/Admin/SolicitudesPreAprobaciones" asp-page-handler="Rechazar" style="margin: 0;">
+                                            <input type="hidden" name="solicitudId" value="@solicitud.Id" />
+                                            <button type="submit" class="btn-accion btn-rechazar" title="Rechazar solicitud">
+                                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                                                    <line x1="18" y1="6" x2="6" y2="18"></line>
+                                                    <line x1="6" y1="6" x2="18" y2="18"></line>
+                                                </svg>
+                                            </button>
+                                        </form>
+                                    </div>
                                 </td>
                             </tr>
                         }

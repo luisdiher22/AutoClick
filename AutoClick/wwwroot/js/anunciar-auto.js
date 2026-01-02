@@ -187,6 +187,37 @@ window.updatePriceCurrency = function () {
     }
 };
 
+// Province/Canton cascade - DEFINIDO GLOBALMENTE para estar disponible en restoreFormState
+window.updateCantones = function (provinciaSelect) {
+    const cantonSelect = document.querySelector('#canton');
+    if (!cantonSelect) return;
+    
+    const provincia = provinciaSelect.value;
+
+    // Clear current options
+    cantonSelect.innerHTML = '<option value="">Elige un cantón</option>';
+
+    // Add cantones based on province
+    const cantonesPorProvincia = {
+        'San José': ['Central', 'Escazú', 'Desamparados', 'Puriscal', 'Tarrazú', 'Aserrí', 'Mora', 'Goicoechea', 'Santa Ana', 'Alajuelita', 'Coronado', 'Acosta', 'Tibás', 'Moravia', 'Montes de Oca', 'Turrubares', 'Dota', 'Curridabat', 'Pérez Zeledón', 'León Cortés'],
+        'Alajuela': ['Central', 'San Ramón', 'Grecia', 'San Mateo', 'Atenas', 'Naranjo', 'Palmares', 'Poás', 'Orotina', 'San Carlos', 'Zarcero', 'Sarchí', 'Upala', 'Los Chiles', 'Guatuso'],
+        'Cartago': ['Central', 'Paraíso', 'La Unión', 'Jiménez', 'Turrialba', 'Alvarado', 'Oreamuno', 'El Guarco'],
+        'Heredia': ['Central', 'Barva', 'Santo Domingo', 'Santa Bárbara', 'San Rafael', 'San Isidro', 'Belén', 'Flores', 'San Pablo', 'Sarapiquí'],
+        'Guanacaste': ['Liberia', 'Nicoya', 'Santa Cruz', 'Bagaces', 'Carrillo', 'Cañas', 'Abangares', 'Tilarán', 'Nandayure', 'La Cruz', 'Hojancha'],
+        'Puntarenas': ['Central', 'Esparza', 'Buenos Aires', 'Montes de Oro', 'Osa', 'Quepos', 'Golfito', 'Coto Brus', 'Parrita', 'Corredores', 'Garabito'],
+        'Limón': ['Central', 'Pococí', 'Siquirres', 'Talamanca', 'Matina', 'Guácimo']
+    };
+
+    if (cantonesPorProvincia[provincia]) {
+        cantonesPorProvincia[provincia].forEach(canton => {
+            const option = document.createElement('option');
+            option.value = canton;
+            option.textContent = canton;
+            cantonSelect.appendChild(option);
+        });
+    }
+};
+
 document.addEventListener('DOMContentLoaded', function () {
     // Form navigation state
     let currentSection = 1;
@@ -209,11 +240,53 @@ document.addEventListener('DOMContentLoaded', function () {
             currentSection = section;
             // Restaurar datos del formulario
             restoreFormState();
+            
+            // Si viene de cancelar pago y debe recargar imágenes, mostrar modal
+            if (urlParams.get('reloadImages') === 'true') {
+                setTimeout(() => {
+                    showReloadImagesModal();
+                }, 500);
+            }
         }
     }
 
     // Initialize form
     initializeForm();
+    
+    // Función para mostrar modal de recargar imágenes
+    function showReloadImagesModal() {
+        const modalHtml = `
+            <div class="modal fade" id="reloadImagesModal" tabindex="-1" role="dialog" data-backdrop="static" data-keyboard="false">
+                <div class="modal-dialog modal-dialog-centered" role="document">
+                    <div class="modal-content" style="background: #02081C; border: 1px solid rgba(255, 255, 255, 0.25); border-radius: 8px;">
+                        <div class="modal-header" style="border-bottom: 1px solid rgba(255, 255, 255, 0.25);">
+                            <h5 class="modal-title" style="color: #FF931E; font-family: 'Montserrat', sans-serif; font-weight: 700;">
+                                <i class="fas fa-images" style="margin-right: 8px;"></i>
+                                Vuelve a cargar tus imágenes
+                            </h5>
+                        </div>
+                        <div class="modal-body" style="color: rgba(255, 255, 255, 0.9); font-family: 'Montserrat', sans-serif;">
+                            <p style="margin-bottom: 16px;">Por motivos de seguridad, las imágenes no se pueden mantener al regresar de la pasarela de pago.</p>
+                            <p style="margin-bottom: 0;"><strong style="color: #00CC00;">✓ Toda tu información ha sido restaurada.</strong></p>
+                            <p><strong style="color: #FF931E;">⚠ Por favor, vuelve a seleccionar las fotos de tu vehículo.</strong></p>
+                        </div>
+                        <div class="modal-footer" style="border-top: 1px solid rgba(255, 255, 255, 0.25);">
+                            <button type="button" class="btn" style="background: #FF931E; color: white; border: none; padding: 10px 24px;" onclick="$('#reloadImagesModal').modal('hide')">Entendido</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        `;
+        
+        document.body.insertAdjacentHTML('beforeend', modalHtml);
+        $('#reloadImagesModal').modal('show');
+        $('#reloadImagesModal').on('hidden.bs.modal', function () {
+            $(this).remove();
+            // Limpiar el parámetro de la URL sin recargar
+            const newUrl = window.location.pathname + '?section=6';
+            window.history.replaceState({}, '', newUrl);
+        });
+    }
 
     function initializeForm() {
         showSection(currentSection);
@@ -624,6 +697,31 @@ document.addEventListener('DOMContentLoaded', function () {
 
         let isValid = true;
         let missingFields = [];
+        
+        // Mapeo de nombres de campos a nombres amigables
+        const fieldNameMap = {
+            'Formulario.Provincia': 'Provincia',
+            'Formulario.Canton': 'Cantón',
+            'Formulario.UbicacionExacta': 'Ubicación Exacta',
+            'Formulario.Marca': 'Marca',
+            'Formulario.Modelo': 'Modelo',
+            'Formulario.Ano': 'Año',
+            'Formulario.Precio': 'Precio',
+            'Formulario.PlacaVehiculo': 'Placa',
+            'Formulario.Kilometraje': 'Kilometraje',
+            'Formulario.Descripcion': 'Descripción',
+            'Formulario.Carroceria': 'Carrocería',
+            'Formulario.Combustible': 'Combustible',
+            'Formulario.Cilindrada': 'Cilindraje',
+            'Formulario.ColorExterior': 'Color Exterior',
+            'Formulario.ColorInterior': 'Color Interior',
+            'Formulario.NumeroPuertas': 'Número de Puertas',
+            'Formulario.NumeroPasajeros': 'Número de Pasajeros',
+            'Formulario.Transmision': 'Transmisión',
+            'Formulario.Traccion': 'Tracción',
+            'Formulario.Condicion': 'Condición',
+            'Formulario.ValorFiscal': 'Valor Fiscal'
+        };
 
         requiredFields.forEach(field => {
             const fieldName = field.name || field.id;
@@ -635,7 +733,16 @@ document.addEventListener('DOMContentLoaded', function () {
                 isValid = false;
 
                 // Obtener el label del campo para el modal
-                const label = field.closest('[data-asterizco], [data-estado], [data-property-1]')?.querySelector('div:first-child')?.textContent?.trim() || fieldName;
+                // Primero intentar del mapeo, luego del HTML, y finalmente usar el nombre limpio
+                let label = fieldNameMap[fieldName];
+                if (!label) {
+                    label = field.closest('[data-asterizco], [data-estado], [data-property-1]')?.querySelector('div:first-child')?.textContent?.trim();
+                }
+                if (!label) {
+                    // Limpiar el nombre del campo (quitar "Formulario." y agregar espacios)
+                    label = fieldName.replace('Formulario.', '').replace(/([A-Z])/g, ' $1').trim();
+                }
+                
                 if (label && !missingFields.includes(label)) {
                     missingFields.push(label);
                 }
@@ -882,8 +989,22 @@ document.addEventListener('DOMContentLoaded', function () {
             clearFieldError(descripcion);
         }
 
-        // NOTA: La validación de placa duplicada ha sido removida
-        // Las placas pueden estar duplicadas en la base de datos
+        // VALIDACIÓN DE PLACA DUPLICADA
+        if (placa && placa.value && placa.value.trim()) {
+            try {
+                const response = await fetch(`/api/pagos/verificar-placa/${encodeURIComponent(placa.value.trim())}`);
+                if (response.ok) {
+                    const data = await response.json();
+                    if (data.existe) {
+                        // Mostrar modal de placa duplicada
+                        showPlacaDuplicadaModal(placa.value.trim());
+                        isValid = false;
+                    }
+                }
+            } catch (error) {
+                console.error('Error al verificar placa:', error);
+            }
+        }
 
         return isValid;
     }
@@ -941,8 +1062,10 @@ document.addEventListener('DOMContentLoaded', function () {
         const subtotal = planPrice + tagPrice;
         const iva = subtotal * 0.13; // 13% IVA
         
-        // Tarifa de servicio solo para planes de pago (valor 1-4), no para plan gratuito (valor 5)
-        const serviceFee = (planValue >= 1 && planValue <= 4) ? 180 : 0;
+        // Tarifa de servicio: solo cuando hay algo que pagar (plan de pago 1-4 O banderines con costo)
+        const hayPlanDePago = (planValue >= 1 && planValue <= 4);
+        const hayBanderinesConCosto = tagPrice > 0;
+        const serviceFee = (hayPlanDePago || hayBanderinesConCosto) ? 180 : 0;
         
         const total = subtotal + iva + serviceFee;
 
@@ -999,6 +1122,9 @@ document.addEventListener('DOMContentLoaded', function () {
         // Guardar el total actual para uso posterior
         window.currentPaymentTotal = total;
     }
+    
+    // Exponer updatePaymentSummary globalmente para que restoreFormState pueda usarla
+    window.updatePaymentSummary = updatePaymentSummary;
 
     function updateSummaryLine(label, value) {
         const summaryLines = document.querySelectorAll('.summary-line');
@@ -2466,38 +2592,51 @@ function saveFormState() {
             planVisibilidad: document.querySelector('input[name="Formulario.PlanVisibilidad"]:checked')?.value,
             banderines: Array.from(document.querySelectorAll('input[name="BanderinesSeleccionados"]:checked')).map(cb => cb.value),
             
-            // Datos básicos
-            marca: document.querySelector('input[name="Formulario.Marca"]')?.value,
-            modelo: document.querySelector('input[name="Formulario.Modelo"]')?.value,
-            ano: document.querySelector('input[name="Formulario.Ano"]')?.value,
-            placaVehiculo: document.querySelector('input[name="Formulario.PlacaVehiculo"]')?.value,
-            precio: document.querySelector('input[name="Formulario.Precio"]')?.value,
+            // Datos básicos - TODOS los campos
+            marca: document.querySelector('#marca')?.value,
+            modelo: document.querySelector('#modelo')?.value,
+            ano: document.querySelector('#ano')?.value,
+            placaVehiculo: document.querySelector('#placa')?.value,
+            precio: document.querySelector('#precio')?.value,
             divisa: document.querySelector('select[name="Formulario.Divisa"]')?.value,
+            valorFiscal: document.querySelector('#valor-fiscal')?.value,
             
-            // Especificaciones
-            carroceria: document.querySelector('select[name="Formulario.Carroceria"]')?.value,
-            combustible: document.querySelector('select[name="Formulario.Combustible"]')?.value,
-            cilindrada: document.querySelector('input[name="Formulario.Cilindrada"]')?.value,
-            colorExterior: document.querySelector('input[name="Formulario.ColorExterior"]')?.value,
-            colorInterior: document.querySelector('input[name="Formulario.ColorInterior"]')?.value,
-            numeroPuertas: document.querySelector('input[name="Formulario.NumeroPuertas"]')?.value,
-            numeroPasajeros: document.querySelector('input[name="Formulario.NumeroPasajeros"]')?.value,
-            transmision: document.querySelector('select[name="Formulario.Transmision"]')?.value,
-            traccion: document.querySelector('select[name="Formulario.Traccion"]')?.value,
-            kilometraje: document.querySelector('input[name="Formulario.Kilometraje"]')?.value,
-            condicion: document.querySelector('select[name="Formulario.Condicion"]')?.value,
+            // Especificaciones - TODOS
+            carroceria: document.querySelector('#carroceria')?.value,
+            combustible: document.querySelector('#combustible')?.value,
+            cilindrada: document.querySelector('#cilindrada')?.value,
+            colorExterior: document.querySelector('#color-exterior')?.value,
+            colorInterior: document.querySelector('#color-interior')?.value,
+            numeroPuertas: document.querySelector('#puertas')?.value,
+            numeroPasajeros: document.querySelector('#pasajeros')?.value,
+            transmision: document.querySelector('#transmision')?.value,
+            traccion: document.querySelector('#traccion')?.value,
+            kilometraje: document.querySelector('#kilometraje')?.value,
+            condicion: document.querySelector('#condicion')?.value,
             
-            // Ubicación
-            provincia: document.querySelector('select[name="Formulario.Provincia"]')?.value,
-            canton: document.querySelector('select[name="Formulario.Canton"]')?.value,
-            ubicacionExacta: document.querySelector('input[name="Formulario.UbicacionExacta"]')?.value,
+            // Ubicación - usar IDs directamente
+            provincia: document.querySelector('#provincia')?.value,
+            canton: document.querySelector('#canton')?.value,
+            ubicacionExacta: document.querySelector('#ubicacion-exacta')?.value,
             
             // Descripción
-            descripcion: document.querySelector('textarea[name="Formulario.Descripcion"]')?.value
+            descripcion: document.querySelector('#descripcion')?.value,
+            
+            // Extras - guardar todos los checkboxes marcados por ID
+            allExtras: Array.from(document.querySelectorAll('#seccion2 input[type="checkbox"]:checked')).map(cb => cb.id || cb.name + '=' + cb.value),
+            
+            // Aceptación de privacidad
+            aceptoPrivacidad: document.querySelector('#acepto-privacidad')?.checked,
+            
+            // Videos
+            videosUrls: document.querySelector('input[name="Formulario.VideosUrls"]')?.value,
+            
+            // Timestamp para debug
+            savedAt: new Date().toISOString()
         };
         
         sessionStorage.setItem('anuncioFormState', JSON.stringify(formData));
-        console.log('Estado del formulario guardado');
+        console.log('Estado del formulario guardado:', formData);
     } catch (error) {
         console.error('Error al guardar estado del formulario:', error);
     }
@@ -2511,66 +2650,352 @@ function restoreFormState() {
         const formData = JSON.parse(savedState);
         console.log('Restaurando estado del formulario:', formData);
         
-        // Restaurar valores básicos
-        if (formData.marca) document.querySelector('input[name="Formulario.Marca"]').value = formData.marca;
-        if (formData.modelo) document.querySelector('input[name="Formulario.Modelo"]').value = formData.modelo;
-        if (formData.ano) document.querySelector('input[name="Formulario.Ano"]').value = formData.ano;
-        if (formData.placaVehiculo) document.querySelector('input[name="Formulario.PlacaVehiculo"]').value = formData.placaVehiculo;
-        if (formData.precio) document.querySelector('input[name="Formulario.Precio"]').value = formData.precio;
-        if (formData.divisa) document.querySelector('select[name="Formulario.Divisa"]').value = formData.divisa;
+        // ===== SECCIÓN 1: DATOS DEL VEHÍCULO =====
+        
+        // Primero restaurar la MARCA y luego esperar para el MODELO
+        if (formData.marca) {
+            const marcaEl = document.querySelector('#marca');
+            if (marcaEl) {
+                marcaEl.value = formData.marca;
+                // Disparar el evento change para cargar los modelos
+                marcaEl.dispatchEvent(new Event('change', { bubbles: true }));
+                
+                // Esperar a que se carguen los modelos y luego establecer el valor
+                setTimeout(() => {
+                    if (formData.modelo) {
+                        const modeloEl = document.querySelector('#modelo');
+                        if (modeloEl) {
+                            modeloEl.value = formData.modelo;
+                        }
+                    }
+                }, 300);
+            }
+        }
+        
+        // Otros campos de sección 1
+        if (formData.ano) {
+            const anoEl = document.querySelector('#ano');
+            if (anoEl) anoEl.value = formData.ano;
+        }
+        if (formData.placaVehiculo) {
+            const placaEl = document.querySelector('#placa');
+            if (placaEl) placaEl.value = formData.placaVehiculo;
+        }
+        if (formData.precio) {
+            const precioEl = document.querySelector('#precio');
+            if (precioEl) precioEl.value = formData.precio;
+        }
+        if (formData.divisa) {
+            const divisaEl = document.querySelector('select[name="Formulario.Divisa"]');
+            if (divisaEl) divisaEl.value = formData.divisa;
+        }
+        if (formData.valorFiscal) {
+            const vfEl = document.querySelector('#valor-fiscal');
+            if (vfEl) vfEl.value = formData.valorFiscal;
+        }
         
         // Especificaciones
-        if (formData.carroceria) document.querySelector('select[name="Formulario.Carroceria"]').value = formData.carroceria;
-        if (formData.combustible) document.querySelector('select[name="Formulario.Combustible"]').value = formData.combustible;
-        if (formData.cilindrada) document.querySelector('input[name="Formulario.Cilindrada"]').value = formData.cilindrada;
-        if (formData.colorExterior) document.querySelector('input[name="Formulario.ColorExterior"]').value = formData.colorExterior;
-        if (formData.colorInterior) document.querySelector('input[name="Formulario.ColorInterior"]').value = formData.colorInterior;
-        if (formData.numeroPuertas) document.querySelector('input[name="Formulario.NumeroPuertas"]').value = formData.numeroPuertas;
-        if (formData.numeroPasajeros) document.querySelector('input[name="Formulario.NumeroPasajeros"]').value = formData.numeroPasajeros;
-        if (formData.transmision) document.querySelector('select[name="Formulario.Transmision"]').value = formData.transmision;
-        if (formData.traccion) document.querySelector('select[name="Formulario.Traccion"]').value = formData.traccion;
-        if (formData.kilometraje) document.querySelector('input[name="Formulario.Kilometraje"]').value = formData.kilometraje;
-        if (formData.condicion) document.querySelector('select[name="Formulario.Condicion"]').value = formData.condicion;
-        
-        // Ubicación
-        if (formData.provincia) document.querySelector('select[name="Formulario.Provincia"]').value = formData.provincia;
-        if (formData.canton) document.querySelector('select[name="Formulario.Canton"]').value = formData.canton;
-        if (formData.ubicacionExacta) document.querySelector('input[name="Formulario.UbicacionExacta"]').value = formData.ubicacionExacta;
+        if (formData.carroceria) {
+            const carroceriaEl = document.querySelector('#carroceria');
+            if (carroceriaEl) carroceriaEl.value = formData.carroceria;
+        }
+        if (formData.combustible) {
+            const combustibleEl = document.querySelector('#combustible');
+            if (combustibleEl) combustibleEl.value = formData.combustible;
+        }
+        if (formData.cilindrada) {
+            const cilindradaEl = document.querySelector('#cilindrada');
+            if (cilindradaEl) cilindradaEl.value = formData.cilindrada;
+        }
+        if (formData.colorExterior) {
+            const colorExtEl = document.querySelector('#color-exterior');
+            if (colorExtEl) colorExtEl.value = formData.colorExterior;
+        }
+        if (formData.colorInterior) {
+            const colorIntEl = document.querySelector('#color-interior');
+            if (colorIntEl) colorIntEl.value = formData.colorInterior;
+        }
+        if (formData.numeroPuertas) {
+            const puertasEl = document.querySelector('#puertas');
+            if (puertasEl) puertasEl.value = formData.numeroPuertas;
+        }
+        if (formData.numeroPasajeros) {
+            const pasajerosEl = document.querySelector('#pasajeros');
+            if (pasajerosEl) pasajerosEl.value = formData.numeroPasajeros;
+        }
+        if (formData.transmision) {
+            const transmisionEl = document.querySelector('#transmision');
+            if (transmisionEl) transmisionEl.value = formData.transmision;
+        }
+        if (formData.traccion) {
+            const traccionEl = document.querySelector('#traccion');
+            if (traccionEl) traccionEl.value = formData.traccion;
+        }
+        if (formData.kilometraje) {
+            const kmEl = document.querySelector('#kilometraje');
+            if (kmEl) kmEl.value = formData.kilometraje;
+        }
+        if (formData.condicion) {
+            const condicionEl = document.querySelector('#condicion');
+            if (condicionEl) condicionEl.value = formData.condicion;
+        }
         
         // Descripción
-        if (formData.descripcion) document.querySelector('textarea[name="Formulario.Descripcion"]').value = formData.descripcion;
+        if (formData.descripcion) {
+            const descEl = document.querySelector('#descripcion');
+            if (descEl) descEl.value = formData.descripcion;
+        }
         
-        // Restaurar plan seleccionado
+        // ===== SECCIÓN 2: EXTRAS =====
+        if (formData.allExtras && formData.allExtras.length > 0) {
+            formData.allExtras.forEach(extraId => {
+                // Intentar encontrar por ID
+                let checkbox = document.getElementById(extraId);
+                if (!checkbox && extraId.includes('=')) {
+                    // Si es formato name=value
+                    const [name, value] = extraId.split('=');
+                    checkbox = document.querySelector(`input[name="${name}"][value="${value}"]`);
+                }
+                if (checkbox) {
+                    checkbox.checked = true;
+                }
+            });
+        }
+        
+        // ===== SECCIÓN 3: UBICACIÓN =====
+        // Primero restaurar la PROVINCIA y luego esperar para el CANTÓN
+        if (formData.provincia) {
+            const provEl = document.querySelector('#provincia');
+            if (provEl) {
+                provEl.value = formData.provincia;
+                // Llamar updateCantones directamente con el elemento
+                if (typeof window.updateCantones === 'function') {
+                    window.updateCantones(provEl);
+                    console.log('updateCantones ejecutado para provincia:', formData.provincia);
+                }
+                
+                // Establecer el cantón después de que las opciones estén cargadas
+                // Usar requestAnimationFrame para asegurar que el DOM se actualizó
+                requestAnimationFrame(() => {
+                    setTimeout(() => {
+                        if (formData.canton) {
+                            const cantonEl = document.querySelector('#canton');
+                            if (cantonEl) {
+                                // Verificar que el cantón existe en las opciones
+                                const optionExists = Array.from(cantonEl.options).some(opt => opt.value === formData.canton);
+                                if (optionExists) {
+                                    cantonEl.value = formData.canton;
+                                    console.log('Cantón restaurado exitosamente:', formData.canton);
+                                } else {
+                                    console.warn('Cantón no encontrado en opciones:', formData.canton, 'Opciones disponibles:', Array.from(cantonEl.options).map(o => o.value));
+                                }
+                            }
+                        }
+                    }, 50);
+                });
+            }
+        }
+        
+        // Ubicación exacta - es un TEXTAREA, no input
+        if (formData.ubicacionExacta) {
+            const ubicEl = document.querySelector('#ubicacion-exacta');
+            if (ubicEl) ubicEl.value = formData.ubicacionExacta;
+        }
+        
+        // ===== SECCIÓN 4: PLAN DE VISIBILIDAD =====
         if (formData.planVisibilidad) {
             const planRadio = document.querySelector(`input[name="Formulario.PlanVisibilidad"][value="${formData.planVisibilidad}"]`);
             if (planRadio) {
                 planRadio.checked = true;
-                // Trigger change event para actualizar UI
-                planRadio.dispatchEvent(new Event('change', { bubbles: true }));
+                
+                // Actualizar UI visual de la tarjeta
+                const planCard = planRadio.closest('.plan-option')?.querySelector('.plan-card');
+                if (planCard) {
+                    // Primero quitar selección de todas las tarjetas
+                    document.querySelectorAll('.plan-option .plan-card').forEach(card => {
+                        card.style.borderColor = 'rgba(255, 255, 255, 0.5)';
+                        card.style.background = '#02081C';
+                        card.style.boxShadow = 'none';
+                    });
+                    
+                    // Marcar la tarjeta seleccionada
+                    planCard.style.borderColor = '#00CC00';
+                    planCard.style.background = 'rgba(0, 204, 0, 0.1)';
+                    planCard.style.boxShadow = '0 0 20px rgba(0, 204, 0, 0.3)';
+                }
             }
         }
         
-        // Restaurar banderines seleccionados
+        // ===== SECCIÓN 5: BANDERINES =====
         if (formData.banderines && formData.banderines.length > 0) {
             formData.banderines.forEach(banderinValue => {
                 const checkbox = document.querySelector(`input[name="BanderinesSeleccionados"][value="${banderinValue}"]`);
                 if (checkbox) {
                     checkbox.checked = true;
-                    // Trigger change event para actualizar UI
-                    checkbox.dispatchEvent(new Event('change', { bubbles: true }));
+                    
+                    // Actualizar UI visual del tag-card (que es el label)
+                    const tagCard = checkbox.nextElementSibling; // El label.tag-card está justo después del input
+                    if (tagCard && tagCard.classList.contains('tag-card')) {
+                        tagCard.style.borderColor = '#00CC00';
+                        tagCard.style.background = 'rgba(0, 204, 0, 0.1)';
+                        tagCard.style.boxShadow = '0 0 20px rgba(0, 204, 0, 0.3)';
+                    }
                 }
             });
         }
         
-        // Actualizar resumen de pago si estamos en la sección correcta
+        // Aceptación de privacidad
+        if (formData.aceptoPrivacidad) {
+            const privacyCheckbox = document.querySelector('#acepto-privacidad');
+            if (privacyCheckbox) privacyCheckbox.checked = true;
+        }
+        
+        // ===== SECCIÓN 6: MULTIMEDIA =====
+        if (formData.videosUrls) {
+            const videosEl = document.querySelector('input[name="Formulario.VideosUrls"]');
+            if (videosEl) videosEl.value = formData.videosUrls;
+        }
+        
+        // ===== ACTUALIZAR RESUMEN DE PAGO =====
+        // Esperar un poco para que todos los cambios se apliquen y luego actualizar
         setTimeout(() => {
             if (typeof updatePaymentSummary === 'function') {
                 updatePaymentSummary();
             }
-        }, 100);
+            // Actualizar también los límites de upload según el plan
+            if (typeof updateUploadLimits === 'function') {
+                updateUploadLimits();
+            }
+        }, 600);
         
-        console.log('Estado del formulario restaurado');
+        console.log('Estado del formulario restaurado completamente');
     } catch (error) {
         console.error('Error al restaurar estado del formulario:', error);
     }
+}
+
+// Función para mostrar modal de placa duplicada
+function showPlacaDuplicadaModal(placa) {
+    // Remover modal existente si hay uno
+    const existingModal = document.querySelector('.placa-duplicada-modal');
+    if (existingModal) {
+        existingModal.remove();
+    }
+
+    // Crear overlay
+    const overlay = document.createElement('div');
+    overlay.className = 'placa-duplicada-modal';
+    overlay.style.cssText = `
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0, 0, 0, 0.8);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        z-index: 10000;
+        animation: fadeIn 0.3s;
+    `;
+
+    // Crear modal
+    const modal = document.createElement('div');
+    modal.style.cssText = `
+        background: #02081C;
+        border: 2px solid #FF4444;
+        border-radius: 12px;
+        padding: 32px;
+        max-width: 500px;
+        width: 90%;
+        box-shadow: 0 10px 40px rgba(255, 68, 68, 0.3);
+        animation: slideIn 0.3s;
+        text-align: center;
+    `;
+
+    // Icono de advertencia
+    const icon = document.createElement('div');
+    icon.innerHTML = `
+        <svg width="64" height="64" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" style="margin: 0 auto 16px;">
+            <circle cx="12" cy="12" r="10" stroke="#FF4444" stroke-width="2"/>
+            <path d="M12 8V12M12 16H12.01" stroke="#FF4444" stroke-width="2" stroke-linecap="round"/>
+        </svg>
+    `;
+
+    // Título
+    const title = document.createElement('h3');
+    title.textContent = '⚠️ Placa ya registrada';
+    title.style.cssText = `
+        color: #FF4444;
+        font-size: 22px;
+        font-family: Montserrat, sans-serif;
+        font-weight: 700;
+        margin: 0 0 16px 0;
+    `;
+
+    // Mensaje
+    const message = document.createElement('p');
+    message.innerHTML = `La placa <strong style="color: #FF931E;">${placa}</strong> ya está registrada en otro anuncio.<br><br>Por favor, verifique la placa e ingrese una diferente.`;
+    message.style.cssText = `
+        color: rgba(255, 255, 255, 0.9);
+        font-size: 15px;
+        font-family: Montserrat, sans-serif;
+        margin: 0 0 24px 0;
+        line-height: 1.6;
+    `;
+
+    // Botón de cerrar
+    const closeBtn = document.createElement('button');
+    closeBtn.textContent = 'Entendido';
+    closeBtn.style.cssText = `
+        background: linear-gradient(135deg, #FF931E, #FF7A00);
+        color: white;
+        border: none;
+        border-radius: 8px;
+        padding: 14px 36px;
+        font-size: 15px;
+        font-family: Montserrat, sans-serif;
+        font-weight: 700;
+        cursor: pointer;
+        transition: all 0.3s;
+    `;
+
+    closeBtn.addEventListener('mouseenter', () => {
+        closeBtn.style.background = 'linear-gradient(135deg, #FF7A00, #FF6600)';
+        closeBtn.style.transform = 'translateY(-2px)';
+        closeBtn.style.boxShadow = '0 4px 12px rgba(255, 147, 30, 0.4)';
+    });
+
+    closeBtn.addEventListener('mouseleave', () => {
+        closeBtn.style.background = 'linear-gradient(135deg, #FF931E, #FF7A00)';
+        closeBtn.style.transform = 'translateY(0)';
+        closeBtn.style.boxShadow = 'none';
+    });
+
+    closeBtn.addEventListener('click', () => {
+        overlay.remove();
+        // Enfocar el input de placa para que el usuario lo corrija
+        const placaInput = document.querySelector('#placa');
+        if (placaInput) {
+            placaInput.focus();
+            placaInput.select();
+        }
+    });
+
+    // Cerrar al hacer click fuera del modal
+    overlay.addEventListener('click', (e) => {
+        if (e.target === overlay) {
+            overlay.remove();
+        }
+    });
+
+    // Ensamblar modal
+    modal.appendChild(icon);
+    modal.appendChild(title);
+    modal.appendChild(message);
+    modal.appendChild(closeBtn);
+    overlay.appendChild(modal);
+
+    // Agregar al DOM
+    document.body.appendChild(overlay);
 }

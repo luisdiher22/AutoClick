@@ -188,15 +188,25 @@ namespace AutoClick.Pages
             }
             catch (DbUpdateException ex)
             {
-                // Verificar si es un error de placa duplicada
-                if (ex.InnerException != null && 
-                    (ex.InnerException.Message.Contains("IX_Autos_PlacaVehiculo") || 
-                     ex.InnerException.Message.Contains("duplicate key")))
+                // Log completo del error para debugging
+                Console.WriteLine($"DbUpdateException: {ex.Message}");
+                if (ex.InnerException != null)
                 {
+                    Console.WriteLine($"InnerException: {ex.InnerException.Message}");
+                }
+                
+                // Verificar si es un error de placa duplicada
+                string errorMessage = ex.InnerException?.Message ?? ex.Message;
+                if (errorMessage.Contains("IX_Autos_PlacaVehiculo") || 
+                    errorMessage.Contains("duplicate key") ||
+                    errorMessage.Contains("Cannot insert duplicate key"))
+                {
+                    Console.WriteLine("Error detectado: Placa duplicada");
                     return new JsonResult(new { error = "Ya existe un anuncio registrado con esta placa. Por favor, verifica que hayas ingresado la placa correctamente." }) { StatusCode = 400 };
                 }
                 
                 // Otro error de base de datos
+                Console.WriteLine("Error de base de datos no identificado");
                 return new JsonResult(new { error = "Error al guardar en la base de datos. Por favor, intenta nuevamente." }) { StatusCode = 500 };
             }
             catch (Exception ex)
@@ -318,11 +328,14 @@ namespace AutoClick.Pages
                 {
                     Console.WriteLine("Creando solicitud de pre-aprobación para plan gratuito...");
                     
+                    // Obtener datos del usuario de la base de datos
+                    var usuario = await _context.Usuarios.FirstOrDefaultAsync(u => u.Email == userEmail);
+                    
                     var solicitud = new SolicitudPreAprobacion
                     {
-                        Nombre = "Usuario",
-                        Apellidos = "de AutoClick",
-                        Telefono = "Por contactar",
+                        Nombre = usuario?.Nombre ?? "Usuario",
+                        Apellidos = usuario?.Apellidos ?? "AutoClick",
+                        Telefono = usuario?.NumeroTelefono ?? "No proporcionado",
                         Email = userEmail,
                         AutoId = auto.Id,
                         FechaSolicitud = DateTime.Now,
@@ -333,7 +346,7 @@ namespace AutoClick.Pages
                     _context.SolicitudesPreAprobacion.Add(solicitud);
                     await _context.SaveChangesAsync();
                     
-                    Console.WriteLine($"Solicitud de pre-aprobación creada con ID: {solicitud.Id}");
+                    Console.WriteLine($"Solicitud de pre-aprobación creada con ID: {solicitud.Id} para usuario: {usuario?.Nombre} {usuario?.Apellidos}");
                 }
                 else
                 {
