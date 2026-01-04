@@ -133,29 +133,49 @@
 
         // Manejar pago exitoso
         function handlePaymentSuccess(data) {
-            console.log('Pago procesado:', data);
+            console.log('Pago procesado - datos completos:', JSON.stringify(data));
+            console.log('Estado del pago:', data.status);
+            console.log('AutoId configurado:', paymentConfig.autoId);
 
-            // Verificar el estado
-            if (data.status === 'succeeded') {
+            // Deshabilitar botón de cancelar inmediatamente
+            disableCancelButton();
+
+            // Verificar el estado - aceptar múltiples estados de éxito
+            // ONVO puede devolver 'succeeded', 'success', 'completed', 'paid', etc.
+            const successStates = ['succeeded', 'success', 'completed', 'paid', 'approved'];
+            const isSuccess = successStates.includes(data.status?.toLowerCase()) || data.success === true;
+            
+            if (isSuccess || data.status === 'succeeded') {
                 showSuccess('¡Pago procesado exitosamente! Activando tu anuncio...');
                 
                 // Activar el auto en la base de datos
                 if (paymentConfig.autoId && paymentConfig.autoId > 0) {
+                    console.log('Llamando a activar-auto para autoId:', paymentConfig.autoId);
+                    
                     fetch(`/api/pagos/activar-auto/${paymentConfig.autoId}`, {
                         method: 'POST',
                         headers: {
                             'Content-Type': 'application/json'
                         }
                     }).then(response => {
-                        if (response.ok) {
-                            console.log('Auto activado exitosamente');
+                        console.log('Respuesta de activar-auto:', response.status, response.statusText);
+                        return response.json().then(jsonData => ({
+                            ok: response.ok,
+                            data: jsonData
+                        }));
+                    }).then(result => {
+                        if (result.ok) {
+                            console.log('Auto activado exitosamente:', result.data);
+                            showSuccess('¡Anuncio activado! Redirigiendo...');
                             // Limpiar el estado guardado del formulario
                             sessionStorage.removeItem('anuncioFormState');
                         } else {
-                            console.error('Error al activar auto');
+                            console.error('Error al activar auto:', result.data);
+                            showSuccess('Pago exitoso. Redirigiendo...');
                         }
                     }).catch(error => {
                         console.error('Error al activar auto:', error);
+                        showSuccess('Pago exitoso. Redirigiendo...');
                     }).finally(() => {
                         // Redirigir después de 2 segundos
                         setTimeout(() => {
@@ -163,10 +183,11 @@
                         }, 2000);
                     });
                 } else {
-                    // Redirigir después de 3 segundos (sin auto para activar)
+                    console.log('No hay autoId para activar, redirigiendo...');
+                    // Redirigir después de 2 segundos (sin auto para activar)
                     setTimeout(() => {
                         window.location.href = '/AnunciarMiAuto?success=true';
-                    }, 3000);
+                    }, 2000);
                 }
             } 
             else if (data.status === 'processing') {
@@ -177,6 +198,7 @@
                 }, 3000);
             }
             else if (data.status === 'requires_payment_method') {
+                enableCancelButton(); // Rehabilitar si falla
                 showError('El pago fue rechazado. Por favor, verifica tu método de pago e intenta nuevamente.');
             }
             else {
@@ -276,6 +298,29 @@
             loadingMessage.style.display = 'none';
             successMessage.style.display = 'none';
             errorMessage.style.display = 'none';
+        }
+
+        // Funciones para el botón de cancelar
+        function disableCancelButton() {
+            const cancelBtn = document.querySelector('button[onclick="cancelPayment()"]');
+            if (cancelBtn) {
+                cancelBtn.disabled = true;
+                cancelBtn.style.opacity = '0.5';
+                cancelBtn.style.cursor = 'not-allowed';
+                cancelBtn.style.pointerEvents = 'none';
+                cancelBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Procesando...';
+            }
+        }
+
+        function enableCancelButton() {
+            const cancelBtn = document.querySelector('button[onclick="cancelPayment()"]');
+            if (cancelBtn) {
+                cancelBtn.disabled = false;
+                cancelBtn.style.opacity = '1';
+                cancelBtn.style.cursor = 'pointer';
+                cancelBtn.style.pointerEvents = 'auto';
+                cancelBtn.innerHTML = '<i class="fas fa-times"></i> Cancelar';
+            }
         }
 
         function formatAmount(amount, currency) {

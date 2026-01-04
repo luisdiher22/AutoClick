@@ -251,6 +251,9 @@ namespace AutoClick.Services
                     pago.LastPaymentError = JsonSerializer.Serialize(paymentIntent.lastPaymentError);
                 }
 
+                // Marcar pago como modificado para EF
+                _context.Entry(pago).State = EntityState.Modified;
+
                 // Procesar según tipo de evento
                 switch (eventType)
                 {
@@ -264,8 +267,11 @@ namespace AutoClick.Services
                             var auto = await _context.Autos.FindAsync(pago.AutoId.Value);
                             if (auto != null)
                             {
+                                Console.WriteLine($"[WEBHOOK] Auto encontrado. Activo antes: {auto.Activo}");
                                 auto.Activo = true; // Activar el auto para que sea visible
-                                // PlanVisibilidad ya fue establecido al crear el auto
+                                // Marcar explícitamente como modificado
+                                _context.Entry(auto).State = EntityState.Modified;
+                                Console.WriteLine($"[WEBHOOK] Auto.Activo establecido a: {auto.Activo}, Estado: {_context.Entry(auto).State}");
                                 _logger.LogInformation(
                                     "Auto {AutoId} activado por pago exitoso {PaymentIntentId}",
                                     auto.Id, paymentIntent.id);
@@ -282,6 +288,8 @@ namespace AutoClick.Services
                             {
                                 anuncio.Activo = true;
                                 anuncio.FechaPublicacion = DateTime.UtcNow;
+                                // Marcar explícitamente como modificado
+                                _context.Entry(anuncio).State = EntityState.Modified;
                                 
                                 _logger.LogInformation(
                                     "Anuncio publicitario {AnuncioId} activado por pago exitoso {PaymentIntentId}",

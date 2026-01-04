@@ -360,7 +360,8 @@
                                 </td>
                                 <td class="acciones-col">
                                     <div class="acciones-container">
-                                        <form method="post" asp-page="/Admin/SolicitudesPreAprobaciones" asp-page-handler="Aprobar" style="margin: 0;">
+                                        <form method="post" action="/Admin/SolicitudesPreAprobaciones?handler=Aprobar" style="margin: 0;">
+                                            @Html.AntiForgeryToken()
                                             <input type="hidden" name="solicitudId" value="@solicitud.Id" />
                                             <button type="submit" class="btn-accion btn-aprobar" title="Aprobar solicitud">
                                                 <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
@@ -368,7 +369,8 @@
                                                 </svg>
                                             </button>
                                         </form>
-                                        <form method="post" asp-page="/Admin/SolicitudesPreAprobaciones" asp-page-handler="Rechazar" style="margin: 0;">
+                                        <form method="post" action="/Admin/SolicitudesPreAprobaciones?handler=Rechazar" style="margin: 0;">
+                                            @Html.AntiForgeryToken()
                                             <input type="hidden" name="solicitudId" value="@solicitud.Id" />
                                             <button type="submit" class="btn-accion btn-rechazar" title="Rechazar solicitud">
                                                 <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
@@ -415,3 +417,24 @@
         }
     </div>
 </div>
+@section Scripts {
+    <script>
+        // Debug: Verificar envío de formularios
+        document.addEventListener('DOMContentLoaded', function() {
+            // Agregar listener a todos los formularios de aprobar/rechazar
+            document.querySelectorAll('form[method="post"]').forEach(function(form) {
+                form.addEventListener('submit', function(e) {
+                    console.log('Formulario enviándose:', form.action);
+                    console.log('Handler:', form.querySelector('input[name="handler"]')?.value || 'desde URL');
+                    console.log('SolicitudId:', form.querySelector('input[name="solicitudId"]')?.value);
+                    
+                    // Verificar que tiene el token antiforgery
+                    const token = form.querySelector('input[name="__RequestVerificationToken"]');
+                    console.log('Token presente:', !!token);
+                    
+                    // NO prevenir el envío, solo loguear
+                });
+            });
+        });
+    </script>
+}

@@ -250,24 +250,39 @@ namespace AutoClick.Controllers.Api
         {
             try
             {
+                _logger.LogInformation("[ACTIVAR-AUTO] Iniciando activación de auto ID: {AutoId}", autoId);
+                Console.WriteLine($"[ACTIVAR-AUTO] Iniciando activación de auto ID: {autoId}");
+                
                 var auto = await _context.Autos.FindAsync(autoId);
                 
                 if (auto == null)
                 {
+                    _logger.LogWarning("[ACTIVAR-AUTO] Auto {AutoId} no encontrado", autoId);
                     return NotFound(new { error = "Auto no encontrado" });
                 }
 
+                Console.WriteLine($"[ACTIVAR-AUTO] Auto encontrado. Activo antes: {auto.Activo}");
+                
                 // Activar el auto (hacerlo visible)
                 auto.Activo = true;
-                await _context.SaveChangesAsync();
                 
-                _logger.LogInformation("Auto {AutoId} activado después de pago exitoso", autoId);
-                return Ok(new { success = true, message = "Anuncio activado correctamente" });
+                // Marcar explícitamente como modificado para asegurar que EF detecte el cambio
+                _context.Entry(auto).State = EntityState.Modified;
+                
+                Console.WriteLine($"[ACTIVAR-AUTO] Auto.Activo establecido a: {auto.Activo}, Estado: {_context.Entry(auto).State}");
+                
+                var cambios = await _context.SaveChangesAsync();
+                
+                Console.WriteLine($"[ACTIVAR-AUTO] Cambios guardados: {cambios} registros afectados");
+                _logger.LogInformation("[ACTIVAR-AUTO] Auto {AutoId} activado. Registros afectados: {Cambios}", autoId, cambios);
+                
+                return Ok(new { success = true, message = "Anuncio activado correctamente", cambios = cambios });
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, "Error al activar auto {AutoId}", autoId);
-                return StatusCode(500, new { error = "Error al activar el anuncio" });
+                _logger.LogError(ex, "[ACTIVAR-AUTO] Error al activar auto {AutoId}", autoId);
+                Console.WriteLine($"[ACTIVAR-AUTO] EXCEPCIÓN: {ex.Message}");
+                return StatusCode(500, new { error = "Error al activar el anuncio: " + ex.Message });
             }
         }
     }

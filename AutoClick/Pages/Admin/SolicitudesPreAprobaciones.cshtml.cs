@@ -72,29 +72,51 @@ namespace AutoClick.Pages.Admin
         {
             try
             {
+                Console.WriteLine($"[APROBAR] Iniciando aprobación de solicitud ID: {solicitudId}");
+                
                 var solicitud = await _context.SolicitudesPreAprobacion
-                    .Include(s => s.Auto)
                     .FirstOrDefaultAsync(s => s.Id == solicitudId);
                     
                 if (solicitud != null)
                 {
+                    Console.WriteLine($"[APROBAR] Solicitud encontrada. AutoId: {solicitud.AutoId}");
+                    
                     // Marcar la solicitud como procesada y aprobada
                     solicitud.Procesada = true;
                     solicitud.FechaProcesamiento = DateTime.Now;
                     solicitud.Aprobada = true;
                     
-                    // Activar el auto asociado (hacerlo visible)
-                    if (solicitud.Auto != null)
+                    // Cargar y activar el auto asociado DIRECTAMENTE (no via Include)
+                    var auto = await _context.Autos.FindAsync(solicitud.AutoId);
+                    if (auto != null)
                     {
-                        solicitud.Auto.Activo = true;
+                        Console.WriteLine($"[APROBAR] Auto encontrado. Activo antes: {auto.Activo}");
+                        auto.Activo = true;
+                        // Marcar explícitamente como modificado para que EF detecte el cambio
+                        _context.Entry(auto).State = EntityState.Modified;
+                        Console.WriteLine($"[APROBAR] Auto.Activo establecido a: {auto.Activo}, Estado: {_context.Entry(auto).State}");
+                    }
+                    else
+                    {
+                        Console.WriteLine($"[APROBAR] ADVERTENCIA: Auto con ID {solicitud.AutoId} no encontrado");
                     }
                     
-                    await _context.SaveChangesAsync();
+                    // Marcar solicitud como modificada también
+                    _context.Entry(solicitud).State = EntityState.Modified;
+                    
+                    var cambios = await _context.SaveChangesAsync();
+                    Console.WriteLine($"[APROBAR] Cambios guardados: {cambios} registros afectados");
+                }
+                else
+                {
+                    Console.WriteLine($"[APROBAR] ERROR: No se encontró solicitud con ID {solicitudId}");
                 }
                 return RedirectToPage();
             }
-            catch (Exception)
+            catch (Exception ex)
             {
+                Console.WriteLine($"[APROBAR] EXCEPCIÓN: {ex.Message}");
+                Console.WriteLine($"[APROBAR] StackTrace: {ex.StackTrace}");
                 return RedirectToPage();
             }
         }
