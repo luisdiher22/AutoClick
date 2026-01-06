@@ -223,11 +223,17 @@ document.addEventListener('DOMContentLoaded', function () {
     let currentSection = 1;
     const totalSections = 9; // Actualizado: 1-5 igual, 6=multimedia, 7=desglose, 8=pago (condicional), 9=confirmación
 
+    // Global array to store uploaded files (declarado al inicio para evitar TDZ)
+    let uploadedFiles = [];
+
     // Inicializar selector de marca/modelo
     initializeMarcaModeloSelectors();
 
     // Verificar si viene de un pago exitoso o cancelado
     const urlParams = new URLSearchParams(window.location.search);
+    let shouldRestoreState = false;
+    let shouldShowReloadModal = false;
+    
     if (urlParams.get('success') === 'true') {
         // Mostrar la sección de confirmación (9)
         currentSection = 9;
@@ -238,54 +244,87 @@ document.addEventListener('DOMContentLoaded', function () {
         const section = parseInt(urlParams.get('section'));
         if (section >= 1 && section <= totalSections) {
             currentSection = section;
-            // Restaurar datos del formulario
-            restoreFormState();
-            
-            // Si viene de cancelar pago y debe recargar imágenes, mostrar modal
-            if (urlParams.get('reloadImages') === 'true') {
-                setTimeout(() => {
-                    showReloadImagesModal();
-                }, 500);
-            }
+            shouldRestoreState = true;
+            shouldShowReloadModal = urlParams.get('reloadImages') === 'true';
         }
     }
 
-    // Initialize form
+    // Initialize form PRIMERO (configura event listeners)
     initializeForm();
     
-    // Función para mostrar modal de recargar imágenes
+    // DESPUÉS restaurar estado si es necesario
+    if (shouldRestoreState) {
+        setTimeout(() => {
+            try {
+                restoreFormState();
+            } catch (e) {
+                console.error('Error restaurando estado:', e);
+            }
+            
+            // Mostrar modal después de restaurar
+            if (shouldShowReloadModal) {
+                setTimeout(() => {
+                    showReloadImagesModal();
+                }, 300);
+            }
+        }, 100);
+    }
+    
+    // Función para mostrar modal de recargar imágenes (CSS puro, sin Bootstrap)
     function showReloadImagesModal() {
         const modalHtml = `
-            <div class="modal fade" id="reloadImagesModal" tabindex="-1" role="dialog" data-backdrop="static" data-keyboard="false">
-                <div class="modal-dialog modal-dialog-centered" role="document">
-                    <div class="modal-content" style="background: #02081C; border: 1px solid rgba(255, 255, 255, 0.25); border-radius: 8px;">
-                        <div class="modal-header" style="border-bottom: 1px solid rgba(255, 255, 255, 0.25);">
-                            <h5 class="modal-title" style="color: #FF931E; font-family: 'Montserrat', sans-serif; font-weight: 700;">
-                                <i class="fas fa-images" style="margin-right: 8px;"></i>
-                                Vuelve a cargar tus imágenes
-                            </h5>
-                        </div>
-                        <div class="modal-body" style="color: rgba(255, 255, 255, 0.9); font-family: 'Montserrat', sans-serif;">
-                            <p style="margin-bottom: 16px;">Por motivos de seguridad, las imágenes no se pueden mantener al regresar de la pasarela de pago.</p>
-                            <p style="margin-bottom: 0;"><strong style="color: #00CC00;">✓ Toda tu información ha sido restaurada.</strong></p>
-                            <p><strong style="color: #FF931E;">⚠ Por favor, vuelve a seleccionar las fotos de tu vehículo.</strong></p>
-                        </div>
-                        <div class="modal-footer" style="border-top: 1px solid rgba(255, 255, 255, 0.25);">
-                            <button type="button" class="btn" style="background: #FF931E; color: white; border: none; padding: 10px 24px;" onclick="$('#reloadImagesModal').modal('hide')">Entendido</button>
-                        </div>
+            <div id="reloadImagesModal" style="
+                display: flex;
+                position: fixed;
+                z-index: 10000;
+                left: 0;
+                top: 0;
+                width: 100%;
+                height: 100%;
+                background-color: rgba(0, 0, 0, 0.8);
+                justify-content: center;
+                align-items: center;
+            ">
+                <div style="
+                    background: #02081C;
+                    border: 1px solid rgba(255, 255, 255, 0.2);
+                    border-radius: 12px;
+                    max-width: 500px;
+                    width: 90%;
+                    padding: 40px;
+                ">
+                    <div style="text-align: center; margin-bottom: 20px;">
+                        <svg width="64" height="64" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <circle cx="12" cy="12" r="10" stroke="#FF931E" stroke-width="2"/>
+                            <path d="M12 8V12M12 16H12.01" stroke="#FF931E" stroke-width="2" stroke-linecap="round"/>
+                        </svg>
                     </div>
+                    <p style="color: rgba(255, 255, 255, 0.9); font-size: 16px; font-family: Montserrat; text-align: center; margin-bottom: 16px;">
+                        Por motivos de seguridad, las imágenes no se pueden mantener al regresar de la pasarela de pago.
+                    </p>
+                    <p style="color: #00CC00; font-size: 14px; font-family: Montserrat; font-weight: 600; text-align: center; margin-bottom: 8px;">
+                        ✓ Toda tu información ha sido restaurada.
+                    </p>
+                    <p style="color: #FF931E; font-size: 14px; font-family: Montserrat; font-weight: 600; text-align: center; margin-bottom: 24px;">
+                        ⚠ Por favor, vuelve a seleccionar las fotos de tu vehículo.
+                    </p>
+                    <button type="button" onclick="document.getElementById('reloadImagesModal').remove(); window.history.replaceState({}, '', window.location.pathname + '?section=6');" style="
+                        display: block;
+                        width: 100%;
+                        background: #FF931E;
+                        color: white;
+                        border: none;
+                        padding: 12px 24px;
+                        border-radius: 8px;
+                        font-family: Montserrat;
+                        font-weight: 600;
+                        cursor: pointer;
+                    ">Entendido</button>
                 </div>
             </div>
         `;
         
         document.body.insertAdjacentHTML('beforeend', modalHtml);
-        $('#reloadImagesModal').modal('show');
-        $('#reloadImagesModal').on('hidden.bs.modal', function () {
-            $(this).remove();
-            // Limpiar el parámetro de la URL sin recargar
-            const newUrl = window.location.pathname + '?section=6';
-            window.history.replaceState({}, '', newUrl);
-        });
     }
 
     function initializeForm() {
@@ -629,25 +668,26 @@ document.addEventListener('DOMContentLoaded', function () {
 
         // Actualizar límites de upload cuando se muestra la sección de multimedia
         if (sectionNumber === 6) {
+            // Llamar a la función de actualización de límites del HTML
+            if (typeof updateUploadLimits === 'function') {
+                updateUploadLimits();
+            }
+            
             // Obtener el plan seleccionado
             const selectedPlan = document.querySelector('input[name="Formulario.PlanVisibilidad"]:checked');
             const planValue = selectedPlan ? selectedPlan.value : '5';
             
             // Determinar el límite de fotos y si permite video según el plan
-            let maxPhotos = 6; // Default
+            let maxPhotos = 6;
             let videoAllowed = false;
             switch(planValue) {
-                case '1': // Instantáneo
-                case '4': // Profesional
-                case '5': // Gratuito
+                case '1': case '4': case '5':
                     maxPhotos = 6;
-                    videoAllowed = false;
                     break;
-                case '2': // Súper
+                case '2':
                     maxPhotos = 8;
-                    videoAllowed = false;
                     break;
-                case '3': // Ultra
+                case '3':
                     maxPhotos = 10;
                     videoAllowed = true;
                     break;
@@ -656,7 +696,6 @@ document.addEventListener('DOMContentLoaded', function () {
             // Limpiar fotos extras si hay más del límite permitido
             if (uploadedFiles.length > maxPhotos) {
                 uploadedFiles = uploadedFiles.slice(0, maxPhotos);
-                // Actualizar la interfaz
                 if (typeof updatePhotoOrderSection === 'function') {
                     updatePhotoOrderSection();
                 }
@@ -667,8 +706,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 const videoArea = document.getElementById('videoUploadArea');
                 if (videoArea) {
                     const placeholder = videoArea.querySelector('.upload-placeholder');
-                    if (placeholder) {
-                        // Restaurar el placeholder original del video
+                    if (placeholder && placeholder.querySelector('video')) {
                         placeholder.innerHTML = `
                             <div class="play-icon"></div>
                             <p>🎥 Subir 1 video</p>
@@ -676,11 +714,6 @@ document.addEventListener('DOMContentLoaded', function () {
                         `;
                     }
                 }
-            }
-            
-            // Llamar a la función de actualización de límites del HTML
-            if (typeof updateUploadLimits === 'function') {
-                updateUploadLimits();
             }
         }
 
@@ -1225,8 +1258,7 @@ document.addEventListener('DOMContentLoaded', function () {
         });
     }
 
-    // Global array to store uploaded files
-    let uploadedFiles = [];
+    // uploadedFiles está declarado al inicio del DOMContentLoaded
 
     function initializeFileUploads() {
         const uploadAreas = document.querySelectorAll('.upload-area');
