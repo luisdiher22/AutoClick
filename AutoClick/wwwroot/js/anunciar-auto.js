@@ -627,6 +627,63 @@ document.addEventListener('DOMContentLoaded', function () {
         updateNavigationButtons();
         updateSectionIndicator();
 
+        // Actualizar límites de upload cuando se muestra la sección de multimedia
+        if (sectionNumber === 6) {
+            // Obtener el plan seleccionado
+            const selectedPlan = document.querySelector('input[name="Formulario.PlanVisibilidad"]:checked');
+            const planValue = selectedPlan ? selectedPlan.value : '5';
+            
+            // Determinar el límite de fotos y si permite video según el plan
+            let maxPhotos = 6; // Default
+            let videoAllowed = false;
+            switch(planValue) {
+                case '1': // Instantáneo
+                case '4': // Profesional
+                case '5': // Gratuito
+                    maxPhotos = 6;
+                    videoAllowed = false;
+                    break;
+                case '2': // Súper
+                    maxPhotos = 8;
+                    videoAllowed = false;
+                    break;
+                case '3': // Ultra
+                    maxPhotos = 10;
+                    videoAllowed = true;
+                    break;
+            }
+            
+            // Limpiar fotos extras si hay más del límite permitido
+            if (uploadedFiles.length > maxPhotos) {
+                uploadedFiles = uploadedFiles.slice(0, maxPhotos);
+                // Actualizar la interfaz
+                if (typeof updatePhotoOrderSection === 'function') {
+                    updatePhotoOrderSection();
+                }
+            }
+            
+            // Limpiar video si el plan no permite video
+            if (!videoAllowed) {
+                const videoArea = document.getElementById('videoUploadArea');
+                if (videoArea) {
+                    const placeholder = videoArea.querySelector('.upload-placeholder');
+                    if (placeholder) {
+                        // Restaurar el placeholder original del video
+                        placeholder.innerHTML = `
+                            <div class="play-icon"></div>
+                            <p>🎥 Subir 1 video</p>
+                            <small id="videoLimitText" style="color: rgba(255,255,255,0.6); font-size: 12px;">Solo disponible con plan Ultra Visible</small>
+                        `;
+                    }
+                }
+            }
+            
+            // Llamar a la función de actualización de límites del HTML
+            if (typeof updateUploadLimits === 'function') {
+                updateUploadLimits();
+            }
+        }
+
         // Scroll hacia arriba en todas las versiones (mobile, tablet y desktop)
         window.scrollTo({ top: 0, behavior: 'smooth' });
     }
@@ -1989,11 +2046,6 @@ document.addEventListener('DOMContentLoaded', function () {
         // Add handler for the specific endpoint
         formData.append('handler', 'Finalizar');
 
-        // Debug: log BanderinesSeleccionados
-        const banderinesValues = formData.getAll('BanderinesSeleccionados');
-        console.log('Banderines en FormData:', banderinesValues);
-        console.log('Cantidad de banderines:', banderinesValues.length);
-
         // Debug: log all FormData entries
         for (let [key, value] of formData.entries()) {
             if (value instanceof File) {
@@ -2636,7 +2688,6 @@ function saveFormState() {
         };
         
         sessionStorage.setItem('anuncioFormState', JSON.stringify(formData));
-        console.log('Estado del formulario guardado:', formData);
     } catch (error) {
         console.error('Error al guardar estado del formulario:', error);
     }
@@ -2648,7 +2699,6 @@ function restoreFormState() {
         if (!savedState) return;
         
         const formData = JSON.parse(savedState);
-        console.log('Restaurando estado del formulario:', formData);
         
         // ===== SECCIÓN 1: DATOS DEL VEHÍCULO =====
         
@@ -2771,7 +2821,6 @@ function restoreFormState() {
                 // Llamar updateCantones directamente con el elemento
                 if (typeof window.updateCantones === 'function') {
                     window.updateCantones(provEl);
-                    console.log('updateCantones ejecutado para provincia:', formData.provincia);
                 }
                 
                 // Establecer el cantón después de que las opciones estén cargadas
@@ -2785,7 +2834,6 @@ function restoreFormState() {
                                 const optionExists = Array.from(cantonEl.options).some(opt => opt.value === formData.canton);
                                 if (optionExists) {
                                     cantonEl.value = formData.canton;
-                                    console.log('Cantón restaurado exitosamente:', formData.canton);
                                 } else {
                                     console.warn('Cantón no encontrado en opciones:', formData.canton, 'Opciones disponibles:', Array.from(cantonEl.options).map(o => o.value));
                                 }
@@ -2868,7 +2916,6 @@ function restoreFormState() {
             }
         }, 600);
         
-        console.log('Estado del formulario restaurado completamente');
     } catch (error) {
         console.error('Error al restaurar estado del formulario:', error);
     }

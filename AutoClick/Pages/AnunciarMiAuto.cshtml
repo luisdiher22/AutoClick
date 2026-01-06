@@ -384,12 +384,18 @@
                 let videoAllowed = false;
                 
                 switch(planValue) {
-                    case '2': // Super
+                    case '1': // Instantáneo
+                        maxPhotos = 6;
+                        break;
+                    case '2': // Súper
                         maxPhotos = 8;
                         break;
                     case '3': // Ultra
                         maxPhotos = 10;
                         videoAllowed = true;
+                        break;
+                    case '4': // Profesional
+                        maxPhotos = 6;
                         break;
                     case '5': // Gratuito
                     default:
@@ -413,14 +419,34 @@
                     }
                 }
                 
-                // Mostrar/ocultar área de video con setProperty para que funcione en responsive
+                // Mostrar/ocultar área de video
                 const videoArea = document.getElementById('videoUploadArea');
                 if (videoArea) {
                     if (videoAllowed) {
-                        videoArea.style.removeProperty('display');
-                        videoArea.style.setProperty('display', 'flex', 'important');
+                        videoArea.style.display = 'flex';
                     } else {
-                        videoArea.style.setProperty('display', 'none', 'important');
+                        videoArea.style.display = 'none';
+                    }
+                }
+                
+                // Eliminar fotos extras si se cambia a un plan con menos límite
+                if (typeof uploadedFiles !== 'undefined' && uploadedFiles.length > maxPhotos) {
+                    uploadedFiles = uploadedFiles.slice(0, maxPhotos);
+                    
+                    // Actualizar la UI
+                    if (typeof updatePhotoOrderSection === 'function') {
+                        updatePhotoOrderSection();
+                    }
+                    
+                    // Actualizar el texto de fotos subidas
+                    const photoUploadArea = document.querySelector('.upload-area.photos');
+                    if (photoUploadArea) {
+                        const uploadText = photoUploadArea.querySelector('p');
+                        if (uploadText && uploadedFiles.length > 0) {
+                            uploadText.textContent = `${uploadedFiles.length} foto${uploadedFiles.length > 1 ? 's' : ''} subida${uploadedFiles.length > 1 ? 's' : ''}. Haga clic para agregar más.`;
+                        } else if (uploadText) {
+                            uploadText.textContent = `📷 Subir máximo ${maxPhotos} fotos`;
+                        }
                     }
                 }
             }
@@ -1448,16 +1474,16 @@ valor fiscal</div>
                         <div class="upload-area photos">
                             <div class="upload-placeholder">
                                 <div class="upload-icon"></div>
-                                <p id="photoLimitText">📷 Subir máximo 10 fotos</p>
+                                <p id="photoLimitText">📷 Subir máximo 6 fotos</p>
                                 <small style="color: rgba(255,255,255,0.6); font-size: 12px;">Haga clic o arrastre las imágenes aquí</small>
                             </div>
                         </div>
 
-                        <div class="upload-area video" id="videoUploadArea">
+                        <div class="upload-area video" id="videoUploadArea" style="display: none;">
                             <div class="upload-placeholder">
                                 <div class="play-icon"></div>
                                 <p>🎥 Subir 1 video</p>
-                                <small id="videoLimitText" style="color: rgba(255,255,255,0.6); font-size: 12px;">Haga clic o arrastre el video aquí</small>
+                                <small id="videoLimitText" style="color: rgba(255,255,255,0.6); font-size: 12px;">Solo disponible con plan Ultra Visible</small>
                             </div>
                         </div>
                     </div>
