@@ -41,8 +41,8 @@ public class AuthService : IAuthService
                 return new AuthResult 
                 { 
                     Success = false, 
-                    Message = $"Usuario no encontrado con email: {email}",
-                    Errors = new List<string> { "Usuario no encontrado" }
+                    Message = "Los datos de inicio de sesión introducidos son incorrectos.",
+                    Errors = new List<string> { "Credenciales inválidas" }
                 };
             }
             
@@ -54,8 +54,8 @@ public class AuthService : IAuthService
                 return new AuthResult 
                 { 
                     Success = false, 
-                    Message = "La contraseña ingresada es incorrecta. Por favor, intenta nuevamente.",
-                    Errors = new List<string> { "Contraseña incorrecta" }
+                    Message = "Los datos de inicio de sesión introducidos son incorrectos.",
+                    Errors = new List<string> { "Credenciales inválidas" }
                 };
             }
 

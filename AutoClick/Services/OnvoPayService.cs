@@ -261,20 +261,53 @@ namespace AutoClick.Services
                         pago.Status = "succeeded";
                         pago.CompletedAt = DateTime.UtcNow;
                         
-                        // Activar auto/anuncio del usuario
+                        // Procesar auto del usuario (si aplica)
                         if (pago.AutoId.HasValue)
                         {
                             var auto = await _context.Autos.FindAsync(pago.AutoId.Value);
                             if (auto != null)
                             {
-                                Console.WriteLine($"[WEBHOOK] Auto encontrado. Activo antes: {auto.Activo}");
-                                auto.Activo = true; // Activar el auto para que sea visible
-                                // Marcar explícitamente como modificado
-                                _context.Entry(auto).State = EntityState.Modified;
-                                Console.WriteLine($"[WEBHOOK] Auto.Activo establecido a: {auto.Activo}, Estado: {_context.Entry(auto).State}");
-                                _logger.LogInformation(
-                                    "Auto {AutoId} activado por pago exitoso {PaymentIntentId}",
-                                    auto.Id, paymentIntent.id);
+                                Console.WriteLine($"[WEBHOOK] Auto encontrado. PlanVisibilidad: {auto.PlanVisibilidad}, Activo antes: {auto.Activo}");
+                                
+                                // Si es plan gratuito (5), enviar a pre-aprobación en lugar de activar
+                                if (auto.PlanVisibilidad == 5)
+                                {
+                                    // Verificar si ya existe una solicitud pendiente
+                                    var solicitudExistente = await _context.SolicitudesPreAprobacion
+                                        .FirstOrDefaultAsync(s => s.AutoId == auto.Id && !s.Procesada);
+                                    
+                                    if (solicitudExistente == null)
+                                    {
+                                        var usuario = await _context.Usuarios.FirstOrDefaultAsync(u => u.Email == auto.EmailPropietario);
+                                        
+                                        var solicitud = new Models.SolicitudPreAprobacion
+                                        {
+                                            Nombre = usuario?.Nombre ?? "Usuario",
+                                            Apellidos = usuario?.Apellidos ?? "AutoClick",
+                                            Telefono = usuario?.NumeroTelefono ?? "No proporcionado",
+                                            Email = auto.EmailPropietario ?? "",
+                                            AutoId = auto.Id,
+                                            FechaSolicitud = DateTime.Now,
+                                            Procesada = false,
+                                            Notas = $"Solicitud de aprobación (webhook con banderines): {auto.Marca} {auto.Modelo} {auto.Ano}"
+                                        };
+                                        
+                                        _context.SolicitudesPreAprobacion.Add(solicitud);
+                                        _logger.LogInformation(
+                                            "Auto {AutoId} con plan gratuito enviado a pre-aprobación por webhook {PaymentIntentId}",
+                                            auto.Id, paymentIntent.id);
+                                    }
+                                }
+                                else
+                                {
+                                    // Planes de pago (1-4): activar directamente
+                                    auto.Activo = true;
+                                    _context.Entry(auto).State = EntityState.Modified;
+                                    Console.WriteLine($"[WEBHOOK] Auto.Activo establecido a: {auto.Activo}, Estado: {_context.Entry(auto).State}");
+                                    _logger.LogInformation(
+                                        "Auto {AutoId} activado por pago exitoso {PaymentIntentId}",
+                                        auto.Id, paymentIntent.id);
+                                }
                             }
                         }
                         

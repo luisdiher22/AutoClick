@@ -146,7 +146,7 @@
             const isSuccess = successStates.includes(data.status?.toLowerCase()) || data.success === true;
             
             if (isSuccess || data.status === 'succeeded') {
-                showSuccess('¡Pago procesado exitosamente! Activando tu anuncio...');
+                showSuccess('¡Pago procesado exitosamente! Procesando tu anuncio...');
                 
                 // Activar el auto en la base de datos
                 if (paymentConfig.autoId && paymentConfig.autoId > 0) {
@@ -165,10 +165,16 @@
                         }));
                     }).then(result => {
                         if (result.ok) {
-                            console.log('Auto activado exitosamente:', result.data);
-                            showSuccess('¡Anuncio activado! Redirigiendo...');
+                            console.log('Respuesta del servidor:', result.data);
                             // Limpiar el estado guardado del formulario
                             sessionStorage.removeItem('anuncioFormState');
+                            
+                            // Verificar si requiere aprobación (plan gratuito con banderines)
+                            if (result.data.requiresApproval) {
+                                showSuccess('¡Pago exitoso! Tu anuncio está pendiente de aprobación por un administrador.');
+                            } else {
+                                showSuccess('¡Anuncio activado! Redirigiendo...');
+                            }
                         } else {
                             console.error('Error al activar auto:', result.data);
                             showSuccess('Pago exitoso. Redirigiendo...');

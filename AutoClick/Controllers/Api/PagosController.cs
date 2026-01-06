@@ -244,6 +244,7 @@ namespace AutoClick.Controllers.Api
         
         /// <summary>
         /// Activa un auto después de un pago exitoso
+        /// Si el auto tiene PlanVisibilidad = 5 (gratuito), envía a pre-aprobación en lugar de activar
         /// </summary>
         [HttpPost("activar-auto/{autoId}")]
         public async Task<IActionResult> ActivarAuto(int autoId)
@@ -261,9 +262,47 @@ namespace AutoClick.Controllers.Api
                     return NotFound(new { error = "Auto no encontrado" });
                 }
 
-                Console.WriteLine($"[ACTIVAR-AUTO] Auto encontrado. Activo antes: {auto.Activo}");
+                Console.WriteLine($"[ACTIVAR-AUTO] Auto encontrado. PlanVisibilidad: {auto.PlanVisibilidad}, Activo antes: {auto.Activo}");
                 
-                // Activar el auto (hacerlo visible)
+                // Si es plan gratuito (5), crear solicitud de pre-aprobación en lugar de activar directamente
+                if (auto.PlanVisibilidad == 5)
+                {
+                    // Verificar si ya existe una solicitud pendiente
+                    var solicitudExistente = await _context.SolicitudesPreAprobacion
+                        .FirstOrDefaultAsync(s => s.AutoId == autoId && !s.Procesada);
+                    
+                    if (solicitudExistente == null)
+                    {
+                        // Obtener datos del usuario
+                        var usuario = await _context.Usuarios.FirstOrDefaultAsync(u => u.Email == auto.EmailPropietario);
+                        
+                        var solicitud = new AutoClick.Models.SolicitudPreAprobacion
+                        {
+                            Nombre = usuario?.Nombre ?? "Usuario",
+                            Apellidos = usuario?.Apellidos ?? "AutoClick",
+                            Telefono = usuario?.NumeroTelefono ?? "No proporcionado",
+                            Email = auto.EmailPropietario ?? "",
+                            AutoId = auto.Id,
+                            FechaSolicitud = DateTime.Now,
+                            Procesada = false,
+                            Notas = $"Solicitud de aprobación (con banderines pagados): {auto.Marca} {auto.Modelo} {auto.Ano}, Placa: {auto.PlacaVehiculo}"
+                        };
+                        
+                        _context.SolicitudesPreAprobacion.Add(solicitud);
+                        await _context.SaveChangesAsync();
+                        
+                        _logger.LogInformation("[ACTIVAR-AUTO] Auto {AutoId} con plan gratuito enviado a pre-aprobación. Solicitud ID: {SolicitudId}", autoId, solicitud.Id);
+                        Console.WriteLine($"[ACTIVAR-AUTO] Auto {autoId} enviado a pre-aprobación (plan gratuito con banderines). Solicitud ID: {solicitud.Id}");
+                    }
+                    else
+                    {
+                        _logger.LogInformation("[ACTIVAR-AUTO] Auto {AutoId} ya tiene solicitud de pre-aprobación pendiente", autoId);
+                    }
+                    
+                    return Ok(new { success = true, message = "Pago procesado. Tu anuncio está pendiente de aprobación.", requiresApproval = true });
+                }
+                
+                // Para otros planes (1-4), activar el auto directamente
                 auto.Activo = true;
                 
                 // Marcar explícitamente como modificado para asegurar que EF detecte el cambio

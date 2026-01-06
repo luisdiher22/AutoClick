@@ -232,7 +232,7 @@ namespace AutoClick.Services
                     client.Credentials = new NetworkCredential(smtpUser, smtpPass);
 
                     // Construir la URL de reseteo
-                    var resetUrl = $"https://autoclick-hhhphnfjakb8hccs.mexicocentral-01.azurewebsites.net/ResetPassword?token={resetToken}";
+                    var resetUrl = $"https://autoclick.cr/ResetPassword?token={resetToken}";
 
                     var mailMessage = new MailMessage
                     {
