@@ -454,7 +454,7 @@
                             <div class="busqueda-filter-group">
                                 <label class="busqueda-filter-label">Provincia</label>
                                 <div class="busqueda-select-wrapper">
-                                    <select name="provincia" class="busqueda-filter-select" asp-for="Provincia">
+                                    <select id="provincia-modal" name="provincia" class="busqueda-filter-select" asp-for="Provincia">
                                         <option value="">Todas las provincias</option>
                                         <option value="San José">San José</option>
                                         <option value="Alajuela">Alajuela</option>
@@ -471,7 +471,7 @@
                             <div class="busqueda-filter-group">
                                 <label class="busqueda-filter-label">Cantón</label>
                                 <div class="busqueda-select-wrapper">
-                                    <select name="canton" class="busqueda-filter-select" asp-for="Canton">
+                                    <select id="canton-modal" name="canton" class="busqueda-filter-select" asp-for="Canton">
                                         <option value="">Todos los cantones</option>
                                     </select>
                                 </div>
@@ -483,7 +483,7 @@
                             <div class="busqueda-filter-group">
                                 <label class="busqueda-filter-label">Marca</label>
                                 <div class="busqueda-select-wrapper">
-                                    <select name="marca" class="busqueda-filter-select" asp-for="Marca">
+                                    <select id="marca-modal" name="marca" class="busqueda-filter-select" asp-for="Marca">
                                         <option value="">Todas las marcas</option>
                                         <option value="Toyota">Toyota</option>
                                         <option value="Honda">Honda</option>
@@ -501,7 +501,7 @@
                             <div class="busqueda-filter-group">
                                 <label class="busqueda-filter-label">Modelo</label>
                                 <div class="busqueda-select-wrapper">
-                                    <select name="modelo" class="busqueda-filter-select" asp-for="Modelo">
+                                    <select id="modelo-modal" name="modelo" class="busqueda-filter-select" asp-for="Modelo">
                                         <option value="">Todos los modelos</option>
                                     </select>
                                 </div>
@@ -723,6 +723,121 @@
         function autoSubmitFilters() {
             document.getElementById('desktopFilterForm').submit();
         }
+
+        // Load cantones based on selected provincia
+        function cargarCantones(provincia) {
+            const cantonSelect = document.getElementById('canton');
+            const cantonSelectModal = document.getElementById('canton-modal');
+            
+            // Clear both selects
+            [cantonSelect, cantonSelectModal].forEach(select => {
+                if (select) {
+                    select.innerHTML = '<option value="">Todos los cantones</option>';
+                }
+            });
+            
+            // Cantones by province
+            const cantonesPorProvincia = {
+                'San José': ['Central', 'Escazú', 'Desamparados', 'Puriscal', 'Tarrazú', 'Aserrí', 'Mora', 'Goicoechea', 'Santa Ana', 'Alajuelita', 'Coronado', 'Acosta', 'Tibás', 'Moravia', 'Montes de Oca', 'Turrubares', 'Dota', 'Curridabat', 'Pérez Zeledón', 'León Cortés'],
+                'Alajuela': ['Central', 'San Ramón', 'Grecia', 'San Mateo', 'Atenas', 'Naranjo', 'Palmares', 'Poás', 'Orotina', 'San Carlos', 'Zarcero', 'Sarchí', 'Upala', 'Los Chiles', 'Guatuso'],
+                'Cartago': ['Central', 'Paraíso', 'La Unión', 'Jiménez', 'Turrialba', 'Alvarado', 'Oreamuno', 'El Guarco'],
+                'Heredia': ['Central', 'Barva', 'Santo Domingo', 'Santa Bárbara', 'San Rafael', 'San Isidro', 'Belén', 'Flores', 'San Pablo', 'Sarapiquí'],
+                'Guanacaste': ['Liberia', 'Nicoya', 'Santa Cruz', 'Bagaces', 'Carrillo', 'Cañas', 'Abangares', 'Tilarán', 'Nandayure', 'La Cruz', 'Hojancha'],
+                'Puntarenas': ['Central', 'Esparza', 'Buenos Aires', 'Montes de Oro', 'Osa', 'Quepos', 'Golfito', 'Coto Brus', 'Parrita', 'Corredores', 'Garabito'],
+                'Limón': ['Central', 'Pococí', 'Siquirres', 'Talamanca', 'Matina', 'Guácimo']
+            };
+            
+            if (cantonesPorProvincia[provincia]) {
+                cantonesPorProvincia[provincia].forEach(canton => {
+                    [cantonSelect, cantonSelectModal].forEach(select => {
+                        if (select) {
+                            const option = document.createElement('option');
+                            option.value = canton;
+                            option.textContent = canton;
+                            select.appendChild(option);
+                        }
+                    });
+                });
+            }
+        }
+
+        // Load modelos based on selected marca
+        function cargarModelos(marca) {
+            const modeloSelect = document.getElementById('modelo');
+            const modeloSelectModal = document.getElementById('modelo-modal');
+            
+            // Clear both selects
+            [modeloSelect, modeloSelectModal].forEach(select => {
+                if (select) {
+                    select.innerHTML = '<option value="">Todos los modelos</option>';
+                }
+            });
+            
+            // Models by brand
+            const modelosPorMarca = {
+                'Toyota': ['Corolla', 'Camry', 'Prius', 'RAV4', 'Highlander', 'Tacoma', 'Tundra', '4Runner', 'Sienna', 'Avalon', 'Land Cruiser', 'Yaris'],
+                'Honda': ['Civic', 'Accord', 'CR-V', 'Pilot', 'Fit', 'HR-V', 'Passport', 'Ridgeline', 'Insight', 'Odyssey'],
+                'Nissan': ['Sentra', 'Altima', 'Maxima', 'Rogue', 'Pathfinder', 'Murano', 'Frontier', 'Titan', 'Armada', 'Leaf', 'Kicks', 'Versa'],
+                'Hyundai': ['Elantra', 'Sonata', 'Tucson', 'Santa Fe', 'Kona', 'Palisade', 'Accent', 'Veloster', 'Genesis', 'Ioniq'],
+                'Mazda': ['Mazda3', 'Mazda6', 'CX-3', 'CX-5', 'CX-9', 'MX-5', 'CX-30', 'Mazda2', 'BT-50'],
+                'BMW': ['Serie 1', 'Serie 2', 'Serie 3', 'Serie 4', 'Serie 5', 'Serie 7', 'X1', 'X3', 'X5', 'X7', 'Z4'],
+                'Mercedes-Benz': ['Clase A', 'Clase C', 'Clase E', 'Clase S', 'GLA', 'GLB', 'GLC', 'GLE', 'GLS'],
+                'Audi': ['A3', 'A4', 'A6', 'A8', 'Q3', 'Q5', 'Q7', 'Q8', 'TT']
+            };
+            
+            if (modelosPorMarca[marca]) {
+                modelosPorMarca[marca].forEach(modelo => {
+                    [modeloSelect, modeloSelectModal].forEach(select => {
+                        if (select) {
+                            const option = document.createElement('option');
+                            option.value = modelo;
+                            option.textContent = modelo;
+                            select.appendChild(option);
+                        }
+                    });
+                });
+            }
+        }
+
+        // Add event listeners to provincia and marca selects
+        document.addEventListener('DOMContentLoaded', function() {
+            const provinciaSelect = document.getElementById('provincia');
+            const marcaSelect = document.getElementById('marca');
+            const provinciaSelectModal = document.getElementById('provincia-modal');
+            const marcaSelectModal = document.getElementById('marca-modal');
+            
+            if (provinciaSelect) {
+                provinciaSelect.addEventListener('change', function() {
+                    cargarCantones(this.value);
+                });
+                // Load cantones if provincia is already selected
+                if (provinciaSelect.value) {
+                    cargarCantones(provinciaSelect.value);
+                }
+            }
+            
+            if (marcaSelect) {
+                marcaSelect.addEventListener('change', function() {
+                    cargarModelos(this.value);
+                });
+                // Load modelos if marca is already selected
+                if (marcaSelect.value) {
+                    cargarModelos(marcaSelect.value);
+                }
+            }
+
+            if (provinciaSelectModal) {
+                provinciaSelectModal.addEventListener('change', function() {
+                    cargarCantones(this.value);
+                });
+            }
+            
+            if (marcaSelectModal) {
+                marcaSelectModal.addEventListener('change', function() {
+                    cargarModelos(this.value);
+                });
+            }
+        });
 
         // Clear all filters
         function clearFilters() {

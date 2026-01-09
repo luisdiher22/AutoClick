@@ -51,7 +51,7 @@
                             <div class="busqueda-filter-group">
                                 <label class="busqueda-filter-label">Provincia</label>
                                 <div class="busqueda-select-wrapper">
-                                    <select name="province" class="busqueda-filter-select" id="province-select">
+                                    <select name="province" class="busqueda-filter-select" id="province-select" onchange="onProvinceChange(this)">
                                         <option value="">Todas las provincias</option>
                                         @foreach (var province in Model.AvailableProvinces)
                                         {
@@ -82,7 +82,7 @@
                             <div class="busqueda-filter-group">
                                 <label class="busqueda-filter-label">Marca</label>
                                 <div class="busqueda-select-wrapper">
-                                    <select name="brand" class="busqueda-filter-select" id="brand-select">
+                                    <select name="brand" class="busqueda-filter-select" id="brand-select" onchange="onBrandChange(this)">
                                         <option value="">Todas las marcas</option>
                                         @foreach (var brand in Model.AvailableBrands)
                                         {
@@ -558,7 +558,7 @@
                             <div class="busqueda-filter-group">
                                 <label class="busqueda-filter-label">Provincia</label>
                                 <div class="busqueda-select-wrapper">
-                                    <select name="province" class="busqueda-filter-select" id="province-select-modal">
+                                    <select name="province" class="busqueda-filter-select" id="province-select-modal" onchange="onProvinceChange(this)">
                                         <option value="">Todas las provincias</option>
                                         @foreach (var province in Model.AvailableProvinces)
                                         {
@@ -587,7 +587,7 @@
                             <div class="busqueda-filter-group">
                                 <label class="busqueda-filter-label">Marca</label>
                                 <div class="busqueda-select-wrapper">
-                                    <select name="brand" class="busqueda-filter-select" id="brand-select-modal">
+                                    <select name="brand" class="busqueda-filter-select" id="brand-select-modal" onchange="onBrandChange(this)">
                                         <option value="">Todas las marcas</option>
                                         @foreach (var brand in Model.AvailableBrands)
                                         {
