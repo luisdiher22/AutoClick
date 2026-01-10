@@ -172,18 +172,26 @@
                             // Verificar si requiere aprobación (plan gratuito con banderines)
                             if (result.data.requiresApproval) {
                                 showSuccess('¡Pago exitoso! Tu anuncio está pendiente de aprobación por un administrador.');
+                                // Redirigir con parámetro indicando que requiere aprobación
+                                setTimeout(() => {
+                                    window.location.href = '/AnunciarMiAuto?success=true&plan=5';
+                                }, 2000);
                             } else {
                                 showSuccess('¡Anuncio activado! Redirigiendo...');
+                                setTimeout(() => {
+                                    window.location.href = '/AnunciarMiAuto?success=true';
+                                }, 2000);
                             }
                         } else {
                             console.error('Error al activar auto:', result.data);
                             showSuccess('Pago exitoso. Redirigiendo...');
+                            setTimeout(() => {
+                                window.location.href = '/AnunciarMiAuto?success=true';
+                            }, 2000);
                         }
                     }).catch(error => {
                         console.error('Error al activar auto:', error);
                         showSuccess('Pago exitoso. Redirigiendo...');
-                    }).finally(() => {
-                        // Redirigir después de 2 segundos
                         setTimeout(() => {
                             window.location.href = '/AnunciarMiAuto?success=true';
                         }, 2000);
