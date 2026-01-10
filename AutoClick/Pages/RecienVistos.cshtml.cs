@@ -95,12 +95,6 @@ public class RecienVistosModel : PageModel
         
         // Cargar URLs de banderines
         await LoadBanderinUrlsAsync(RecentlyViewedAutos.ToList());
-        
-        // Si no hay autos en la base de datos, crear algunos ejemplos
-        if (!RecentlyViewedAutos.Any())
-        {
-            RecentlyViewedAutos = GetSampleRecentlyViewedAutos();
-        }
     }
     
     private async Task LoadBanderinUrlsAsync(List<Auto> autos)
@@ -130,14 +124,5 @@ public class RecienVistosModel : PageModel
                 }
             }
         }
-    }
-
-    private List<Auto> GetSampleRecentlyViewedAutos()
-    {
-        return new List<Auto>
-        {
-            new Auto { Id = 1, Marca = "Mercedes-Benz", Modelo = "E53 Coupé", Ano = 2022, Precio = 170000, ImagenPrincipal = "https://placehold.co/392x209", Carroceria = "Coupé", Combustible = "Gasolina", Transmision = "Automática", NumeroPuertas = 2, Provincia = "San José", Canton = "Escazú", PlacaVehiculo = "MER001", Condicion = "Excelente", EmailPropietario = "mercedes@dealer.com" },
-            new Auto { Id = 2, Marca = "BMW", Modelo = "X5 M50i", Ano = 2023, Precio = 95000, ImagenPrincipal = "https://placehold.co/392x209", Carroceria = "SUV", Combustible = "Gasolina", Transmision = "Automática", NumeroPuertas = 4, Provincia = "San José", Canton = "Santa Ana", PlacaVehiculo = "BMW002", Condicion = "Excelente", EmailPropietario = "bmw@dealer.com" }
-        };
     }
 }

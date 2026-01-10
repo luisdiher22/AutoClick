@@ -45,6 +45,12 @@
 
                 <!-- Cars Grid - 3 columns desktop, 2 tablet, 1 mobile -->
                 <div class="guardados-cars-grid">
+                    @if (!Model.RecentlyViewedAutos.Any())
+                    {
+                        <div style="grid-column: 1 / -1; width: 100%; padding: 60px 20px; text-align: center; color: rgba(255, 255, 255, 0.6); font-family: 'Montserrat', sans-serif; font-size: 18px;">
+                            No se encuentran autos recién vistos por mostrar
+                        </div>
+                    }
                     @{
                         int cardIndex = 0;
                         int adIndex = 0;

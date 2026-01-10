@@ -187,23 +187,6 @@ namespace AutoClick.Pages
                 .Skip((PageNumber - 1) * PageSize)
                 .Take(PageSize)
                 .ToListAsync();
-
-            // If no autos in database, use sample data
-            if (!Autos.Any())
-            {
-                var sampleAutos = GetSampleSearchResults();
-                
-                // Apply filters to sample data
-                sampleAutos = ApplyFiltersToSampleData(sampleAutos);
-                
-                TotalCars = sampleAutos.Count;
-                TotalPages = (int)Math.Ceiling((double)TotalCars / PageSize);
-                
-                Autos = sampleAutos
-                    .Skip((PageNumber - 1) * PageSize)
-                    .Take(PageSize)
-                    .ToList();
-            }
             
             // Cargar URLs de banderines para los autos
             await LoadBanderinUrlsAsync(Autos.ToList());
@@ -295,57 +278,6 @@ namespace AutoClick.Pages
                 if (!string.IsNullOrEmpty(yearRange))
                     AppliedFilters.Add(yearRange);
             }
-        }
-
-        private List<Auto> ApplyFiltersToSampleData(List<Auto> autos)
-        {
-            if (!string.IsNullOrEmpty(Brand))
-                autos = autos.Where(a => a.Marca == Brand).ToList();
-                
-            if (!string.IsNullOrEmpty(Model))
-                autos = autos.Where(a => a.Modelo == Model).ToList();
-                
-            if (MinPrice.HasValue)
-                autos = autos.Where(a => a.Precio >= MinPrice.Value).ToList();
-                
-            if (MaxPrice.HasValue)
-                autos = autos.Where(a => a.Precio <= MaxPrice.Value).ToList();
-                
-            if (MinYear.HasValue)
-                autos = autos.Where(a => a.Ano >= MinYear.Value).ToList();
-                
-            if (MaxYear.HasValue)
-                autos = autos.Where(a => a.Ano <= MaxYear.Value).ToList();
-                
-            if (!string.IsNullOrEmpty(BodyType))
-                autos = autos.Where(a => a.Carroceria == BodyType).ToList();
-                
-            if (!string.IsNullOrEmpty(FuelType))
-                autos = autos.Where(a => a.Combustible == FuelType).ToList();
-                
-            if (!string.IsNullOrEmpty(Transmission))
-                autos = autos.Where(a => a.Transmision == Transmission).ToList();
-                
-            if (!string.IsNullOrEmpty(Condition))
-                autos = autos.Where(a => a.Condicion == Condition).ToList();
-                
-            if (MinKm.HasValue)
-                autos = autos.Where(a => a.Kilometraje >= MinKm.Value).ToList();
-                
-            if (MaxKm.HasValue)
-                autos = autos.Where(a => a.Kilometraje <= MaxKm.Value).ToList();
-
-            // Apply sorting
-            autos = SortBy switch
-            {
-                "price-asc" => autos.OrderBy(a => a.Precio).ToList(),
-                "price-desc" => autos.OrderByDescending(a => a.Precio).ToList(),
-                "year" => autos.OrderByDescending(a => a.Ano).ToList(),
-                "brand" => autos.OrderBy(a => a.Marca).ThenBy(a => a.Modelo).ToList(),
-                _ => autos.OrderByDescending(a => a.Id).ToList()
-            };
-
-            return autos;
         }
 
         private async Task LoadDropdownOptions()
@@ -545,67 +477,6 @@ namespace AutoClick.Pages
             };
 
             AvailableYears = Enumerable.Range(1990, DateTime.Now.Year - 1989).OrderByDescending(y => y).ToList();
-        }
-
-        private List<Auto> GetSampleSearchResults()
-        {
-            return new List<Auto>
-            {
-                new Auto
-                {
-                    Id = 1,
-                    Marca = "BMW",
-                    Modelo = "X5M",
-                    Ano = 2025,
-                    Precio = 170000,
-                    ImagenPrincipal = "https://placehold.co/415x262/333333/FFFFFF?text=BMW+X5M",
-                    Carroceria = "SUV",
-                    Combustible = "Gasolina",
-                    Transmision = "Automática",
-                    NumeroPuertas = 4,
-                    Provincia = "San José",
-                    Canton = "Escazú",
-                    PlacaVehiculo = "BMW001",
-                    Condicion = "Excelente",
-                    EmailPropietario = "bmw@dealer.com"
-                },
-                new Auto
-                {
-                    Id = 2,
-                    Marca = "Audi",
-                    Modelo = "Q5 Sportback",
-                    Ano = 2022,
-                    Precio = 75000,
-                    ImagenPrincipal = "https://placehold.co/415x262/8B0000/FFFFFF?text=Audi+Q5",
-                    Carroceria = "SUV",
-                    Combustible = "Gasolina",
-                    Transmision = "Automática",
-                    NumeroPuertas = 4,
-                    Provincia = "Alajuela",
-                    Canton = "Alajuela",
-                    PlacaVehiculo = "AUD002",
-                    Condicion = "Muy Buena",
-                    EmailPropietario = "audi@dealer.com"
-                },
-                new Auto
-                {
-                    Id = 3,
-                    Marca = "Mercedes-Benz",
-                    Modelo = "GLE 450",
-                    Ano = 2023,
-                    Precio = 85000,
-                    ImagenPrincipal = "https://placehold.co/415x262/000000/FFFFFF?text=Mercedes+GLE",
-                    Carroceria = "SUV",
-                    Combustible = "Gasolina",
-                    Transmision = "Automática",
-                    NumeroPuertas = 4,
-                    Provincia = "San José",
-                    Canton = "Santa Ana",
-                    PlacaVehiculo = "MER003",
-                    Condicion = "Excelente",
-                    EmailPropietario = "mercedes@dealer.com"
-                }
-            };
         }
     }
 }

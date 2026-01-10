@@ -283,6 +283,12 @@
 
                 <!-- Cars Grid - 2 Columns -->
                 <div class="busqueda-cars-grid">
+                    @if (!Model.Autos.Any())
+                    {
+                        <div style="grid-column: 1 / -1; width: 100%; padding: 60px 20px; text-align: center; color: rgba(255, 255, 255, 0.6); font-family: 'Montserrat', sans-serif; font-size: 18px;">
+                            No se encuentran autos por mostrar
+                        </div>
+                    }
                     @foreach (var auto in Model.Autos)
                     {
                         <div class="busqueda-auto-card">
