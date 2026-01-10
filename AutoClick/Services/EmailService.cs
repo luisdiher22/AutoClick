@@ -1,6 +1,7 @@
-using System.Net;
-using System.Net.Mail;
 using AutoClick.Models;
+using MailKit.Net.Smtp;
+using MailKit.Security;
+using MimeKit;
 
 namespace AutoClick.Services
 {
@@ -21,7 +22,7 @@ namespace AutoClick.Services
     }
 
     /// <summary>
-    /// Servicio de envío de correos electrónicos usando SMTP
+    /// Servicio de envío de correos electrónicos usando MailKit (más confiable para Azure)
     /// </summary>
     public class EmailService : IEmailService
     {
@@ -46,7 +47,7 @@ namespace AutoClick.Services
 
                 // Configuración SMTP desde appsettings
                 var smtpHost = _configuration["EmailSettings:SmtpHost"];
-                var smtpPort = int.Parse(_configuration["EmailSettings:SmtpPort"] ?? "465"); // Puerto 465 para SSL en Azure
+                var smtpPort = int.Parse(_configuration["EmailSettings:SmtpPort"] ?? "465");
                 var smtpUser = _configuration["EmailSettings:SmtpUser"];
                 var smtpPass = _configuration["EmailSettings:SmtpPassword"];
                 var fromEmail = _configuration["EmailSettings:FromEmail"] ?? smtpUser;
@@ -55,56 +56,142 @@ namespace AutoClick.Services
                 // Validar configuración
                 if (string.IsNullOrEmpty(smtpHost) || string.IsNullOrEmpty(smtpUser) || string.IsNullOrEmpty(smtpPass))
                 {
-                    _logger.LogWarning("Configuración SMTP incompleta. Email no enviado.");
-                    // En desarrollo, logear la información en lugar de fallar
+                    _logger.LogWarning("Configuración SMTP incompleta. SmtpHost: {Host}, SmtpUser: {User}, SmtpPass: {Pass}", 
+                        smtpHost ?? "NULL", 
+                        smtpUser ?? "NULL", 
+                        string.IsNullOrEmpty(smtpPass) ? "NULL" : "***SET***");
                     LogSolicitudEnConsola(solicitud, correosAdmins);
-                    return true; // Retornar true para no bloquear el flujo en desarrollo
+                    return true;
                 }
 
-                using (var client = new SmtpClient(smtpHost, smtpPort))
+                var subject = esEspacioPublicitario 
+                    ? $"Solicitud de Espacio Publicitario - {solicitud.NombreEmpresa}"
+                    : $"Nueva Solicitud de Empresa - {solicitud.NombreEmpresa}";
+
+                // Crear mensaje con MimeKit
+                var message = new MimeMessage();
+                message.From.Add(new MailboxAddress(fromName, fromEmail));
+                
+                foreach (var email in correosAdmins)
                 {
-                    client.EnableSsl = true;
-                    client.UseDefaultCredentials = false; // Importante para Azure
-                    client.Credentials = new NetworkCredential(smtpUser, smtpPass);
-
-                    var subject = esEspacioPublicitario 
-                        ? $"Solicitud de Espacio Publicitario - {solicitud.NombreEmpresa}"
-                        : $"Nueva Solicitud de Empresa - {solicitud.NombreEmpresa}";
-
-                    var mailMessage = new MailMessage
+                    if (!string.IsNullOrWhiteSpace(email))
                     {
-                        From = new MailAddress(fromEmail!, fromName),
-                        Subject = subject,
-                        Body = GenerarCuerpoEmail(solicitud, esEspacioPublicitario),
-                        IsBodyHtml = true
-                    };
-
-                    // Agregar todos los administradores como destinatarios
-                    foreach (var email in correosAdmins)
-                    {
-                        if (!string.IsNullOrWhiteSpace(email))
-                        {
-                            mailMessage.To.Add(email);
-                        }
+                        message.To.Add(MailboxAddress.Parse(email));
                     }
+                }
 
-                    if (mailMessage.To.Count == 0)
+                if (message.To.Count == 0)
+                {
+                    _logger.LogWarning("No hay destinatarios válidos para enviar el correo");
+                    return false;
+                }
+
+                message.Subject = subject;
+                message.Body = new TextPart("html")
+                {
+                    Text = GenerarCuerpoEmail(solicitud, esEspacioPublicitario)
+                };
+
+                // Enviar con MailKit
+                using (var client = new SmtpClient())
+                {
+                    _logger.LogInformation("Conectando a SMTP {Host}:{Port}...", smtpHost, smtpPort);
+                    
+                    // Puerto 465 usa SSL directo, puerto 587 usa STARTTLS
+                    if (smtpPort == 465)
                     {
-                        _logger.LogWarning("No hay destinatarios válidos para enviar el correo");
-                        return false;
+                        await client.ConnectAsync(smtpHost, smtpPort, SecureSocketOptions.SslOnConnect);
                     }
-
-                    await client.SendMailAsync(mailMessage);
-                    _logger.LogInformation($"Email enviado exitosamente a {mailMessage.To.Count} administrador(es)");
+                    else
+                    {
+                        await client.ConnectAsync(smtpHost, smtpPort, SecureSocketOptions.StartTls);
+                    }
+                    
+                    _logger.LogInformation("Autenticando con usuario {User}...", smtpUser);
+                    await client.AuthenticateAsync(smtpUser, smtpPass);
+                    
+                    _logger.LogInformation("Enviando email a {Count} destinatario(s)...", message.To.Count);
+                    await client.SendAsync(message);
+                    
+                    await client.DisconnectAsync(true);
+                    
+                    _logger.LogInformation("Email enviado exitosamente a {Count} administrador(es)", message.To.Count);
                     return true;
                 }
             }
             catch (Exception ex)
             {
-                _logger.LogError($"Error al enviar email: {ex.Message}");
-                // En desarrollo, logear en consola para no bloquear
+                _logger.LogError(ex, "Error al enviar email: {Message}", ex.Message);
                 LogSolicitudEnConsola(solicitud, correosAdmins);
-                return true; // Retornar true en desarrollo para no bloquear el flujo
+                return false;
+            }
+        }
+
+        public async Task<bool> SendPasswordResetEmailAsync(string toEmail, string resetToken)
+        {
+            try
+            {
+                // Configuración SMTP desde appsettings
+                var smtpHost = _configuration["EmailSettings:SmtpHost"];
+                var smtpPort = int.Parse(_configuration["EmailSettings:SmtpPort"] ?? "465");
+                var smtpUser = _configuration["EmailSettings:SmtpUser"];
+                var smtpPass = _configuration["EmailSettings:SmtpPassword"];
+                var fromEmail = _configuration["EmailSettings:FromEmail"] ?? smtpUser;
+                var fromName = _configuration["EmailSettings:FromName"] ?? "AutoClick.cr";
+
+                if (string.IsNullOrEmpty(smtpHost) || string.IsNullOrEmpty(smtpUser) || string.IsNullOrEmpty(smtpPass))
+                {
+                    _logger.LogWarning("Configuración SMTP incompleta. SmtpHost: {Host}, SmtpUser: {User}, SmtpPass: {Pass}", 
+                        smtpHost ?? "NULL", 
+                        smtpUser ?? "NULL", 
+                        string.IsNullOrEmpty(smtpPass) ? "NULL" : "***SET***");
+                    return false;
+                }
+
+                // Construir la URL de reseteo
+                var resetUrl = $"https://autoclick.cr/ResetPassword?token={resetToken}";
+
+                // Crear mensaje con MimeKit
+                var message = new MimeMessage();
+                message.From.Add(new MailboxAddress(fromName, fromEmail));
+                message.To.Add(MailboxAddress.Parse(toEmail));
+                message.Subject = "Recuperación de contraseña - AutoClick.cr";
+                message.Body = new TextPart("html")
+                {
+                    Text = GenerarCuerpoEmailResetPassword(resetUrl)
+                };
+
+                // Enviar con MailKit
+                using (var client = new SmtpClient())
+                {
+                    _logger.LogInformation("Conectando a SMTP {Host}:{Port} para reset de contraseña...", smtpHost, smtpPort);
+                    
+                    // Puerto 465 usa SSL directo, puerto 587 usa STARTTLS
+                    if (smtpPort == 465)
+                    {
+                        await client.ConnectAsync(smtpHost, smtpPort, SecureSocketOptions.SslOnConnect);
+                    }
+                    else
+                    {
+                        await client.ConnectAsync(smtpHost, smtpPort, SecureSocketOptions.StartTls);
+                    }
+                    
+                    _logger.LogInformation("Autenticando...");
+                    await client.AuthenticateAsync(smtpUser, smtpPass);
+                    
+                    _logger.LogInformation("Enviando email de recuperación a {Email}...", toEmail);
+                    await client.SendAsync(message);
+                    
+                    await client.DisconnectAsync(true);
+                    
+                    _logger.LogInformation("Email de recuperación enviado exitosamente a {Email}", toEmail);
+                    return true;
+                }
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error al enviar email de recuperación: {Message}", ex.Message);
+                return false;
             }
         }
 
@@ -198,64 +285,15 @@ namespace AutoClick.Services
             _logger.LogInformation("====================================");
             _logger.LogInformation("NUEVA SOLICITUD DE EMPRESA (Email no configurado - LOG)");
             _logger.LogInformation("====================================");
-            _logger.LogInformation($"Empresa: {solicitud.NombreEmpresa}");
-            _logger.LogInformation($"Representante: {solicitud.RepresentanteLegal}");
-            _logger.LogInformation($"Industria: {solicitud.Industria}");
-            _logger.LogInformation($"Email: {solicitud.CorreoElectronico}");
-            _logger.LogInformation($"Teléfono: {solicitud.Telefono}");
-            _logger.LogInformation($"Descripción: {solicitud.DescripcionEmpresa}");
-            _logger.LogInformation($"Fecha: {solicitud.FechaCreacion}");
-            _logger.LogInformation($"Destinatarios (admins): {string.Join(", ", correosAdmins)}");
+            _logger.LogInformation("Empresa: {Empresa}", solicitud.NombreEmpresa);
+            _logger.LogInformation("Representante: {Rep}", solicitud.RepresentanteLegal);
+            _logger.LogInformation("Industria: {Ind}", solicitud.Industria);
+            _logger.LogInformation("Email: {Email}", solicitud.CorreoElectronico);
+            _logger.LogInformation("Teléfono: {Tel}", solicitud.Telefono);
+            _logger.LogInformation("Descripción: {Desc}", solicitud.DescripcionEmpresa);
+            _logger.LogInformation("Fecha: {Fecha}", solicitud.FechaCreacion);
+            _logger.LogInformation("Destinatarios (admins): {Admins}", string.Join(", ", correosAdmins));
             _logger.LogInformation("====================================");
-        }
-
-        public async Task<bool> SendPasswordResetEmailAsync(string toEmail, string resetToken)
-        {
-            try
-            {
-                // Configuración SMTP desde appsettings
-                var smtpHost = _configuration["EmailSettings:SmtpHost"];
-                var smtpPort = int.Parse(_configuration["EmailSettings:SmtpPort"] ?? "465"); // Puerto 465 para SSL en Azure
-                var smtpUser = _configuration["EmailSettings:SmtpUser"];
-                var smtpPass = _configuration["EmailSettings:SmtpPassword"];
-                var fromEmail = _configuration["EmailSettings:FromEmail"] ?? smtpUser;
-                var fromName = _configuration["EmailSettings:FromName"] ?? "AutoClick.cr";
-
-                if (string.IsNullOrEmpty(smtpHost) || string.IsNullOrEmpty(smtpUser) || string.IsNullOrEmpty(smtpPass))
-                {
-                    _logger.LogWarning("Configuración SMTP incompleta. Email no enviado.");
-                    return false;
-                }
-
-                using (var client = new SmtpClient(smtpHost, smtpPort))
-                {
-                    client.EnableSsl = true;
-                    client.UseDefaultCredentials = false; // Importante para Azure
-                    client.Credentials = new NetworkCredential(smtpUser, smtpPass);
-
-                    // Construir la URL de reseteo
-                    var resetUrl = $"https://autoclick.cr/ResetPassword?token={resetToken}";
-
-                    var mailMessage = new MailMessage
-                    {
-                        From = new MailAddress(fromEmail!, fromName),
-                        Subject = "Recuperación de contraseña - AutoClick.cr",
-                        Body = GenerarCuerpoEmailResetPassword(resetUrl),
-                        IsBodyHtml = true
-                    };
-
-                    mailMessage.To.Add(toEmail);
-
-                    await client.SendMailAsync(mailMessage);
-                    _logger.LogInformation($"Email de recuperación enviado a {toEmail}");
-                    return true;
-                }
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError($"Error al enviar email de recuperación: {ex.Message}");
-                return false;
-            }
         }
 
         private string GenerarCuerpoEmailResetPassword(string resetUrl)

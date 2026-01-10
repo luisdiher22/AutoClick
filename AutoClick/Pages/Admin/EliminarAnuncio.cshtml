@@ -1,0 +1,411 @@
+@page
+@model AutoClick.Pages.Admin.EliminarAnuncioModel
+@{
+    ViewData["Title"] = "Eliminar Anuncio";
+    Layout = "~/Pages/Shared/_Layout.cshtml";
+}
+
+<style>
+    /* Reset body styles for admin page */
+    body {
+        margin: 0;
+        padding: 0;
+        background: #02081C !important;
+        font-family: 'Montserrat', sans-serif !important;
+        overflow-x: hidden;
+    }
+    
+    .main-container {
+        background: #02081C !important;
+        min-height: 100vh;
+        position: relative;
+        width: 100%;
+        overflow: hidden;
+    }
+    
+    /* Admin Container */
+    .admin-eliminar-container {
+        width: 100%;
+        min-height: 100vh;
+        position: relative;
+        display: flex;
+    }
+    
+    /* Main Content */
+    .admin-main-content {
+        margin-left: 376px;
+        padding: 120px 40px 30px 40px;
+        width: calc(100% - 376px);
+        min-height: 100vh;
+        background: #02081C;
+    }
+    
+    .page-title {
+        color: white;
+        font-size: 28px;
+        font-weight: 700;
+        margin-bottom: 8px;
+    }
+    
+    .page-subtitle {
+        color: rgba(255, 255, 255, 0.6);
+        font-size: 14px;
+        margin-bottom: 30px;
+    }
+
+    .admin-container {
+        max-width: 600px;
+        padding: 30px;
+        background: linear-gradient(145deg, #030D2B, #02081C);
+        border-radius: 16px;
+        border: 1px solid rgba(255, 147, 30, 0.3);
+    }
+
+    .form-group {
+        margin-bottom: 20px;
+    }
+
+    .form-group label {
+        display: block;
+        color: #ffffff;
+        font-weight: 600;
+        margin-bottom: 8px;
+        font-size: 14px;
+    }
+
+    .form-group input {
+        width: 100%;
+        padding: 14px 16px;
+        background: rgba(255, 255, 255, 0.05);
+        border: 1px solid rgba(255, 255, 255, 0.2);
+        border-radius: 8px;
+        color: #ffffff;
+        font-size: 16px;
+        transition: all 0.3s ease;
+    }
+
+    .form-group input:focus {
+        outline: none;
+        border-color: #FF931E;
+        box-shadow: 0 0 0 3px rgba(255, 147, 30, 0.2);
+    }
+
+    .form-group input::placeholder {
+        color: rgba(255, 255, 255, 0.4);
+    }
+
+    .btn-eliminar {
+        width: 100%;
+        padding: 16px;
+        background: linear-gradient(135deg, #dc3545, #c82333);
+        color: white;
+        border: none;
+        border-radius: 8px;
+        font-size: 16px;
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        margin-top: 10px;
+    }
+
+    .btn-eliminar:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 8px 25px rgba(220, 53, 69, 0.4);
+    }
+
+    .btn-eliminar:disabled {
+        opacity: 0.6;
+        cursor: not-allowed;
+        transform: none;
+    }
+
+    .alert {
+        padding: 16px 20px;
+        border-radius: 8px;
+        margin-bottom: 20px;
+        font-size: 14px;
+    }
+
+    .alert-success {
+        background: rgba(40, 167, 69, 0.2);
+        border: 1px solid rgba(40, 167, 69, 0.5);
+        color: #28a745;
+    }
+
+    .alert-danger {
+        background: rgba(220, 53, 69, 0.2);
+        border: 1px solid rgba(220, 53, 69, 0.5);
+        color: #dc3545;
+    }
+
+    .alert-warning {
+        background: rgba(255, 193, 7, 0.2);
+        border: 1px solid rgba(255, 193, 7, 0.5);
+        color: #ffc107;
+    }
+
+    .warning-box {
+        background: rgba(255, 193, 7, 0.1);
+        border-left: 4px solid #ffc107;
+        padding: 16px;
+        margin-bottom: 25px;
+        border-radius: 4px;
+    }
+
+    .warning-box p {
+        margin: 0;
+        color: rgba(255, 255, 255, 0.85);
+        font-size: 14px;
+    }
+
+    .warning-box strong {
+        color: #ffc107;
+    }
+
+    .anuncio-info {
+        background: rgba(255, 255, 255, 0.05);
+        border-radius: 8px;
+        padding: 20px;
+        margin-bottom: 20px;
+        border: 1px solid rgba(255, 255, 255, 0.1);
+    }
+
+    .anuncio-info h4 {
+        color: #FF931E;
+        margin-bottom: 15px;
+        font-size: 16px;
+    }
+
+    .anuncio-info p {
+        margin: 8px 0;
+        color: rgba(255, 255, 255, 0.8);
+        font-size: 14px;
+    }
+
+    .anuncio-info span {
+        color: #ffffff;
+        font-weight: 500;
+    }
+
+    /* Modal de confirmación */
+    .modal-overlay {
+        display: none;
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0, 0, 0, 0.7);
+        z-index: 1000;
+        justify-content: center;
+        align-items: center;
+    }
+
+    .modal-overlay.active {
+        display: flex;
+    }
+
+    .modal-content {
+        background: linear-gradient(145deg, #030D2B, #02081C);
+        border-radius: 16px;
+        padding: 30px;
+        max-width: 450px;
+        width: 90%;
+        border: 1px solid rgba(220, 53, 69, 0.5);
+        text-align: center;
+        animation: modalSlideIn 0.3s ease;
+    }
+
+    @@keyframes modalSlideIn {
+        from {
+            opacity: 0;
+            transform: scale(0.9);
+        }
+        to {
+            opacity: 1;
+            transform: scale(1);
+        }
+    }
+
+    .modal-icon {
+        font-size: 48px;
+        margin-bottom: 20px;
+    }
+
+    .modal-title {
+        color: #dc3545;
+        font-size: 22px;
+        font-weight: 700;
+        margin-bottom: 15px;
+    }
+
+    .modal-message {
+        color: rgba(255, 255, 255, 0.85);
+        font-size: 14px;
+        margin-bottom: 25px;
+        line-height: 1.6;
+    }
+
+    .modal-buttons {
+        display: flex;
+        gap: 15px;
+        justify-content: center;
+    }
+
+    .btn-modal-cancel {
+        padding: 12px 30px;
+        background: rgba(255, 255, 255, 0.1);
+        color: white;
+        border: 1px solid rgba(255, 255, 255, 0.3);
+        border-radius: 8px;
+        font-size: 14px;
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.3s ease;
+    }
+
+    .btn-modal-cancel:hover {
+        background: rgba(255, 255, 255, 0.2);
+    }
+
+    .btn-modal-confirm {
+        padding: 12px 30px;
+        background: linear-gradient(135deg, #dc3545, #c82333);
+        color: white;
+        border: none;
+        border-radius: 8px;
+        font-size: 14px;
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.3s ease;
+    }
+
+    .btn-modal-confirm:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 8px 25px rgba(220, 53, 69, 0.4);
+    }
+    
+    /* Responsive */
+    @@media (max-width: 1024px) {
+        .admin-main-content {
+            margin-left: 0;
+            width: 100%;
+            padding: 20px;
+        }
+    }
+</style>
+
+<div class="admin-eliminar-container">
+    @await Html.PartialAsync("_AdminSidebar")
+    
+    <div class="admin-main-content">
+        <h1 class="page-title">Eliminar Anuncio</h1>
+        <p class="page-subtitle">Ingrese el ID del anuncio que desea eliminar permanentemente</p>
+        
+        <div class="admin-container">
+
+    @if (!string.IsNullOrEmpty(Model.MensajeExito))
+    {
+        <div class="alert alert-success">
+            <i class="fas fa-check-circle"></i> @Model.MensajeExito
+        </div>
+    }
+
+    @if (!string.IsNullOrEmpty(Model.MensajeError))
+    {
+        <div class="alert alert-danger">
+            <i class="fas fa-exclamation-circle"></i> @Model.MensajeError
+        </div>
+    }
+
+    <div class="warning-box">
+        <p><strong>⚠️ Advertencia:</strong> Esta acción es irreversible. El anuncio, sus imágenes y toda la información asociada serán eliminados permanentemente de la base de datos.</p>
+    </div>
+
+    @if (Model.AnuncioAEliminar != null)
+    {
+        <div class="anuncio-info">
+            <h4>📋 Información del Anuncio a Eliminar</h4>
+            <p><strong>ID:</strong> <span>@Model.AnuncioAEliminar.Id</span></p>
+            <p><strong>Título:</strong> <span>@Model.AnuncioAEliminar.Marca @Model.AnuncioAEliminar.Modelo @Model.AnuncioAEliminar.Ano</span></p>
+            <p><strong>Placa:</strong> <span>@Model.AnuncioAEliminar.PlacaVehiculo</span></p>
+            <p><strong>Precio:</strong> <span>₡@Model.AnuncioAEliminar.Precio.ToString("N0")</span></p>
+            <p><strong>Estado:</strong> <span>@(Model.AnuncioAEliminar.Activo ? "Activo" : "Inactivo")</span></p>
+            <p><strong>Fecha Creación:</strong> <span>@Model.AnuncioAEliminar.FechaCreacion.ToString("dd/MM/yyyy HH:mm")</span></p>
+        </div>
+
+        <form id="formEliminar" method="post" asp-page-handler="ConfirmarEliminacion">
+            <input type="hidden" name="autoIdConfirmar" value="@Model.AnuncioAEliminar.Id" />
+            <button type="button" class="btn-eliminar" onclick="showConfirmModal()">
+                <i class="fas fa-trash-alt"></i> Confirmar Eliminación
+            </button>
+        </form>
+    }
+    else
+    {
+        <form method="post" asp-page-handler="BuscarAnuncio">
+            <div class="form-group">
+                <label for="autoId">ID del Anuncio</label>
+                <input type="number" id="autoId" name="autoId" placeholder="Ej: 12345" required min="1" />
+            </div>
+
+            <button type="submit" class="btn-eliminar" style="background: linear-gradient(135deg, #FF931E, #FF7A00);">
+                <i class="fas fa-search"></i> Buscar Anuncio
+            </button>
+        </form>
+    }
+        </div>
+    </div>
+</div>
+
+<!-- Modal de Confirmación -->
+<div id="confirmModal" class="modal-overlay">
+    <div class="modal-content">
+        <div class="modal-icon">⚠️</div>
+        <h3 class="modal-title">¿Está seguro?</h3>
+        <p class="modal-message">
+            Esta acción <strong>NO se puede deshacer</strong>. El anuncio, sus imágenes, videos y toda la información asociada serán eliminados permanentemente.
+        </p>
+        <div class="modal-buttons">
+            <button type="button" class="btn-modal-cancel" onclick="hideConfirmModal()">
+                Cancelar
+            </button>
+            <button type="button" class="btn-modal-confirm" onclick="confirmarEliminacion()">
+                Sí, eliminar
+            </button>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        // Auto-focus en el campo de ID
+        document.getElementById('autoId')?.focus();
+
+        function showConfirmModal() {
+            document.getElementById('confirmModal').classList.add('active');
+        }
+
+        function hideConfirmModal() {
+            document.getElementById('confirmModal').classList.remove('active');
+        }
+
+        function confirmarEliminacion() {
+            document.getElementById('formEliminar').submit();
+        }
+
+        // Cerrar modal al hacer clic fuera
+        document.getElementById('confirmModal')?.addEventListener('click', function(e) {
+            if (e.target === this) {
+                hideConfirmModal();
+            }
+        });
+
+        // Cerrar modal con Escape
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape') {
+                hideConfirmModal();
+            }
+        });
+    </script>
+}

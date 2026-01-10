@@ -34,21 +34,21 @@
     </div>
 
     <!-- Gestión de anuncios (Dropdown) -->
-    <div data-estado="@(currentPage.Contains("PendientesAprobacion") || currentPage.Contains("HistorialRechazos") || currentPage.Contains("PublicacionesPagadas") ? "desplegado" : "collapsed")" style="width: 344px; position: relative; flex-direction: column; justify-content: flex-start; align-items: flex-start; display: flex;">
-        <div onclick="return toggleDropdown('gestionanuncios', event);" style="width: 344px; height: 50px; padding-top: 14px; padding-bottom: 14px; padding-left: 16px; padding-right: 22px; @(currentPage.Contains("PendientesAprobacion") || currentPage.Contains("HistorialRechazos") || currentPage.Contains("PublicacionesPagadas") ? "background: rgba(255, 255, 255, 0.25);" : "") overflow: hidden; border-radius: 2px; justify-content: space-between; align-items: center; display: inline-flex; cursor: pointer; transition: background-color 0.2s ease;">
+    <div data-estado="@(currentPage.Contains("SolicitudesPreAprobaciones") || currentPage.Contains("HistorialRechazos") || currentPage.Contains("PublicacionesPagadas") || currentPage.Contains("EliminarAnuncio") ? "desplegado" : "collapsed")" style="width: 344px; position: relative; flex-direction: column; justify-content: flex-start; align-items: flex-start; display: flex;">
+        <div onclick="return toggleDropdown('gestionanuncios', event);" style="width: 344px; height: 50px; padding-top: 14px; padding-bottom: 14px; padding-left: 16px; padding-right: 22px; @(currentPage.Contains("SolicitudesPreAprobaciones") || currentPage.Contains("HistorialRechazos") || currentPage.Contains("PublicacionesPagadas") || currentPage.Contains("EliminarAnuncio") ? "background: rgba(255, 255, 255, 0.25);" : "") overflow: hidden; border-radius: 2px; justify-content: space-between; align-items: center; display: inline-flex; cursor: pointer; transition: background-color 0.2s ease;">
             <div style="justify-content: flex-start; align-items: center; gap: 8px; display: flex; pointer-events: none;">
                 <svg width="22" height="22" viewBox="0 0 22 22" fill="none" xmlns="http://www.w3.org/2000/svg" style="flex-shrink: 0;">
                     <path d="M2 22C1.45 22 0.979167 21.8042 0.5875 21.4125C0.195833 21.0208 0 20.55 0 20V2C0 1.45 0.195833 0.979167 0.5875 0.5875C0.979167 0.195833 1.45 0 2 0H13L11 2H2V20H20V11L22 9V20C22 20.55 21.8042 21.0208 21.4125 21.4125C21.0208 21.8042 20.55 22 20 22H2ZM14.175 5.825L15.575 7.225L8.4 14.4V15.8H9.8L16.975 8.625L18.375 10.025L10.6 17.8H6.4V13.6L14.175 5.825ZM18.375 10.025L14.175 5.825L16.875 3.125C17.2583 2.74167 17.725 2.55 18.275 2.55C18.825 2.55 19.2917 2.74167 19.675 3.125L20.875 4.325C21.2583 4.70833 21.45 5.16667 21.45 5.7C21.45 6.23333 21.2583 6.69167 20.875 7.075L18.375 10.025Z" fill="white"/>
                 </svg>
                 <div style="text-box-trim: trim-both; text-box-edge: cap alphabetic; color: white; font-size: 16px; font-family: Montserrat; font-weight: 500; word-wrap: break-word">Gestión de anuncios</div>
             </div>
-            <svg id="gestionanuncios-arrow" width="12" height="6" viewBox="0 0 12 6" fill="none" xmlns="http://www.w3.org/2000/svg" style="transition: transform 0.3s ease; pointer-events: none; @(currentPage.Contains("PendientesAprobacion") || currentPage.Contains("HistorialRechazos") || currentPage.Contains("PublicacionesPagadas") ? "transform: rotate(180deg);" : "")">
+            <svg id="gestionanuncios-arrow" width="12" height="6" viewBox="0 0 12 6" fill="none" xmlns="http://www.w3.org/2000/svg" style="transition: transform 0.3s ease; pointer-events: none; @(currentPage.Contains("SolicitudesPreAprobaciones") || currentPage.Contains("HistorialRechazos") || currentPage.Contains("PublicacionesPagadas") || currentPage.Contains("EliminarAnuncio") ? "transform: rotate(180deg);" : "")">
                 <path d="M0 0L6 6L12 0H0Z" fill="white"/>
             </svg>
         </div>
-        <div id="gestionanuncios-dropdown" style="width: 344px; flex-direction: column; justify-content: flex-start; align-items: flex-start; gap: 4px; @(currentPage.Contains("PendientesAprobacion") || currentPage.Contains("HistorialRechazos") || currentPage.Contains("PublicacionesPagadas") ? "display: flex;" : "display: none;") margin-top: 8px;">
-            <div class="dropdown-item" style="width: 344px; height: 40px; padding-top: 8px; padding-bottom: 8px; padding-left: 12px; padding-right: 8px; border-radius: 4px; justify-content: flex-start; align-items: center; display: inline-flex; @(currentPage.Contains("PendientesAprobacion") ? "background: rgba(255, 255, 255, 0.25);" : "") transition: background-color 0.2s ease;">
-                <a href="/Admin/PendientesAprobacion" style="text-decoration: none; color: white; width: 100%;">
+        <div id="gestionanuncios-dropdown" style="width: 344px; flex-direction: column; justify-content: flex-start; align-items: flex-start; gap: 4px; @(currentPage.Contains("SolicitudesPreAprobaciones") || currentPage.Contains("HistorialRechazos") || currentPage.Contains("PublicacionesPagadas") || currentPage.Contains("EliminarAnuncio") ? "display: flex;" : "display: none;") margin-top: 8px;">
+            <div class="dropdown-item" style="width: 344px; height: 40px; padding-top: 8px; padding-bottom: 8px; padding-left: 12px; padding-right: 8px; border-radius: 4px; justify-content: flex-start; align-items: center; display: inline-flex; @(currentPage.Contains("SolicitudesPreAprobaciones") ? "background: rgba(255, 255, 255, 0.25);" : "") transition: background-color 0.2s ease;">
+                <a href="/Admin/SolicitudesPreAprobaciones" style="text-decoration: none; color: white; width: 100%;">
                     <div style="text-box-trim: trim-both; text-box-edge: cap alphabetic; color: white; font-size: 16px; font-family: Montserrat; font-weight: 500; word-wrap: break-word">Pendientes de aprobación</div>
                 </a>
             </div>
@@ -60,6 +60,11 @@
             <div class="dropdown-item" style="width: 344px; height: 40px; padding-top: 8px; padding-bottom: 8px; padding-left: 12px; padding-right: 8px; border-radius: 4px; justify-content: flex-start; align-items: center; display: inline-flex; @(currentPage.Contains("PublicacionesPagadas") ? "background: rgba(255, 255, 255, 0.25);" : "") transition: background-color 0.2s ease;">
                 <a href="/Admin/PublicacionesPagadas" style="text-decoration: none; color: white; width: 100%;">
                     <div style="text-box-trim: trim-both; text-box-edge: cap alphabetic; color: white; font-size: 16px; font-family: Montserrat; font-weight: 500; word-wrap: break-word">Publicaciones pagadas</div>
+                </a>
+            </div>
+            <div class="dropdown-item" style="width: 344px; height: 40px; padding-top: 8px; padding-bottom: 8px; padding-left: 12px; padding-right: 8px; border-radius: 4px; justify-content: flex-start; align-items: center; display: inline-flex; @(currentPage.Contains("EliminarAnuncio") ? "background: rgba(255, 255, 255, 0.25);" : "") transition: background-color 0.2s ease;">
+                <a href="/Admin/EliminarAnuncio" style="text-decoration: none; color: white; width: 100%;">
+                    <div style="text-box-trim: trim-both; text-box-edge: cap alphabetic; color: white; font-size: 16px; font-family: Montserrat; font-weight: 500; word-wrap: break-word">Eliminar anuncio</div>
                 </a>
             </div>
         </div>
@@ -102,20 +107,6 @@
                         <path d="M11 22C9.61667 22 8.31667 21.7375 7.1 21.2125C5.88333 20.6875 4.825 19.975 3.925 19.075C3.025 18.175 2.3125 17.1167 1.7875 15.9C1.2625 14.6833 1 13.3833 1 12C1 10.6167 1.2625 9.31667 1.7875 8.1C2.3125 6.88333 3.025 5.825 3.925 4.925C4.825 4.025 5.88333 3.3125 7.1 2.7875C8.31667 2.2625 9.61667 2 11 2C12.05 2 13.0542 2.15417 14.0125 2.4625C14.9708 2.77083 15.8667 3.21667 16.7 3.8L15.3 5.2C14.65 4.75 13.9458 4.39583 13.1875 4.1375C12.4292 3.87917 11.6333 3.75 10.8 3.75C8.56667 3.75 6.66667 4.52083 5.1 6.0625C3.53333 7.60417 2.75 9.5 2.75 11.75C2.75 14 3.52917 15.9042 5.0875 17.4625C6.64583 19.0208 8.55 19.8 10.8 19.8C13.05 19.8 14.9542 19.0208 16.5125 17.4625C18.0708 15.9042 18.85 14 18.85 11.75V11.2H14.7V9.3H20.6V11.75C20.6 13.1333 20.3375 14.4333 19.8125 15.65C19.2875 16.8667 18.575 17.925 17.675 18.825C16.775 19.725 15.7167 20.4375 14.5 20.9625C13.2833 21.4875 11.9833 21.75 10.6 21.75L11 22Z" fill="white"/>
                     </svg>
                     <div style="text-box-trim: trim-both; text-box-edge: cap alphabetic; color: white; font-size: 16px; font-family: Montserrat; font-weight: 500; word-wrap: break-word">Centro de soporte</div>
-                </div>
-            </a>
-        </div>
-    </div>
-
-    <!-- Solicitudes de Pre-aprobación -->
-    <div class="sidebar-item" data-estado="@(currentPage.Contains("SolicitudesPreAprobaciones") ? "active" : "Default")" style="width: 344px; height: 56px; position: relative;">
-        <div style="width: 344px; height: 50px; padding-top: 14px; padding-bottom: 14px; padding-left: 16px; padding-right: 22px; left: 0px; top: 3px; position: absolute; overflow: hidden; border-radius: 2px; justify-content: flex-start; align-items: center; display: inline-flex; @(currentPage.Contains("SolicitudesPreAprobaciones") ? "background: rgba(255, 255, 255, 0.25);" : "") transition: background-color 0.2s ease;">
-            <a href="/Admin/SolicitudesPreAprobaciones" style="text-decoration: none; color: white; display: flex; align-items: center; gap: 8px; width: 100%;">
-                <div style="justify-content: flex-start; align-items: center; gap: 8px; display: flex">
-                    <svg width="22" height="22" viewBox="0 0 22 22" fill="none" xmlns="http://www.w3.org/2000/svg" style="flex-shrink: 0;">
-                        <path d="M9 12L11 14L15 10M21 12C21 16.9706 16.9706 21 12 21C7.02944 21 3 16.9706 3 12C3 7.02944 7.02944 3 12 3C16.9706 3 21 7.02944 21 12Z" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
-                    </svg>
-                    <div style="text-box-trim: trim-both; text-box-edge: cap alphabetic; color: white; font-size: 16px; font-family: Montserrat; font-weight: 500; word-wrap: break-word">Solicitudes de Pre-aprobación</div>
                 </div>
             </a>
         </div>
