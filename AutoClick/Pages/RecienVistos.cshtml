@@ -25,14 +25,23 @@
                     <h1 style="color: white; font-size: 28px; font-family: 'Montserrat', sans-serif; font-weight: 700; margin: 0;">Autos recién vistos</h1>
                     
                     <div class="busqueda-sort-wrapper">
-                        <select class="busqueda-sort-select" onchange="changeSorting(this.value)">
-                            <option value="recent" selected="@(Model.SortBy == "recent")">Ordenar por: Más recientes</option>
-                            <option value="price-asc" selected="@(Model.SortBy == "price-asc")">Ordenar por: Precio menor a mayor</option>
-                            <option value="price-desc" selected="@(Model.SortBy == "price-desc")">Ordenar por: Precio mayor a menor</option>
-                            <option value="year" selected="@(Model.SortBy == "year")">Ordenar por: Año más nuevo</option>
+                        <select class="busqueda-sort-select" id="sortSelect" onchange="changeSorting(this.value)">
+                            <option value="recent">Ordenar por: Más recientes</option>
+                            <option value="price-asc">Ordenar por: Precio menor a mayor</option>
+                            <option value="price-desc">Ordenar por: Precio mayor a menor</option>
+                            <option value="year">Ordenar por: Año más nuevo</option>
                         </select>
                     </div>
                 </div>
+
+                <script>
+                    document.addEventListener('DOMContentLoaded', function() {
+                        var sortSelect = document.getElementById('sortSelect');
+                        if (sortSelect) {
+                            sortSelect.value = '@Model.SortBy';
+                        }
+                    });
+                </script>
 
                 <!-- Cars Grid - 3 columns desktop, 2 tablet, 1 mobile -->
                 <div class="guardados-cars-grid">

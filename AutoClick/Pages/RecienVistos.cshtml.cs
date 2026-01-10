@@ -19,18 +19,27 @@ public class RecienVistosModel : PageModel
 
     public IList<Auto> RecentlyViewedAutos { get; set; } = new List<Auto>();
     public Dictionary<int, List<string>> BanderinUrls { get; set; } = new(); // Dictionary for multiple banderines
+    
+    [Microsoft.AspNetCore.Mvc.BindProperty(SupportsGet = true)]
+    [Microsoft.AspNetCore.Mvc.FromQuery(Name = "page")]
     public int CurrentPage { get; set; } = 1;
+    
     public int TotalPages { get; set; }
     public int PageSize { get; set; } = 11; // Desktop: 11 cards (3x4 grid - 1 for ad)
+    
+    [Microsoft.AspNetCore.Mvc.BindProperty(SupportsGet = true)]
+    [Microsoft.AspNetCore.Mvc.FromQuery(Name = "sortBy")]
     public string SortBy { get; set; } = "recent";
+    
     public Dictionary<int, int> AutoCountByOwner { get; set; } = new Dictionary<int, int>();
     public bool IsMobile { get; set; }
     public bool IsTablet { get; set; }
 
-    public async Task OnGetAsync(int? page, string? sortBy)
+    public async Task OnGetAsync()
     {
-        CurrentPage = page ?? 1;
-        SortBy = sortBy ?? "recent";
+        // CurrentPage y SortBy ya están bindeados desde query string
+        if (CurrentPage < 1) CurrentPage = 1;
+        if (string.IsNullOrEmpty(SortBy)) SortBy = "recent";
 
         // Detectar dispositivo móvil o tablet
         var userAgent = Request.Headers["User-Agent"].ToString().ToLower();

@@ -158,9 +158,9 @@ namespace AutoClick.Pages
             {
                 ModelState.AddModelError("NewEmail", "El nuevo correo es obligatorio");
             }
-            else if (!System.Text.RegularExpressions.Regex.IsMatch(NewEmail, @"^[a-zA-Z0-9._%+-]+@gmail\.com$"))
+            else if (!System.Text.RegularExpressions.Regex.IsMatch(NewEmail, @"^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$"))
             {
-                ModelState.AddModelError("NewEmail", "El correo debe tener el formato @gmail.com");
+                ModelState.AddModelError("NewEmail", "El correo debe tener un formato válido");
             }
             
             if (!ModelState.IsValid)
