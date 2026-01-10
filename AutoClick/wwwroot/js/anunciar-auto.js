@@ -237,9 +237,24 @@ document.addEventListener('DOMContentLoaded', function () {
     if (urlParams.get('success') === 'true') {
         // Mostrar la sección de confirmación (9)
         currentSection = 9;
-        // Actualizar mensaje según el plan (si viene de pago exitoso, es plan pagado)
+        // Verificar el plan guardado para determinar el mensaje correcto
+        // Plan 5 = Gratuito, requiere revisión aunque haya pagado banderines
+        let isPaidPlan = true;
+        try {
+            const savedState = sessionStorage.getItem('anuncioFormState');
+            if (savedState) {
+                const formData = JSON.parse(savedState);
+                // Si el plan es 5 (gratuito), el anuncio requiere revisión
+                if (formData.planVisibilidad === '5' || formData.planVisibilidad === 5) {
+                    isPaidPlan = false;
+                }
+            }
+        } catch (e) {
+            console.error('Error al verificar plan:', e);
+        }
+        // Actualizar mensaje según el plan
         setTimeout(() => {
-            updateConfirmationMessage(true); // true = plan pagado
+            updateConfirmationMessage(isPaidPlan);
         }, 100);
         // Limpiar sessionStorage
         sessionStorage.removeItem('anuncioFormState');
