@@ -46,7 +46,7 @@ namespace AutoClick.Services
 
                 // Configuración SMTP desde appsettings
                 var smtpHost = _configuration["EmailSettings:SmtpHost"];
-                var smtpPort = int.Parse(_configuration["EmailSettings:SmtpPort"] ?? "587");
+                var smtpPort = int.Parse(_configuration["EmailSettings:SmtpPort"] ?? "465"); // Puerto 465 para SSL en Azure
                 var smtpUser = _configuration["EmailSettings:SmtpUser"];
                 var smtpPass = _configuration["EmailSettings:SmtpPassword"];
                 var fromEmail = _configuration["EmailSettings:FromEmail"] ?? smtpUser;
@@ -64,6 +64,7 @@ namespace AutoClick.Services
                 using (var client = new SmtpClient(smtpHost, smtpPort))
                 {
                     client.EnableSsl = true;
+                    client.UseDefaultCredentials = false; // Importante para Azure
                     client.Credentials = new NetworkCredential(smtpUser, smtpPass);
 
                     var subject = esEspacioPublicitario 
@@ -214,7 +215,7 @@ namespace AutoClick.Services
             {
                 // Configuración SMTP desde appsettings
                 var smtpHost = _configuration["EmailSettings:SmtpHost"];
-                var smtpPort = int.Parse(_configuration["EmailSettings:SmtpPort"] ?? "587");
+                var smtpPort = int.Parse(_configuration["EmailSettings:SmtpPort"] ?? "465"); // Puerto 465 para SSL en Azure
                 var smtpUser = _configuration["EmailSettings:SmtpUser"];
                 var smtpPass = _configuration["EmailSettings:SmtpPassword"];
                 var fromEmail = _configuration["EmailSettings:FromEmail"] ?? smtpUser;
@@ -229,6 +230,7 @@ namespace AutoClick.Services
                 using (var client = new SmtpClient(smtpHost, smtpPort))
                 {
                     client.EnableSsl = true;
+                    client.UseDefaultCredentials = false; // Importante para Azure
                     client.Credentials = new NetworkCredential(smtpUser, smtpPass);
 
                     // Construir la URL de reseteo
