@@ -2,19 +2,23 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
 using AutoClick.Data;
 using AutoClick.Models;
+using AutoClick.Services;
 
 namespace AutoClick.Pages;
 
 public class RecienVistosModel : PageModel
 {
     private readonly ApplicationDbContext _context;
+    private readonly IBanderinesService _banderinesService;
 
-    public RecienVistosModel(ApplicationDbContext context)
+    public RecienVistosModel(ApplicationDbContext context, IBanderinesService banderinesService)
     {
         _context = context;
+        _banderinesService = banderinesService;
     }
 
     public IList<Auto> RecentlyViewedAutos { get; set; } = new List<Auto>();
+    public Dictionary<int, List<string>> BanderinUrls { get; set; } = new(); // Dictionary for multiple banderines
     public int CurrentPage { get; set; } = 1;
     public int TotalPages { get; set; }
     public int PageSize { get; set; } = 11; // Desktop: 11 cards (3x4 grid - 1 for ad)
@@ -80,10 +84,42 @@ public class RecienVistosModel : PageModel
             }
         }
         
+        // Cargar URLs de banderines
+        await LoadBanderinUrlsAsync(RecentlyViewedAutos.ToList());
+        
         // Si no hay autos en la base de datos, crear algunos ejemplos
         if (!RecentlyViewedAutos.Any())
         {
             RecentlyViewedAutos = GetSampleRecentlyViewedAutos();
+        }
+    }
+    
+    private async Task LoadBanderinUrlsAsync(List<Auto> autos)
+    {
+        foreach (var auto in autos)
+        {
+            if (!BanderinUrls.ContainsKey(auto.Id))
+            {
+                var urls = new List<string>();
+                var banderinFiles = auto.BanderinesVideoUrls;
+                
+                foreach (var fileName in banderinFiles)
+                {
+                    if (!string.IsNullOrEmpty(fileName))
+                    {
+                        var url = await _banderinesService.GetBanderinUrlAsync(fileName);
+                        if (!string.IsNullOrEmpty(url))
+                        {
+                            urls.Add(url);
+                        }
+                    }
+                }
+                
+                if (urls.Count > 0)
+                {
+                    BanderinUrls[auto.Id] = urls;
+                }
+            }
         }
     }
 

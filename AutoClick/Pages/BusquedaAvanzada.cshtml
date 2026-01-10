@@ -287,19 +287,15 @@
                     {
                         <div class="busqueda-auto-card">
                             <!-- Banderín superior derecho (fuera del link) -->
-                            @if (!string.IsNullOrEmpty(auto.BanderinVideoUrl) && Model.BanderinUrls.ContainsKey(auto.Id))
+                            @if (Model.BanderinUrls.ContainsKey(auto.Id) && Model.BanderinUrls[auto.Id].Any())
                             {
-                                <div class="busqueda-banderin-container">
-                                    @if (auto.BanderinVideoUrl.EndsWith(".gif", StringComparison.OrdinalIgnoreCase))
-                                    {
-                                        <img src="@Model.BanderinUrls[auto.Id]" alt="Banderín" />
-                                    }
-                                    else
-                                    {
-                                        <video autoplay loop muted playsinline>
-                                            <source src="@Model.BanderinUrls[auto.Id]" type="video/mp4">
-                                        </video>
-                                    }
+                                <div class="busqueda-banderin-container" data-auto-id="@auto.Id" data-banderin-count="@Model.BanderinUrls[auto.Id].Count">
+                                    <div class="busqueda-banderin-carousel">
+                                        @for (int i = 0; i < Model.BanderinUrls[auto.Id].Count; i++)
+                                        {
+                                            <img src="@Model.BanderinUrls[auto.Id][i]" class="@(i == 0 ? "active" : "")" alt="Banderín" />
+                                        }
+                                    </div>
                                 </div>
                             }
                             
@@ -1027,6 +1023,43 @@ document.addEventListener('DOMContentLoaded', function() {
     });
 });
 */
+
+// Carousel para banderines múltiples
+document.addEventListener('DOMContentLoaded', function() {
+    // Función para rotar banderines de un auto específico
+    function rotateBanderines(container) {
+        const carousel = container.querySelector('.busqueda-banderin-carousel');
+        if (!carousel) return;
+        
+        const items = carousel.querySelectorAll('img, video');
+        if (items.length <= 1) return; // No rotar si solo hay un banderín
+        
+        let currentIndex = 0;
+        
+        function rotate() {
+            // Remover clase active del actual
+            items[currentIndex].classList.remove('active');
+            
+            // Mover al siguiente
+            currentIndex = (currentIndex + 1) % items.length;
+            
+            // Agregar clase active al nuevo
+            items[currentIndex].classList.add('active');
+        }
+        
+        // Rotar cada 6 segundos
+        setInterval(rotate, 6000);
+    }
+    
+    // Inicializar carousels para todos los banderines
+    const banderinContainers = document.querySelectorAll('.busqueda-banderin-container');
+    banderinContainers.forEach(container => {
+        const count = parseInt(container.getAttribute('data-banderin-count') || '0');
+        if (count > 1) {
+            rotateBanderines(container);
+        }
+    });
+});
 </script>
 
 

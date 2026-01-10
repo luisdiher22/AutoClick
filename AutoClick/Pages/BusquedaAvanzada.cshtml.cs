@@ -34,7 +34,7 @@ namespace AutoClick.Pages
         }
 
         public IList<Auto> Autos { get; set; } = new List<Auto>();
-        public Dictionary<int, string?> BanderinUrls { get; set; } = new();
+        public Dictionary<int, List<string>> BanderinUrls { get; set; } = new(); // Changed to List<string> for multiple banderines
         
         // Filter Parameters
         [BindProperty(SupportsGet = true)]
@@ -213,10 +213,27 @@ namespace AutoClick.Pages
         {
             foreach (var auto in autos)
             {
-                if (!string.IsNullOrEmpty(auto.BanderinVideoUrl) && !BanderinUrls.ContainsKey(auto.Id))
+                if (!BanderinUrls.ContainsKey(auto.Id))
                 {
-                    var url = await _banderinesService.GetBanderinUrlAsync(auto.BanderinVideoUrl);
-                    BanderinUrls[auto.Id] = url;
+                    var urls = new List<string>();
+                    var banderinFiles = auto.BanderinesVideoUrls; // Use the property that gets multiple banderines
+                    
+                    foreach (var fileName in banderinFiles)
+                    {
+                        if (!string.IsNullOrEmpty(fileName))
+                        {
+                            var url = await _banderinesService.GetBanderinUrlAsync(fileName);
+                            if (!string.IsNullOrEmpty(url))
+                            {
+                                urls.Add(url);
+                            }
+                        }
+                    }
+                    
+                    if (urls.Count > 0)
+                    {
+                        BanderinUrls[auto.Id] = urls;
+                    }
                 }
             }
         }

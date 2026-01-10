@@ -3083,6 +3083,30 @@ body {
     filter: drop-shadow(2px 2px 4px rgba(0, 0, 0, 0.5));
 }
 
+/* Banderin Carousel Styles for multiple banderines */
+.busqueda-banderin-carousel {
+    position: relative;
+    width: 100%;
+    height: 100%;
+}
+
+.busqueda-banderin-carousel img {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    opacity: 0;
+    transition: opacity 0.8s ease-in-out;
+    filter: drop-shadow(2px 2px 4px rgba(0, 0, 0, 0.5));
+}
+
+.busqueda-banderin-carousel img.active {
+    opacity: 1;
+    z-index: 2;
+}
+
 /* Contenedor de información con fondo oscuro */
 .busqueda-auto-card-info {
     background: #02081C;
