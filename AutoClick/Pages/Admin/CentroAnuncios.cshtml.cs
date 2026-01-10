@@ -9,6 +9,7 @@ namespace AutoClick.Pages.Admin
     public class CentroAnunciosModel : PageModel
     {
         private readonly ApplicationDbContext _context;
+        private const int PageSize = 15;
 
         public CentroAnunciosModel(ApplicationDbContext context)
         {
@@ -16,11 +17,25 @@ namespace AutoClick.Pages.Admin
         }
 
         public List<Auto> Anuncios { get; set; } = new();
+        
+        [BindProperty(SupportsGet = true)]
+        public int PaginaActual { get; set; } = 1;
+        public int TotalPaginas { get; set; }
+        public int TotalRegistros { get; set; }
 
         public async Task OnGetAsync()
         {
+            TotalRegistros = await _context.Autos.CountAsync();
+            TotalPaginas = (int)Math.Ceiling((double)TotalRegistros / PageSize);
+            
+            // Asegurar que la página actual sea válida
+            if (PaginaActual < 1) PaginaActual = 1;
+            if (PaginaActual > TotalPaginas && TotalPaginas > 0) PaginaActual = TotalPaginas;
+            
             Anuncios = await _context.Autos
                 .OrderByDescending(a => a.FechaCreacion)
+                .Skip((PaginaActual - 1) * PageSize)
+                .Take(PageSize)
                 .ToListAsync();
         }
 

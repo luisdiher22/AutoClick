@@ -237,6 +237,10 @@ document.addEventListener('DOMContentLoaded', function () {
     if (urlParams.get('success') === 'true') {
         // Mostrar la sección de confirmación (9)
         currentSection = 9;
+        // Actualizar mensaje según el plan (si viene de pago exitoso, es plan pagado)
+        setTimeout(() => {
+            updateConfirmationMessage(true); // true = plan pagado
+        }, 100);
         // Limpiar sessionStorage
         sessionStorage.removeItem('anuncioFormState');
     } else if (urlParams.get('section')) {

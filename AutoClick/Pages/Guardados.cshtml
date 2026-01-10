@@ -135,7 +135,7 @@
                     <nav class="busqueda-pagination" aria-label="Paginación de autos guardados">
                         <div class="pagination-container">
                             <!-- Previous Button -->
-                            <a href="@Url.Page("/Guardados", new { page = Model.CurrentPage - 1, sortBy = Model.SortBy })" 
+                            <a href="/guardados?page=@(Model.CurrentPage - 1)&sortBy=@Model.SortBy" 
                                class="busqueda-pagination-arrow @(Model.CurrentPage <= 1 ? "disabled" : "")">
                                 <div class="pagination-arrow-icon left"></div>
                             </a>
@@ -143,7 +143,7 @@
                             <!-- Page Numbers -->
                             @for (int i = 1; i <= Math.Min(5, Model.TotalPages); i++)
                             {
-                                <a href="@Url.Page("/Guardados", new { page = i, sortBy = Model.SortBy })" 
+                                <a href="/guardados?page=@i&sortBy=@Model.SortBy" 
                                    class="busqueda-pagination-number @(Model.CurrentPage == i ? "active" : "")">
                                     @i
                                 </a>
@@ -153,14 +153,14 @@
                             {
                                 <span class="busqueda-pagination-ellipsis">…</span>
                                 
-                                <a href="@Url.Page("/Guardados", new { page = Model.TotalPages, sortBy = Model.SortBy })" 
+                                <a href="/guardados?page=@Model.TotalPages&sortBy=@Model.SortBy" 
                                    class="busqueda-pagination-number @(Model.CurrentPage == Model.TotalPages ? "active" : "")">
                                     @Model.TotalPages
                                 </a>
                             }
 
                             <!-- Next Button -->
-                            <a href="@Url.Page("/Guardados", new { page = Model.CurrentPage + 1, sortBy = Model.SortBy })" 
+                            <a href="/guardados?page=@(Model.CurrentPage + 1)&sortBy=@Model.SortBy" 
                                class="busqueda-pagination-arrow @(Model.CurrentPage >= Model.TotalPages ? "disabled" : "")">
                                 <div class="pagination-arrow-icon right"></div>
                             </a>
@@ -302,8 +302,7 @@ document.addEventListener('DOMContentLoaded', function() {
 });
 
 function changeSorting(sortBy) {
-    const currentPage = @Model.CurrentPage;
-    const url = `@Url.Page("/Guardados")?page=1&sortBy=${sortBy}`;
+    const url = `/guardados?page=1&sortBy=${sortBy}`;
     window.location.href = url;
 }
 

@@ -36,7 +36,7 @@
     /* Main Content Area */
     .admin-main-content {
         margin-left: 376px;
-        padding: 24px 40px 0 40px;
+        padding: 120px 40px 40px 40px;
         background: #02081C;
     }
     
@@ -360,6 +360,61 @@
     .modal-body::-webkit-scrollbar-thumb:hover {
         background: rgba(255, 255, 255, 0.3);
     }
+
+    /* Estilos de paginación */
+    .paginacion-wrapper {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        margin-top: 24px;
+        gap: 8px;
+    }
+
+    .btn-paginacion {
+        padding: 8px 16px;
+        background: rgba(255, 255, 255, 0.15);
+        border: 0.5px solid rgba(255, 255, 255, 0.25);
+        border-radius: 8px;
+        color: #F7F7F7;
+        font-family: 'Montserrat', sans-serif;
+        font-size: 14px;
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.2s ease;
+        text-decoration: none;
+        display: inline-flex;
+        align-items: center;
+    }
+
+    .btn-paginacion:hover:not(.disabled) {
+        background: rgba(255, 147, 30, 0.2);
+        border-color: #FF931E;
+        transform: translateY(-2px);
+    }
+
+    .btn-paginacion.disabled {
+        opacity: 0.3;
+        cursor: not-allowed;
+        pointer-events: none;
+    }
+
+    .paginacion-info {
+        color: #F7F7F7;
+        font-family: 'Montserrat', sans-serif;
+        font-size: 14px;
+        font-weight: 500;
+        margin: 0 12px;
+    }
+
+    .total-registros {
+        color: rgba(255, 255, 255, 0.7);
+        font-size: 14px;
+        margin-top: 20px;
+    }
+
+    .total-registros strong {
+        color: #FF931E;
+    }
 </style>
 
 <div class="main-container">
@@ -421,6 +476,34 @@
                     </div>
                 }
             </div>
+
+            <!-- Paginación -->
+            @if (Model.TotalPaginas > 1)
+            {
+                <div class="paginacion-wrapper">
+                    <a href="?PaginaActual=@(Model.PaginaActual - 1)" 
+                       class="btn-paginacion @(Model.PaginaActual <= 1 ? "disabled" : "")">
+                        Anterior
+                    </a>
+                    
+                    <span class="paginacion-info">
+                        Página @Model.PaginaActual de @Model.TotalPaginas
+                    </span>
+                    
+                    <a href="?PaginaActual=@(Model.PaginaActual + 1)" 
+                       class="btn-paginacion @(Model.PaginaActual >= Model.TotalPaginas ? "disabled" : "")">
+                        Siguiente
+                    </a>
+                </div>
+            }
+
+            <!-- Total de registros -->
+            @if (Model.TotalRegistros > 0)
+            {
+                <div class="total-registros">
+                    Total de anuncios: <strong>@Model.TotalRegistros</strong>
+                </div>
+            }
         </div>
     </div>
 </div>

@@ -1013,10 +1013,15 @@
                     <a href="@Url.Page("/Producto", new { id = auto.Id })" class="index-card-small">
                         <div class="index-card-small-image">
                             <img src="@(string.IsNullOrEmpty(auto.ImagenPrincipal) ? "https://placehold.co/226x136" : auto.ImagenPrincipal)" alt="@auto.NombreCompleto" />
-                            @if (!string.IsNullOrEmpty(auto.BanderinVideoUrl) && Model.BanderinUrls.ContainsKey(auto.Id))
+                            @if (!string.IsNullOrEmpty(auto.BanderinVideoUrl) && Model.BanderinUrls.ContainsKey(auto.Id) && Model.BanderinUrls[auto.Id].Any())
                             {
-                                <div class="index-card-banderin">
-                                    <img src="@Model.BanderinUrls[auto.Id]" alt="Banderín" />
+                                <div class="index-card-banderin" data-auto-id="@auto.Id" data-banderin-count="@Model.BanderinUrls[auto.Id].Count">
+                                    <div class="index-banderin-carousel">
+                                        @for (int i = 0; i < Model.BanderinUrls[auto.Id].Count; i++)
+                                        {
+                                            <img src="@Model.BanderinUrls[auto.Id][i]" class="@(i == 0 ? "active" : "")" alt="Banderín" />
+                                        }
+                                    </div>
                                 </div>
                             }
                         </div>
@@ -1622,7 +1627,7 @@ document.addEventListener('DOMContentLoaded', function() {
 document.addEventListener('DOMContentLoaded', function() {
     // Función para rotar banderines de un auto específico
     function rotateBanderines(container) {
-        const carousel = container.querySelector('.index-card-banderin-carousel');
+        const carousel = container.querySelector('.index-card-banderin-carousel, .index-banderin-carousel');
         if (!carousel) return;
         
         const items = carousel.querySelectorAll('img, video');
