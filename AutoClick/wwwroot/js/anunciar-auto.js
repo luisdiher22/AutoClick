@@ -561,6 +561,14 @@ document.addEventListener('DOMContentLoaded', function () {
     async function handleNextClick(e) {
         e.preventDefault();
 
+        // Validación especial para sección 6 (Multimedia): verificar que hay al menos 1 foto
+        if (currentSection === 6) {
+            if (!uploadedFiles || uploadedFiles.length === 0) {
+                showValidationModal('Debe subir al menos 1 foto antes de continuar.');
+                return;
+            }
+        }
+
         // Mostrar estado de carga
         const nextBtn = document.querySelector('#btn-next');
         const originalText = nextBtn ? nextBtn.textContent : '';

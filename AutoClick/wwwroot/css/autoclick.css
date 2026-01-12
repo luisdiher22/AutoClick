@@ -4254,10 +4254,34 @@ body {
 .producto-thumbnails {
     display: flex;
     gap: 8px;
+    overflow-x: auto;
+    overflow-y: hidden;
+    scrollbar-width: thin;
+    scrollbar-color: rgba(255, 255, 255, 0.3) rgba(0, 0, 0, 0.1);
+    padding-bottom: 8px;
+}
+
+.producto-thumbnails::-webkit-scrollbar {
+    height: 6px;
+}
+
+.producto-thumbnails::-webkit-scrollbar-track {
+    background: rgba(0, 0, 0, 0.1);
+    border-radius: 3px;
+}
+
+.producto-thumbnails::-webkit-scrollbar-thumb {
+    background: rgba(255, 255, 255, 0.3);
+    border-radius: 3px;
+}
+
+.producto-thumbnails::-webkit-scrollbar-thumb:hover {
+    background: rgba(255, 255, 255, 0.5);
 }
 
 .thumbnail-item {
     width: 93px;
+    min-width: 93px;
     height: 78px;
     border-radius: 4px;
     overflow: hidden;

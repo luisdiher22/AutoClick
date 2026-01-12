@@ -72,26 +72,11 @@
                         @if (imageUrlsList.Count > 0)
                         {
                             <div class="producto-thumbnails">
-                                @{
-                                    var maxThumbnails = Math.Min(8, imageUrlsList.Count);
-                                }
-                                @for (int i = 0; i < maxThumbnails; i++)
+                                @for (int i = 0; i < imageUrlsList.Count; i++)
                                 {
                                     <div class="thumbnail-item @(i == 0 ? "active" : "")" data-index="@i"
                                         onclick="selectThumbnail(@i)">
-                                        @if (i == 7 && imageUrlsList.Count > 8)
-                                        {
-                                            <img src="@imageUrlsList[i]" alt="Más imágenes" />
-                                            <div class="thumbnail-overlay">
-                                                <svg width="20" height="20" viewBox="0 0 20 20" fill="white">
-                                                    <path d="M10 4V16M4 10H16" stroke="white" stroke-width="2" stroke-linecap="round" />
-                                                </svg>
-                                            </div>
-                                        }
-                                        else
-                                        {
-                                            <img src="@imageUrlsList[i]" alt="@Model.Vehicle.NombreCompleto vista @(i + 1)" />
-                                        }
+                                        <img src="@imageUrlsList[i]" alt="@Model.Vehicle.NombreCompleto vista @(i + 1)" />
                                     </div>
                                 }
                             </div>

@@ -64,8 +64,8 @@ builder.Services.AddDbContext<ApplicationDbContext>(options =>
             maxRetryDelay: TimeSpan.FromSeconds(30),
             errorNumbersToAdd: null);
         
-        // Set command timeout for long-running operations (30 seconds reduced from 60)
-        sqlOptions.CommandTimeout(30);
+        // Set command timeout for long-running operations (aumentado a 90 segundos para operaciones con múltiples imágenes)
+        sqlOptions.CommandTimeout(90);
     });
     
     // Enable sensitive data logging in development for debugging
