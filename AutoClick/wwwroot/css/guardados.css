@@ -53,7 +53,7 @@
 /* Banderin posicionado fuera del link, en la esquina superior derecha del card */
 .busqueda-banderin-container {
     position: absolute;
-    top: -8px;
+    top: -30px;
     right: 16px;
     width: 138px;
     height: 136px;

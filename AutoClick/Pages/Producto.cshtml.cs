@@ -86,16 +86,10 @@ namespace AutoClick.Pages
                     .FirstOrDefaultAsync(a => a.Id == Id && a.Activo && a.PlanVisibilidad > 0);
             }
             
-            // Si no se encuentra, usar datos de muestra como fallback
+            // Si no se encuentra el vehículo, retornar 404
             if (Vehicle == null)
             {
-                var sampleAutos = GetSampleAutos();
-                Vehicle = sampleAutos.FirstOrDefault(a => a.Id == Id);
-                
-                if (Vehicle == null)
-                {
-                    Vehicle = CreateDefaultAuto();
-                }
+                return NotFound();
             }
 
             if (VehiclePrice == 0)
@@ -122,31 +116,6 @@ namespace AutoClick.Pages
             }
 
             return Page();
-        }
-
-        private Auto CreateDefaultAuto()
-        {
-            return new Auto
-            {
-                Id = Id,
-                Marca = "Mercedes-Benz",
-                Modelo = "E53 Coupe",
-                Ano = 2022,
-                Precio = 170000,
-                Kilometraje = 15000,
-                Carroceria = "Coupe",
-                Combustible = "Gasolina",
-                Transmision = "Automatica",
-                NumeroPuertas = 2,
-                Cilindrada = "3.0L V6 Turbo",
-                ExtrasInterior = "[\"Sistema de navegacion\",\"Bluetooth\"]",
-                ExtrasExterior = "[\"Camara de reversa\",\"Sensores\"]",
-                Provincia = "San Jose",
-                Canton = "San Jose",
-                PlacaVehiculo = "BCR123",
-                Condicion = "Excelente",
-                EmailPropietario = "dealer@mercedes.com"
-            };
         }
 
         private void CalculateMonthlyPayment()
@@ -204,69 +173,10 @@ namespace AutoClick.Pages
                 .ToListAsync();
 
             // Ordenar por diferencia de precio usando evaluación del cliente
-            var similarFromDb = candidates
+            SimilarAutos = candidates
                 .OrderBy(a => Math.Abs(a.Precio - Vehicle.Precio))
                 .Take(3)
                 .ToList();
-
-            // Si no hay suficientes autos similares en la DB, completar con datos de muestra
-            if (similarFromDb.Count < 3)
-            {
-                var sampleAutos = GetSampleAutos()
-                    .Where(a => a.Id != Id)
-                    .Take(3 - similarFromDb.Count)
-                    .ToList();
-                
-                similarFromDb.AddRange(sampleAutos);
-            }
-
-            SimilarAutos = similarFromDb.Take(3).ToList();
-        }
-
-        private List<Auto> GetSampleAutos()
-        {
-            return new List<Auto>
-            {
-                new Auto
-                {
-                    Id = 1,
-                    Marca = "Mercedes-Benz",
-                    Modelo = "E53 AMG Coupe",
-                    Ano = 2022,
-                    Precio = 150000,
-                    ImagenPrincipal = "https://placehold.co/803x462",
-                    Kilometraje = 22000,
-                    Carroceria = "Coupe",
-                    Combustible = "Hibrida",
-                    Transmision = "Automatica",
-                    NumeroPuertas = 2,
-                    Cilindrada = "3.000 cc",
-                    Provincia = "San Jose",
-                    Canton = "Escazu",
-                    PlacaVehiculo = "MER001",
-                    Condicion = "Excelente",
-                    EmailPropietario = "mercedes@dealer.com"
-                },
-                new Auto
-                {
-                    Id = 2,
-                    Marca = "BMW",
-                    Modelo = "X5M",
-                    Ano = 2023,
-                    Precio = 170000,
-                    ImagenPrincipal = "https://placehold.co/392x209",
-                    Kilometraje = 15000,
-                    Carroceria = "SUV",
-                    Combustible = "Gasolina",
-                    Transmision = "Automatica",
-                    NumeroPuertas = 4,
-                    Provincia = "San Jose",
-                    Canton = "Santa Ana",
-                    PlacaVehiculo = "BMW002",
-                    Condicion = "Excelente",
-                    EmailPropietario = "bmw@dealer.com"
-                }
-            };
         }
 
         public string FormatPrice(decimal price)

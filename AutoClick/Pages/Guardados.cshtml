@@ -25,17 +25,32 @@
                     <h1 style="color: white; font-size: 28px; font-family: 'Montserrat', sans-serif; font-weight: 700; margin: 0;">Autos guardados</h1>
                     
                     <div class="busqueda-sort-wrapper">
-                        <select class="busqueda-sort-select" onchange="changeSorting(this.value)">
-                            <option value="recent" selected="@(Model.SortBy == "recent")">Ordenar por: Más recientes</option>
-                            <option value="price-asc" selected="@(Model.SortBy == "price-asc")">Ordenar por: Precio menor a mayor</option>
-                            <option value="price-desc" selected="@(Model.SortBy == "price-desc")">Ordenar por: Precio mayor a menor</option>
-                            <option value="year" selected="@(Model.SortBy == "year")">Ordenar por: Año más nuevo</option>
+                        <select class="busqueda-sort-select" id="sortSelect" onchange="changeSorting(this.value)">
+                            <option value="recent">Ordenar por: Más recientes</option>
+                            <option value="price-asc">Ordenar por: Precio menor a mayor</option>
+                            <option value="price-desc">Ordenar por: Precio mayor a menor</option>
+                            <option value="year">Ordenar por: Año más nuevo</option>
                         </select>
                     </div>
                 </div>
 
+                <script>
+                    document.addEventListener('DOMContentLoaded', function() {
+                        var sortSelect = document.getElementById('sortSelect');
+                        if (sortSelect) {
+                            sortSelect.value = '@Model.SortBy';
+                        }
+                    });
+                </script>
+
                 <!-- Cars Grid - 3 columns desktop, 2 tablet, 1 mobile -->
                 <div class="guardados-cars-grid">
+                    @if (!Model.SavedAutos.Any())
+                    {
+                        <div style="grid-column: 1 / -1; width: 100%; padding: 60px 20px; text-align: center; color: rgba(255, 255, 255, 0.6); font-family: 'Montserrat', sans-serif; font-size: 18px;">
+                            No se encuentran autos guardados por mostrar
+                        </div>
+                    }
                     @{
                         int cardIndex = 0;
                         int adIndex = 0;
@@ -63,19 +78,15 @@
                         
                         <div class="busqueda-auto-card">
                             <!-- Banderín superior derecho (fuera del link) -->
-                            @if (!string.IsNullOrEmpty(auto.BanderinVideoUrl))
+                            @if (Model.BanderinUrls.ContainsKey(auto.Id) && Model.BanderinUrls[auto.Id].Any())
                             {
-                                <div class="busqueda-banderin-container">
-                                    @if (auto.BanderinVideoUrl.EndsWith(".gif", StringComparison.OrdinalIgnoreCase))
-                                    {
-                                        <img src="@auto.BanderinVideoUrl" alt="Banderín" />
-                                    }
-                                    else
-                                    {
-                                        <video autoplay loop muted playsinline>
-                                            <source src="@auto.BanderinVideoUrl" type="video/mp4">
-                                        </video>
-                                    }
+                                <div class="busqueda-banderin-container" data-auto-id="@auto.Id" data-banderin-count="@Model.BanderinUrls[auto.Id].Count">
+                                    <div class="busqueda-banderin-carousel">
+                                        @for (int i = 0; i < Model.BanderinUrls[auto.Id].Count; i++)
+                                        {
+                                            <img src="@Model.BanderinUrls[auto.Id][i]" class="@(i == 0 ? "active" : "")" alt="Banderín" />
+                                        }
+                                    </div>
                                 </div>
                             }
                             
@@ -139,7 +150,7 @@
                     <nav class="busqueda-pagination" aria-label="Paginación de autos guardados">
                         <div class="pagination-container">
                             <!-- Previous Button -->
-                            <a href="@Url.Page("/Guardados", new { page = Model.CurrentPage - 1, sortBy = Model.SortBy })" 
+                            <a href="/guardados?page=@(Model.CurrentPage - 1)&sortBy=@Model.SortBy" 
                                class="busqueda-pagination-arrow @(Model.CurrentPage <= 1 ? "disabled" : "")">
                                 <div class="pagination-arrow-icon left"></div>
                             </a>
@@ -147,7 +158,7 @@
                             <!-- Page Numbers -->
                             @for (int i = 1; i <= Math.Min(5, Model.TotalPages); i++)
                             {
-                                <a href="@Url.Page("/Guardados", new { page = i, sortBy = Model.SortBy })" 
+                                <a href="/guardados?page=@i&sortBy=@Model.SortBy" 
                                    class="busqueda-pagination-number @(Model.CurrentPage == i ? "active" : "")">
                                     @i
                                 </a>
@@ -157,14 +168,14 @@
                             {
                                 <span class="busqueda-pagination-ellipsis">…</span>
                                 
-                                <a href="@Url.Page("/Guardados", new { page = Model.TotalPages, sortBy = Model.SortBy })" 
+                                <a href="/guardados?page=@Model.TotalPages&sortBy=@Model.SortBy" 
                                    class="busqueda-pagination-number @(Model.CurrentPage == Model.TotalPages ? "active" : "")">
                                     @Model.TotalPages
                                 </a>
                             }
 
                             <!-- Next Button -->
-                            <a href="@Url.Page("/Guardados", new { page = Model.CurrentPage + 1, sortBy = Model.SortBy })" 
+                            <a href="/guardados?page=@(Model.CurrentPage + 1)&sortBy=@Model.SortBy" 
                                class="busqueda-pagination-arrow @(Model.CurrentPage >= Model.TotalPages ? "disabled" : "")">
                                 <div class="pagination-arrow-icon right"></div>
                             </a>
@@ -306,8 +317,36 @@ document.addEventListener('DOMContentLoaded', function() {
 });
 
 function changeSorting(sortBy) {
-    const currentPage = @Model.CurrentPage;
-    const url = `@Url.Page("/Guardados")?page=1&sortBy=${sortBy}`;
+    const url = `/guardados?page=1&sortBy=${sortBy}`;
     window.location.href = url;
 }
+
+// Carousel rotation for banderines
+document.addEventListener('DOMContentLoaded', function() {
+    function rotateBanderines(container) {
+        const carousel = container.querySelector('.busqueda-banderin-carousel');
+        if (!carousel) return;
+        
+        const items = carousel.querySelectorAll('img, video');
+        if (items.length <= 1) return;
+        
+        let currentIndex = 0;
+        
+        function rotate() {
+            items[currentIndex].classList.remove('active');
+            currentIndex = (currentIndex + 1) % items.length;
+            items[currentIndex].classList.add('active');
+        }
+        
+        setInterval(rotate, 6000);
+    }
+    
+    const banderinContainers = document.querySelectorAll('.busqueda-banderin-container');
+    banderinContainers.forEach(container => {
+        const count = parseInt(container.getAttribute('data-banderin-count') || '0');
+        if (count > 1) {
+            rotateBanderines(container);
+        }
+    });
+});
 </script>

@@ -173,6 +173,13 @@
         color: #CD7F32;
     }
 
+    /* Plan gratis */
+    .plan-badge.nivel-gratis {
+        background: linear-gradient(135deg, rgba(100, 100, 100, 0.3) 0%, rgba(100, 100, 100, 0.15) 100%);
+        border-color: rgba(150, 150, 150, 0.6);
+        color: #A0A0A0;
+    }
+
     /* Estilos de paginación */
     .paginacion-wrapper {
         display: flex;
@@ -279,11 +286,19 @@
                                             3 => "nivel-3",
                                             2 => "nivel-2",
                                             1 => "nivel-1",
-                                            _ => ""
+                                            _ => "nivel-gratis"
+                                        };
+                                        string planText = item.PlanLevel switch
+                                        {
+                                            4 => "Nivel 4",
+                                            3 => "Nivel 3",
+                                            2 => "Nivel 2",
+                                            1 => "Nivel 1",
+                                            _ => "Plan gratis"
                                         };
                                     }
                                     <span class="plan-badge @planClass">
-                                        Nivel @item.PlanLevel
+                                        @planText
                                     </span>
                                 </td>
                                 <td>

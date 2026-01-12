@@ -4,6 +4,7 @@ using AutoClick.Models;
 using AutoClick.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Caching.Memory;
+using AutoClick.Services;
 
 namespace AutoClick.Pages
 {
@@ -11,14 +12,17 @@ namespace AutoClick.Pages
     {
         private readonly ApplicationDbContext _context;
         private readonly IMemoryCache _cache;
+        private readonly IBanderinesService _banderinesService;
 
-        public DestacadosModel(ApplicationDbContext context, IMemoryCache cache)
+        public DestacadosModel(ApplicationDbContext context, IMemoryCache cache, IBanderinesService banderinesService)
         {
             _context = context;
             _cache = cache;
+            _banderinesService = banderinesService;
         }
 
         public IList<Auto> Autos { get; set; } = new List<Auto>();
+        public Dictionary<int, List<string>> BanderinUrls { get; set; } = new(); // Dictionary for multiple banderines
         
         // Filter Parameters
         [BindProperty(SupportsGet = true)]
@@ -172,6 +176,38 @@ namespace AutoClick.Pages
                 .Skip((Page - 1) * PageSize)
                 .Take(PageSize)
                 .ToListAsync();
+                
+            // Cargar URLs de banderines para los autos
+            await LoadBanderinUrlsAsync(Autos.ToList());
+        }
+        
+        private async Task LoadBanderinUrlsAsync(List<Auto> autos)
+        {
+            foreach (var auto in autos)
+            {
+                if (!BanderinUrls.ContainsKey(auto.Id))
+                {
+                    var urls = new List<string>();
+                    var banderinFiles = auto.BanderinesVideoUrls;
+                    
+                    foreach (var fileName in banderinFiles)
+                    {
+                        if (!string.IsNullOrEmpty(fileName))
+                        {
+                            var url = await _banderinesService.GetBanderinUrlAsync(fileName);
+                            if (!string.IsNullOrEmpty(url))
+                            {
+                                urls.Add(url);
+                            }
+                        }
+                    }
+                    
+                    if (urls.Count > 0)
+                    {
+                        BanderinUrls[auto.Id] = urls;
+                    }
+                }
+            }
         }
 
         private void BuildAppliedFiltersList()

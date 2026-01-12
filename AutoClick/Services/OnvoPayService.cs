@@ -127,10 +127,21 @@ namespace AutoClick.Services
 
                 if (paymentIntent != null)
                 {
-                    // Guardar en base de datos
-                    var usuario = usuarioId.HasValue 
-                        ? await _context.Usuarios.FindAsync(usuarioId.Value) 
-                        : null;
+                    // Obtener email del usuario - primero intentar desde usuarioId, luego desde el auto
+                    string? emailUsuario = null;
+                    
+                    if (usuarioId.HasValue)
+                    {
+                        var usuario = await _context.Usuarios.FindAsync(usuarioId.Value);
+                        emailUsuario = usuario?.Email;
+                    }
+                    
+                    // Si no hay email del usuario autenticado, obtenerlo del auto
+                    if (string.IsNullOrEmpty(emailUsuario) && autoId.HasValue)
+                    {
+                        var auto = await _context.Autos.FindAsync(autoId.Value);
+                        emailUsuario = auto?.EmailPropietario;
+                    }
 
                     var pago = new PagoOnvo
                     {
@@ -140,7 +151,7 @@ namespace AutoClick.Services
                         Status = paymentIntent.status,
                         Description = paymentIntent.description,
                         UsuarioId = usuarioId,
-                        EmailUsuario = usuario?.Email,
+                        EmailUsuario = emailUsuario,
                         AutoId = autoId,
                         AnuncioPublicidadId = anuncioPublicidadId,
                         Metadata = JsonSerializer.Serialize(paymentIntent.metadata),

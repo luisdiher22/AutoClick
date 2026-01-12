@@ -3067,7 +3067,7 @@ body {
 /* Banderin posicionado fuera del link, en la esquina superior derecha del card */
 .busqueda-banderin-container {
     position: absolute;
-    top: -8px;
+    top: -30px;
     right: 16px;
     width: 138px;
     height: 136px;
@@ -3081,6 +3081,30 @@ body {
     height: 100%;
     object-fit: contain;
     filter: drop-shadow(2px 2px 4px rgba(0, 0, 0, 0.5));
+}
+
+/* Banderin Carousel Styles for multiple banderines */
+.busqueda-banderin-carousel {
+    position: relative;
+    width: 100%;
+    height: 100%;
+}
+
+.busqueda-banderin-carousel img {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    opacity: 0;
+    transition: opacity 0.8s ease-in-out;
+    filter: drop-shadow(2px 2px 4px rgba(0, 0, 0, 0.5));
+}
+
+.busqueda-banderin-carousel img.active {
+    opacity: 1;
+    z-index: 2;
 }
 
 /* Contenedor de información con fondo oscuro */
@@ -3368,7 +3392,7 @@ body {
 /* Banderín posicionado fuera del link, en la esquina superior derecha del card */
 .busqueda-banderin-container {
     position: absolute;
-    top: -8px;
+    top: -30px;
     right: 16px;
     width: 138px;
     height: 136px;

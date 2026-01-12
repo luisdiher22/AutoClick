@@ -393,7 +393,7 @@
                     <nav class="busqueda-pagination" aria-label="Paginación de anuncios">
                         <div class="pagination-container">
                             <!-- Previous Button -->
-                            <a href="?pagina=@(Model.PaginaActual - 1)" 
+                            <a href="?PaginaActual=@(Model.PaginaActual - 1)" 
                                class="busqueda-pagination-arrow @(Model.PaginaActual <= 1 ? "disabled" : "")">
                                 <div class="pagination-arrow-icon left"></div>
                             </a>
@@ -401,7 +401,7 @@
                             <!-- Page Numbers -->
                             @for (int i = 1; i <= Math.Min(5, Model.TotalPaginas); i++)
                             {
-                                <a href="?pagina=@i" 
+                                <a href="?PaginaActual=@i" 
                                    class="busqueda-pagination-number @(Model.PaginaActual == i ? "active" : "")">
                                     @i
                                 </a>
@@ -411,14 +411,14 @@
                             {
                                 <span class="busqueda-pagination-ellipsis">…</span>
                                 
-                                <a href="?pagina=@Model.TotalPaginas" 
+                                <a href="?PaginaActual=@Model.TotalPaginas" 
                                    class="busqueda-pagination-number @(Model.PaginaActual == Model.TotalPaginas ? "active" : "")">
                                     @Model.TotalPaginas
                                 </a>
                             }
 
                             <!-- Next Button -->
-                            <a href="?pagina=@(Model.PaginaActual + 1)" 
+                            <a href="?PaginaActual=@(Model.PaginaActual + 1)" 
                                class="busqueda-pagination-arrow @(Model.PaginaActual >= Model.TotalPaginas ? "disabled" : "")">
                                 <div class="pagination-arrow-icon right"></div>
                             </a>
