@@ -153,7 +153,7 @@ namespace AutoClick.Controllers.Api
         /// Verifica si una placa ya existe en la base de datos
         /// </summary>
         [HttpGet("verificar-placa/{placa}")]
-        public IActionResult VerificarPlaca(string placa)
+        public IActionResult VerificarPlaca(string placa, [FromQuery] int? autoId = null)
         {
             try
             {
@@ -162,7 +162,16 @@ namespace AutoClick.Controllers.Api
                     return BadRequest(new { error = "La placa es requerida" });
                 }
                 
-                var existe = _context.Autos.Any(a => a.PlacaVehiculo == placa);
+                // Si se está editando un anuncio (autoId presente), excluir ese auto de la verificación
+                bool existe;
+                if (autoId.HasValue)
+                {
+                    existe = _context.Autos.Any(a => a.PlacaVehiculo == placa && a.Id != autoId.Value);
+                }
+                else
+                {
+                    existe = _context.Autos.Any(a => a.PlacaVehiculo == placa);
+                }
                 
                 return Ok(new { existe = existe });
             }

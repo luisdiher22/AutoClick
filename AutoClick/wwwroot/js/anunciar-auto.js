@@ -551,10 +551,40 @@ document.addEventListener('DOMContentLoaded', function () {
         }
 
         if (isValid) {
+            // Detectar si estamos en modo edición
+            const urlParams = new URLSearchParams(window.location.search);
+            const isEditMode = urlParams.has('edit');
+            
             // Si estamos en la sección 7 (desglose de costos)
             if (currentSection === 7) {
                 const total = window.currentPaymentTotal || 0;
                 
+                // En modo edición, simplemente guardar los cambios sin procesar pago
+                if (isEditMode) {
+                    if (nextBtn) {
+                        nextBtn.disabled = true;
+                        nextBtn.textContent = 'Guardando cambios...';
+                    }
+                    
+                    const result = await submitForm(false); // false = mostrar confirmación
+                    
+                    if (result) {
+                        // Ir directamente a la sección 9 (confirmación)
+                        currentSection = 9;
+                        showSection(currentSection);
+                        updateSectionIndicator();
+                        updateNavigationButtons();
+                        updateConfirmationMessage(false, true); // true = modo edición
+                    }
+                    
+                    if (nextBtn) {
+                        nextBtn.disabled = false;
+                        nextBtn.textContent = originalText;
+                    }
+                    return;
+                }
+                
+                // Lógica normal para nuevo anuncio
                 if (total > 0) {
                     // Hay que pagar - crear el auto primero y luego ir a pago
                     if (nextBtn) {
@@ -1082,7 +1112,17 @@ document.addEventListener('DOMContentLoaded', function () {
         // VALIDACIÓN DE PLACA DUPLICADA
         if (placa && placa.value && placa.value.trim()) {
             try {
-                const response = await fetch(`/api/pagos/verificar-placa/${encodeURIComponent(placa.value.trim())}`);
+                // Detectar si estamos en modo edición
+                const urlParams = new URLSearchParams(window.location.search);
+                const editId = urlParams.get('edit');
+                
+                // Construir URL con parámetro autoId si estamos editando
+                let url = `/api/pagos/verificar-placa/${encodeURIComponent(placa.value.trim())}`;
+                if (editId) {
+                    url += `?autoId=${encodeURIComponent(editId)}`;
+                }
+                
+                const response = await fetch(url);
                 if (response.ok) {
                     const data = await response.json();
                     if (data.existe) {
@@ -2635,12 +2675,15 @@ function updateMobileTotalDisplay() {
 }
 
 // Actualizar el mensaje de confirmación según el tipo de plan
-function updateConfirmationMessage(isPaidPlan) {
+function updateConfirmationMessage(isPaidPlan, isEditMode = false) {
     const title = document.querySelector('#confirmation-title');
     const message = document.querySelector('#confirmation-message');
     
     if (title && message) {
-        if (isPaidPlan) {
+        if (isEditMode) {
+            title.textContent = '¡Cambios guardados exitosamente!';
+            message.textContent = 'Su anuncio ha sido actualizado correctamente. Puede ver los cambios desde la sección "Mis Anuncios".';
+        } else if (isPaidPlan) {
             title.textContent = '¡Su auto ha sido publicado!';
             message.textContent = 'Su anuncio ya está visible para todos los usuarios de AutoClick.cr. Puede ver y administrar su anuncio desde la sección "Mis Anuncios".';
         } else {
