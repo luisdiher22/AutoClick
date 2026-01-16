@@ -99,6 +99,10 @@
                 </div>
                 
                 <form method="post" asp-page-handler="Login" class="auth-form" id="loginForm" autocomplete="off">
+                    @if (!string.IsNullOrEmpty(Model.ReturnUrl))
+                    {
+                        <input type="hidden" name="ReturnUrl" value="@Model.ReturnUrl" />
+                    }
                     @if (!string.IsNullOrEmpty(Model.ErrorMessage))
                     {
                         <div class="error-message" id="serverErrorMessage">

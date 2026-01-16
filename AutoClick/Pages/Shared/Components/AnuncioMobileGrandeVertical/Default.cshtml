@@ -1,0 +1,87 @@
+@model AutoClick.Models.AnuncioPublicidad
+
+<div class="anuncio-container anuncio-mobile-grande-vertical">
+@if (Model != null)
+{
+    <a href="@(string.IsNullOrEmpty(Model.UrlDestino) ? "#" : Model.UrlDestino)" 
+       target="_blank" 
+       class="anuncio-link"
+       onclick="registrarClic(@Model.Id)">
+        <img src="@Model.UrlImagen" 
+             alt="@Model.EmpresaPublicidad?.NombreEmpresa" 
+             class="anuncio-imagen" />
+    </a>
+}
+else
+{
+    <div class="anuncio-placeholder" onclick="abrirModalSolicitudAnuncio()" style="cursor: pointer;">
+        <img src="https://autoclickstorage.blob.core.windows.net/anuncios/PlaceholderCuadrado_movil.png" 
+             alt="Su anuncio aquí" 
+             class="placeholder-image" />
+    </div>
+}
+</div>
+
+<script>
+function registrarClic(anuncioId) {
+    fetch(`/api/publicidad/registrar-clic/${anuncioId}`, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        }
+    });
+}
+</script>
+
+<style>
+.anuncio-container.anuncio-mobile-grande-vertical {
+    position: relative;
+    overflow: hidden;
+    border-radius: 8px;
+    margin: 20px 0;
+    contain: layout;
+    width: 291px;
+    height: 180px;
+    max-width: 100%;
+    background: #04091F;
+}
+
+.anuncio-mobile-grande-vertical .anuncio-placeholder {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: transparent;
+    transition: opacity 0.3s ease;
+}
+
+.anuncio-mobile-grande-vertical .anuncio-placeholder:hover {
+    opacity: 0.9;
+}
+
+.anuncio-mobile-grande-vertical .placeholder-image {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    display: block;
+}
+
+.anuncio-mobile-grande-vertical .anuncio-link {
+    display: block;
+    width: 100%;
+    height: 100%;
+    position: relative;
+}
+
+.anuncio-mobile-grande-vertical .anuncio-imagen {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    transition: transform 0.3s ease;
+}
+
+.anuncio-mobile-grande-vertical .anuncio-link:hover .anuncio-imagen {
+    transform: scale(1.02);
+}
+</style>

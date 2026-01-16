@@ -1216,26 +1216,106 @@
     }
 
     // Toggle favorite function
-    function toggleFavorite(vehicleId) {
+    async function toggleFavorite(vehicleId) {
         const favoriteBtn = document.querySelector('.producto-favorite-btn');
-
-        if (favoriteBtn) {
-            // Toggle active class
-            favoriteBtn.classList.toggle('active');
-
-            // Cambiar texto según el estado
-            const isActive = favoriteBtn.classList.contains('active');
-            const textSpan = favoriteBtn.querySelector('span');
-
-            if (textSpan) {
-                textSpan.textContent = isActive ? 'Agregado a favoritos' : 'Agregar a favoritos';
+        const favoriteBtnResponsive = document.querySelector('.favorite-icon-btn-responsive');
+        
+        try {
+            // Llamar a la API para toggle del favorito
+            const response = await fetch('/api/Favoritos/Toggle', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ autoId: vehicleId })
+            });
+            
+            const data = await response.json();
+            
+            if (data.success) {
+                // Actualizar botón desktop
+                if (favoriteBtn) {
+                    if (data.isFavorite) {
+                        favoriteBtn.classList.add('active');
+                    } else {
+                        favoriteBtn.classList.remove('active');
+                    }
+                    
+                    const textSpan = favoriteBtn.querySelector('span');
+                    if (textSpan) {
+                        textSpan.textContent = data.isFavorite ? 'Agregado a favoritos' : 'Agregar a favoritos';
+                    }
+                    
+                    // Cambiar el fill del SVG
+                    const svgPath = favoriteBtn.querySelector('svg path');
+                    if (svgPath) {
+                        svgPath.setAttribute('fill', data.isFavorite ? '#FF931E' : 'none');
+                    }
+                }
+                
+                // Actualizar botón responsive
+                if (favoriteBtnResponsive) {
+                    if (data.isFavorite) {
+                        favoriteBtnResponsive.classList.add('active');
+                    } else {
+                        favoriteBtnResponsive.classList.remove('active');
+                    }
+                    
+                    const svgPathResponsive = favoriteBtnResponsive.querySelector('svg path');
+                    if (svgPathResponsive) {
+                        svgPathResponsive.setAttribute('fill', data.isFavorite ? '#FF931E' : 'none');
+                    }
+                }
+            } else {
+                // Si no está autenticado, redirigir a login
+                if (data.message === 'Usuario no autenticado') {
+                    window.location.href = '/Auth?returnUrl=' + encodeURIComponent(window.location.pathname);
+                } else {
+                    console.error('Error:', data.message);
+                }
             }
-
-            // Aquí puedes agregar la lógica para guardar en la base de datos
-            console.log('Toggle favorite for vehicle:', vehicleId, 'Active:', isActive);
-            // Add your API call here
+        } catch (error) {
+            console.error('Error toggling favorite:', error);
         }
     }
+    
+    // Verificar si el vehículo ya es favorito al cargar la página
+    document.addEventListener('DOMContentLoaded', async function() {
+        const vehicleId = @(Model.Vehicle?.Id ?? 0);
+        if (vehicleId > 0) {
+            try {
+                const response = await fetch('/api/Favoritos/Check/' + vehicleId);
+                const data = await response.json();
+                
+                if (data.isFavorite) {
+                    const favoriteBtn = document.querySelector('.producto-favorite-btn');
+                    const favoriteBtnResponsive = document.querySelector('.favorite-icon-btn-responsive');
+                    
+                    if (favoriteBtn) {
+                        favoriteBtn.classList.add('active');
+                        const textSpan = favoriteBtn.querySelector('span');
+                        if (textSpan) {
+                            textSpan.textContent = 'Agregado a favoritos';
+                        }
+                        const svgPath = favoriteBtn.querySelector('svg path');
+                        if (svgPath) {
+                            svgPath.setAttribute('fill', '#FF931E');
+                        }
+                    }
+                    
+                    if (favoriteBtnResponsive) {
+                        favoriteBtnResponsive.classList.add('active');
+                        const svgPathResponsive = favoriteBtnResponsive.querySelector('svg path');
+                        if (svgPathResponsive) {
+                            svgPathResponsive.setAttribute('fill', '#FF931E');
+                        }
+                    }
+                }
+            } catch (error) {
+                console.error('Error checking favorite:', error);
+            }
+        }
+    });
 </script>
 
 <style type="text/css">

@@ -862,9 +862,9 @@
                     <span class="modal-field-label">Subir imagen desde tu computadora</span>
                     <input type="file" asp-for="ImagenAnuncio" class="modal-field-input" accept="image/jpeg,image/jpg,image/png,image/gif,image/webp" onchange="onFileSelected('add')" />
                     <small class="modal-field-hint">
-                        Formatos permitidos: JPG, PNG, GIF, WEBP. Tamaño máximo: 5 MB<br/>
-                        <strong>📐 Importante:</strong> La imagen se redimensionará automáticamente a las dimensiones exactas del tamaño seleccionado.
-                        Si el aspect ratio no coincide, se recortará desde el centro.
+                        <strong>📦 Límite:</strong> Máximo 5 MB | Formatos: JPG, PNG, GIF, WEBP<br/>
+                        <strong>📐 Dimensiones recomendadas:</strong> Use las dimensiones exactas del tamaño seleccionado abajo para mejores resultados.<br/>
+                        <strong>⚙️ Procesamiento automático:</strong> La imagen se redimensionará automáticamente. Si las proporciones no coinciden, se recortará desde el centro.<br/>
                     </small>
                 </div>
 
@@ -892,12 +892,22 @@
                     <span class="modal-field-label">Tamaño del anuncio <span style="color: #EF4444;">*</span></span>
                     <select name="TamanoAnuncio" class="modal-field-input" required>
                         <option value="">Seleccione un tamaño</option>
-                        <option value="1">Horizontal (1010 x 189 px) - Ratio 5.3:1</option>
-                        @* <option value="2">Medio Vertical (401 x 287 px) - Ratio 1.4:1</option> *@
-                        <option value="3">Grande Vertical (344 x 423 px) - Ratio 0.8:1</option>
+                        <optgroup label="Desktop">
+                            <option value="1">Horizontal Desktop (1010 x 189 px)</option>
+                            <option value="2">Medio Vertical Desktop (401 x 287 px)</option>
+                            <option value="3">Grande Vertical Desktop (344 x 423 px)</option>
+                        </optgroup>
+                        <optgroup label="Tablet">
+                            <option value="6">Horizontal Tablet (550 x 217 px)</option>
+                            <option value="7">Grande Vertical Tablet (340 x 373 px)</option>
+                        </optgroup>
+                        <optgroup label="Móvil">
+                            <option value="4">Horizontal Móvil (291 x 120 px)</option>
+                            <option value="5">Grande Vertical Móvil (291 x 180 px)</option>
+                        </optgroup>
                     </select>
                     <small class="modal-field-hint">
-                        La imagen se redimensionará automáticamente. Para mejores resultados, use imágenes con el aspect ratio indicado.
+                        Suba una imagen con las dimensiones exactas indicadas. Las proporciones se respetarán sin recortar ni deformar.
                     </small>
                 </div>
             </div>
@@ -930,11 +940,9 @@
             <div class="modal-detalles-body">
                 <div class="modal-field">
                     <span class="modal-field-label">Subir nueva imagen desde tu computadora</span>
-                    <input type="file" asp-for="ImagenAnuncio" class="modal-field-input" accept="image/jpeg,image/jpg,image/png,image/gif,image/webp" onchange="onFileSelected('edit')" />
-                    <small class="modal-field-hint">
-                        Formatos permitidos: JPG, PNG, GIF, WEBP. Tamaño máximo: 5 MB<br/>
-                        <strong>📐 Importante:</strong> La imagen se redimensionará automáticamente a las dimensiones exactas del tamaño seleccionado.
-                        Si el aspect ratio no coincide, se recortará desde el centro.
+                    <inp<strong>📦 Límite:</strong> Máximo 5 MB | Formatos: JPG, PNG, GIF, WEBP<br/>
+                        <strong>📐 Dimensiones recomendadas:</strong> Use las dimensiones exactas del tamaño seleccionado abajo para mejores resultados.<br/>
+                        <strong>⚙️ Procesamiento automático:</strong> La imagen se redimensionará automáticamente. Si las proporciones no coinciden, se recortará desde el centro.<br/>
                     </small>
                 </div>
 
@@ -962,12 +970,22 @@
                     <span class="modal-field-label">Tamaño del anuncio <span style="color: #EF4444;">*</span></span>
                     <select name="TamanoAnuncio" id="editTamanoAnuncio" class="modal-field-input" required>
                         <option value="">Seleccione un tamaño</option>
-                        <option value="1">Horizontal (1010 x 189 px) - Ratio 5.3:1</option>
-                        @* <option value="2">Medio Vertical (401 x 287 px) - Ratio 1.4:1</option> *@
-                        <option value="3">Grande Vertical (344 x 423 px) - Ratio 0.8:1</option>
+                        <optgroup label="Desktop">
+                            <option value="1">Horizontal Desktop (1010 x 189 px)</option>
+                            <option value="2">Medio Vertical Desktop (401 x 287 px)</option>
+                            <option value="3">Grande Vertical Desktop (344 x 423 px)</option>
+                        </optgroup>
+                        <optgroup label="Tablet">
+                            <option value="6">Horizontal Tablet (550 x 217 px)</option>
+                            <option value="7">Grande Vertical Tablet (340 x 373 px)</option>
+                        </optgroup>
+                        <optgroup label="Móvil">
+                            <option value="4">Horizontal Móvil (291 x 120 px)</option>
+                            <option value="5">Grande Vertical Móvil (291 x 180 px)</option>
+                        </optgroup>
                     </select>
                     <small class="modal-field-hint">
-                        La imagen se redimensionará automáticamente. Para mejores resultados, use imágenes con el aspect ratio indicado.
+                        Suba una imagen con las dimensiones exactas indicadas. Las proporciones se respetarán sin recortar ni deformar.
                     </small>
                 </div>
             </div>

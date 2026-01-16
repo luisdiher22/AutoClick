@@ -1,0 +1,87 @@
+@model AutoClick.Models.AnuncioPublicidad
+
+<div class="anuncio-container anuncio-tablet-horizontal">
+@if (Model != null)
+{
+    <a href="@(string.IsNullOrEmpty(Model.UrlDestino) ? "#" : Model.UrlDestino)" 
+       target="_blank" 
+       class="anuncio-link"
+       onclick="registrarClic(@Model.Id)">
+        <img src="@Model.UrlImagen" 
+             alt="@Model.EmpresaPublicidad?.NombreEmpresa" 
+             class="anuncio-imagen" />
+    </a>
+}
+else
+{
+    <div class="anuncio-placeholder" onclick="abrirModalSolicitudAnuncio()" style="cursor: pointer;">
+        <img src="https://autoclickstorage.blob.core.windows.net/anuncios/PlaceholderHorizontal_tablet.png" 
+             alt="Su anuncio aquí" 
+             class="placeholder-image" />
+    </div>
+}
+</div>
+
+<script>
+function registrarClic(anuncioId) {
+    fetch(`/api/publicidad/registrar-clic/${anuncioId}`, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        }
+    });
+}
+</script>
+
+<style>
+.anuncio-container.anuncio-tablet-horizontal {
+    position: relative;
+    overflow: hidden;
+    border-radius: 8px;
+    margin: 20px 0;
+    contain: layout;
+    width: 550px;
+    height: 217px;
+    max-width: 100%;
+    background: #04091F;
+}
+
+.anuncio-tablet-horizontal .anuncio-placeholder {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: transparent;
+    transition: opacity 0.3s ease;
+}
+
+.anuncio-tablet-horizontal .anuncio-placeholder:hover {
+    opacity: 0.9;
+}
+
+.anuncio-tablet-horizontal .placeholder-image {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    display: block;
+}
+
+.anuncio-tablet-horizontal .anuncio-link {
+    display: block;
+    width: 100%;
+    height: 100%;
+    position: relative;
+}
+
+.anuncio-tablet-horizontal .anuncio-imagen {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    transition: transform 0.3s ease;
+}
+
+.anuncio-tablet-horizontal .anuncio-link:hover .anuncio-imagen {
+    transform: scale(1.02);
+}
+</style>

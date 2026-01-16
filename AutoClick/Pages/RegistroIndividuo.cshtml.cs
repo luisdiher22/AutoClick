@@ -2,6 +2,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using AutoClick.Models;
 using AutoClick.Data;
+using AutoClick.Services;
 using Microsoft.EntityFrameworkCore;
 using System.ComponentModel.DataAnnotations;
 using System.Security.Cryptography;
@@ -12,10 +13,12 @@ namespace AutoClick.Pages
     public class RegistroIndividuoModel : PageModel
     {
         private readonly ApplicationDbContext _context;
+        private readonly IAuthService _authService;
 
-        public RegistroIndividuoModel(ApplicationDbContext context)
+        public RegistroIndividuoModel(ApplicationDbContext context, IAuthService authService)
         {
             _context = context;
+            _authService = authService;
         }
 
         [BindProperty]
@@ -137,13 +140,26 @@ namespace AutoClick.Pages
                 _context.Usuarios.Add(nuevoUsuario);
                 await _context.SaveChangesAsync();
 
-                // Crear la sesión del usuario
-                HttpContext.Session.SetString("UserEmail", nuevoUsuario.Email);
-                HttpContext.Session.SetString("UserName", nuevoUsuario.NombreCompleto);
-                HttpContext.Session.SetString("IsLoggedIn", "true");
+                // Iniciar sesión automáticamente usando AuthService
+                var loginResult = await _authService.LoginAsync(nuevoUsuario.Email, Contrasena);
+                
+                if (!loginResult.Success)
+                {
+                    ErrorMessage = "Cuenta creada pero hubo un error al iniciar sesión. Por favor, inicie sesión manualmente.";
+                    return RedirectToPage("/Auth");
+                }
 
                 // Limpiar la sesión de tipo de usuario
                 HttpContext.Session.Remove("TipoUsuario");
+
+                // Verificar si hay una URL de retorno
+                var returnUrl = HttpContext.Session.GetString("ReturnUrl");
+                HttpContext.Session.Remove("ReturnUrl"); // Limpiar después de usar
+                
+                if (!string.IsNullOrEmpty(returnUrl) && Url.IsLocalUrl(returnUrl))
+                {
+                    return Redirect(returnUrl);
+                }
 
                 // Redirigir a la página principal
                 return RedirectToPage("/Index");

@@ -31,6 +31,9 @@ namespace AutoClick.Pages
 
         public string ErrorMessage { get; set; } = "";
         public string SuccessMessage { get; set; } = "";
+        
+        [BindProperty(SupportsGet = true)]
+        public string? ReturnUrl { get; set; }
 
         public async Task<IActionResult> OnGet()
         {
@@ -41,6 +44,13 @@ namespace AutoClick.Pages
                 HttpContext.Session.Clear();
                 SuccessMessage = "Sesión cerrada exitosamente";
                 return Page();
+            }
+
+            // Guardar returnUrl en sesión si viene como parámetro
+            ReturnUrl = Request.Query["returnUrl"];
+            if (!string.IsNullOrEmpty(ReturnUrl))
+            {
+                HttpContext.Session.SetString("ReturnUrl", ReturnUrl);
             }
 
             // Initialize the page
@@ -133,8 +143,10 @@ namespace AutoClick.Pages
                 
                 if (result.Success)
                 {
-                    // Redirect to home page or return URL
-                    string? returnUrl = Request.Query["returnUrl"];
+                    // Verificar returnUrl del formulario (campo oculto) o de la sesión
+                    string? returnUrl = ReturnUrl ?? HttpContext.Session.GetString("ReturnUrl");
+                    HttpContext.Session.Remove("ReturnUrl"); // Limpiar después de usar
+                    
                     if (!string.IsNullOrEmpty(returnUrl) && Url.IsLocalUrl(returnUrl))
                     {
                         return Redirect(returnUrl);

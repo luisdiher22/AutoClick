@@ -16,29 +16,40 @@ namespace AutoClick.ViewComponents
 
         public async Task<IViewComponentResult> InvokeAsync(string formato, string seccion)
         {
-            // formato: "cuadrado" o "horizontal"
+            // formato: "cuadrado", "horizontal", "medio-vertical"
             // seccion: nombre de la sección para filtrar anuncios
 
-            // Mapear formato a TamanoAnuncio
-            TamanoAnuncio tamanoFiltro;
-            if (formato == "horizontal")
+            // Mapear formato a MÚLTIPLES tamaños (desktop, tablet, móvil)
+            List<TamanoAnuncio> tamanosPermitidos = formato switch
             {
-                tamanoFiltro = TamanoAnuncio.Horizontal;
-            }
-            else if (formato == "medio-vertical")
-            {
-                tamanoFiltro = TamanoAnuncio.MedioVertical;
-            }
-            else // "cuadrado" o cualquier otro valor usa GrandeVertical
-            {
-                tamanoFiltro = TamanoAnuncio.GrandeVertical;
-            }
+                "horizontal" => new List<TamanoAnuncio> 
+                { 
+                    TamanoAnuncio.Horizontal,           // Desktop: 1010x189
+                    TamanoAnuncio.TabletHorizontal,     // Tablet: 550x217
+                    TamanoAnuncio.MobileHorizontal      // Móvil: 291x120
+                },
+                "medio-vertical" => new List<TamanoAnuncio> 
+                { 
+                    TamanoAnuncio.MedioVertical,        // Desktop: 401x287
+                    TamanoAnuncio.TabletGrandeVertical, // Tablet: 340x373
+                    TamanoAnuncio.MobileGrandeVertical  // Móvil: 291x180
+                },
+                _ => new List<TamanoAnuncio> // "cuadrado"
+                { 
+                    TamanoAnuncio.GrandeVertical,       // Desktop: 344x423
+                    TamanoAnuncio.TabletGrandeVertical, // Tablet: 340x373
+                    TamanoAnuncio.MobileGrandeVertical  // Móvil: 291x180
+                }
+            };
 
+            // Consultar todos los anuncios de todos los tamaños permitidos
             var anuncios = await _context.AnunciosPublicidad
                 .Include(a => a.EmpresaPublicidad)
-                .Where(a => a.Activo && a.EmpresaPublicidad != null && a.Tamano == tamanoFiltro)
+                .Where(a => a.Activo && 
+                           a.EmpresaPublicidad != null && 
+                           tamanosPermitidos.Contains(a.Tamano))
                 .OrderByDescending(a => a.FechaPublicacion)
-                .Take(10) // Máximo 10 anuncios activos
+                .Take(10) // Máximo 10 anuncios activos por tamaño
                 .ToListAsync();
 
             var viewModel = new CarruselPublicidadViewModel

@@ -1,4 +1,5 @@
 @model AutoClick.ViewComponents.CarruselPublicidadViewModel
+@using AutoClick.Models
 
 @{
     var claseContenedor = Model.Formato switch
@@ -7,96 +8,137 @@
         "medio-vertical" => "ad-carousel-medio-vertical",
         _ => "ad-carousel-cuadrado"
     };
+
+    // Agrupar anuncios por tipo de dispositivo
+    var anunciosDesktop = Model.Anuncios.Where(a => a.Tamano.GetDeviceType() == "Desktop").ToList();
+    var anunciosTablet = Model.Anuncios.Where(a => a.Tamano.GetDeviceType() == "Tablet").ToList();
+    var anunciosMovil = Model.Anuncios.Where(a => a.Tamano.GetDeviceType() == "Móvil").ToList();
+    
+    // Debug: Contar anuncios por dispositivo
+    var totalAnuncios = Model.Anuncios.Count;
+    var debugInfo = $"Total: {totalAnuncios} | Desktop: {anunciosDesktop.Count} | Tablet: {anunciosTablet.Count} | Móvil: {anunciosMovil.Count}";
 }
 
-<div class="ad-carousel-container @claseContenedor" data-seccion="@Model.Seccion">
+<div class="ad-carousel-container @claseContenedor" data-seccion="@Model.Seccion" data-debug="@debugInfo">
     <div class="ad-carousel-inner">
-        <div class="ad-carousel-wrapper">
-            @if (!Model.Anuncios.Any())
+        <!-- CARRUSEL DESKTOP -->
+        <div class="ad-carousel-wrapper ad-carousel-desktop" data-device="desktop" data-count="@anunciosDesktop.Count">
+            @foreach (var anuncio in anunciosDesktop)
             {
-                <!-- Solo placeholder cuando no hay anuncios -->
-                <div class="ad-carousel-item ad-placeholder" onclick="window.abrirModalSolicitudAnuncioPublicidad()">
-                    @if (Model.Formato == "horizontal")
+                <div class="ad-carousel-item" data-anuncio-id="@anuncio.Id">
+                    @if (!string.IsNullOrEmpty(anuncio.UrlDestino))
                     {
-                        <picture>
-                            <source media="(max-width: 768px)" 
-                                    srcset="https://autoclickstorage.blob.core.windows.net/anuncios/PlaceholderHorizontal_movil.png">
-                            <img src="https://autoclickstorage.blob.core.windows.net/anuncios/PlaceholderHorizontal_escritorio.png" 
-                                 alt="Su anuncio aquí" class="placeholder-image" />
-                        </picture>
+                        <a href="@anuncio.UrlDestino" target="_blank" rel="noopener noreferrer" 
+                           onclick="window.registrarClickAnuncio(@anuncio.Id); return true;" class="ad-link">
+                            <img src="@anuncio.UrlImagen" alt="Anuncio - @anuncio.EmpresaPublicidad?.NombreEmpresa" class="ad-image" />
+                        </a>
                     }
                     else
                     {
-                        <picture>
-                            <source media="(max-width: 768px)" 
-                                    srcset="https://autoclickstorage.blob.core.windows.net/anuncios/PlaceholderCuadrado_movil.png">
-                            <img src="https://autoclickstorage.blob.core.windows.net/anuncios/PlaceholderCuadrado_escritorio.png" 
-                                 alt="Su anuncio aquí" class="placeholder-image" />
-                        </picture>
+                        <img src="@anuncio.UrlImagen" alt="Anuncio - @anuncio.EmpresaPublicidad?.NombreEmpresa" class="ad-image" 
+                             onclick="window.registrarVistaAnuncio(@anuncio.Id)" />
                     }
                 </div>
             }
-            else
-            {
-                <!-- Anuncios reales -->
-                @foreach (var anuncio in Model.Anuncios)
+            
+            <!-- Placeholder SIEMPRE al final (desktop) -->
+            <div class="ad-carousel-item ad-placeholder" onclick="window.abrirModalSolicitudAnuncioPublicidad()">
+                @if (Model.Formato == "horizontal")
                 {
-                    <div class="ad-carousel-item" data-anuncio-id="@anuncio.Id">
-                        @if (!string.IsNullOrEmpty(anuncio.UrlDestino))
-                        {
-                            <a href="@anuncio.UrlDestino" target="_blank" rel="noopener noreferrer" 
-                               onclick="window.registrarClickAnuncio(@anuncio.Id); return true;" class="ad-link">
-                                <img src="@anuncio.UrlImagen" alt="Anuncio - @anuncio.EmpresaPublicidad?.NombreEmpresa" class="ad-image" />
-                            </a>
-                        }
-                        else
-                        {
-                            <img src="@anuncio.UrlImagen" alt="Anuncio - @anuncio.EmpresaPublicidad?.NombreEmpresa" class="ad-image" 
-                                 onclick="window.registrarVistaAnuncio(@anuncio.Id)" />
-                        }
-                    </div>
+                    <img src="https://autoclickstorage.blob.core.windows.net/anuncios/PlaceholderHorizontal_escritorio.png" 
+                         alt="Su anuncio aquí" class="placeholder-image" />
                 }
-                
-                <!-- Placeholder "SU ANUNCIO AQUÍ" al final del carrusel -->
-                <div class="ad-carousel-item ad-placeholder" onclick="window.abrirModalSolicitudAnuncioPublicidad()">
-                    @if (Model.Formato == "horizontal")
-                    {
-                        <picture>
-                            <source media="(max-width: 768px)" 
-                                    srcset="https://autoclickstorage.blob.core.windows.net/anuncios/PlaceholderHorizontal_movil.png">
-                            <img src="https://autoclickstorage.blob.core.windows.net/anuncios/PlaceholderHorizontal_escritorio.png" 
-                                 alt="Su anuncio aquí" class="placeholder-image" />
-                        </picture>
-                    }
-                    else
-                    {
-                        <picture>
-                            <source media="(max-width: 768px)" 
-                                    srcset="https://autoclickstorage.blob.core.windows.net/anuncios/PlaceholderCuadrado_movil.png">
-                            <img src="https://autoclickstorage.blob.core.windows.net/anuncios/PlaceholderCuadrado_escritorio.png" 
-                                 alt="Su anuncio aquí" class="placeholder-image" />
-                        </picture>
-                    }
-                </div>
-            }
+                else
+                {
+                    <img src="https://autoclickstorage.blob.core.windows.net/anuncios/PlaceholderCuadrado_escritorio.png" 
+                         alt="Su anuncio aquí" class="placeholder-image" />
+                }
+            </div>
         </div>
 
-        @if (Model.Anuncios.Count >= 1)
-        {
-            <!-- Controles del carrusel (dentro del inner para posicionamiento correcto) -->
-            <button class="ad-carousel-prev" onclick="window.cambiarAnuncio(this, -1)">
-                <svg width="32" height="32" viewBox="0 0 32 32" fill="none">
-                    <circle cx="16" cy="16" r="16" fill="rgba(0, 0, 0, 0.3)" />
-                    <path d="M18 10L12 16L18 22" stroke="white" stroke-width="2" stroke-linecap="round" />
-                </svg>
-            </button>
-            <button class="ad-carousel-next" onclick="window.cambiarAnuncio(this, 1)">
-                <svg width="32" height="32" viewBox="0 0 32 32" fill="none">
-                    <circle cx="16" cy="16" r="16" fill="rgba(0, 0, 0, 0.3)" />
-                    <path d="M14 10L20 16L14 22" stroke="white" stroke-width="2" stroke-linecap="round" />
-                </svg>
-            </button>
-        }
+        <!-- CARRUSEL TABLET -->
+        <div class="ad-carousel-wrapper ad-carousel-tablet" data-device="tablet" data-count="@anunciosTablet.Count">
+            @foreach (var anuncio in anunciosTablet)
+            {
+                <div class="ad-carousel-item" data-anuncio-id="@anuncio.Id">
+                    @if (!string.IsNullOrEmpty(anuncio.UrlDestino))
+                    {
+                        <a href="@anuncio.UrlDestino" target="_blank" rel="noopener noreferrer" 
+                           onclick="window.registrarClickAnuncio(@anuncio.Id); return true;" class="ad-link">
+                            <img src="@anuncio.UrlImagen" alt="Anuncio - @anuncio.EmpresaPublicidad?.NombreEmpresa" class="ad-image" />
+                        </a>
+                    }
+                    else
+                    {
+                        <img src="@anuncio.UrlImagen" alt="Anuncio - @anuncio.EmpresaPublicidad?.NombreEmpresa" class="ad-image" 
+                             onclick="window.registrarVistaAnuncio(@anuncio.Id)" />
+                    }
+                </div>
+            }
+            
+            <!-- Placeholder SIEMPRE al final (tablet) -->
+            <div class="ad-carousel-item ad-placeholder" onclick="window.abrirModalSolicitudAnuncioPublicidad()">
+                @if (Model.Formato == "horizontal")
+                {
+                    <img src="https://autoclickstorage.blob.core.windows.net/anuncios/PlaceholderHorizontal_tablet.png" 
+                         alt="Su anuncio aquí" class="placeholder-image" />
+                }
+                else
+                {
+                    <img src="https://autoclickstorage.blob.core.windows.net/anuncios/PlaceholderCuadrado_tablet.png" 
+                         alt="Su anuncio aquí" class="placeholder-image" />
+                }
+            </div>
+        </div>
+
+        <!-- CARRUSEL MÓVIL -->
+        <div class="ad-carousel-wrapper ad-carousel-mobile" data-device="mobile" data-count="@anunciosMovil.Count">
+            @foreach (var anuncio in anunciosMovil)
+            {
+                <div class="ad-carousel-item" data-anuncio-id="@anuncio.Id">
+                    @if (!string.IsNullOrEmpty(anuncio.UrlDestino))
+                    {
+                        <a href="@anuncio.UrlDestino" target="_blank" rel="noopener noreferrer" 
+                           onclick="window.registrarClickAnuncio(@anuncio.Id); return true;" class="ad-link">
+                            <img src="@anuncio.UrlImagen" alt="Anuncio - @anuncio.EmpresaPublicidad?.NombreEmpresa" class="ad-image" />
+                        </a>
+                    }
+                    else
+                    {
+                        <img src="@anuncio.UrlImagen" alt="Anuncio - @anuncio.EmpresaPublicidad?.NombreEmpresa" class="ad-image" 
+                             onclick="window.registrarVistaAnuncio(@anuncio.Id)" />
+                    }
+                </div>
+            }
+            
+            <!-- Placeholder SIEMPRE al final (móvil) -->
+            <div class="ad-carousel-item ad-placeholder" onclick="window.abrirModalSolicitudAnuncioPublicidad()">
+                @if (Model.Formato == "horizontal")
+                {
+                    <img src="https://autoclickstorage.blob.core.windows.net/anuncios/PlaceholderHorizontal_movil.png" 
+                         alt="Su anuncio aquí" class="placeholder-image" />
+                }
+                else
+                {
+                    <img src="https://autoclickstorage.blob.core.windows.net/anuncios/PlaceholderCuadrado_movil.png" 
+                         alt="Su anuncio aquí" class="placeholder-image" />
+                }
+            </div>
+        </div>
+
+        <!-- Controles del carrusel (siempre visibles) -->
+        <button class="ad-carousel-prev" onclick="window.cambiarAnuncio(this, -1)">
+            <svg width="32" height="32" viewBox="0 0 32 32" fill="none">
+                <circle cx="16" cy="16" r="16" fill="rgba(0, 0, 0, 0.3)" />
+                <path d="M18 10L12 16L18 22" stroke="white" stroke-width="2" stroke-linecap="round" />
+            </svg>
+        </button>
+        <button class="ad-carousel-next" onclick="window.cambiarAnuncio(this, 1)">
+            <svg width="32" height="32" viewBox="0 0 32 32" fill="none">
+                <circle cx="16" cy="16" r="16" fill="rgba(0, 0, 0, 0.3)" />
+                <path d="M14 10L20 16L14 22" stroke="white" stroke-width="2" stroke-linecap="round" />
+            </svg>
+        </button>
     </div>
 </div>
 
@@ -113,6 +155,53 @@
         overflow: hidden;
         border-radius: 4px;
         background: #02081C;
+        /* Asegurar que tenga altura para los wrappers absolutos */
+        min-height: 100px;
+    }
+
+    /* ===== VISIBILIDAD DE CARRUSELES POR DISPOSITIVO ===== */
+    /* Todos los wrappers deben estar superpuestos en la misma posición */
+    .ad-carousel-wrapper {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+    }
+    
+    /* Desktop: 1024px en adelante (por defecto) */
+    .ad-carousel-desktop {
+        display: flex;
+        z-index: 3;
+    }
+    .ad-carousel-tablet,
+    .ad-carousel-mobile {
+        display: none;
+        z-index: 1;
+    }
+
+    /* Tablet: 768px hasta 1023px */
+    @@media (min-width: 768px) and (max-width: 1023px) {
+        .ad-carousel-desktop,
+        .ad-carousel-mobile {
+            display: none;
+        }
+        .ad-carousel-tablet {
+            display: flex;
+            z-index: 3;
+        }
+    }
+
+    /* Móvil: hasta 767px */
+    @@media (max-width: 767px) {
+        .ad-carousel-desktop,
+        .ad-carousel-tablet {
+            display: none;
+        }
+        .ad-carousel-mobile {
+            display: flex;
+            z-index: 3;
+        }
     }
 
     /* ===== CONTENEDORES BASE ===== */
@@ -127,9 +216,23 @@
     .ad-carousel-container.ad-carousel-cuadrado .ad-carousel-inner {
         max-width: 344px;
         aspect-ratio: 344 / 423;
-        min-height: 250px;
-        max-height: 423px;
         margin: 0 auto;
+    }
+
+    /* Tablet: 340x373 (768px - 1023px) */
+    @@media (min-width: 768px) and (max-width: 1023px) {
+        .ad-carousel-container.ad-carousel-cuadrado .ad-carousel-inner {
+            max-width: 340px;
+            aspect-ratio: 340 / 373;
+        }
+    }
+
+    /* Móvil: 291x180 */
+    @@media (max-width: 767px) {
+        .ad-carousel-container.ad-carousel-cuadrado .ad-carousel-inner {
+            max-width: 291px;
+            aspect-ratio: 291 / 180;
+        }
     }
 
     /* Anuncios cuadrados en Producto sidebar - ocupan 100% del ancho del contenedor */
@@ -149,8 +252,6 @@
         max-width: 100% !important;
         width: 100% !important;
         aspect-ratio: 560 / 688 !important;
-        min-height: 400px !important;
-        max-height: 688px !important;
         margin: 0 !important;
     }
 
@@ -158,9 +259,23 @@
     .ad-carousel-container.ad-carousel-horizontal .ad-carousel-inner {
         max-width: 1010px;
         aspect-ratio: 1010 / 189;
-        min-height: 120px;
-        max-height: 189px;
         margin: 0 auto;
+    }
+
+    /* Tablet: 550x217 (768px - 1023px) */
+    @@media (min-width: 768px) and (max-width: 1023px) {
+        .ad-carousel-container.ad-carousel-horizontal .ad-carousel-inner {
+            max-width: 550px;
+            aspect-ratio: 550 / 217;
+        }
+    }
+
+    /* Móvil: 291x120 */
+    @@media (max-width: 767px) {
+        .ad-carousel-container.ad-carousel-horizontal .ad-carousel-inner {
+            max-width: 291px;
+            aspect-ratio: 291 / 120;
+        }
     }
 
     /* Anuncios horizontales que deben ocupar 100% del ancho */
@@ -183,13 +298,27 @@
     .ad-carousel-container.ad-carousel-medio-vertical .ad-carousel-inner {
         max-width: 401px;
         aspect-ratio: 401 / 287;
-        min-height: 200px;
-        max-height: 287px;
+        margin: 0 auto;
     }
 
-    /* ===== ESTRUCTURA INTERNA ===== */
-    .ad-carousel-wrapper {
-        position: relative;
+    /* Tablet: 340x373 (usa el mismo aspecto que cuadrado tablet) (768px - 1023px) */
+    @@media (min-width: 768px) and (max-width: 1023px) {
+        .ad-carousel-container.ad-carousel-medio-vertical .ad-carousel-inner {
+            max-width: 340px;
+            aspect-ratio: 340 / 373;
+        }
+    }
+
+    /* Móvil: 291x180 (usa el mismo aspecto que cuadrado móvil) */
+    @@media (max-width: 768px) {
+        .ad-carousel-container.ad-carousel-medio-vertical .ad-carousel-inner {
+            max-width: 291px;
+            aspect-ratio: 291 / 180;
+        }
+    }
+
+    /* =/* Ya definido arriba con position: absolute */
+        /* width: 100%; height: 100%; ya están definidos */per {
         width: 100%;
         height: 100%;
         display: flex;
@@ -234,86 +363,31 @@
         opacity: 0.9;
     }
 
-    /* ===== RESPONSIVE - TABLET (≤102px) ===== */
+    /* ===== RESPONSIVE - MANTENER PROPORCIONES EXACTAS ===== */
     @@media (max-width: 1024px) {
-        /* Reducir tamaños máximos pero mantener aspect ratios */
-        .ad-carousel-container.ad-carousel-cuadrado .ad-carousel-inner {
-            max-width: 300px;
-            min-height: 220px;
-            max-height: 370px;
-        }
-
-        .ad-carousel-container.ad-carousel-cuadrado[data-seccion="producto-sidebar-1"] .ad-carousel-inner,
-        .ad-carousel-container.ad-carousel-cuadrado[data-seccion="producto-sidebar-2"] .ad-carousel-inner {
-            max-width: 100%;
-            min-height: 350px;
-            max-height: 600px;
-        }
-
-        .ad-carousel-container.ad-carousel-horizontal .ad-carousel-inner {
-            min-height: 100px;
-            max-height: 150px;
-        }
-
+        /* Solo permitir que se reduzca el ancho, pero mantener aspect-ratio original */
+        .ad-carousel-container.ad-carousel-cuadrado .ad-carousel-inner,
+        .ad-carousel-container.ad-carousel-horizontal .ad-carousel-inner,
         .ad-carousel-container.ad-carousel-medio-vertical .ad-carousel-inner {
-            max-width: 350px;
-            min-height: 180px;
-            max-height: 250px;
+            max-width: 100%;
         }
     }
 
-    /* ===== RESPONSIVE - MÓVIL (≤768px) ===== */
     @@media (max-width: 768px) {
-        /* Ajustar para pantallas móviles */
-        .ad-carousel-container.ad-carousel-cuadrado .ad-carousel-inner {
-            max-width: 100%;
-            aspect-ratio: 1 / 1;
-            min-height: 250px;
-            max-height: 400px;
-        }
-
-        .ad-carousel-container.ad-carousel-cuadrado[data-seccion="producto-sidebar-1"] .ad-carousel-inner,
-        .ad-carousel-container.ad-carousel-cuadrado[data-seccion="producto-sidebar-2"] .ad-carousel-inner {
-            aspect-ratio: 1 / 1;
-            min-height: 250px;
-            max-height: 450px;
-        }
-
-        .ad-carousel-container.ad-carousel-horizontal .ad-carousel-inner {
-            aspect-ratio: 16 / 9;
-            min-height: 120px;
-            max-height: 200px;
-        }
-
+        /* Solo permitir que se reduzca el ancho, pero mantener aspect-ratio original */
+        .ad-carousel-container.ad-carousel-cuadrado .ad-carousel-inner,
+        .ad-carousel-container.ad-carousel-horizontal .ad-carousel-inner,
         .ad-carousel-container.ad-carousel-medio-vertical .ad-carousel-inner {
             max-width: 100%;
-            aspect-ratio: 4 / 3;
-            min-height: 180px;
-            max-height: 280px;
         }
     }
 
-    /* ===== RESPONSIVE - MÓVIL PEQUEÑO (≤480px) ===== */
     @@media (max-width: 480px) {
-        .ad-carousel-container.ad-carousel-cuadrado .ad-carousel-inner {
-            min-height: 200px;
-            max-height: 300px;
-        }
-
-        .ad-carousel-container.ad-carousel-cuadrado[data-seccion="producto-sidebar-1"] .ad-carousel-inner,
-        .ad-carousel-container.ad-carousel-cuadrado[data-seccion="producto-sidebar-2"] .ad-carousel-inner {
-            min-height: 200px;
-            max-height: 320px;
-        }
-
-        .ad-carousel-container.ad-carousel-horizontal .ad-carousel-inner {
-            min-height: 100px;
-            max-height: 150px;
-        }
-
+        /* Solo permitir que se reduzca el ancho, pero mantener aspect-ratio original */
+        .ad-carousel-container.ad-carousel-cuadrado .ad-carousel-inner,
+        .ad-carousel-container.ad-carousel-horizontal .ad-carousel-inner,
         .ad-carousel-container.ad-carousel-medio-vertical .ad-carousel-inner {
-            min-height: 150px;
-            max-height: 220px;
+            max-width: 100%;
         }
     }
 
@@ -398,7 +472,18 @@
 
         window.cambiarAnuncio = function(button, direccion) {
             const carrusel = button.closest('.ad-carousel-inner');
-            const wrapper = carrusel.querySelector('.ad-carousel-wrapper');
+            // Buscar solo el wrapper visible (el que no tiene display:none)
+            const wrappers = carrusel.querySelectorAll('.ad-carousel-wrapper');
+            let wrapper = null;
+            for (let w of wrappers) {
+                if (window.getComputedStyle(w).display !== 'none') {
+                    wrapper = w;
+                    break;
+                }
+            }
+            
+            if (!wrapper) return;
+            
             const items = wrapper.querySelectorAll('.ad-carousel-item');
             const indicators = carrusel.querySelectorAll('.indicator');
             const state = window.getCarouselState(carrusel);
@@ -421,7 +506,18 @@
         };
 
         window.irAAnuncio = function(carrusel, index) {
-            const wrapper = carrusel.querySelector('.ad-carousel-wrapper');
+            // Buscar solo el wrapper visible
+            const wrappers = carrusel.querySelectorAll('.ad-carousel-wrapper');
+            let wrapper = null;
+            for (let w of wrappers) {
+                if (window.getComputedStyle(w).display !== 'none') {
+                    wrapper = w;
+                    break;
+                }
+            }
+            
+            if (!wrapper) return;
+            
             const items = wrapper.querySelectorAll('.ad-carousel-item');
             const indicators = carrusel.querySelectorAll('.indicator');
             const state = window.getCarouselState(carrusel);
@@ -496,7 +592,19 @@
     if (document.readyState === 'loading') {
         document.addEventListener('DOMContentLoaded', function initCarousels() {
             document.querySelectorAll('.ad-carousel-inner').forEach(carrusel => {
-                const items = carrusel.querySelectorAll('.ad-carousel-item');
+                // Buscar el wrapper visible
+                const wrappers = carrusel.querySelectorAll('.ad-carousel-wrapper');
+                let wrapper = null;
+                for (let w of wrappers) {
+                    if (window.getComputedStyle(w).display !== 'none') {
+                        wrapper = w;
+                        break;
+                    }
+                }
+                
+                if (!wrapper) return;
+                
+                const items = wrapper.querySelectorAll('.ad-carousel-item');
                 if (items.length > 1 && !window.carouselStates.has(carrusel)) {
                     window.resetAutoplay(carrusel);
 
@@ -512,7 +620,19 @@
     } else {
         // DOM ya está listo, inicializar inmediatamente
         document.querySelectorAll('.ad-carousel-inner').forEach(carrusel => {
-            const items = carrusel.querySelectorAll('.ad-carousel-item');
+            // Buscar el wrapper visible
+            const wrappers = carrusel.querySelectorAll('.ad-carousel-wrapper');
+            let wrapper = null;
+            for (let w of wrappers) {
+                if (window.getComputedStyle(w).display !== 'none') {
+                    wrapper = w;
+                    break;
+                }
+            }
+            
+            if (!wrapper) return;
+            
+            const items = wrapper.querySelectorAll('.ad-carousel-item');
             if (items.length > 1 && !window.carouselStates.has(carrusel)) {
                 window.resetAutoplay(carrusel);
 

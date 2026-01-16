@@ -14,11 +14,13 @@ namespace AutoClick.Pages
     {
         private readonly ApplicationDbContext _context;
         private readonly IFileUploadService _fileUploadService;
+        private readonly IAuthService _authService;
 
-        public RegistroAgenciaModel(ApplicationDbContext context, IFileUploadService fileUploadService)
+        public RegistroAgenciaModel(ApplicationDbContext context, IFileUploadService fileUploadService, IAuthService authService)
         {
             _context = context;
             _fileUploadService = fileUploadService;
+            _authService = authService;
         }
 
         [BindProperty]
@@ -198,13 +200,26 @@ namespace AutoClick.Pages
                 _context.Usuarios.Add(nuevoUsuario);
                 await _context.SaveChangesAsync();
 
-                // Crear la sesión del usuario
-                HttpContext.Session.SetString("UserEmail", nuevoUsuario.Email);
-                HttpContext.Session.SetString("UserName", nuevoUsuario.NombreAMostrar);
-                HttpContext.Session.SetString("IsLoggedIn", "true");
+                // Iniciar sesión automáticamente usando AuthService
+                var loginResult = await _authService.LoginAsync(nuevoUsuario.Email, Contrasena);
+                
+                if (!loginResult.Success)
+                {
+                    ErrorMessage = "Cuenta creada pero hubo un error al iniciar sesión. Por favor, inicie sesión manualmente.";
+                    return RedirectToPage("/Auth");
+                }
 
                 // Limpiar la sesión de tipo de usuario
                 HttpContext.Session.Remove("TipoUsuario");
+
+                // Verificar si hay una URL de retorno
+                var returnUrl = HttpContext.Session.GetString("ReturnUrl");
+                HttpContext.Session.Remove("ReturnUrl"); // Limpiar después de usar
+                
+                if (!string.IsNullOrEmpty(returnUrl) && Url.IsLocalUrl(returnUrl))
+                {
+                    return Redirect(returnUrl);
+                }
 
                 // Redirigir a la página principal
                 return RedirectToPage("/Index");

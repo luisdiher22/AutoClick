@@ -86,4 +86,114 @@ namespace AutoClick.ViewComponents
             return View(anuncio);
         }
     }
+
+    // Nuevos ViewComponents para Móvil
+    public class AnuncioMobileHorizontalViewComponent : ViewComponent
+    {
+        private readonly ApplicationDbContext _context;
+
+        public AnuncioMobileHorizontalViewComponent(ApplicationDbContext context)
+        {
+            _context = context;
+        }
+
+        public async Task<IViewComponentResult> InvokeAsync(string ubicacion = "general")
+        {
+            var anuncio = await _context.AnunciosPublicidad
+                .Include(a => a.EmpresaPublicidad)
+                .Where(a => a.Activo && a.Tamano == TamanoAnuncio.MobileHorizontal)
+                .OrderBy(x => Guid.NewGuid())
+                .FirstOrDefaultAsync();
+
+            if (anuncio != null)
+            {
+                anuncio.NumeroVistas++;
+                await _context.SaveChangesAsync();
+            }
+
+            return View(anuncio);
+        }
+    }
+
+    public class AnuncioMobileGrandeVerticalViewComponent : ViewComponent
+    {
+        private readonly ApplicationDbContext _context;
+
+        public AnuncioMobileGrandeVerticalViewComponent(ApplicationDbContext context)
+        {
+            _context = context;
+        }
+
+        public async Task<IViewComponentResult> InvokeAsync(string ubicacion = "general")
+        {
+            var anuncio = await _context.AnunciosPublicidad
+                .Include(a => a.EmpresaPublicidad)
+                .Where(a => a.Activo && a.Tamano == TamanoAnuncio.MobileGrandeVertical)
+                .OrderBy(x => Guid.NewGuid())
+                .FirstOrDefaultAsync();
+
+            if (anuncio != null)
+            {
+                anuncio.NumeroVistas++;
+                await _context.SaveChangesAsync();
+            }
+
+            return View(anuncio);
+        }
+    }
+
+    // Nuevos ViewComponents para Tablet
+    public class AnuncioTabletHorizontalViewComponent : ViewComponent
+    {
+        private readonly ApplicationDbContext _context;
+
+        public AnuncioTabletHorizontalViewComponent(ApplicationDbContext context)
+        {
+            _context = context;
+        }
+
+        public async Task<IViewComponentResult> InvokeAsync(string ubicacion = "general")
+        {
+            var anuncio = await _context.AnunciosPublicidad
+                .Include(a => a.EmpresaPublicidad)
+                .Where(a => a.Activo && a.Tamano == TamanoAnuncio.TabletHorizontal)
+                .OrderBy(x => Guid.NewGuid())
+                .FirstOrDefaultAsync();
+
+            if (anuncio != null)
+            {
+                anuncio.NumeroVistas++;
+                await _context.SaveChangesAsync();
+            }
+
+            return View(anuncio);
+        }
+    }
+
+    public class AnuncioTabletGrandeVerticalViewComponent : ViewComponent
+    {
+        private readonly ApplicationDbContext _context;
+
+        public AnuncioTabletGrandeVerticalViewComponent(ApplicationDbContext context)
+        {
+            _context = context;
+        }
+
+        public async Task<IViewComponentResult> InvokeAsync(string ubicacion = "general")
+        {
+            var anuncio = await _context.AnunciosPublicidad
+                .Include(a => a.EmpresaPublicidad)
+                .Where(a => a.Activo && a.Tamano == TamanoAnuncio.TabletGrandeVertical)
+                .OrderBy(x => Guid.NewGuid())
+                .FirstOrDefaultAsync();
+
+            if (anuncio != null)
+            {
+                anuncio.NumeroVistas++;
+                await _context.SaveChangesAsync();
+            }
+
+            return View(anuncio);
+        }
+    }
 }

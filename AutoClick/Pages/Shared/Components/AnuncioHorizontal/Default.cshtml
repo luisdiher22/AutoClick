@@ -18,6 +18,8 @@ else
         <picture>
             <source media="(max-width: 768px)" 
                     srcset="https://autoclickstorage.blob.core.windows.net/anuncios/PlaceholderHorizontal_movil.png">
+            <source media="(max-width: 1024px)" 
+                    srcset="https://autoclickstorage.blob.core.windows.net/anuncios/PlaceholderHorizontal_tablet.png">
             <img src="https://autoclickstorage.blob.core.windows.net/anuncios/PlaceholderHorizontal_escritorio.png" 
                  alt="Su anuncio aquí" class="placeholder-image" />
         </picture>
@@ -49,8 +51,6 @@ function registrarClic(anuncioId) {
     width: 100%;
     max-width: 1010px;
     aspect-ratio: 1010 / 189;
-    min-height: 120px;
-    max-height: 189px;
     margin-left: auto;
     margin-right: auto;
     background: #04091F;
@@ -111,16 +111,14 @@ function registrarClic(anuncioId) {
 
 @@media (max-width: 1024px) {
     .anuncio-horizontal {
-        min-height: 100px;
-        max-height: 150px;
+        /* Mantener proporciones originales en todas las pantallas */
     }
 }
 
 @@media (max-width: 768px) {
     .anuncio-horizontal {
-        aspect-ratio: 16 / 9;
-        min-height: 80px;
-        max-height: 120px;
+        /* Mantener proporciones originales */
+        max-width: 100%;
     }
 
     .anuncio-imagen,
@@ -131,8 +129,7 @@ function registrarClic(anuncioId) {
 
 @@media (max-width: 480px) {
     .anuncio-horizontal {
-        min-height: 70px;
-        max-height: 100px;
+        /* Proporciones preservadas */
     }
 }
 </style>
