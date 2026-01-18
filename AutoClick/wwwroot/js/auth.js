@@ -6,6 +6,7 @@ document.addEventListener('DOMContentLoaded', function() {
 function initializeAuthPage() {
     initializeUserTypeSelection();
     initializeFormValidation();
+    initializeForgotPasswordModal();
     // initializeSocialButtons(); // Removed - social login disabled
     checkRememberedUser();
 }
@@ -444,3 +445,203 @@ window.addEventListener('load', function() {
         }, 300);
     }
 });
+// ========================================
+// FORGOT PASSWORD MODAL FUNCTIONALITY
+// ========================================
+
+function initializeForgotPasswordModal() {
+    const forgotPasswordLink = document.getElementById('forgotPasswordLink');
+    const modal = document.getElementById('forgotPasswordModal');
+    const closeBtn = document.getElementById('closeForgotModal');
+    const cancelBtn = document.getElementById('cancelForgotPassword');
+    const overlay = document.getElementById('forgotModalOverlay');
+    const form = document.getElementById('forgotPasswordForm');
+    
+    // Abrir modal
+    if (forgotPasswordLink) {
+        forgotPasswordLink.addEventListener('click', function(e) {
+            e.preventDefault();
+            openForgotPasswordModal();
+        });
+    }
+    
+    // Cerrar modal - bot�n X
+    if (closeBtn) {
+        closeBtn.addEventListener('click', closeForgotPasswordModal);
+    }
+    
+    // Cerrar modal - bot�n Cancelar
+    if (cancelBtn) {
+        cancelBtn.addEventListener('click', closeForgotPasswordModal);
+    }
+    
+    // Cerrar modal - click en overlay
+    if (overlay) {
+        overlay.addEventListener('click', closeForgotPasswordModal);
+    }
+    
+    // Cerrar con tecla ESC
+    document.addEventListener('keydown', function(e) {
+        if (e.key === 'Escape' && modal && modal.style.display !== 'none') {
+            closeForgotPasswordModal();
+        }
+    });
+    
+    // Submit del formulario
+    if (form) {
+        form.addEventListener('submit', handleForgotPasswordSubmit);
+    }
+}
+
+function openForgotPasswordModal() {
+    const modal = document.getElementById('forgotPasswordModal');
+    const emailInput = document.getElementById('forgotEmail');
+    const successMsg = document.getElementById('forgotSuccessMessage');
+    const errorMsg = document.getElementById('forgotErrorMessage');
+    
+    if (modal) {
+        modal.style.display = 'block';
+        
+        // Limpiar formulario y mensajes
+        if (emailInput) {
+            emailInput.value = '';
+            clearForgotFieldError(emailInput);
+        }
+        if (successMsg) successMsg.style.display = 'none';
+        if (errorMsg) errorMsg.style.display = 'none';
+        
+        // Focus en el input
+        setTimeout(() => {
+            if (emailInput) emailInput.focus();
+        }, 300);
+        
+        // Prevenir scroll del body
+        document.body.style.overflow = 'hidden';
+    }
+}
+
+function closeForgotPasswordModal() {
+    const modal = document.getElementById('forgotPasswordModal');
+    
+    if (modal) {
+        modal.style.display = 'none';
+        
+        // Restaurar scroll del body
+        document.body.style.overflow = '';
+    }
+}
+
+async function handleForgotPasswordSubmit(e) {
+    e.preventDefault();
+    
+    const emailInput = document.getElementById('forgotEmail');
+    const submitBtn = document.getElementById('submitForgotPassword');
+    const btnText = submitBtn.querySelector('.btn-text');
+    const btnSpinner = submitBtn.querySelector('.btn-spinner');
+    const successMsg = document.getElementById('forgotSuccessMessage');
+    const errorMsg = document.getElementById('forgotErrorMessage');
+    
+    // Limpiar mensajes previos
+    successMsg.style.display = 'none';
+    errorMsg.style.display = 'none';
+    clearForgotFieldError(emailInput);
+    
+    // Validar email
+    const email = emailInput.value.trim();
+    if (!email) {
+        showForgotFieldError(emailInput, 'Por favor, ingrese su correo electr�nico');
+        return;
+    }
+    
+    if (!isValidEmailFormat(email)) {
+        showForgotFieldError(emailInput, 'Por favor, ingrese un correo electr�nico v�lido');
+        return;
+    }
+    
+    // Deshabilitar bot�n y mostrar spinner
+    submitBtn.disabled = true;
+    btnText.style.display = 'none';
+    btnSpinner.style.display = 'inline';
+    
+    try {
+        // Crear FormData
+        const formData = new FormData();
+        formData.append('ForgotPasswordEmail', email);
+        formData.append('handler', 'ForgotPassword');
+        
+        // Obtener el token anti-forgery
+        const antiForgeryToken = document.querySelector('input[name="__RequestVerificationToken"]');
+        if (antiForgeryToken) {
+            formData.append('__RequestVerificationToken', antiForgeryToken.value);
+        }
+        
+        // Enviar request
+        const response = await fetch('/Auth?handler=ForgotPassword', {
+            method: 'POST',
+            body: formData
+        });
+        
+        const result = await response.json();
+        
+        if (result.success) {
+            // Mostrar mensaje de �xito
+            successMsg.innerHTML = `
+                <i class="fas fa-check-circle" style="margin-right: 8px;"></i>
+                ${result.message}
+                ${result.email ? `<br><small>Correo: ${result.email}</small>` : ''}
+            `;
+            successMsg.style.display = 'block';
+            
+            // Limpiar el formulario
+            emailInput.value = '';
+            
+            // Cerrar modal despu�s de 5 segundos
+            setTimeout(() => {
+                closeForgotPasswordModal();
+            }, 5000);
+        } else {
+            // Mostrar mensaje de error
+            errorMsg.innerHTML = `
+                <i class="fas fa-exclamation-triangle" style="margin-right: 8px;"></i>
+                ${result.message}
+                ${result.secondsRemaining ? `<br><small>Tiempo restante: ${Math.ceil(result.secondsRemaining / 60)} minutos</small>` : ''}
+            `;
+            errorMsg.style.display = 'block';
+        }
+    } catch (error) {
+        console.error('Error al enviar recuperaci�n de contrase�a:', error);
+        errorMsg.innerHTML = `
+            <i class="fas fa-exclamation-triangle" style="margin-right: 8px;"></i>
+            Ha ocurrido un error de conexi�n. Por favor, intente nuevamente.
+        `;
+        errorMsg.style.display = 'block';
+    } finally {
+        // Restaurar bot�n
+        submitBtn.disabled = false;
+        btnText.style.display = 'inline';
+        btnSpinner.style.display = 'none';
+    }
+}
+
+function showForgotFieldError(field, message) {
+    const errorSpan = document.getElementById('forgotEmailError');
+    if (errorSpan) {
+        errorSpan.textContent = message;
+        errorSpan.style.display = 'block';
+    }
+    field.classList.add('error');
+}
+
+function clearForgotFieldError(field) {
+    const errorSpan = document.getElementById('forgotEmailError');
+    if (errorSpan) {
+        errorSpan.style.display = 'none';
+    }
+    field.classList.remove('error');
+}
+
+function isValidEmailFormat(email) {
+    // Regex simple pero efectiva para validar emails
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    return emailRegex.test(email);
+}

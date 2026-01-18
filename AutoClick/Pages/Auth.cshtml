@@ -129,7 +129,7 @@
                         <label for="loginPassword">Contraseña</label>
                         <input type="password" id="loginPassword" name="LoginPassword" asp-for="LoginPassword" required 
                                placeholder="Su contraseña" class="form-input" autocomplete="off" />
-                        <a href="#" class="forgot-password">¿Olvidó su contraseña?</a>
+                        <a href="#" class="forgot-password" id="forgotPasswordLink">¿Olvidó su contraseña?</a>
                     </div>
                     
                     <div class="login-actions">
@@ -143,4 +143,211 @@
         </div>
     </div>
 </div>
+
+<!-- Modal de Recuperación de Contraseña -->
+<div id="forgotPasswordModal" class="forgot-password-modal" style="display: none;">
+    <div class="modal-overlay" id="forgotModalOverlay"></div>
+    <div class="modal-content">
+        <div class="modal-header">
+            <h2 class="modal-title">Recuperar contraseña</h2>
+            <button type="button" class="modal-close" id="closeForgotModal">&times;</button>
+        </div>
+        <div class="modal-body">
+            <p class="modal-description">
+                Ingrese el correo electrónico asociado a su cuenta y le enviaremos instrucciones para recuperar su contraseña.
+            </p>
+            <form id="forgotPasswordForm">
+                <div class="form-group">
+                    <label for="forgotEmail">Correo electrónico</label>
+                    <input type="email" 
+                           id="forgotEmail" 
+                           name="ForgotPasswordEmail" 
+                           class="form-input" 
+                           placeholder="ejemplo@correo.com" 
+                           required />
+                    <span class="field-error" id="forgotEmailError" style="display: none;"></span>
+                </div>
+                <div class="modal-actions">
+                    <button type="button" class="btn-secondary" id="cancelForgotPassword">Cancelar</button>
+                    <button type="submit" class="btn-primary" id="submitForgotPassword">
+                        <span class="btn-text">Enviar instrucciones</span>
+                        <span class="btn-spinner" style="display: none;">⏳ Enviando...</span>
+                    </button>
+                </div>
+                <div class="success-message" id="forgotSuccessMessage" style="display: none; margin-top: 16px;"></div>
+                <div class="error-message" id="forgotErrorMessage" style="display: none; margin-top: 16px;"></div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<style>
+.forgot-password-modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 10000;
+    animation: fadeIn 0.3s ease-out;
+}
+
+.modal-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.75);
+    backdrop-filter: blur(4px);
+}
+
+.modal-content {
+    position: relative;
+    max-width: 500px;
+    width: 90%;
+    margin: 80px auto;
+    background: #02081C;
+    border: 2px solid rgba(215, 220, 215, 0.2);
+    border-radius: 16px;
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+    animation: slideDown 0.3s ease-out;
+}
+
+.modal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 24px 32px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.modal-title {
+    color: #f2f2f4;
+    font-size: 24px;
+    font-weight: 700;
+    margin: 0;
+    font-family: Montserrat, sans-serif;
+}
+
+.modal-close {
+    background: none;
+    border: none;
+    color: rgba(255, 255, 255, 0.6);
+    font-size: 32px;
+    cursor: pointer;
+    padding: 0;
+    width: 32px;
+    height: 32px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s;
+    line-height: 1;
+}
+
+.modal-close:hover {
+    color: #FF931E;
+    transform: rotate(90deg);
+}
+
+.modal-body {
+    padding: 32px;
+}
+
+.modal-description {
+    color: rgba(255, 255, 255, 0.8);
+    font-size: 15px;
+    line-height: 1.6;
+    margin: 0 0 24px 0;
+    font-family: Montserrat, sans-serif;
+}
+
+.modal-actions {
+    display: flex;
+    gap: 12px;
+    margin-top: 24px;
+}
+
+.btn-primary,
+.btn-secondary {
+    flex: 1;
+    padding: 12px 24px;
+    border: none;
+    border-radius: 8px;
+    font-size: 15px;
+    font-weight: 600;
+    font-family: Montserrat, sans-serif;
+    cursor: pointer;
+    transition: all 0.3s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.btn-primary {
+    background: linear-gradient(135deg, #FF931E, #FF7A00);
+    color: white;
+}
+
+.btn-primary:hover:not(:disabled) {
+    background: linear-gradient(135deg, #FF7A00, #FF6600);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(255, 147, 30, 0.4);
+}
+
+.btn-primary:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+}
+
+.btn-secondary {
+    background: rgba(255, 255, 255, 0.05);
+    color: rgba(255, 255, 255, 0.8);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.btn-secondary:hover {
+    background: rgba(255, 255, 255, 0.1);
+    border-color: rgba(255, 255, 255, 0.3);
+}
+
+.field-error {
+    color: #FF4444;
+    font-size: 13px;
+    margin-top: 8px;
+}
+
+@@keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+@@keyframes slideDown {
+    from {
+        opacity: 0;
+        transform: translateY(-30px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@@media (max-width: 600px) {
+    .modal-content {
+        width: 95%;
+        margin: 40px auto;
+    }
+    
+    .modal-header,
+    .modal-body {
+        padding: 20px;
+    }
+    
+    .modal-actions {
+        flex-direction: column;
+    }
+}
+</style>
 
