@@ -2218,7 +2218,19 @@ document.addEventListener('DOMContentLoaded', function () {
                 } catch {
                     // No hay JSON de error
                 }
-                return { error: 'Error al enviar el formulario' };
+                
+                // Verificar códigos de error HTTP específicos
+                if (response.status === 413) {
+                    return { error: 'Las imágenes son demasiado grandes (más de 150 MB en total). Por favor, reduzca el tamaño o la cantidad de imágenes antes de continuar.' };
+                } else if (response.status === 404) {
+                    return { error: 'Página no encontrada. Por favor, recargue la página e intente nuevamente.' };
+                } else if (response.status === 500) {
+                    return { error: 'Error del servidor. Por favor, intente nuevamente en unos momentos.' };
+                } else if (response.status === 400) {
+                    return { error: 'Error en los datos enviados. Por favor, verifique todos los campos e intente nuevamente.' };
+                }
+                
+                return { error: `Error al enviar el formulario (Código: ${response.status}). Si el problema persiste, contacte a soporte.` };
             }
         } catch (error) {
             console.error('Error al enviar formulario:', error);

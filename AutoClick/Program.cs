@@ -8,6 +8,20 @@ var builder = WebApplication.CreateBuilder(args);
 // Configure encoding to support UTF-8 characters
 System.Text.Encoding.RegisterProvider(System.Text.CodePagesEncodingProvider.Instance);
 
+// Configure Kestrel server limits for file uploads (150 MB)
+builder.Services.Configure<Microsoft.AspNetCore.Server.Kestrel.Core.KestrelServerOptions>(options =>
+{
+    options.Limits.MaxRequestBodySize = 150_000_000; // 150 MB
+});
+
+// Configure Form options for multipart form data
+builder.Services.Configure<Microsoft.AspNetCore.Http.Features.FormOptions>(options =>
+{
+    options.MultipartBodyLengthLimit = 150_000_000; // 150 MB
+    options.ValueLengthLimit = int.MaxValue;
+    options.MultipartHeadersLengthLimit = int.MaxValue;
+});
+
 // Add services to the container.
 builder.Services.AddRazorPages();
 
