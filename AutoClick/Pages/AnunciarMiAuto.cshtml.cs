@@ -10,6 +10,8 @@ using Microsoft.AspNetCore.Authorization;
 namespace AutoClick.Pages
 {
     [Authorize]
+    [RequestSizeLimit(150_000_000)] // 150 MB - permite hasta 100 MB de imágenes + overhead
+    [RequestFormLimits(MultipartBodyLengthLimit = 150_000_000)]
     public class AnunciarMiAutoModel : PageModel
     {
         private readonly ApplicationDbContext _context;
@@ -236,6 +238,11 @@ namespace AutoClick.Pages
                     imagenPrincipal = imagenesUrls.FirstOrDefault();
 
                 }
+                catch (FileUploadException fex)
+                {
+                    // Error de validación de tamaño - mensaje específico para el usuario
+                    throw new Exception(fex.Message, fex);
+                }
                 catch (Exception ex)
                 {
                     throw new Exception("Error al subir las imágenes. Por favor, intenta de nuevo.", ex);
@@ -395,8 +402,15 @@ namespace AutoClick.Pages
                     }
 
                 }
+                catch (FileUploadException fex)
+                {
+                    // Error de validación de tamaño - relanzar con mensaje específico
+                    throw new Exception(fex.Message, fex);
+                }
                 catch (Exception ex)
                 {
+                    // Error general al subir imágenes
+                    throw new Exception("Error al subir las imágenes. Por favor, intenta de nuevo.", ex);
                 }
             }
 

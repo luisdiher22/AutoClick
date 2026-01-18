@@ -644,14 +644,12 @@ document.addEventListener('DOMContentLoaded', function () {
                             nextBtn.textContent = originalText;
                         }
                         
-                        // Verificar si es un error de placa duplicada
+                        // Verificar si es un error de placa duplicada o de tamaño
                         let errorMsg = 'Error al crear el anuncio. Por favor, inténtelo de nuevo.';
                         if (autoCreated && autoCreated.error) {
-                            if (autoCreated.error.includes('placa') || autoCreated.error.includes('duplicate')) {
-                                errorMsg = 'Esta placa ya está registrada en otro anuncio. Por favor, verifica la placa e inténtalo de nuevo.';
-                            } else {
-                                errorMsg = autoCreated.error;
-                            }
+                            errorMsg = autoCreated.error;
+                        } else if (!autoCreated) {
+                            errorMsg = 'Error de conexión al crear el anuncio. Verifique que las imágenes no sean demasiado grandes.';
                         }
                         
                         showValidationModal(errorMsg);
@@ -1412,6 +1410,27 @@ document.addEventListener('DOMContentLoaded', function () {
                 showValidationModal(`Solo se permiten máximo ${maxPhotos} imágenes con su plan seleccionado`);
                 return;
             }
+
+            // Validar tamaño de cada imagen (máximo 10 MB por imagen)
+            const maxFileSize = 10 * 1024 * 1024; // 10 MB
+            const oversizedFiles = fileArray.filter(file => file.size > maxFileSize);
+            if (oversizedFiles.length > 0) {
+                const filesNames = oversizedFiles.map(f => f.name).join(', ');
+                showValidationModal(`Las siguientes imágenes exceden el tamaño máximo de 10 MB: ${filesNames}. Por favor, reduzca el tamaño de las imágenes.`);
+                return;
+            }
+
+            // Validar tamaño total de todas las imágenes (máximo 100 MB total)
+            const maxTotalSize = 100 * 1024 * 1024; // 100 MB
+            const currentTotalSize = uploadedFiles.reduce((sum, file) => sum + file.size, 0);
+            const newFilesTotalSize = fileArray.reduce((sum, file) => sum + file.size, 0);
+            const totalSize = currentTotalSize + newFilesTotalSize;
+            
+            if (totalSize > maxTotalSize) {
+                const totalSizeMB = (totalSize / (1024 * 1024)).toFixed(1);
+                showValidationModal(`El tamaño total de todas las imágenes (${totalSizeMB} MB) excede el límite de 100 MB. Por favor, reduzca la cantidad o calidad de las imágenes.`);
+                return;
+            }
         }
 
         // Contador para saber cuándo se han procesado todos los archivos
@@ -2162,10 +2181,17 @@ document.addEventListener('DOMContentLoaded', function () {
 
         try {
             // Submit using fetch with FormData
+            // Crear un AbortController para manejar timeout
+            const controller = new AbortController();
+            const timeoutId = setTimeout(() => controller.abort(), 120000); // 120 segundos (2 minutos)
+            
             const response = await fetch(form.action || window.location.pathname, {
                 method: 'POST',
-                body: formData
+                body: formData,
+                signal: controller.signal
             });
+            
+            clearTimeout(timeoutId);
 
             if (response.ok) {
                 // Intentar obtener el JSON de respuesta con el ID del auto
@@ -2195,9 +2221,22 @@ document.addEventListener('DOMContentLoaded', function () {
                 return { error: 'Error al enviar el formulario' };
             }
         } catch (error) {
-            console.error('Error de conexión:', error);
-            alert('Error de conexión');
-            return null;
+            console.error('Error al enviar formulario:', error);
+            
+            let errorMessage = 'Error al enviar el formulario';
+            
+            // Detectar tipo de error
+            if (error.name === 'AbortError') {
+                errorMessage = 'El tiempo de espera se agotó. Esto puede deberse a imágenes muy grandes o conexión lenta. Intente con imágenes más pequeñas o de menor calidad.';
+            } else if (error.message && error.message.includes('NetworkError')) {
+                errorMessage = 'Error de red. Verifique su conexión a internet e intente nuevamente.';
+            } else if (error.message && error.message.includes('413')) {
+                errorMessage = 'Las imágenes son demasiado grandes. Por favor, reduzca el tamaño o la cantidad de imágenes.';
+            } else {
+                errorMessage = `Error de conexión: ${error.message || 'Desconocido'}. Si el problema persiste, intente con imágenes más pequeñas.`;
+            }
+            
+            return { error: errorMessage };
         } finally {
             // Reset button state
             if (nextBtn && !skipConfirmation) {
