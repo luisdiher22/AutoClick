@@ -139,7 +139,7 @@ public class Auto
     public string? UbicacionExacta { get; set; }
 
     // Descripción del vehículo
-    [Column(TypeName = "TEXT")]
+    [Column(TypeName = "NVARCHAR(MAX)")]
     [Display(Name = "Descripción")]
     public string Descripcion { get; set; } = string.Empty;
 
