@@ -465,6 +465,7 @@
         color: rgba(255, 255, 255, 0.7) !important;
         font-size: 14px;
         line-height: 1.6;
+        text-align: justify !important;
     }
 
     /* Especificaciones en tab - mantener estilo escritorio */
@@ -1027,6 +1028,7 @@
         color: rgba(255, 255, 255, 0.7) !important;
         font-size: 16px;
         line-height: 1.6;
+        text-align: justify !important;
     }
 
     /* Especificaciones en tab - mantener estilo escritorio */
@@ -1166,5 +1168,342 @@
         width: 100% !important;
         max-width: 344px !important;
         height: 423px !important;
+    }
+}
+
+/* ====================================
+   DESKTOP RESPONSIVO (1024px - 1844px)
+   Ajustes para pantallas desktop pequeñas/medianas
+   SIN afectar mobile ni tablet
+   ==================================== */
+@media (min-width: 1024px) and (max-width: 1844px) {
+    /* Container con padding reducido */
+    .producto-container {
+        padding: 24px 24px 24px 24px !important;
+    }
+
+    /* Layout grid con sidebar flexible */
+    .producto-content {
+        grid-template-columns: 1fr minmax(320px, 400px) !important;
+        gap: 24px !important;
+    }
+
+    /* Imagen principal - fluida en lugar de fija */
+    .producto-main-image {
+        width: 100% !important;
+        max-width: 100% !important;
+        height: auto !important;
+        aspect-ratio: 16/9 !important;
+        min-height: 400px !important;
+    }
+
+    /* Imagen interna */
+    .main-car-image {
+        width: 100% !important;
+        height: 100% !important;
+        object-fit: contain !important;
+    }
+
+    /* Thumbnails adaptativos */
+    .producto-thumbnails {
+        max-width: 100% !important;
+    }
+
+    .thumbnail-item {
+        min-width: 80px !important;
+        width: 80px !important;
+        height: 60px !important;
+        flex-shrink: 0 !important;
+    }
+
+    .thumbnail-item img {
+        width: 100% !important;
+        height: 100% !important;
+        object-fit: cover !important;
+    }
+
+    /* Sidebar más compacto */
+    .producto-sidebar {
+        max-width: 400px !important;
+        min-width: 320px !important;
+    }
+
+    /* Cards del sidebar - padding reducido */
+    .produto-info-card,
+    .producto-info-card,
+    .producto-contact-card,
+    .producto-seller-card {
+        padding: 12px !important;
+    }
+
+    /* Título del vehículo más pequeño */
+    .produto-car-title,
+    .producto-car-title {
+        font-size: 18px !important;
+        margin: 0 0 16px 0 !important;
+    }
+
+    /* Precio más pequeño */
+    .produto-car-price,
+    .producto-car-price {
+        font-size: 20px !important;
+        margin: 0 0 16px 0 !important;
+    }
+
+    /* Botones de contacto más compactos */
+    .producto-contact-buttons {
+        flex-direction: column !important;
+        gap: 8px !important;
+    }
+
+    .producto-contact-buttons .btn-primario,
+    .producto-contact-buttons .btn-secundario {
+        font-size: 13px !important;
+        padding: 10px 12px !important;
+    }
+
+    /* Espacios publicitarios - ajustar tamaño */
+    .producto-sidebar > div[style*="flex-direction: column"] {
+        width: 100% !important;
+        gap: 24px !important;
+    }
+
+    .ad-carousel-cuadrado[data-seccion="producto-sidebar-1"],
+    .ad-carousel-cuadrado[data-seccion="producto-sidebar-2"] {
+        width: 100% !important;
+        max-width: 100% !important;
+        height: auto !important;
+        aspect-ratio: 1/1 !important;
+        min-height: 280px !important;
+        max-height: 350px !important;
+    }
+
+    /* Especificaciones - distribuir columnas en todo el ancho */
+    .specifications-grid {
+        display: flex !important;
+        flex-wrap: wrap !important;
+        gap: 40px !important;
+        justify-content: space-between !important;
+        width: 100% !important;
+    }
+
+    .spec-column {
+        display: flex !important;
+        flex-direction: column !important;
+        gap: 33px !important;
+        flex: 1 !important;
+        min-width: 150px !important;
+    }
+
+    /* Equipamiento - mantener tamaños originales */
+    .producto-equipment {
+        max-width: calc(100% - 40px) !important;
+    }
+}
+
+/* ====================================
+   DESKTOP PEQUEÑO (1024px - 1280px)
+   Ajustes adicionales para pantallas muy pequeñas
+   ==================================== */
+@media (min-width: 1024px) and (max-width: 1280px) {
+    /* Layout más comprimido */
+    .producto-content {
+        grid-template-columns: 1fr minmax(280px, 340px) !important;
+        gap: 16px !important;
+    }
+
+    /* Container con menos padding */
+    .producto-container {
+        padding: 20px 16px 20px 16px !important;
+    }
+
+    /* Imagen principal aún más pequeña */
+    .producto-main-image {
+        min-height: 350px !important;
+    }
+
+    /* Sidebar mínimo */
+    .producto-sidebar {
+        max-width: 340px !important;
+        min-width: 280px !important;
+    }
+
+    /* Cards más compactas */
+    .produto-info-card,
+    .producto-info-card,
+    .producto-contact-card,
+    .producto-seller-card {
+        padding: 10px !important;
+    }
+
+    /* Título más pequeño */
+    .produto-car-title,
+    .producto-car-title {
+        font-size: 16px !important;
+        margin: 0 0 12px 0 !important;
+    }
+
+    /* Precio más pequeño */
+    .produto-car-price,
+    .producto-car-price {
+        font-size: 18px !important;
+    }
+
+    /* Kilometraje */
+    .produto-car-mileage,
+    .producto-car-mileage {
+        font-size: 14px !important;
+        margin: 0 0 12px 0 !important;
+    }
+
+    /* Cuota estimada */
+    .producto-payment-estimate {
+        margin-bottom: 12px !important;
+    }
+
+    .estimate-label,
+    .estimate-amount {
+        font-size: 13px !important;
+    }
+
+    /* Botones de iconos (favoritos, compartir) */
+    .producto-card-icons {
+        gap: 8px !important;
+    }
+
+    .producto-card-icons button {
+        padding: 8px !important;
+    }
+
+    .producto-card-icons button svg {
+        width: 18px !important;
+        height: 18px !important;
+    }
+
+    /* Pre-aprobación button */
+    .producto-preapproval-btn {
+        font-size: 13px !important;
+        padding: 10px 16px !important;
+    }
+
+    /* Anuncios publicitarios más pequeños */
+    .ad-carousel-cuadrado[data-seccion="producto-sidebar-1"],
+    .ad-carousel-cuadrado[data-seccion="producto-sidebar-2"] {
+        min-height: 220px !important;
+        max-height: 280px !important;
+    }
+
+    /* Descripción y secciones - mantener tamaños de fuente originales */
+    /* Los títulos h2 mantienen su font-size: 20px original */
+    /* Los párrafos mantienen su font-size: 16px original */
+}
+
+/* ====================================
+   DESKTOP RESPONSIVO - Calculadoras y secciones adicionales
+   Para pantallas de 1024px a 1844px
+   ==================================== */
+@media (min-width: 1024px) and (max-width: 1844px) {
+    /* Calculadora de financiamiento - mismo ancho que marchamo */
+    .produto-financing,
+    .producto-financing {
+        max-width: calc(100% - 40px) !important;
+    }
+
+    /* Valor de mercado - mismo ancho que marchamo */
+    .produto-market-analysis,
+    .producto-market-analysis {
+        max-width: calc(100% - 40px) !important;
+    }
+
+    /* Calculadora de marchamo - permitir que use el ancho disponible */
+    .produto-marchamo,
+    .producto-marchamo {
+        max-width: calc(100% - 40px) !important;
+    }
+
+    /* Descripción - aprovechar ancho disponible */
+    .producto-description {
+        max-width: calc(100% - 40px) !important;
+    }
+
+    .producto-description p {
+        max-width: 100% !important;
+        text-align: justify !important;
+    }
+
+    /* Especificaciones - aprovechar ancho disponible */
+    .producto-specifications {
+        max-width: calc(100% - 40px) !important;
+    }
+
+    /* Especificaciones grid - distribuir en todo el ancho */
+    .specifications-grid {
+        width: 100% !important;
+        justify-content: space-between !important;
+    }
+
+    .spec-column {
+        flex: 1 !important;
+        min-width: 150px !important;
+    }
+}
+
+/* ====================================
+   DESKTOP PEQUEÑO - Calculadoras más compactas
+   Para pantallas de 1024px a 1280px
+   ==================================== */
+@media (min-width: 1024px) and (max-width: 1280px) {
+    /* Calculadora de financiamiento - más compacta */
+    .produto-financing,
+    .producto-financing {
+        padding: 16px !important;
+        margin: 24px 0 !important;
+    }
+
+    .financing-header h3 {
+        font-size: 16px !important;
+    }
+
+    .financing-grid {
+        gap: 12px !important;
+    }
+
+    .financing-group label {
+        font-size: 12px !important;
+    }
+
+    .financing-select,
+    .financing-input {
+        height: 36px !important;
+        font-size: 13px !important;
+    }
+
+    /* Calculadora de marchamo - más compacta */
+    .produto-marchamo,
+    .producto-marchamo {
+        padding: 16px !important;
+        margin: 24px 0 !important;
+    }
+
+    .marchamo-header h3 {
+        font-size: 16px !important;
+    }
+
+    /* Análisis de mercado - más compacto */
+    .produto-market-analysis,
+    .producto-market-analysis {
+        padding: 16px !important;
+        margin: 24px 0 !important;
+    }
+
+    .market-header h3 {
+        font-size: 16px !important;
+    }
+
+    /* Breadcrumb más compacto */
+    .producto-breadcrumb {
+        margin-bottom: 20px !important;
+        font-size: 14px !important;
+        gap: 6px !important;
     }
 }

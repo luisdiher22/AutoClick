@@ -325,6 +325,95 @@
                         }
                     </section>
                 }
+
+                <!-- Financing Calculator Section -->
+                <section class="producto-financing">
+                    <div class="financing-calculator">
+                        <div class="financing-header">
+                            <div class="financing-icon">
+                                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                    <path d="M12 1V23" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                    <path d="M17 5H9.5C8.57174 5 7.6815 5.36875 7.02513 6.02513C6.36875 6.6815 6 7.57174 6 8.5C6 9.42826 6.36875 10.3185 7.02513 10.9749C7.6815 11.6313 8.57174 12 9.5 12H14.5C15.4283 12 16.3185 12.3687 16.9749 13.0251C17.6313 13.6815 18 14.5717 18 15.5C18 16.4283 17.6313 17.3185 16.9749 17.9749C16.3185 18.6313 15.4283 19 14.5 19H6" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                </svg>
+                            </div>
+                            <h3>Calculadora de Financiamiento</h3>
+                        </div>
+
+                        <form method="get" class="financing-form" id="financingForm"
+                              data-original-price="@Model.Vehicle.Precio.ToString(System.Globalization.CultureInfo.InvariantCulture)"
+                              data-original-currency="@Model.Vehicle.Divisa"
+                              data-exchange-rate="@PrecioHelper.TasaCambio.ToString(System.Globalization.CultureInfo.InvariantCulture)">
+                            
+                            <div class="financing-grid">
+                                <div class="financing-group">
+                                    <label for="currency">Moneda <span class="required">*</span></label>
+                                    <div class="select-wrapper">
+                                        <select name="currency" id="currency" class="financing-select">
+                                            <option value="USD" selected="@(Model.Vehicle.Divisa == "USD")">Dólar (USD)</option>
+                                            <option value="CRC" selected="@(Model.Vehicle.Divisa == "CRC")">Colón (CRC)</option>
+                                        </select>
+                                        <svg class="select-arrow" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                            <path d="M6 9l6 6 6-6"/>
+                                        </svg>
+                                    </div>
+                                </div>
+
+                                <div class="financing-group">
+                                    <label>Precio total del vehículo <span class="required">*</span></label>
+                                    <input type="text" name="vehiclePrice" id="vehiclePrice" 
+                                           value="@(Model.Vehicle.Divisa == "USD" ? Model.Vehicle.Precio.ToString("C0", new System.Globalization.CultureInfo("en-US")) : Model.Vehicle.Precio.ToString("C0", new System.Globalization.CultureInfo("es-CR")))" 
+                                           class="financing-input" readonly />
+                                </div>
+
+                                <div class="financing-group">
+                                    <label for="loanTerm">Plazo del préstamo <span class="required">*</span></label>
+                                    <div class="select-wrapper">
+                                        <select name="loanTerm" id="loanTerm" class="financing-select">
+                                            <option value="12" selected="@(Model.LoanTerm == 12)">12 meses</option>
+                                            <option value="24" selected="@(Model.LoanTerm == 24)">24 meses</option>
+                                            <option value="36" selected="@(Model.LoanTerm == 36)">36 meses</option>
+                                            <option value="48" selected="@(Model.LoanTerm == 48)">48 meses</option>
+                                            <option value="60" selected="@(Model.LoanTerm == 60)">60 meses</option>
+                                            <option value="72" selected="@(Model.LoanTerm == 72)">72 meses</option>
+                                            <option value="84" selected="@(Model.LoanTerm == 84)">84 meses</option>
+                                        </select>
+                                        <svg class="select-arrow" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                            <path d="M6 9l6 6 6-6"/>
+                                        </svg>
+                                    </div>
+                                </div>
+
+                                <div class="financing-group">
+                                    <label for="downPayment">Prima deseada</label>
+                                    <input type="number" name="downPayment" id="downPayment" 
+                                           value="@Model.DownPayment" 
+                                           placeholder="Monto de prima" 
+                                           class="financing-input" />
+                                </div>
+
+                                <div class="financing-group">
+                                    <label>Tasa anual</label>
+                                    <input type="text" name="annualRate" id="annualRate" 
+                                           value="8%" 
+                                           class="financing-input" readonly />
+                                </div>
+
+                                <div class="financing-group">
+                                    <label>Cuota mensual estimada</label>
+                                    <input type="text" id="monthlyPayment" 
+                                           value="₡@Model.MonthlyPayment.ToString("N0")" 
+                                           readonly class="financing-input" />
+                                </div>
+                            </div>
+
+                            <p class="financing-disclaimer">* Cuota estimada sujeta a aprobación crediticia. No incluye seguros ni gastos de formalización.</p>
+
+                            <button type="button" class="btn-primario" onclick="solicitarPreAprobacion()">
+                                Solicitar Pre-aprobación
+                            </button>
+                        </form>
+                    </div>
+                </section>
             </div>
 
             <!-- Right Sidebar (33.33% width) -->
@@ -812,94 +901,6 @@
             </div>
         </div>
 
-        <!-- Financing Calculator Section -->
-        <section class="producto-financing">
-            <div class="financing-calculator">
-                <div class="financing-header">
-                    <div class="financing-icon">
-                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                            <path d="M12 1V23" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                            <path d="M17 5H9.5C8.57174 5 7.6815 5.36875 7.02513 6.02513C6.36875 6.6815 6 7.57174 6 8.5C6 9.42826 6.36875 10.3185 7.02513 10.9749C7.6815 11.6313 8.57174 12 9.5 12H14.5C15.4283 12 16.3185 12.3687 16.9749 13.0251C17.6313 13.6815 18 14.5717 18 15.5C18 16.4283 17.6313 17.3185 16.9749 17.9749C16.3185 18.6313 15.4283 19 14.5 19H6" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                        </svg>
-                    </div>
-                    <h3>Calculadora de Financiamiento</h3>
-                </div>
-
-                <form method="get" class="financing-form" id="financingForm"
-                      data-original-price="@Model.Vehicle.Precio.ToString(System.Globalization.CultureInfo.InvariantCulture)"
-                      data-original-currency="@Model.Vehicle.Divisa"
-                      data-exchange-rate="@PrecioHelper.TasaCambio.ToString(System.Globalization.CultureInfo.InvariantCulture)">
-                    
-                    <div class="financing-grid">
-                        <div class="financing-group">
-                            <label for="currency">Moneda <span class="required">*</span></label>
-                            <div class="select-wrapper">
-                                <select name="currency" id="currency" class="financing-select">
-                                    <option value="USD" selected="@(Model.Vehicle.Divisa == "USD")">Dólar (USD)</option>
-                                    <option value="CRC" selected="@(Model.Vehicle.Divisa == "CRC")">Colón (CRC)</option>
-                                </select>
-                                <svg class="select-arrow" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                    <path d="M6 9l6 6 6-6"/>
-                                </svg>
-                            </div>
-                        </div>
-
-                        <div class="financing-group">
-                            <label>Precio total del vehículo <span class="required">*</span></label>
-                            <input type="text" name="vehiclePrice" id="vehiclePrice" 
-                                   value="@(Model.Vehicle.Divisa == "USD" ? Model.Vehicle.Precio.ToString("C0", new System.Globalization.CultureInfo("en-US")) : Model.Vehicle.Precio.ToString("C0", new System.Globalization.CultureInfo("es-CR")))" 
-                                   class="financing-input" readonly />
-                        </div>
-
-                        <div class="financing-group">
-                            <label for="loanTerm">Plazo del préstamo <span class="required">*</span></label>
-                            <div class="select-wrapper">
-                                <select name="loanTerm" id="loanTerm" class="financing-select">
-                                    <option value="12" selected="@(Model.LoanTerm == 12)">12 meses</option>
-                                    <option value="24" selected="@(Model.LoanTerm == 24)">24 meses</option>
-                                    <option value="36" selected="@(Model.LoanTerm == 36)">36 meses</option>
-                                    <option value="48" selected="@(Model.LoanTerm == 48)">48 meses</option>
-                                    <option value="60" selected="@(Model.LoanTerm == 60)">60 meses</option>
-                                    <option value="72" selected="@(Model.LoanTerm == 72)">72 meses</option>
-                                    <option value="84" selected="@(Model.LoanTerm == 84)">84 meses</option>
-                                </select>
-                                <svg class="select-arrow" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                    <path d="M6 9l6 6 6-6"/>
-                                </svg>
-                            </div>
-                        </div>
-
-                        <div class="financing-group">
-                            <label for="downPayment">Prima deseada</label>
-                            <input type="number" name="downPayment" id="downPayment" 
-                                   value="@Model.DownPayment" 
-                                   placeholder="Monto de prima" 
-                                   class="financing-input" />
-                        </div>
-
-                        <div class="financing-group">
-                            <label>Tasa anual</label>
-                            <input type="text" name="annualRate" id="annualRate" 
-                                   value="8%" 
-                                   class="financing-input" readonly />
-                        </div>
-
-                        <div class="financing-group">
-                            <label>Cuota mensual estimada</label>
-                            <input type="text" id="monthlyPayment" 
-                                   value="₡@Model.MonthlyPayment.ToString("N0")" 
-                                   readonly class="financing-input" />
-                        </div>
-                    </div>
-
-                    <p class="financing-disclaimer">* Cuota estimada sujeta a aprobación crediticia. No incluye seguros ni gastos de formalización.</p>
-
-                    <button type="button" class="btn-primario" onclick="solicitarPreAprobacion()">
-                        Solicitar Pre-aprobación
-                    </button>
-                </form>
-            </div>
-        </section>
     </div>
 </div>
 
