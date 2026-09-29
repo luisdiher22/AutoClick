@@ -62,6 +62,18 @@ project.lock.json
 project.fragment.lock.json
 artifacts/
 
+# Local configuration and credentials
+**/appsettings.Development.json
+**/appsettings.*.local.json
+**/secrets.json
+.claude/settings.local.json
+
+# Deployment archives and manual backups
+*.zip
+*.bak
+*.backup
+**/*_Backup.cshtml
+
 # ASP.NET Scaffolding
 ScaffoldingReadMe.txt
 
